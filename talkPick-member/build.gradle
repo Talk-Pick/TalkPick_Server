@@ -1,0 +1,20 @@
+bootJar.enabled = false
+
+jar.enabled = true
+
+dependencies {
+}
+//
+//def generated = layout.buildDirectory.dir("generated/querydsl")
+//
+//sourceSets {
+//    main {
+//        java {
+//            srcDirs += generated
+//        }
+//    }
+//}
+//
+//clean.doLast {
+//    file(generated).deleteDir()
+//}
