@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import talkPick.model.BaseTime;
+import talkPick.model.TalkPickStatus;
 
 @Getter
 @Builder
@@ -16,4 +17,5 @@ public class Topic extends BaseTime {
     private long averageTalkTime;
     private int selectCount;
     private int likeCount;
+    private TalkPickStatus status;
 }
