@@ -1,0 +1,50 @@
+jwt:
+  secret: ${JWT_SECRET}
+  accessTokenExpireTime: ${JWT_ACCESS_EXPIRE_TIME}
+
+server:
+  port: ${CHARACTER_PORT}
+  tomcat:
+    threads:
+      max: ${THREADS_MAX}
+    accept-count: ${ACCEPT_COUNT}
+
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${CHARACTER_DB_HOST}:${CHARACTER_DB_PORT}/${CHARACTER_DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    hikari:
+      connection-timeout: ${CONNECTION_TIMEOUT}
+      maximum-pool-size: ${MAXIMUM_POOL_SIZE}
+      idle-timeout: ${IDLE_TIMEOUT}
+      max-lifetime: ${MAX_LIFETIME}
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+  servlet:
+    multipart:
+      max-file-size: ${MAX_FILE_SIZE}
+      max-request-size: ${MAX_REQUEST_SIZE}
+
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.orm.jdbc.bind: trace
+  org.springframework.web.cors: DEBUG
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health
