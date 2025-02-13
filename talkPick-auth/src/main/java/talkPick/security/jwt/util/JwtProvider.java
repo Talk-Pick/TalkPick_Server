@@ -2,8 +2,8 @@ package talkPick.security.jwt.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import tictoc.config.security.jwt.dto.JwtResDTO;
-import tictoc.error.ErrorCode;
+import talkPick.error.ErrorCode;
+import talkPick.security.jwt.dto.JwtResDTO;
 
 @RequiredArgsConstructor
 @Component

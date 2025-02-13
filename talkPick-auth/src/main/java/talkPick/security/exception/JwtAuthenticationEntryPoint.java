@@ -9,6 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
+import talkPick.constants.AuthConstants;
+import talkPick.error.ErrorCode;
+import talkPick.error.ErrorResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 

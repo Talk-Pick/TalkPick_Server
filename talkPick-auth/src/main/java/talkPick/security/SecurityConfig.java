@@ -11,12 +11,11 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import tictoc.config.CorsFilter;
-import tictoc.config.security.exception.ExceptionHandlerFilter;
-import tictoc.config.security.exception.JwtAuthenticationEntryPoint;
-import tictoc.config.security.filter.JwtAuthenticationFilter;
-import tictoc.config.security.jwt.util.JwtProvider;
-
+import talkPick.config.CorsFilter;
+import talkPick.security.exception.ExceptionHandlerFilter;
+import talkPick.security.exception.JwtAuthenticationEntryPoint;
+import talkPick.security.filter.JwtAuthenticationFilter;
+import talkPick.security.jwt.util.JwtProvider;
 
 @RequiredArgsConstructor
 @EnableWebSecurity

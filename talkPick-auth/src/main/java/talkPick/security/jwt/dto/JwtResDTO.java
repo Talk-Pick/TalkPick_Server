@@ -1,6 +1,6 @@
 package talkPick.security.jwt.dto;
 
-import tictoc.config.security.jwt.RefreshToken;
+import talkPick.security.jwt.RefreshToken;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

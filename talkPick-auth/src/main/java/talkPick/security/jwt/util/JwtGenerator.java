@@ -1,16 +1,17 @@
 package talkPick.security.jwt.util;
 
+
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import tictoc.config.security.jwt.JwtProperties;
-import tictoc.config.security.jwt.dto.JwtResDTO;
-import tictoc.error.ErrorCode;
-import tictoc.error.exception.UnauthorizedException;
+import talkPick.error.ErrorCode;
+import talkPick.error.exception.UnauthorizedException;
+import talkPick.security.jwt.JwtProperties;
+import talkPick.security.jwt.dto.JwtResDTO;
 
 import java.security.Key;
+import java.security.SignatureException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Base64;
@@ -60,8 +61,6 @@ public class JwtGenerator {
             throw new UnauthorizedException(ErrorCode.EXPIRED_ACCESS_TOKEN);
         } catch (UnsupportedJwtException e) {
             throw new UnauthorizedException(ErrorCode.UNSUPPORTED_TOKEN_TYPE);
-        } catch (SignatureException e) {
-            throw new UnauthorizedException(ErrorCode.INVALID_SIGNATURE_TOKEN);
         } catch (Exception e) {
             throw new UnauthorizedException(ErrorCode.MALFORMED_TOKEN);
         }
