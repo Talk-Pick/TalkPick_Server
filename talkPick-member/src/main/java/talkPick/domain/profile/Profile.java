@@ -5,12 +5,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import talkPick.domain.type.MBTI;
+import talkPick.model.BaseTime;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Profile {
+public class Profile extends BaseTime {
     private Long id;
     private Long memberId;
     private String nickname;
