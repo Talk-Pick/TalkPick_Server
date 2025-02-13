@@ -18,6 +18,7 @@ public class Member extends BaseTime {
     private String kakaoId;
     private String email;
     private String password;
+    private String name;
     private String birth;
     private Gender gender;
     private LongType longType;
