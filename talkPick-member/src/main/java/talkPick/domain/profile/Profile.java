@@ -14,6 +14,5 @@ import talkPick.model.BaseTime;
 public class Profile extends BaseTime {
     private Long id;
     private Long memberId;
-    private String nickname;
     private MBTI mbti;
 }

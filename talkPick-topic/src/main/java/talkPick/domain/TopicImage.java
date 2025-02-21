@@ -1,18 +1,18 @@
-package talkPick.domain.character;
+package talkPick.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import talkPick.model.TalkPickStatus;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CharacterTopic {
+public class TopicImage {
     private Long id;
-    private Long characterId;
     private Long topicId;
-    private String topic;
-    private long talkTime;
+    private String imageUrl;
+    private TalkPickStatus status;
 }
