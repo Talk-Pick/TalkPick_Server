@@ -14,6 +14,7 @@ import talkPick.model.TalkPickStatus;
 public class Topic extends BaseTime {
     private Long id;
     private String content;
+    private String detail;
     private long averageTalkTime;
     private int selectCount;
     private int likeCount;
