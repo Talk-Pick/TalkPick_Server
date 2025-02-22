@@ -1,4 +1,4 @@
-package talkPick.infra.redis.model;
+package talkPick.infrastructure.redis.model;
 
 import jakarta.persistence.Id;
 import org.springframework.data.redis.core.RedisHash;
