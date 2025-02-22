@@ -1,4 +1,4 @@
-package talkPick.adaptor.controller;
+package talkPick.adaptor.in;
 
 public interface TopicCommandApi {
 }
