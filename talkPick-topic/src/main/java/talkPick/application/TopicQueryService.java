@@ -17,6 +17,11 @@ public class TopicQueryService implements TopicQueryUseCase {
     private final TopicQueryRepositoryPort topicQueryRepositoryPort;
 
     @Override
+    public List<TopicResDTO.Topics> getTopLikedTopics() {
+        return topicQueryRepositoryPort.findTopLikedTopics();
+    }
+
+    @Override
     public List<TopicResDTO.Categories> getTopCategories() {
         return topicQueryRepositoryPort.findTopCategories();
     }

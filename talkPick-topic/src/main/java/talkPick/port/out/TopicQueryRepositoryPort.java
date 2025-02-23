@@ -9,4 +9,5 @@ import java.util.List;
 public interface TopicQueryRepositoryPort {
     List<TopicResDTO.Categories> findTopCategories();
     PageCustom<TopicResDTO.Categories> findCategoriesWithPageable(Pageable pageable);
+    List<TopicResDTO.Topics> findTopLikedTopics();
 }

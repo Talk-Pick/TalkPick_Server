@@ -23,7 +23,15 @@ public class TopicQueryRepositoryAdaptor implements TopicQueryRepositoryPort {
     private final TopicJpaRepository topicJpaRepository;
 
     @Override
+    public List<TopicResDTO.Topics> findTopLikedTopics() {
+        //TODO Redis에서 조회해야 함.
+        return topicQuerydslRepository.findTopLikedTopics(TopicConstants.TOP_LIKED_TOPICS_COUNT);
+    }
+
+    @Override
     public List<TopicResDTO.Categories> findTopCategories() {
+        //TODO Redis+DB 할 때 중복 제거해야 함.
+
         List<Category> topCategoriesFromRedis = findTopCategoriesFromRedis(TopicConstants.TOP_CATEGORIES_COUNT);
 
         if (topCategoriesFromRedis.size() < TopicConstants.TOP_CATEGORIES_COUNT) {

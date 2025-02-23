@@ -7,6 +7,7 @@ import talkPick.model.PageCustom;
 import java.util.List;
 
 public interface TopicQueryUseCase {
+    List<TopicResDTO.Topics> getTopLikedTopics();
     List<TopicResDTO.Categories> getTopCategories();
     PageCustom<TopicResDTO.Categories> getCategories(Pageable pageable);
 }
