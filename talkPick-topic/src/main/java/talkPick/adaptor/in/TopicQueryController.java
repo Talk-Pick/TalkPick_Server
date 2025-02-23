@@ -16,6 +16,11 @@ import java.util.List;
 public class TopicQueryController implements TopicQueryApi {
     private final TopicQueryUseCase topicQueryUseCase;
 
+    @GetMapping("/top-like")
+    public List<TopicResDTO.Topics> getTopLikedTopics() {
+        return topicQueryUseCase.getTopLikedTopics();
+    }
+
     @GetMapping("/top-categories")
     public List<TopicResDTO.Categories> getTopCategories() {
         return topicQueryUseCase.getTopCategories();
