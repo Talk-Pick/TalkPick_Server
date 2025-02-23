@@ -1,19 +1,23 @@
 package talkPick.domain.member;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.*;
 import talkPick.domain.type.Gender;
 import talkPick.domain.type.LongType;
 import talkPick.model.BaseTime;
 import talkPick.model.TalkPickStatus;
 
 @Getter
+@Entity
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTime {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String kakaoId;
     private String email;

@@ -1,4 +1,4 @@
-package talkPick.infra.redis.model;
+package talkPick.infrastructure.cache.model;
 
 public enum Age {
     TEENS,      // 10대
