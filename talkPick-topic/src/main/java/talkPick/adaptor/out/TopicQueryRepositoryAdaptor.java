@@ -1,6 +1,7 @@
 package talkPick.adaptor.out;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import talkPick.adaptor.out.dto.TopicResDTO;
@@ -9,6 +10,7 @@ import talkPick.adaptor.out.repository.TopicQuerydslRepository;
 import talkPick.constants.topic.TopicConstants;
 import talkPick.domain.type.Category;
 import talkPick.infrastructure.cache.model.TopicRanking;
+import talkPick.model.PageCustom;
 import talkPick.port.out.TopicQueryRepositoryPort;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,7 +23,7 @@ public class TopicQueryRepositoryAdaptor implements TopicQueryRepositoryPort {
     private final TopicJpaRepository topicJpaRepository;
 
     @Override
-    public List<TopicResDTO.TopCategories> findTopCategories() {
+    public List<TopicResDTO.Categories> findTopCategories() {
         List<Category> topCategoriesFromRedis = findTopCategoriesFromRedis(TopicConstants.TOP_CATEGORIES_COUNT);
 
         if (topCategoriesFromRedis.size() < TopicConstants.TOP_CATEGORIES_COUNT) {
@@ -30,8 +32,13 @@ public class TopicQueryRepositoryAdaptor implements TopicQueryRepositoryPort {
         }
 
         return topCategoriesFromRedis.stream()
-                .map(category -> new TopicResDTO.TopCategories(category.name(), category.getDescription()))
+                .map(category -> new TopicResDTO.Categories(category.name(), category.getDescription()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PageCustom<TopicResDTO.Categories> findCategories(Pageable pageable) {
+        return topicQuerydslRepository.findCategoriesWithPageable(pageable);
     }
 
     private List<Category> findTopCategoriesFromRedis(int count) {
@@ -56,6 +63,6 @@ public class TopicQueryRepositoryAdaptor implements TopicQueryRepositoryPort {
     }
 
     private List<Category> findTopCategoriesFromDB(int count) {
-        return topicQuerydslRepository.getTopCategories(count);
+        return topicQuerydslRepository.findTopCategories(count);
     }
 }

@@ -16,7 +16,7 @@ public class TopicQueryController implements TopicQueryApi {
     private final TopicQueryUseCase topicQueryUseCase;
 
     @GetMapping("/categories")
-    public List<TopicResDTO.TopCategories> getTopCategories() {
+    public List<TopicResDTO.Categories> getTopCategories() {
         return topicQueryUseCase.getTopCategories();
     }
 }

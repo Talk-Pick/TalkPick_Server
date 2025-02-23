@@ -1,9 +1,6 @@
 package talkPick.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import talkPick.domain.type.Keyword;
 import talkPick.model.BaseTime;
@@ -18,5 +15,6 @@ public class TopicKeyword extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long topicId;
+    @Enumerated(EnumType.STRING)
     private Keyword keyword;
 }

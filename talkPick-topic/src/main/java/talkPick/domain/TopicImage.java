@@ -1,9 +1,6 @@
 package talkPick.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import talkPick.model.TalkPickStatus;
 
@@ -18,5 +15,6 @@ public class TopicImage {
     private Long id;
     private Long topicId;
     private String imageUrl;
+    @Enumerated(EnumType.STRING)
     private TalkPickStatus status;
 }
