@@ -37,7 +37,7 @@ public class TopicQueryRepositoryAdaptor implements TopicQueryRepositoryPort {
     }
 
     @Override
-    public PageCustom<TopicResDTO.Categories> findCategories(Pageable pageable) {
+    public PageCustom<TopicResDTO.Categories> findCategoriesWithPageable(Pageable pageable) {
         return topicQuerydslRepository.findCategoriesWithPageable(pageable);
     }
 
