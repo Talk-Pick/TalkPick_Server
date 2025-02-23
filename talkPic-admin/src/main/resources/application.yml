@@ -12,28 +12,28 @@ server:
 spring:
   config:
     import: optional:file:.env[.properties]
-#  datasource:
-#    driver-class-name: org.postgresql.Driver
-#    url: jdbc:postgresql://${TOPIC_DB_HOST}:${TOPIC_DB_PORT}/${TOPIC_DB_NAME}
-#    username: ${DB_USER}
-#    password: ${DB_PASSWORD}
-#    hikari:
-#      connection-timeout: ${CONNECTION_TIMEOUT}
-#      maximum-pool-size: ${MAXIMUM_POOL_SIZE}
-#      idle-timeout: ${IDLE_TIMEOUT}
-#      max-lifetime: ${MAX_LIFETIME}
-#  jpa:
-#    show-sql: true
-#    properties:
-#      hibernate:
-#        format_sql: true
-#    database-platform: org.hibernate.dialect.PostgreSQLDialect
-#    hibernate:
-#      ddl-auto: update
-#  servlet:
-#    multipart:
-#      max-file-size: ${MAX_FILE_SIZE}
-#      max-request-size: ${MAX_REQUEST_SIZE}
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${ADMIN_DB_HOST}:${ADMIN_DB_PORT}/${ADMIN_DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    hikari:
+      connection-timeout: ${CONNECTION_TIMEOUT}
+      maximum-pool-size: ${MAXIMUM_POOL_SIZE}
+      idle-timeout: ${IDLE_TIMEOUT}
+      max-lifetime: ${MAX_LIFETIME}
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+  servlet:
+    multipart:
+      max-file-size: ${MAX_FILE_SIZE}
+      max-request-size: ${MAX_REQUEST_SIZE}
 
 logging.level:
   org.hibernate.SQL: debug
