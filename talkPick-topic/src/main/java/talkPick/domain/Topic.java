@@ -29,4 +29,8 @@ public class Topic extends BaseTime {
     private int PCount;
     @Enumerated(EnumType.STRING)
     private TalkPickStatus status;
+
+    public void addLike() {
+        this.likeCount++;
+    }
 }

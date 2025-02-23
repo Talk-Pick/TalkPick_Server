@@ -8,7 +8,10 @@ import talkPick.adaptor.out.dto.TopicResDTO;
 import talkPick.adaptor.out.repository.TopicJpaRepository;
 import talkPick.adaptor.out.repository.TopicQuerydslRepository;
 import talkPick.constants.topic.TopicConstants;
+import talkPick.domain.Topic;
 import talkPick.domain.type.Category;
+import talkPick.error.ErrorCode;
+import talkPick.exception.TopicNotFoundException;
 import talkPick.infrastructure.cache.model.TopicRanking;
 import talkPick.model.PageCustom;
 import talkPick.port.out.TopicQueryRepositoryPort;
@@ -21,6 +24,11 @@ public class TopicQueryRepositoryAdaptor implements TopicQueryRepositoryPort {
     private final RedisTemplate<String, TopicRanking> redisTemplate;
     private final TopicQuerydslRepository topicQuerydslRepository;
     private final TopicJpaRepository topicJpaRepository;
+
+    @Override
+    public Topic findTopicById(final Long topicId) {
+        return topicJpaRepository.findById(topicId).orElseThrow(() -> new TopicNotFoundException(ErrorCode.TOPIC_NOT_FOUND));
+    }
 
     @Override
     public List<TopicResDTO.Categories> findTopCategories() {
