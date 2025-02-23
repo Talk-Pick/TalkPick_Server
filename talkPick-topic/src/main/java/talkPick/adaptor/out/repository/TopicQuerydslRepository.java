@@ -8,6 +8,7 @@ import talkPick.domain.type.Category;
 import java.util.List;
 
 import static talkPick.domain.QTopic.topic;
+import static talkPick.domain.QTopicCategory.topicCategory;
 
 @Repository
 public class TopicQuerydslRepository {
@@ -17,6 +18,12 @@ public class TopicQuerydslRepository {
     }
 
     public List<Category> getTopCategories(int count) {
-        return null;
+        return queryFactory
+                .select(topicCategory.category)
+                .from(topicCategory)
+                .groupBy(topicCategory.category)
+                .orderBy(topicCategory.category.count().desc())
+                .limit(count)
+                .fetch();
     }
 }
