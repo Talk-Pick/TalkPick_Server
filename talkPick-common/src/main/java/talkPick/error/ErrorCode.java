@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
-    // User
-    USER_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 회원입니다."),
+    // Member
+    MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 회원입니다."),
 
     // Topic
     TOPIC_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 토픽입니다."),
