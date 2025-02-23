@@ -19,6 +19,8 @@ public class TopicCommandService implements TopicCommandUseCase {
         //TODO memberId 유효한 멤버인지 확인해야 함.
 
         var findTopic = topicQueryRepositoryPort.findTopicById(topicId);
+
+        //TODO 동시성 제어해야 함.
         findTopic.addLike();
     }
 }

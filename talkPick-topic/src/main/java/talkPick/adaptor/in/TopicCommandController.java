@@ -15,8 +15,7 @@ public class TopicCommandController implements TopicCommandApi {
     private final TopicCommandUseCase topicCommandUseCase;
 
     @PostMapping("/{topicId}/like")
-    public String addLike(@UserId final Long memberId, @PathVariable("topicId") final Long topicId) {
+    public void addLike(@UserId final Long memberId, @PathVariable("topicId") final Long topicId) {
         topicCommandUseCase.addLike(memberId, topicId);
-        return "좋아요가 완료되었습니다.";
     }
 }
