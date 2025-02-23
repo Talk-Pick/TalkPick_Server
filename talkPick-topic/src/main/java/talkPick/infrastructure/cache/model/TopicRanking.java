@@ -1,12 +1,16 @@
-package talkPick.infrastructure.redis.model;
+package talkPick.infrastructure.cache.model;
 
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.data.redis.core.RedisHash;
 import talkPick.domain.type.Category;
 import talkPick.domain.type.Keyword;
 
 import java.io.Serializable;
 
+@Getter
+@AllArgsConstructor
 @RedisHash("topic_ranking")
 public class TopicRanking implements Serializable {
     @Id

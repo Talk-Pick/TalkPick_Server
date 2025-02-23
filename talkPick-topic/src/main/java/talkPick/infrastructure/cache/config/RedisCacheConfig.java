@@ -1,4 +1,4 @@
-package talkPick.infrastructure.redis.config;
+package talkPick.infrastructure.cache.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

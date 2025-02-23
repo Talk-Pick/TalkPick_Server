@@ -1,4 +1,4 @@
-package talkPick.adaptor.out;
+package talkPick.adaptor.out.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import talkPick.domain.Topic;

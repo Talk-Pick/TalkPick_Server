@@ -1,7 +1,8 @@
 package talkPick.port.in;
 
 import talkPick.adaptor.out.dto.TopicResDTO;
+import java.util.List;
 
 public interface TopicQueryUseCase {
-    TopicResDTO.Categories getCategories();
+    List<TopicResDTO.TopCategories> getTopCategories();
 }

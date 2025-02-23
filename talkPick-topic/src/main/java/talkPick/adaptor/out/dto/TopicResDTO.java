@@ -1,7 +1,7 @@
 package talkPick.adaptor.out.dto;
 
 public class TopicResDTO {
-    public record Categories(
+    public record TopCategories(
             String category,
             String detail
     ) {}
