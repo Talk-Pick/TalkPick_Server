@@ -10,6 +10,9 @@ public enum ErrorCode {
     // User
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 회원입니다."),
 
+    // Admin
+    ADMIN_NOT_FOUND(HttpStatus.BAD_REQUEST, "관리자 정보가 존재하지 않습니다."),
+
     // Server
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "리소스 접근 권한이 없습니다."),

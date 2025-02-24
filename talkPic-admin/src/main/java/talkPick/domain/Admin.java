@@ -18,9 +18,9 @@ public class Admin extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true)
     private String adminCode;
 
     @Column(nullable = false)
@@ -38,11 +38,32 @@ public class Admin extends BaseTime {
     @OrderBy("loginTime DESC") // 최근 로그인 순서
     private List<AdminLoginHistory> loginHistories = new ArrayList<>();
 
-    // adminCode 자동 생성
+    public static Admin toAdminEntity(String adminCode, String email, String password) {
+        return Admin.builder()
+                .adminCode(adminCode) // static 메서드로 변경
+                .email(email)
+                .password(password)
+                .role(Role.ADMIN)
+                .build();
+    }
+
+    public static Admin toSignupAdminEntity(String email, String password) {
+        return Admin.builder()
+                .email(email)
+                .password(password)
+                .role(Role.ADMIN)
+                .build();
+    }
+
+    // UUID 기반 adminCode 자동 생성
+    private static String generateAdminCode() {
+        return "talkpick" + UUID.randomUUID().toString().replace("-", "").substring(0, 5);
+    }
+
     @PrePersist
-    public void generateAdminCode() {
+    public void prePersist() {
         if (this.adminCode == null) {
-            this.adminCode = "talkpick" + UUID.randomUUID().toString().replace("-", "").substring(0, 5);
+            this.adminCode = generateAdminCode();
         }
     }
 }

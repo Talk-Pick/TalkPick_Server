@@ -1,4 +1,11 @@
 package talkPick.adapter.out.repository;
 
-public interface AdminJpaRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import talkPick.domain.Admin;
+
+import java.util.Optional;
+
+public interface AdminJpaRepository extends JpaRepository<Admin, String> {
+
+    Optional<Admin> findByEmail(String email);
 }
