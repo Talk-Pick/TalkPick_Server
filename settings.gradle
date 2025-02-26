@@ -3,5 +3,5 @@ include 'talkPick-common'
 include 'talkPick-topic'
 include 'talkPick-member'
 include 'talkPick-auth'
-include 'talkPic-admin'
+include 'talkPick-admin'
 
