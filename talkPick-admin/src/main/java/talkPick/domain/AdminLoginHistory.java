@@ -33,8 +33,7 @@ public class AdminLoginHistory {
 
     @PrePersist
     public void setLoginTime() {
-        // TODO 로그인 성공시에만 로그인 접속 기록 남기도록 수정
-        if (this.loginTime == null) {
+        if (this.successful) { // 로그인 성공시에만 기록 남김
             this.loginTime = LocalDateTime.now();
         }
     }

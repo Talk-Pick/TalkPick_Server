@@ -5,13 +5,11 @@ public class AdminResDTO {
     public record Signup (
             long adminId,
             String email,
-            String password,
-            String adminCode
+            String password
     ){}
 
     public record Login (
             String email,
-            String password,
-            String adminCode
+            String password
     ){}
 }

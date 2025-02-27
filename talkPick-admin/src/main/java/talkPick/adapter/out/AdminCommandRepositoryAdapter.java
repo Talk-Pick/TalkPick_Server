@@ -22,17 +22,7 @@ public class AdminCommandRepositoryAdapter implements AdminCommandRepositoryPort
     }
 
     @Override
-    public Admin findByAdminId(String adminCode) {
-        return adminJpaRepository.findById(adminCode).orElseThrow(() -> new AdminException(ErrorCode.ADMIN_NOT_FOUND));
-    }
-
-    @Override
     public Admin findByEmail(String email) {
         return adminJpaRepository.findByEmail(email).orElseThrow(() -> new AdminException(ErrorCode.ADMIN_NOT_FOUND));
-    }
-
-    @Override
-    public boolean existByAdminCode(String adminCode) {
-        return adminJpaRepository.existsById(adminCode);
     }
 }

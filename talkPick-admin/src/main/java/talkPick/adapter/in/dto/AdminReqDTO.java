@@ -6,7 +6,6 @@ public class AdminReqDTO {
 
     public record Admin(
         Long adminId,
-        String adminCode,
         Role role
     ){}
 
@@ -17,7 +16,6 @@ public class AdminReqDTO {
 
     public record Login (
         String email,
-        String password,
-        String adminCode
+        String password
     ){}
 }
