@@ -1,0 +1,14 @@
+admin:
+  jasypt:
+    encryptor:
+      password: ${JASYPT_ADMIN_SECRET_KEY}
+
+member:
+  jasypt:
+    encryptor:
+      password: ${JASYPT_MEMBER_SECRET_KEY}
+
+jasypt:
+  encryptor:
+    algorithm: ${JASYPT_ALGORITHM}
+    pool-size: ${JASYPT_POOL_SIZE}
