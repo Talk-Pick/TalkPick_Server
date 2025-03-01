@@ -3,6 +3,7 @@ package talkPick.error;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
+import talkPick.config.JasyptConfig;
 
 @Getter
 @AllArgsConstructor
@@ -21,7 +22,10 @@ public enum ErrorCode {
     MALFORMED_TOKEN(HttpStatus.UNAUTHORIZED,  "잘못된 토큰 구조입니다."),
     INVALID_SIGNATURE_TOKEN(HttpStatus.UNAUTHORIZED, "잘못된 토큰 서명입니다."),
     TOKEN_SUBJECT_NOT_NUMERIC_STRING(HttpStatus.UNAUTHORIZED, "토큰의 subject가 숫자 문자열이 아닙니다."),
-    NOT_ALLOW_STRING(HttpStatus.INTERNAL_SERVER_ERROR ,"잘못된 String 반환입니다. 서버 담당자에게 문의하세요.");
+    NOT_ALLOW_STRING(HttpStatus.INTERNAL_SERVER_ERROR ,"잘못된 String 반환입니다. 서버 담당자에게 문의하세요."),
+
+    // Common
+    JASYPT_KEY_CONFIGURATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "jayspt 암호화 키가 유효하지 않습니다.");
 
     private final HttpStatus status;
     private final String message;
