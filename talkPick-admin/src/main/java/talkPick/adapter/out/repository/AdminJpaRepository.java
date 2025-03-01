@@ -5,7 +5,7 @@ import talkPick.domain.Admin;
 
 import java.util.Optional;
 
-public interface AdminJpaRepository extends JpaRepository<Admin, String> {
+public interface AdminJpaRepository extends JpaRepository<Admin, Long> {
 
     Optional<Admin> findByEmail(String email);
 }

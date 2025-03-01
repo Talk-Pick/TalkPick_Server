@@ -1,4 +1,4 @@
 package talkPick.port.out;
 
-public class AdminQueryRepositoryPort {
+public interface AdminQueryRepositoryPort {
 }

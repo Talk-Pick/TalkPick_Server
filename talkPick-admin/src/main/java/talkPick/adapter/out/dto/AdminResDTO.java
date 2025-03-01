@@ -4,12 +4,11 @@ public class AdminResDTO {
 
     public record Signup (
             long adminId,
-            String email,
-            String password
+            String email
     ){}
 
     public record Login (
-            String email,
-            String password
+            long adminId,
+            String email
     ){}
 }
