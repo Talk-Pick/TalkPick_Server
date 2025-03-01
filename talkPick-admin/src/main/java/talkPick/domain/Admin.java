@@ -38,18 +38,20 @@ public class Admin extends BaseTime {
     @OrderBy("loginTime DESC") // 최근 로그인 순서
     private List<AdminLoginHistory> loginHistories = new ArrayList<>();
 
-    public static Admin create(String email, String password) {
+    public void setAuthInfo(AdminAuthInfo authInfo) {
+        this.authInfo = authInfo;
+    }
+
+    public static Admin create(String email) {
         return Admin.builder()
                 .email(email)
-                .password(password)
                 .role(Role.ADMIN)
                 .build();
     }
 
-    public static Admin toSignupAdminEntity(String email, String password) {
+    public static Admin toSignupAdminEntity(String email) {
         return Admin.builder()
                 .email(email)
-                .password(password)
                 .role(Role.ADMIN)
                 .build();
     }

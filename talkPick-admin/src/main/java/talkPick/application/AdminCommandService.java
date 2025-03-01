@@ -1,11 +1,18 @@
 package talkPick.application;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.jasypt.encryption.StringEncryptor;
 import talkPick.adapter.in.dto.AdminReqDTO;
 import talkPick.adapter.out.dto.AdminResDTO;
 import talkPick.domain.Admin;
+import talkPick.domain.AdminAuthInfo;
+import talkPick.error.ErrorCode;
+import talkPick.error.exception.AdminException;
 import talkPick.mapper.AdminResMapper;
 import talkPick.port.in.AdminCommandUseCase;
 import talkPick.port.out.AdminCommandRepositoryPort;
@@ -16,11 +23,33 @@ import talkPick.port.out.AdminCommandRepositoryPort;
 public class AdminCommandService implements AdminCommandUseCase {
     private final AdminCommandRepositoryPort adminCommandRepositoryPort;
     private final AdminResMapper adminResMapper;
+    @Autowired
+    @Qualifier("adminEncryptor")
+    private final StringEncryptor adminEncryptor;
 
     @Override
     public AdminResDTO.Signup signup(AdminReqDTO.Signup signup) {
-        Admin admin = saveAdmin(signup.email(), signup.password());
-        return adminResMapper.toAdmin(admin);
+
+        // pw 암호화
+        String encryptedPassword = adminEncryptor.encrypt(signup.password());
+        // Admin 저장
+        Admin savedAdmin = saveAdmin(signup.email());
+        // AdminAuthInfo 저장
+        saveAdminAuthInfo(savedAdmin, encryptedPassword);
+
+        return adminResMapper.toAdmin(savedAdmin);
+    }
+
+    private Admin saveAdmin(String email) {
+        Admin admin = Admin.toSignupAdminEntity(email);
+        // Admin 저장
+        return adminCommandRepositoryPort.saveAdmin(admin);
+    }
+
+    private void saveAdminAuthInfo(Admin admin, String password) {
+        AdminAuthInfo adminAuthInfo = AdminAuthInfo.create(admin, password);
+        admin.setAuthInfo(adminAuthInfo);
+        adminCommandRepositoryPort.saveAdminAuthInfo(adminAuthInfo);
     }
 
     @Override
@@ -28,14 +57,10 @@ public class AdminCommandService implements AdminCommandUseCase {
         Admin admin = adminCommandRepositoryPort.findByEmail(login.email());
 
         if (!passwordMatches(login.password(), admin.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new AdminException(ErrorCode.ADMIN_LOGIN_PASSWORD_FAULT);
         }
 
         return adminResMapper.toLoginAdmin(admin);
-    }
-
-    private Admin saveAdmin(String email, String password) {
-        return adminCommandRepositoryPort.saveAdmin(Admin.toSignupAdminEntity(email, password));
     }
 
     private void validateAccount(String email, String password) {
@@ -47,7 +72,10 @@ public class AdminCommandService implements AdminCommandUseCase {
         }
     }
 
-    private boolean passwordMatches(String rawPassword, String encodedPassword) {
-        return rawPassword.equals(encodedPassword); // 실제로는 BCryptPasswordEncoder를 사용해야 함
+    private boolean passwordMatches(String rawPassword, String encryptedPassword) {
+        // 입력된 pw를 암호화
+        String encryptedRawPassword = adminEncryptor.encrypt(rawPassword);
+        // DB상의 pw와 비교
+        return encryptedRawPassword.equals(encryptedPassword);
     }
 }

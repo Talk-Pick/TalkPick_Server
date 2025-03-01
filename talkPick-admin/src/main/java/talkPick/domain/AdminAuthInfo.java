@@ -24,7 +24,7 @@ public class AdminAuthInfo {
     private boolean isLocked;
 
     @Column(nullable = false)
-    private String passwordHash;
+    private String password;
 
     @OneToOne
     @JoinColumn(name = "admin_id", nullable = false)
@@ -35,11 +35,11 @@ public class AdminAuthInfo {
         return "talkpick" + UUID.randomUUID().toString().replace("-", "").substring(0, 5);
     }
 
-    public static AdminAuthInfo create(Admin admin, String passwordHash) {
+    public static AdminAuthInfo create(Admin admin, String password) {
         return AdminAuthInfo.builder()
                 .admin(admin)
                 .adminCode(generateAdminCode())
-                .passwordHash(passwordHash)
+                .password(password)
                 .loginAttemptCount(0)
                 .isLocked(false)
                 .build();
