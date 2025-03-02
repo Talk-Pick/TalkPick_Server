@@ -19,11 +19,8 @@ public class AdminCommandController {
     private final AdminCommandUseCase adminCommandUseCase;
 
     @PostMapping("/signup")
-    public AdminResDTO.Signup adminSignup(@Validated @RequestBody AdminReqDTO.Signup signup) {
-        log.info("가입 중============");
-        AdminResDTO.Signup signup1 = adminCommandUseCase.signup(signup);
-        log.info("가입 완료===========");
-        return signup1;
+    public AdminResDTO.Admin adminSignup(@Validated @RequestBody AdminReqDTO.Signup signup) {
+        return adminCommandUseCase.signup(signup);
     }
 
     @PostMapping("/login")

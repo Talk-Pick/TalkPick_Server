@@ -5,8 +5,10 @@ import talkPick.domain.AdminAuthInfo;
 
 public interface AdminCommandRepositoryPort {
 
-    Admin saveAdmin(Admin admin);
+    void saveAdmin(Admin admin);
     Admin findByEmail(String email);
-    AdminAuthInfo saveAdminAuthInfo(AdminAuthInfo adminAuthInfo);
+    void saveAdminAuthInfo(AdminAuthInfo adminAuthInfo);
     AdminAuthInfo findByPassword(String password);
+    AdminAuthInfo findByAdmin(Admin admin);
+    void saveAdminWithAuthInfo(Admin admin, AdminAuthInfo adminAuthInfo);
 }

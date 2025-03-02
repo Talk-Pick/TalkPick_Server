@@ -12,6 +12,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 회원입니다."),
 
     // Admin
+    ADMIN_NOT_FOUND(HttpStatus.BAD_REQUEST, "관리자 정보를 찾을 수 없습니다."),
     ADMIN_EMAIL_NOT_FOUND(HttpStatus.BAD_REQUEST, "관리자 이메일 정보가 존재하지 않습니다."),
     ADMIN_PASSWORD_NOT_FOUND(HttpStatus.BAD_REQUEST, "관리자 비밀번호 정보가 존재하지 않습니다."),
     ADMIN_LOGIN_PASSWORD_FAULT(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),

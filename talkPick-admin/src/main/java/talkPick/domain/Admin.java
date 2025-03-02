@@ -23,9 +23,6 @@ public class Admin extends BaseTime {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
@@ -38,7 +35,7 @@ public class Admin extends BaseTime {
     @OrderBy("loginTime DESC") // 최근 로그인 순서
     private List<AdminLoginHistory> loginHistories = new ArrayList<>();
 
-    public void setAuthInfo(AdminAuthInfo authInfo) {
+    public void updateAuthInfo(AdminAuthInfo authInfo) {
         this.authInfo = authInfo;
     }
 
