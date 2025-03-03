@@ -16,6 +16,7 @@ public enum ErrorCode {
     ADMIN_EMAIL_NOT_FOUND(HttpStatus.BAD_REQUEST, "관리자 이메일 정보가 존재하지 않습니다."),
     ADMIN_PASSWORD_NOT_FOUND(HttpStatus.BAD_REQUEST, "관리자 비밀번호 정보가 존재하지 않습니다."),
     ADMIN_LOGIN_PASSWORD_FAULT(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
+    ADMIN_EMAIL_DUPLICATED(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일 입니다."),
 
     // Server
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다."),

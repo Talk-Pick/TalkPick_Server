@@ -7,6 +7,7 @@ public interface AdminCommandRepositoryPort {
 
     void saveAdmin(Admin admin);
     Admin findByEmail(String email);
+    boolean existsByEmail(String email);
     void saveAdminAuthInfo(AdminAuthInfo adminAuthInfo);
     AdminAuthInfo findByPassword(String password);
     AdminAuthInfo findByAdmin(Admin admin);

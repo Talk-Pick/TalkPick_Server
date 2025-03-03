@@ -7,6 +7,7 @@ import org.jasypt.encryption.StringEncryptor;
 import talkPick.adapter.in.dto.AdminReqDTO;
 import talkPick.adapter.out.dto.AdminResDTO;
 import talkPick.adapter.out.mapper.AdminResMapper;
+import talkPick.application.validator.annotation.ValidPassword;
 import talkPick.domain.Admin;
 import talkPick.domain.AdminAuthInfo;
 import talkPick.error.ErrorCode;
@@ -44,6 +45,8 @@ public class AdminCommandService implements AdminCommandUseCase {
 
     private Admin createAdmin(String email, String password) {
 
+        duplicateEmailValidate(email);
+
         Admin admin = Admin.create(email);
         AdminAuthInfo adminAuthInfo = AdminAuthInfo.create(admin, password);
         admin.updateAuthInfo(adminAuthInfo);
@@ -58,6 +61,12 @@ public class AdminCommandService implements AdminCommandUseCase {
 
         if (!rawPassword.equals(decryptedPassword)) {
             throw new AdminException(ErrorCode.ADMIN_LOGIN_PASSWORD_FAULT);
+        }
+    }
+
+    public void duplicateEmailValidate(String email) {
+        if (adminCommandRepositoryPort.existsByEmail(email)) {
+            throw new AdminException(ErrorCode.ADMIN_EMAIL_DUPLICATED);
         }
     }
 }

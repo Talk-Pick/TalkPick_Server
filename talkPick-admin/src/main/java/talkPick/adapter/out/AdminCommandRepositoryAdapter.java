@@ -29,6 +29,11 @@ public class AdminCommandRepositoryAdapter implements AdminCommandRepositoryPort
     }
 
     @Override
+    public boolean existsByEmail(String email) {
+        return adminJpaRepository.existsByEmail(email);
+    }
+
+    @Override
     public void saveAdminAuthInfo(AdminAuthInfo adminAuthInfo) {
         adminAuthInfoJpaRepository.save(adminAuthInfo);
     }
