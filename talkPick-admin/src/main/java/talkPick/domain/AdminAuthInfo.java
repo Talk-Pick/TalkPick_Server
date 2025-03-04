@@ -2,6 +2,7 @@ package talkPick.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import talkPick.application.validator.annotation.ValidPassword;
 
 import java.util.UUID;
 
@@ -19,12 +20,12 @@ public class AdminAuthInfo {
     @Column(nullable = false, unique = true, updatable = false)
     private String adminCode;
 
+    @Column(nullable = false)
+    private String password;
+
     private int loginAttemptCount;
 
     private boolean isLocked;
-
-    @Column(nullable = false)
-    private String password;
 
     @OneToOne
     @JoinColumn(name = "admin_id", nullable = false)

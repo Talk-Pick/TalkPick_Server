@@ -1,19 +1,17 @@
 package talkPick.application;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.jasypt.encryption.StringEncryptor;
 import talkPick.adapter.in.dto.AdminReqDTO;
 import talkPick.adapter.out.dto.AdminResDTO;
+import talkPick.adapter.out.mapper.AdminResMapper;
+import talkPick.application.validator.annotation.ValidPassword;
 import talkPick.domain.Admin;
 import talkPick.domain.AdminAuthInfo;
 import talkPick.error.ErrorCode;
 import talkPick.error.exception.AdminException;
-import talkPick.mapper.AdminResMapper;
 import talkPick.port.in.AdminCommandUseCase;
 import talkPick.port.out.AdminCommandRepositoryPort;
 
@@ -23,59 +21,52 @@ import talkPick.port.out.AdminCommandRepositoryPort;
 public class AdminCommandService implements AdminCommandUseCase {
     private final AdminCommandRepositoryPort adminCommandRepositoryPort;
     private final AdminResMapper adminResMapper;
-    @Autowired
-    @Qualifier("adminEncryptor")
     private final StringEncryptor adminEncryptor;
 
     @Override
-    public AdminResDTO.Signup signup(AdminReqDTO.Signup signup) {
+    public AdminResDTO.Admin signup(AdminReqDTO.Signup signup) {
 
-        // pw 암호화
         String encryptedPassword = adminEncryptor.encrypt(signup.password());
-        // Admin 저장
-        Admin savedAdmin = saveAdmin(signup.email());
-        // AdminAuthInfo 저장
-        saveAdminAuthInfo(savedAdmin, encryptedPassword);
+        Admin savedAdmin = createAdmin(signup.email(), encryptedPassword);
 
         return adminResMapper.toAdmin(savedAdmin);
     }
 
-    private Admin saveAdmin(String email) {
-        Admin admin = Admin.toSignupAdminEntity(email);
-        // Admin 저장
-        return adminCommandRepositoryPort.saveAdmin(admin);
-    }
-
-    private void saveAdminAuthInfo(Admin admin, String password) {
-        AdminAuthInfo adminAuthInfo = AdminAuthInfo.create(admin, password);
-        admin.setAuthInfo(adminAuthInfo);
-        adminCommandRepositoryPort.saveAdminAuthInfo(adminAuthInfo);
-    }
-
     @Override
     public AdminResDTO.Login login(AdminReqDTO.Login login) {
-        Admin admin = adminCommandRepositoryPort.findByEmail(login.email());
 
-        if (!passwordMatches(login.password(), admin.getPassword())) {
-            throw new AdminException(ErrorCode.ADMIN_LOGIN_PASSWORD_FAULT);
-        }
+        Admin admin = adminCommandRepositoryPort.findByEmail(login.email());
+        AdminAuthInfo adminAuthInfo = adminCommandRepositoryPort.findByAdmin(admin);
+
+        passwordMatches(login.password(), adminAuthInfo.getPassword());
 
         return adminResMapper.toLoginAdmin(admin);
     }
 
-    private void validateAccount(String email, String password) {
-        if (email == null || email.isBlank()) {
-            throw new IllegalArgumentException("이메일을 입력해주세요.");
-        }
-        if (password == null || password.length() < 6) {
-            throw new IllegalArgumentException("비밀번호는 최소 6자 이상이어야 합니다.");
+    private Admin createAdmin(String email, String password) {
+
+        duplicateEmailValidate(email);
+
+        Admin admin = Admin.create(email);
+        AdminAuthInfo adminAuthInfo = AdminAuthInfo.create(admin, password);
+        admin.updateAuthInfo(adminAuthInfo);
+
+        adminCommandRepositoryPort.saveAdminWithAuthInfo(admin, adminAuthInfo);
+        return adminCommandRepositoryPort.findByEmail(email);
+    }
+
+    public void passwordMatches(String rawPassword, String encryptedPassword) {
+
+        String decryptedPassword = adminEncryptor.decrypt(encryptedPassword);
+
+        if (!rawPassword.equals(decryptedPassword)) {
+            throw new AdminException(ErrorCode.ADMIN_LOGIN_PASSWORD_FAULT);
         }
     }
 
-    private boolean passwordMatches(String rawPassword, String encryptedPassword) {
-        // 입력된 pw를 암호화
-        String encryptedRawPassword = adminEncryptor.encrypt(rawPassword);
-        // DB상의 pw와 비교
-        return encryptedRawPassword.equals(encryptedPassword);
+    public void duplicateEmailValidate(String email) {
+        if (adminCommandRepositoryPort.existsByEmail(email)) {
+            throw new AdminException(ErrorCode.ADMIN_EMAIL_DUPLICATED);
+        }
     }
 }

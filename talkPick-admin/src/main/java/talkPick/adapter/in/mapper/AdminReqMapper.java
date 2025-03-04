@@ -1,5 +1,4 @@
-package talkPick.mapper;
-
+package talkPick.adapter.in.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -11,5 +10,5 @@ public interface AdminReqMapper {
 
     AdminReqMapper INSTANCE = Mappers.getMapper(AdminReqMapper.class);
 
-    AdminReqDTO.Signup toAdmin(Admin admin);
+    AdminReqDTO.Admin toAdmin(Admin admin);
 }

@@ -52,6 +52,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .headers(jsonHeaders)
-                .body(ResultResponse.fail("서버 내부 오류가 발생했습니다." + e.getMessage()));
+                .body(ResultResponse.fail("[서버 내부 오류] " + e.getMessage()));
     }
 }
