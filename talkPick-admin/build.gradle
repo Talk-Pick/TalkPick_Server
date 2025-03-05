@@ -6,4 +6,8 @@ dependencies {
     // common
     implementation project(':talkPick-common')
     implementation 'org.passay:passay:1.6.2'
+
+    // Monitoring
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
 }
