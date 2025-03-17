@@ -17,16 +17,20 @@ public class Topic extends BaseTime {
     private String content;
     private String detail;
     private long averageTalkTime;
-    private int selectCount;
-    private int likeCount;
-    private int ECount;
-    private int ICount;
-    private int SCount;
-    private int NCount;
-    private int FCount;
-    private int TCount;
-    private int JCount;
-    private int PCount;
+    private long selectCount;
+    private long likeCount;
+    private long ECount;
+    private long ICount;
+    private long SCount;
+    private long NCount;
+    private long FCount;
+    private long TCount;
+    private long JCount;
+    private long PCount;
     @Enumerated(EnumType.STRING)
     private TalkPickStatus status;
+
+    public void addLike(Long likeCount) {
+        this.likeCount = likeCount;
+    }
 }
