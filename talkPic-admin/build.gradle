@@ -1,8 +1,0 @@
-bootJar.enabled = true
-
-jar.enabled = true
-
-dependencies {
-    // common
-    implementation project(':talkPick-common')
-}

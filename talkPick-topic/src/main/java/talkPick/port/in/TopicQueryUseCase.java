@@ -3,7 +3,6 @@ package talkPick.port.in;
 import org.springframework.data.domain.Pageable;
 import talkPick.adapter.out.dto.TopicResDTO;
 import talkPick.model.PageCustom;
-
 import java.util.List;
 
 public interface TopicQueryUseCase {
