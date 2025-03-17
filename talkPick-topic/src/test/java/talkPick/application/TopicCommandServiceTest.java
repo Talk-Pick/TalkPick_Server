@@ -55,5 +55,4 @@ class TopicCommandServiceTest {
         // When & Then
         assertThrows(AddLikeFailInRedisException.class, () -> topicCommandService.addLike(memberId, topicId));
     }
-
 }
