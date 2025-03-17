@@ -1,7 +1,7 @@
 package talkPick.port.out;
 
 import org.springframework.data.domain.Pageable;
-import talkPick.adaptor.out.dto.TopicResDTO;
+import talkPick.adapter.out.dto.TopicResDTO;
 import talkPick.domain.Topic;
 import talkPick.model.PageCustom;
 

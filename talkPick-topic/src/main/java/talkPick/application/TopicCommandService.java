@@ -3,6 +3,8 @@ package talkPick.application;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import talkPick.error.ErrorCode;
+import talkPick.exception.AddLikeFailInRedisException;
 import talkPick.port.in.TopicCommandUseCase;
 import talkPick.port.out.TopicCommandRepositoryPort;
 import talkPick.port.out.TopicQueryRepositoryPort;
@@ -11,16 +13,24 @@ import talkPick.port.out.TopicQueryRepositoryPort;
 @Transactional
 @RequiredArgsConstructor
 public class TopicCommandService implements TopicCommandUseCase {
-    private final TopicCommandRepositoryPort topicCommandRepository;
+    private final TopicCommandRepositoryPort topicCommandRepositoryPort;
     private final TopicQueryRepositoryPort topicQueryRepositoryPort;
 
     @Override
     public void addLike(Long memberId, Long topicId) {
-        //TODO memberId 유효한 멤버인지 확인해야 함.
+        // TODO: memberId 유효성 체크 → Kafka 적용 후 구현 예정
+        try {
+            var likeCountInRedis = topicCommandRepositoryPort.addLike(memberId, topicId);
+            updateLikeCountEvery10(topicId, likeCountInRedis);
+        } catch (Exception e) {
+            throw new AddLikeFailInRedisException(ErrorCode.ADD_LIKE_FAIL);
+        }
+    }
 
-        var findTopic = topicQueryRepositoryPort.findTopicById(topicId);
-
-        //TODO 동시성 제어해야 함.
-        findTopic.addLike();
+    private void updateLikeCountEvery10(Long topicId, Long likeCountInRedis) {
+        if (likeCountInRedis % 10 == 0) {
+            var findTopic = topicQueryRepositoryPort.findTopicById(topicId);
+            findTopic.addLike(likeCountInRedis);
+        }
     }
 }

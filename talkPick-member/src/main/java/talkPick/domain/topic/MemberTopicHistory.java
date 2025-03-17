@@ -1,26 +1,22 @@
 package talkPick.domain.topic;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import talkPick.domain.type.TopicType;
 import talkPick.model.BaseTime;
 
 @Getter
-@Entity
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class MemberTopicHistory extends BaseTime {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long memberId;
     private Long topicId;
     private long talkTime;
-    private boolean checkLiked;
+    private boolean like;
     private int sequence;
     private TopicType topicType;
 }

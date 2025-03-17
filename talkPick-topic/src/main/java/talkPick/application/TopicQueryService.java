@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import talkPick.adaptor.out.dto.TopicResDTO;
+import talkPick.adapter.out.dto.TopicResDTO;
 import talkPick.model.PageCustom;
 import talkPick.port.in.TopicQueryUseCase;
 import talkPick.port.out.TopicQueryRepositoryPort;
