@@ -20,7 +20,7 @@ public class MemberTopicHistory extends BaseTime {
     private Long memberId;
     private Long topicId;
     private long talkTime;
-    private boolean like;
+    private boolean checkLiked;
     private int sequence;
     private TopicType topicType;
 }
