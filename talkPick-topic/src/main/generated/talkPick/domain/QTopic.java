@@ -30,29 +30,29 @@ public class QTopic extends EntityPathBase<Topic> {
 
     public final StringPath detail = createString("detail");
 
-    public final NumberPath<Integer> ECount = createNumber("ECount", Integer.class);
+    public final NumberPath<Long> ECount = createNumber("ECount", Long.class);
 
-    public final NumberPath<Integer> FCount = createNumber("FCount", Integer.class);
+    public final NumberPath<Long> FCount = createNumber("FCount", Long.class);
 
-    public final NumberPath<Integer> ICount = createNumber("ICount", Integer.class);
+    public final NumberPath<Long> ICount = createNumber("ICount", Long.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final NumberPath<Integer> JCount = createNumber("JCount", Integer.class);
+    public final NumberPath<Long> JCount = createNumber("JCount", Long.class);
 
-    public final NumberPath<Integer> likeCount = createNumber("likeCount", Integer.class);
+    public final NumberPath<Long> likeCount = createNumber("likeCount", Long.class);
 
-    public final NumberPath<Integer> NCount = createNumber("NCount", Integer.class);
+    public final NumberPath<Long> NCount = createNumber("NCount", Long.class);
 
-    public final NumberPath<Integer> PCount = createNumber("PCount", Integer.class);
+    public final NumberPath<Long> PCount = createNumber("PCount", Long.class);
 
-    public final NumberPath<Integer> SCount = createNumber("SCount", Integer.class);
+    public final NumberPath<Long> SCount = createNumber("SCount", Long.class);
 
-    public final NumberPath<Integer> selectCount = createNumber("selectCount", Integer.class);
+    public final NumberPath<Long> selectCount = createNumber("selectCount", Long.class);
 
     public final EnumPath<talkPick.model.TalkPickStatus> status = createEnum("status", talkPick.model.TalkPickStatus.class);
 
-    public final NumberPath<Integer> TCount = createNumber("TCount", Integer.class);
+    public final NumberPath<Long> TCount = createNumber("TCount", Long.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedDate = _super.updatedDate;
