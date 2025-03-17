@@ -1,5 +1,5 @@
 package talkPick.domain.type;
 
-public enum LongType {
+public enum LoginType {
     KAKAO, EMAIL
 }

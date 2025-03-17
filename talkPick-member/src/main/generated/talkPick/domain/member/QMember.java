@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import talkPick.domain.type.LoginType;
 
 
 /**
@@ -34,7 +35,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public final StringPath kakaoId = createString("kakaoId");
 
-    public final EnumPath<talkPick.domain.type.LongType> longType = createEnum("longType", talkPick.domain.type.LongType.class);
+    public final EnumPath<LoginType> longType = createEnum("longType", LoginType.class);
 
     public final StringPath name = createString("name");
 

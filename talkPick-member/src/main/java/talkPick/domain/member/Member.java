@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 import talkPick.domain.type.Gender;
-import talkPick.domain.type.LongType;
+import talkPick.domain.type.LoginType;
 import talkPick.model.BaseTime;
 import talkPick.model.TalkPickStatus;
 
@@ -25,6 +25,6 @@ public class Member extends BaseTime {
     private String name;
     private String birth;
     private Gender gender;
-    private LongType longType;
+    private LoginType loginType;
     private TalkPickStatus status;
 }
