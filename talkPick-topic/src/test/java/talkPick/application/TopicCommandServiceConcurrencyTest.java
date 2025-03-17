@@ -9,12 +9,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import talkPick.domain.Topic;
 import talkPick.port.out.TopicCommandRepositoryPort;
 import talkPick.port.out.TopicQueryRepositoryPort;
-
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -33,11 +31,11 @@ class TopicCommandServiceConcurrencyTest {
     void 좋아요_기능_동시성_테스트() throws InterruptedException {
         // Given
         Long topicId = 100L;
-        Long memberId = 1L;
-
         AtomicLong redisLikeCounter = new AtomicLong(0);
+
+        // When
         when(topicCommandRepositoryPort.addLike(anyLong(), anyLong()))
-                .thenAnswer(invocation -> redisLikeCounter.incrementAndGet()); // Redis INCR을 시뮬레이션
+                .thenAnswer(invocation -> redisLikeCounter.incrementAndGet());
 
         Topic mockTopic = mock(Topic.class);
         when(topicQueryRepositoryPort.findTopicById(topicId)).thenReturn(mockTopic);
