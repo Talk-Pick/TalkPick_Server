@@ -16,6 +16,5 @@ public class TopicKeyword extends BaseTime {
     private Long id;
     private Long topicId;
     @Enumerated(EnumType.STRING)
-    @Column(name = "key_word")
     private Keyword keyword;
 }

@@ -32,6 +32,7 @@ public class TopicQueryRepositoryAdapter implements TopicQueryRepositoryPort {
 
     @Override
     public List<TopicResDTO.Categories> findTopCategories() {
+        //TODO Redis 저장 고민해야 함.
         List<Category> topCategoriesFromRedis = findTopCategoriesFromRedis(TopicConstants.TOP_CATEGORIES_COUNT);
 
         if (topCategoriesFromRedis.size() < TopicConstants.TOP_CATEGORIES_COUNT) {
@@ -47,6 +48,12 @@ public class TopicQueryRepositoryAdapter implements TopicQueryRepositoryPort {
     @Override
     public PageCustom<TopicResDTO.Categories> findCategoriesWithPageable(Pageable pageable) {
         return topicQuerydslRepository.findCategoriesWithPageable(pageable);
+    }
+
+    @Override
+    public List<TopicResDTO.Topics> findTodayTopics() {
+        //TODO ADMIN에서 오늘의 토픽 5개를 지정해야 함으로 따로 테이블 팔까 고민 중
+        return List.of();
     }
 
     private List<Category> findTopCategoriesFromRedis(int count) {

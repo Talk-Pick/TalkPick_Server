@@ -25,4 +25,9 @@ public class TopicQueryController implements TopicQueryApi {
     public PageCustom<TopicResDTO.Categories> getCategories(Pageable pageable) {
         return topicQueryUseCase.getCategories(pageable);
     }
+
+    @GetMapping("/today-topics")
+    public List<TopicResDTO.Topics> getTodayTopics() {
+        return topicQueryUseCase.getTodayTopics();
+    }
 }
