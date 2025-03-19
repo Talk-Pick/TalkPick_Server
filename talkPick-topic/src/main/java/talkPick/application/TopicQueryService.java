@@ -25,4 +25,9 @@ public class TopicQueryService implements TopicQueryUseCase {
     public PageCustom<TopicResDTO.Categories> getCategories(Pageable pageable) {
         return topicQueryRepositoryPort.findCategoriesWithPageable(pageable);
     }
+
+    @Override
+    public List<TopicResDTO.Topics> getTodayTopics() {
+        return topicQueryRepositoryPort.findTodayTopics();
+    }
 }
