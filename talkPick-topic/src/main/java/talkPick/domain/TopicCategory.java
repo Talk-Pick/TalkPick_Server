@@ -16,5 +16,6 @@ public class TopicCategory extends BaseTime {
     private Long id;
     private Long topicId;
     @Enumerated(EnumType.STRING)
+    @Column(name = "cate_gory")
     private Category category;
 }

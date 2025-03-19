@@ -6,3 +6,17 @@ dependencies {
     // common
     implementation project(':talkPick-common')
 }
+
+def generated = layout.buildDirectory.dir("generated/querydsl")
+
+sourceSets {
+    main {
+        java {
+            srcDirs += generated
+        }
+    }
+}
+
+clean.doLast {
+    file(generated).deleteDir()
+}
