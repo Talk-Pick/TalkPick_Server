@@ -29,16 +29,19 @@ spring:
         format_sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
   servlet:
     multipart:
       max-file-size: ${MAX_FILE_SIZE}
       max-request-size: ${MAX_REQUEST_SIZE}
+  messages:
+    basename: messages,errors
 
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.orm.jdbc.bind: trace
-  org.springframework.web.cors: DEBUG
+  org.springframework.web.cors: debug
+  org.apache.coyote.http11: debug
   logging:
     level:
       root: debug
