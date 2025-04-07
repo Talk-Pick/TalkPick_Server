@@ -2,7 +2,6 @@ package talkPick.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import talkPick.application.validator.annotation.ValidPassword;
 
 import java.util.UUID;
 

@@ -6,11 +6,4 @@ dependencies {
     // common
     implementation project(':talkPick-common')
     implementation 'org.passay:passay:1.6.2'
-
-    // Jakarta Validation API
-    implementation 'jakarta.validation:jakarta.validation-api:2.0.2'
-
-    // Hibernate Validator
-    implementation 'org.hibernate.validator:hibernate-validator:6.2.0.Final'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
 }

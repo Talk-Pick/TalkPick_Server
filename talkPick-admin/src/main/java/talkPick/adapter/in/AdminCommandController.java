@@ -10,9 +10,8 @@ import talkPick.adapter.in.dto.AdminReqDTO;
 import talkPick.adapter.out.dto.AdminResDTO;
 import talkPick.port.in.AdminCommandUseCase;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
-@Valid
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin")
