@@ -6,11 +6,13 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class TokenAuthentication implements Authentication {
     private final String token;
     private final Long userId;
+    private final String role;
     private boolean isAuthenticated = true;
 
     @Override
@@ -48,7 +50,7 @@ public class TokenAuthentication implements Authentication {
         this.isAuthenticated = isAuthenticated;
     }
 
-    public static TokenAuthentication createTokenAuthentication(final String token, final long userId) {
-        return new TokenAuthentication(token, userId);
+    public static TokenAuthentication createTokenAuthentication(final String token, final long userId, final String role) {
+        return new TokenAuthentication(token, userId, role);
     }
 }

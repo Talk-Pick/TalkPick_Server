@@ -4,6 +4,7 @@ package talkPick.security.jwt.util;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import talkPick.error.ErrorCode;
 import talkPick.error.exception.UnauthorizedException;
@@ -11,30 +12,31 @@ import talkPick.security.jwt.JwtProperties;
 import talkPick.security.jwt.dto.JwtResDTO;
 
 import java.security.Key;
-import java.security.SignatureException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
 
-@RequiredArgsConstructor
+@Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtGenerator {
     private final JwtProperties jwtProperties;
 
-    public JwtResDTO.AccessToken generateAccessToken(final long userId) {
+    public JwtResDTO.AccessToken generateAccessToken(final long userId, final String role) {
         final var now = LocalDateTime.now();
         final var expireDate = generateExpirationDate(now);
 
         var accessToken = Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setSubject(String.valueOf(userId))
+                .claim("role", role)
                 .setIssuedAt(convertToDate(now))
                 .setExpiration(convertToDate(expireDate))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
 
-        return JwtResDTO.AccessToken.of(userId, accessToken, expireDate);
+        return JwtResDTO.AccessToken.of(userId, role, accessToken, expireDate);
     }
 
     private LocalDateTime generateExpirationDate(final LocalDateTime now) {
@@ -62,6 +64,7 @@ public class JwtGenerator {
         } catch (UnsupportedJwtException e) {
             throw new UnauthorizedException(ErrorCode.UNSUPPORTED_TOKEN_TYPE);
         } catch (Exception e) {
+            log.warn("Expired JWT token: {}", token);
             throw new UnauthorizedException(ErrorCode.MALFORMED_TOKEN);
         }
     }
