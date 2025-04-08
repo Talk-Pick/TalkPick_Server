@@ -18,12 +18,14 @@ public class RefreshToken {
     @Id
     private String token;
     private Long userId;
+    private String role;
     private LocalDateTime expiredAt;
 
-    public static RefreshToken of(final String token, final Long userId, LocalDateTime expiredAt) {
+    public static RefreshToken of(final String token, final Long userId, final String role, LocalDateTime expiredAt) {
         return RefreshToken.builder()
                 .token(token)
                 .userId(userId)
+                .role(role)
                 .expiredAt(expiredAt)
                 .build();
     }
