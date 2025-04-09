@@ -18,4 +18,8 @@ public class AdminResDTO {
             long id,
             String email
     ){}
+
+    public record Test (
+            String message
+    ) {}
 }

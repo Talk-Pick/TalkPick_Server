@@ -2,10 +2,7 @@ package talkPick.adapter.in;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import talkPick.adapter.in.dto.AdminReqDTO;
 import talkPick.adapter.out.dto.AdminResDTO;
 import talkPick.port.in.AdminCommandUseCase;
@@ -30,5 +27,10 @@ public class AdminCommandController {
     @Operation(summary = "관리자 로그인", description = "POST")
     public JwtResDTO.Login adminLogin(@RequestBody @Valid AdminReqDTO.Login login, JwtResDTO.Login jwtResDTO) {
         return authCommandUseCase.login(login, jwtResDTO);
+    }
+
+    @GetMapping("")
+    public AdminResDTO.Test test() {
+        return new AdminResDTO.Test("성공!!");
     }
 }
