@@ -17,10 +17,10 @@ public enum ErrorCode {
 
     // Admin
     ADMIN_NOT_FOUND(HttpStatus.BAD_REQUEST, "관리자 정보를 찾을 수 없습니다."),
+    ADMIN_EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "해당 이메일로 가입된 관리자가 이미 존재합니다."),
     ADMIN_EMAIL_NOT_FOUND(HttpStatus.BAD_REQUEST, "관리자 이메일 정보가 존재하지 않습니다."),
     ADMIN_PASSWORD_NOT_FOUND(HttpStatus.BAD_REQUEST, "관리자 비밀번호 정보가 존재하지 않습니다."),
     ADMIN_LOGIN_PASSWORD_FAULT(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
-    ADMIN_EMAIL_DUPLICATED(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일 입니다."),
     ADMIN_PASSWORD_NOT_ALLOWED(HttpStatus.BAD_REQUEST,"비밀번호가 보안 정책을 만족하지 않습니다."),
 
     // Server

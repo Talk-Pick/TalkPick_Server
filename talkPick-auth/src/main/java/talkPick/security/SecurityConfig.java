@@ -30,6 +30,8 @@ public class SecurityConfig {
 //        private final CorsConfig corsConfig;
     private static final String[] whiteList = {
             "/api/v1/member/login",
+            "/api/v1/admin/signup",
+            "/api/v1/admin/login",
             "/swagger-ui/**",
             "/v3/api-docs/**"
     };

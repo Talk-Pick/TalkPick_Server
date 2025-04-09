@@ -1,4 +1,4 @@
-package talkPick.application;
+package talkPick.application.query;
 
 import org.springframework.transaction.annotation.Transactional;
 

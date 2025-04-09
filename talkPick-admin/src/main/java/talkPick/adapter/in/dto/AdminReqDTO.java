@@ -6,7 +6,6 @@ import talkPick.domain.type.Role;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Email;
 
-
 public class AdminReqDTO {
 
     public record Admin (
@@ -20,7 +19,7 @@ public class AdminReqDTO {
     ) {}
 
     public record Login (
-            @NotNull @Email String email,
-            @NotNull String password
+        @NotNull @Email String email,
+        @NotNull String password
     ) {}
 }
