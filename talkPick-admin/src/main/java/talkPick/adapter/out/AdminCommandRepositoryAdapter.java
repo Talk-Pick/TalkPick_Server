@@ -18,8 +18,8 @@ public class AdminCommandRepositoryAdapter implements AdminCommandRepositoryPort
     private final AdminAuthInfoJpaRepository adminAuthInfoJpaRepository;
 
     @Override
-    public void saveAdmin(Admin admin) {
-        adminJpaRepository.save(admin);
+    public Admin saveAdmin(Admin admin) {
+        return adminJpaRepository.save(admin);
     }
 
     @Override

@@ -5,7 +5,10 @@ jar.enabled = true
 dependencies {
     // common
     implementation project(':talkPick-common')
+    implementation project(':talkPick-auth')
+
     implementation 'org.passay:passay:1.6.2'
+    implementation 'org.springframework.security:spring-security-crypto'
 
     // Monitoring
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
