@@ -3,6 +3,7 @@ package talkPick.security.jwt.util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import talkPick.error.ErrorCode;
+import talkPick.security.jwt.JwtProperties;
 import talkPick.security.jwt.dto.JwtResDTO;
 
 @RequiredArgsConstructor
