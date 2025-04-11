@@ -2,6 +2,7 @@ package talkPick.adapter.in;
 
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Pageable;
+import talkPick.adapter.in.dto.TopicReqDTO;
 import talkPick.adapter.out.dto.TopicResDTO;
 import talkPick.model.PageCustom;
 
@@ -16,4 +17,7 @@ public interface TopicQueryApi {
 
     @Operation(summary = "오늘의 토픽 5개 조회 API", description = "오늘의 토픽 5개 조회 API 입니다.")
     List<TopicResDTO.Topics> getTodayTopics();
+
+    @Operation(summary = "오늘의 토픽 5개 상세 조회 API", description = "오늘의 토픽 5개 상세 조회 API 입니다.")
+    List<TopicResDTO.TopicDetails> getTodayTopicDetails(TopicReqDTO.TodayTopics requestDTO);
 }
