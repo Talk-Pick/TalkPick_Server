@@ -23,7 +23,7 @@ public class TopicQueryService implements TopicQueryUseCase {
     @Override
     public List<TopicResDTO.Categories> getTopCategories() {
         return Stream.of(Category.values())
-                .map(category -> new TopicResDTO.Categories(category.name(), category.getDescription()))
+                .map(category -> new TopicResDTO.Categories(category.name(), category.getDescription(), category.getImageUrl()))
                 .collect(Collectors.toList());
     }
 
@@ -33,8 +33,8 @@ public class TopicQueryService implements TopicQueryUseCase {
     }
 
     @Override
-    public List<TopicResDTO.TopicSummaries> getTodayTopicSummaries() {
-        return topicQueryRepositoryPort.findTodayTopicSummaries();
+    public List<TopicResDTO.TopicSummaries> getTodayTopicSummaries(Long userId) {
+        return topicQueryRepositoryPort.findTodayTopicSummaries(userId);
     }
 
     @Override

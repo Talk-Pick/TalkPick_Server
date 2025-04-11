@@ -9,6 +9,6 @@ import java.util.List;
 public interface TopicQueryUseCase {
     List<TopicResDTO.Categories> getTopCategories();
     PageCustom<TopicResDTO.Categories> getCategories(Pageable pageable);
-    List<TopicResDTO.TopicSummaries> getTodayTopicSummaries();
+    List<TopicResDTO.TopicSummaries> getTodayTopicSummaries(Long userId);
     List<TopicResDTO.TopicDetails> getTodayTopicDetails(TopicReqDTO.TodayTopics requestDTO);
 }
