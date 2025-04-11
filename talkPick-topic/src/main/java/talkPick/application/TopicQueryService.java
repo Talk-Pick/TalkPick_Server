@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import talkPick.adapter.in.dto.TopicReqDTO;
 import talkPick.adapter.out.dto.TopicResDTO;
 import talkPick.model.PageCustom;
 import talkPick.port.in.TopicQueryUseCase;
@@ -27,7 +28,12 @@ public class TopicQueryService implements TopicQueryUseCase {
     }
 
     @Override
-    public List<TopicResDTO.Topics> getTodayTopics() {
-        return topicQueryRepositoryPort.findTodayTopics();
+    public List<TopicResDTO.TopicSummaries> getTodayTopicSummaries() {
+        return topicQueryRepositoryPort.findTodayTopicSummaries();
+    }
+
+    @Override
+    public List<TopicResDTO.TopicDetails> getTodayTopicDetails(TopicReqDTO.TodayTopics requestDTO) {
+        return topicQueryRepositoryPort.findTodayTopicDetails(requestDTO);
     }
 }

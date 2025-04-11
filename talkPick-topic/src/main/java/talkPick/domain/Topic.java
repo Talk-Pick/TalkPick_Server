@@ -14,8 +14,10 @@ public class Topic extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String content;
+    private String title;
     private String detail;
+    private String thumbnail;
+    private String icon;
     private long averageTalkTime;
     private long selectCount;
     private long likeCount;
