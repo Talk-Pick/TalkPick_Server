@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import talkPick.adapter.in.dto.TopicReqDTO;
 import talkPick.adapter.out.dto.TopicResDTO;
+import talkPick.annotation.UserId;
 import talkPick.model.PageCustom;
 import talkPick.port.in.TopicQueryUseCase;
 import java.util.List;

@@ -6,10 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talkPick.adapter.in.dto.TopicReqDTO;
 import talkPick.adapter.out.dto.TopicResDTO;
+import talkPick.domain.type.Category;
 import talkPick.model.PageCustom;
 import talkPick.port.in.TopicQueryUseCase;
 import talkPick.port.out.TopicQueryRepositoryPort;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional(readOnly = true)
@@ -19,7 +22,9 @@ public class TopicQueryService implements TopicQueryUseCase {
 
     @Override
     public List<TopicResDTO.Categories> getTopCategories() {
-        return topicQueryRepositoryPort.findTopCategories();
+        return Stream.of(Category.values())
+                .map(category -> new TopicResDTO.Categories(category.name(), category.getDescription()))
+                .collect(Collectors.toList());
     }
 
     @Override

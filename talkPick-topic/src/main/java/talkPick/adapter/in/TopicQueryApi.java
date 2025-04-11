@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Pageable;
 import talkPick.adapter.in.dto.TopicReqDTO;
 import talkPick.adapter.out.dto.TopicResDTO;
+import talkPick.annotation.UserId;
 import talkPick.model.PageCustom;
 
 import java.util.List;
