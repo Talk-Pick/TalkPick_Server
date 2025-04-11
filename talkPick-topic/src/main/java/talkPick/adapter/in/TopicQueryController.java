@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import talkPick.adapter.out.dto.TopicResDTO;
+import talkPick.annotation.UserId;
 import talkPick.model.PageCustom;
 import talkPick.port.in.TopicQueryUseCase;
 import java.util.List;
@@ -27,7 +28,7 @@ public class TopicQueryController implements TopicQueryApi {
     }
 
     @GetMapping("/today-topics")
-    public List<TopicResDTO.Topics> getTodayTopics() {
-        return topicQueryUseCase.getTodayTopics();
+    public List<TopicResDTO.Topics> getTodayTopics(@UserId Long memberId) {
+        return topicQueryUseCase.getTodayTopics(memberId);
     }
 }

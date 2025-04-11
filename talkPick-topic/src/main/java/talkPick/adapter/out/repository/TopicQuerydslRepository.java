@@ -19,16 +19,6 @@ public class TopicQuerydslRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<Category> findTopCategories(int count) {
-        return queryFactory
-                .select(topicCategory.category)
-                .from(topicCategory)
-                .groupBy(topicCategory.category)
-                .orderBy(topicCategory.category.count().desc())
-                .limit(count)
-                .fetch();
-    }
-
     public PageCustom<TopicResDTO.Categories> findCategoriesWithPageable(Pageable pageable) {
         long totalElements = Optional.ofNullable(
                 queryFactory.select(topicCategory.category.countDistinct())
@@ -49,6 +39,7 @@ public class TopicQuerydslRepository {
                 .map(category -> new TopicResDTO.Categories(category.name(), category.getDescription()))
                 .collect(Collectors.toList());
 
+        //TODO Count 쿼리 수 줄이기 위해 Redis 캐싱 적용해야 함.
         int totalPages = (int) Math.ceil((double) totalElements / pageable.getPageSize());
         return new PageCustom<>(content, totalPages, totalElements, pageable.getPageSize(), pageable.getPageNumber());
     }
