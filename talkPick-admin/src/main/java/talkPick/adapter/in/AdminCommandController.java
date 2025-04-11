@@ -1,31 +1,36 @@
 package talkPick.adapter.in;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import talkPick.adapter.in.dto.AdminReqDTO;
 import talkPick.adapter.out.dto.AdminResDTO;
 import talkPick.port.in.AdminCommandUseCase;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
+import talkPick.port.in.AuthCommandUseCase;
+import talkPick.security.jwt.dto.JwtResDTO;
 
-@Valid
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/admin")
 public class AdminCommandController {
-    private final AdminCommandUseCase adminCommandUseCase;
+    private final AuthCommandUseCase authCommandUseCase;
 
     @PostMapping("/signup")
-    public AdminResDTO.Admin adminSignup(@RequestBody @Valid AdminReqDTO.Signup signup) {
-        return adminCommandUseCase.signup(signup);
+    @Operation(summary = "관리자 회원가입", description = "POST")
+    public AdminResDTO.Signup adminSignup(@RequestBody @Valid AdminReqDTO.Signup signup) {
+        return authCommandUseCase.signup(signup);
     }
 
     @PostMapping("/login")
-    public void adminLogin(@Validated @RequestBody AdminReqDTO.Login login) {
-        adminCommandUseCase.login(login);
+    @Operation(summary = "관리자 로그인", description = "POST")
+    public JwtResDTO.Login adminLogin(@RequestBody @Valid AdminReqDTO.Login login, JwtResDTO.Login jwtResDTO) {
+        return authCommandUseCase.login(login, jwtResDTO);
+    }
+
+    @GetMapping("")
+    public AdminResDTO.Test test() {
+        return new AdminResDTO.Test("성공!!");
     }
 }

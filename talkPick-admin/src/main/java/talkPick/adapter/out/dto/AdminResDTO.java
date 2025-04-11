@@ -9,8 +9,17 @@ public class AdminResDTO {
             Role role
     ){}
 
+    public record Signup(
+            Long id,
+            Role role
+    ) {}
+
     public record Login (
             long id,
             String email
     ){}
+
+    public record Test (
+            String message
+    ) {}
 }

@@ -1,8 +1,8 @@
 package talkPick.domain;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import jakarta.persistence.*;
 import lombok.*;
-import talkPick.application.validator.annotation.ValidPassword;
 
 import java.util.UUID;
 
@@ -40,9 +40,19 @@ public class AdminAuthInfo {
         return AdminAuthInfo.builder()
                 .admin(admin)
                 .adminCode(generateAdminCode())
-                .password(password)
+                .password(encryptPassword(password))
                 .loginAttemptCount(0)
                 .isLocked(false)
                 .build();
+    }
+
+    public static String encryptPassword(String password) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.encode(password);
+    }
+
+    public boolean isMatchedPassword(String rawPassword) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.matches(rawPassword, this.password);
     }
 }

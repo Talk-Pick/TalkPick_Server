@@ -23,7 +23,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final var accessToken = getAccessToken(request);
         final var userId = jwtProvider.getUserIdFromToken(accessToken);
-        doAuthentication(accessToken, userId);
+        final var role = jwtProvider.getRoleFromToken(accessToken);
+        doAuthentication(accessToken, userId, role);
         filterChain.doFilter(request, response);
     }
 
@@ -35,8 +36,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         throw new UnauthorizedException(ErrorCode.UNAUTHORIZED);
     }
 
-    private void doAuthentication(final String token, final Long userId) {
-        var tokenAuthentication = TokenAuthentication.createTokenAuthentication(token, userId);
+    private void doAuthentication(final String token, final Long userId, final String role) {
+        var tokenAuthentication = TokenAuthentication.createTokenAuthentication(token, userId, role);
         var securityContext = SecurityContextHolder.getContext();
         securityContext.setAuthentication(tokenAuthentication);
     }

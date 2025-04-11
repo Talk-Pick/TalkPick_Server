@@ -16,7 +16,7 @@ public class RefreshTokenGenerator {
     private final RefreshTokenRepository refreshTokenRepository;
     private static final int TOKEN_BYTE_SIZE = 60 * 6 / 8; // 45 Bytes
 
-    public RefreshToken generateRefreshToken(final long userId) {
+    public RefreshToken generateRefreshToken(final long userId, final String role) {
         var random = createSecureRandom();
 
         // SecureRandom을 사용하여 45 바이트의 랜덤 토큰을 생성
@@ -28,7 +28,7 @@ public class RefreshTokenGenerator {
 
         var expireAt = LocalDateTime.now().plusWeeks(4);
 
-        var refreshToken = RefreshToken.of(token, userId, expireAt);
+        var refreshToken = RefreshToken.of(token, userId, role, expireAt);
         refreshTokenRepository.save(refreshToken);
 
         return refreshToken;

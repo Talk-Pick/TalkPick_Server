@@ -3,6 +3,7 @@ package talkPick.security.jwt.util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import talkPick.error.ErrorCode;
+import talkPick.security.jwt.JwtProperties;
 import talkPick.security.jwt.dto.JwtResDTO;
 
 @RequiredArgsConstructor
@@ -11,10 +12,10 @@ public class JwtProvider {
     private final JwtGenerator jwtGenerator;
     private final RefreshTokenGenerator refreshTokenGenerator;
 
-    public JwtResDTO.Login createJwt(final Long userId) {
+    public JwtResDTO.Login createJwt(final Long userId, final String role) {
         return JwtResDTO.Login.of(
-                jwtGenerator.generateAccessToken(userId),
-                refreshTokenGenerator.generateRefreshToken(userId)
+                jwtGenerator.generateAccessToken(userId, role),
+                refreshTokenGenerator.generateRefreshToken(userId, role)
         );
     }
 
@@ -25,5 +26,9 @@ public class JwtProvider {
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException(String.valueOf(ErrorCode.TOKEN_SUBJECT_NOT_NUMERIC_STRING));
         }
+    }
+
+    public String getRoleFromToken(String token) {
+        return jwtGenerator.parseToken(token).getBody().get("role", String.class);
     }
 }

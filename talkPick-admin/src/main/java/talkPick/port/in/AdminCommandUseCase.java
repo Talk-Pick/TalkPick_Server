@@ -1,11 +1,4 @@
 package talkPick.port.in;
 
-import talkPick.adapter.in.dto.AdminReqDTO;
-import talkPick.adapter.out.dto.AdminResDTO;
-
 public interface AdminCommandUseCase {
-
-    AdminResDTO.Admin signup(AdminReqDTO.Signup signup);
-
-    AdminResDTO.Login login(AdminReqDTO.Login login);
 }

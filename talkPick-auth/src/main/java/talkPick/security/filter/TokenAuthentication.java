@@ -1,16 +1,20 @@
 package talkPick.security.filter;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class TokenAuthentication implements Authentication {
     private final String token;
     private final Long userId;
+    private final String role;
     private boolean isAuthenticated = true;
 
     @Override
@@ -20,7 +24,7 @@ public class TokenAuthentication implements Authentication {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return List.of(new SimpleGrantedAuthority(role));
     }
 
     @Override
@@ -48,7 +52,7 @@ public class TokenAuthentication implements Authentication {
         this.isAuthenticated = isAuthenticated;
     }
 
-    public static TokenAuthentication createTokenAuthentication(final String token, final long userId) {
-        return new TokenAuthentication(token, userId);
+    public static TokenAuthentication createTokenAuthentication(final String token, final long userId, final String role) {
+        return new TokenAuthentication(token, userId, role);
     }
 }
