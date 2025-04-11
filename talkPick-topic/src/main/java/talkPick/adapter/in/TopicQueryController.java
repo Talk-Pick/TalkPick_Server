@@ -31,8 +31,8 @@ public class TopicQueryController implements TopicQueryApi {
 
     @Override
     @GetMapping("/today-topics")
-    public List<TopicResDTO.Topics> getTodayTopics() {
-        return topicQueryUseCase.getTodayTopics();
+    public List<TopicResDTO.TopicSummaries> getTodayTopicSummaries() {
+        return topicQueryUseCase.getTodayTopicSummaries();
     }
 
     @Override

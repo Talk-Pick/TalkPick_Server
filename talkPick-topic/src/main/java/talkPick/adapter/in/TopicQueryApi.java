@@ -16,7 +16,7 @@ public interface TopicQueryApi {
     PageCustom<TopicResDTO.Categories> getCategories(Pageable pageable);
 
     @Operation(summary = "오늘의 토픽 5개 조회 API", description = "오늘의 토픽 5개 조회 API 입니다.")
-    List<TopicResDTO.Topics> getTodayTopics();
+    List<TopicResDTO.TopicSummaries> getTodayTopicSummaries();
 
     @Operation(summary = "오늘의 토픽 5개 상세 조회 API", description = "오늘의 토픽 5개 상세 조회 API 입니다.")
     List<TopicResDTO.TopicDetails> getTodayTopicDetails(TopicReqDTO.TodayTopics requestDTO);

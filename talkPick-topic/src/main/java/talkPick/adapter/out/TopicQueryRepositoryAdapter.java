@@ -40,7 +40,7 @@ public class TopicQueryRepositoryAdapter implements TopicQueryRepositoryPort {
     }
 
     @Override
-    public List<TopicResDTO.Topics> findTodayTopics() {
+    public List<TopicResDTO.TopicSummaries> findTodayTopicSummaries() {
         //TODO ADMIN에서 오늘의 토픽 5개를 지정해야 함으로 따로 테이블 팔까 고민 중
         return null;
     }
