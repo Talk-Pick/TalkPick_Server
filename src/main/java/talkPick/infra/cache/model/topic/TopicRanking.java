@@ -1,0 +1,34 @@
+package talkPick.infra.cache.model.topic;
+
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.data.redis.core.RedisHash;
+import talkPick.domain.topic.type.Category;
+import talkPick.domain.topic.type.Keyword;
+
+import java.io.Serializable;
+
+@Getter
+@AllArgsConstructor
+@RedisHash("topic_ranking")
+public class TopicRanking implements Serializable {
+    @Id
+    private String id;
+    private Long topicId;
+    private String content;
+    private Keyword keyword;
+    private Category category;
+    private String gender; //TODO Gender Enum으로 변환 작업해야 함. User 모듈에 있어서 그럼.
+    private Age age;
+    private int ECount;
+    private int ICount;
+    private int SCount;
+    private int NCount;
+    private int FCount;
+    private int TCount;
+    private int JCount;
+    private int PCount;
+    private boolean like;
+    private long talkTime;
+}
