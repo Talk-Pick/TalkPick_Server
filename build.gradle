@@ -4,79 +4,101 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
-bootJar.enabled = false
+group = 'talkPick'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
 
 repositories {
     mavenCentral()
 }
 
-subprojects {
-    group = 'talkPick'
-    version = '0.0.1-SNAPSHOT'
-    sourceCompatibility = '21'
+dependencies {
+    // Spring
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    apply plugin: 'java'
-    apply plugin: 'java-library'
-    apply plugin: 'org.springframework.boot'
-    apply plugin: 'io.spring.dependency-management'
+    // Security
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
-    configurations {
-        compileOnly {
-            extendsFrom annotationProcessor
-        }
-    }
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    repositories {
-        mavenCentral()
-    }
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 
-    dependencies {
-        // spring
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
-        // Swagger
-        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
-        implementation 'javax.servlet:javax.servlet-api:4.0.1'
+    // JPA (postgresql) 관련 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.postgresql:postgresql:42.7.1'
 
-        // lombok
-        compileOnly 'org.projectlombok:lombok'
-        annotationProcessor 'org.projectlombok:lombok'
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
-        // JPA (postgresql) 관련 의존성
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-        implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-        implementation 'org.postgresql:postgresql:42.7.1'
+    // Jackson
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
-        // redis
-        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-        implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    // Todo : 단일 모듈로 변경된 현재 아키텍처에서 필요한지 논의하기
+//    // kafka 의존성: 모듈간 통신 용도
+//    implementation 'org.springframework.kafka:spring-kafka'
+//    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
-        // jackson
-        implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    // Querydsl
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
-        // kafka 의존성: 모듈간 통신 용도
-        implementation 'org.springframework.kafka:spring-kafka'
-        implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    // Test
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-        // Querydsl
-        implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-        annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
-        annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-        annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    // MapStruct
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 
-        testImplementation platform('org.junit:junit-bom:5.9.1')
-        testImplementation 'org.junit.jupiter:junit-jupiter'
+    // Jakarta Validation API
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+    implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
 
-        // MapStruct
-        implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-        annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
-        annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
-    }
+    // Validation starter
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    test {
-        useJUnitPlatform()
-    }
+    // Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
+
+    // Jasypt
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
+    implementation 'org.passay:passay:1.6.2'
+    implementation 'org.springframework.security:spring-security-crypto'
+
+    // Monitoring
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 def generated = layout.buildDirectory.dir("generated/querydsl")
@@ -91,4 +113,8 @@ sourceSets {
 
 clean.doLast {
     file(generated).deleteDir()
+}
+
+jar {
+    enabled = false
 }
