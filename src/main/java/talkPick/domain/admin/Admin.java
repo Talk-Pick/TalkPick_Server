@@ -2,8 +2,8 @@ package talkPick.domain.admin;
 
 import jakarta.persistence.*;
 import lombok.*;
-import talkPick.domain.admin.type.Role;
 import talkPick.common.model.BaseTime;
+import talkPick.domain.auth.Role;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +18,9 @@ public class Admin extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(nullable = false)
+    private String name;
 
     @Column(nullable = false)
     private String email;
@@ -38,16 +41,10 @@ public class Admin extends BaseTime {
         this.authInfo = authInfo;
     }
 
-    public static Admin create(String email) {
+    public static Admin create(String email, String name) {
         return Admin.builder()
                 .email(email)
-                .role(Role.ADMIN)
-                .build();
-    }
-
-    public static Admin toSignupAdminEntity(String email) {
-        return Admin.builder()
-                .email(email)
+                .name(name)
                 .role(Role.ADMIN)
                 .build();
     }

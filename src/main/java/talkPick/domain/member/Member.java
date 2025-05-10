@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
+import talkPick.domain.auth.Role;
 import talkPick.domain.member.type.Gender;
 import talkPick.domain.member.type.LoginType;
 import talkPick.common.model.BaseTime;
@@ -21,6 +22,7 @@ public class Member extends BaseTime {
     private Long id;
     private String kakaoId;
     private String email;
+    private Role memberRole;
     private String password;
     private String name;
     private String birth;

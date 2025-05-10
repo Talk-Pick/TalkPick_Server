@@ -33,7 +33,10 @@ public enum ErrorCode {
     NOT_ALLOW_STRING(HttpStatus.INTERNAL_SERVER_ERROR ,"잘못된 String 반환입니다. 서버 담당자에게 문의하세요."),
 
     // Common
-    JASYPT_KEY_CONFIGURATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "jayspt 암호화 키가 유효하지 않습니다.");
+    JASYPT_KEY_CONFIGURATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "jayspt 암호화 키가 유효하지 않습니다."),
+
+    // Auth
+    INVALID_ROLE(HttpStatus.INTERNAL_SERVER_ERROR, "유효하지 않은 role입니다.");
 
     private final HttpStatus status;
     private final String message;

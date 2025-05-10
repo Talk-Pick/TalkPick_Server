@@ -1,6 +1,6 @@
 package talkPick.adapter.out.admin.dto;
 
-import talkPick.domain.admin.type.Role;
+import talkPick.domain.auth.Role;
 
 public class AdminResDTO {
 
@@ -11,6 +11,7 @@ public class AdminResDTO {
 
     public record Signup(
             Long id,
+            String name,
             Role role
     ) {}
 

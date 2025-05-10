@@ -3,7 +3,7 @@ package talkPick.adapter.in.admin.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import talkPick.application.admin.validator.annotation.ValidPassword;
-import talkPick.domain.admin.type.Role;
+import talkPick.domain.auth.Role;
 
 public class AdminReqDTO {
 
@@ -14,6 +14,7 @@ public class AdminReqDTO {
 
     public record Signup (
         @NotNull @Email String email,
+        @NotNull String name,
         @NotNull @ValidPassword String password
     ) {}
 
