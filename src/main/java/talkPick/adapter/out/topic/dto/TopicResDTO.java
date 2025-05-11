@@ -4,6 +4,10 @@ import talkPick.domain.topic.type.Category;
 import talkPick.domain.topic.type.Keyword;
 
 public class TopicResDTO {
+    public record Topic(
+            Long id,
+            String title
+    ){}
     public record TopicSummaries(
             Long topicId,
             String title,
