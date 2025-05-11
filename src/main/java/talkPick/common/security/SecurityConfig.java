@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import talkPick.adapter.out.admin.repository.AdminJpaRepository;
+import talkPick.adapter.out.member.repository.MemberJpaRepository;
 import talkPick.common.config.CorsFilter;
 import talkPick.common.security.exception.ExceptionHandlerFilter;
 import talkPick.common.security.exception.JwtAuthenticationEntryPoint;
@@ -27,6 +29,9 @@ public class SecurityConfig {
     private final JwtProvider jwtProvider;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
     private final CorsFilter corsFilter;
+    private final AdminJpaRepository adminJpaRepository;
+    private final MemberJpaRepository memberJpaRepository;
+
 //        private final CorsConfig corsConfig;
     private static final String[] whiteList = {
             "/api/v1/member/login",
@@ -35,6 +40,11 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/v3/api-docs/**"
     };
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtProvider, adminJpaRepository, memberJpaRepository);
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -52,12 +62,11 @@ public class SecurityConfig {
                         authorizationManagerRequestMatcherRegistry ->
                                 authorizationManagerRequestMatcherRegistry
                                         .requestMatchers(whiteList).permitAll()
-                                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                        .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN")
+                                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                                         .anyRequest()
                                         .authenticated())
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class) // CorsFilter 추가
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class)
                 .build();
     }

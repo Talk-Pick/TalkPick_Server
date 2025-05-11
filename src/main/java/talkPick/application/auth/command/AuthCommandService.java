@@ -8,9 +8,9 @@ import talkPick.adapter.in.admin.mapper.AdminReqMapper;
 import talkPick.adapter.out.admin.dto.AdminResDTO;
 import talkPick.domain.admin.Admin;
 import talkPick.domain.admin.AdminAuthInfo;
-import talkPick.domain.admin.type.Role;
 import talkPick.common.error.ErrorCode;
 import talkPick.common.error.exception.AdminException;
+import talkPick.domain.auth.Role;
 import talkPick.port.in.admin.AuthCommandUseCase;
 import talkPick.port.out.admin.AdminCommandRepositoryPort;
 import talkPick.common.security.jwt.dto.JwtResDTO;
@@ -28,7 +28,7 @@ public class AuthCommandService implements AuthCommandUseCase {
     public AdminResDTO.Signup signup(AdminReqDTO.Signup signup) {
 
         validateEmailDuplication(signup.email());
-        Admin admin = createAdmin(signup.email(), signup.password());
+        Admin admin = createAdmin(signup);
 
         return adminReqMapper.toSignupRes(admin);
     }
@@ -46,10 +46,10 @@ public class AuthCommandService implements AuthCommandUseCase {
         return getToken(admin.getId());
     }
 
-    private Admin createAdmin(String email, String password) {
+    private Admin createAdmin(AdminReqDTO.Signup signup) {
 
-        Admin admin = Admin.create(email);
-        AdminAuthInfo adminAuthInfo = AdminAuthInfo.create(admin, password);
+        Admin admin = Admin.create(signup.email(), signup.name());
+        AdminAuthInfo adminAuthInfo = AdminAuthInfo.create(admin, signup.password());
 
         Admin newAdmin = adminCommandRepositoryPort.saveAdmin(admin);
         adminCommandRepositoryPort.saveAdminAuthInfo(adminAuthInfo);
