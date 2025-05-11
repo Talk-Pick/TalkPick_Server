@@ -14,7 +14,6 @@ import talkPick.global.error.ErrorCode;
 import talkPick.exception.topic.TopicNotFoundException;
 import talkPick.infra.cache.model.topic.TopicRanking;
 import talkPick.global.common.model.PageCustom;
-
 import java.util.*;
 
 @Component
@@ -27,12 +26,6 @@ public class TopicQueryRepositoryAdapter implements TopicQueryRepositoryPort {
     @Override
     public Topic findTopicById(final Long topicId) {
         return topicJpaRepository.findById(topicId).orElseThrow(() -> new TopicNotFoundException(ErrorCode.TOPIC_NOT_FOUND));
-    }
-
-    @Override
-    public List<TopicResDTO.Categories> findTopCategories() {
-        //TODO Redis 저장 고민해야 함.
-        return null;
     }
 
     @Override

@@ -10,7 +10,6 @@ import java.util.List;
 
 public interface TopicQueryRepositoryPort {
     Topic findTopicById(final Long topicId);
-    List<TopicResDTO.Categories> findTopCategories();
     PageCustom<TopicResDTO.Categories> findCategoriesWithPageable(Pageable pageable);
     List<TopicResDTO.TopicSummaries> findTodayTopicSummaries(Long userId);
     List<TopicResDTO.TopicDetail> findTodayTopicDetails(TopicReqDTO.TodayTopics requestDTO);
