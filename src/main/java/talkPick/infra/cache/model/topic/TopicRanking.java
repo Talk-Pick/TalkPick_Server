@@ -4,8 +4,8 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.redis.core.RedisHash;
-import talkPick.domain.topic.type.Category;
-import talkPick.domain.topic.type.Keyword;
+import talkPick.domain.topic.domain.type.Category;
+import talkPick.domain.topic.domain.type.Keyword;
 
 import java.io.Serializable;
 
