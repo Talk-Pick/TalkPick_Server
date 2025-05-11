@@ -1,4 +1,4 @@
 package talkPick.domain.random.adapter.in;
 
-public class RandomQueryController {
+public class RandomQueryController implements RandomQueryApi {
 }
