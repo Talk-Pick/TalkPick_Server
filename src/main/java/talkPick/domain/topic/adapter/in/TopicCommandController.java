@@ -14,6 +14,7 @@ import talkPick.domain.topic.port.in.TopicCommandUseCase;
 public class TopicCommandController implements TopicCommandApi {
     private final TopicCommandUseCase topicCommandUseCase;
 
+    @Override
     @PostMapping("/{topicId}/like")
     public void addLike(@UserId final Long memberId, @PathVariable("topicId") final Long topicId) {
         topicCommandUseCase.addLike(memberId, topicId);
