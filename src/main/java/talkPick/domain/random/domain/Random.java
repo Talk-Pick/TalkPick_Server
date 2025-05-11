@@ -19,4 +19,11 @@ public class Random extends BaseTime {
     private Long id;
     private Long memberId;
     private RandomType type;
+
+    public static Random of(final Long memberId) {
+        return Random.builder()
+                .memberId(memberId)
+                .type(RandomType.NOT_STARTED)
+                .build();
+    }
 }
