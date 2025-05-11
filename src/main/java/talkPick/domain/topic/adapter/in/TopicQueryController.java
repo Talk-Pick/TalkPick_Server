@@ -3,6 +3,7 @@ package talkPick.domain.topic.adapter.in;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import talkPick.domain.topic.port.in.TopicQueryUseCase;
@@ -39,7 +40,13 @@ public class TopicQueryController implements TopicQueryApi {
 
     @Override
     @GetMapping("/today-topic-details")
-    public List<TopicResDTO.TopicDetails> getTodayTopicDetails(TopicReqDTO.TodayTopics requestDTO) {
+    public List<TopicResDTO.TopicDetail> getTodayTopicDetails(TopicReqDTO.TodayTopics requestDTO) {
         return topicQueryUseCase.getTodayTopicDetails(requestDTO);
+    }
+
+    @Override
+    @GetMapping("/{topicId}")
+    public TopicResDTO.TopicDetail getTopicDetail(@PathVariable("topicId") Long topicId) {
+        return topicQueryUseCase.getTopicDetail(topicId);
     }
 }

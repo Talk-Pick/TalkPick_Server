@@ -13,5 +13,6 @@ public interface TopicQueryRepositoryPort {
     List<TopicResDTO.Categories> findTopCategories();
     PageCustom<TopicResDTO.Categories> findCategoriesWithPageable(Pageable pageable);
     List<TopicResDTO.TopicSummaries> findTodayTopicSummaries(Long userId);
-    List<TopicResDTO.TopicDetails> findTodayTopicDetails(TopicReqDTO.TodayTopics requestDTO);
+    List<TopicResDTO.TopicDetail> findTodayTopicDetails(TopicReqDTO.TodayTopics requestDTO);
+    TopicResDTO.TopicDetail findTopicDetail(Long topicId);
 }

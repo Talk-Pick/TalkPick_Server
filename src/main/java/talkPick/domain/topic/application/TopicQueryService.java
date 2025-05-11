@@ -38,7 +38,12 @@ public class TopicQueryService implements TopicQueryUseCase {
     }
 
     @Override
-    public List<TopicResDTO.TopicDetails> getTodayTopicDetails(TopicReqDTO.TodayTopics requestDTO) {
+    public List<TopicResDTO.TopicDetail> getTodayTopicDetails(TopicReqDTO.TodayTopics requestDTO) {
         return topicQueryRepositoryPort.findTodayTopicDetails(requestDTO);
+    }
+
+    @Override
+    public TopicResDTO.TopicDetail getTopicDetail(Long topicId) {
+        return topicQueryRepositoryPort.findTopicDetail(topicId);
     }
 }
