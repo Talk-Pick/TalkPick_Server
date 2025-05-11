@@ -10,5 +10,6 @@ public interface TopicQueryUseCase {
     List<TopicResDTO.Categories> getTopCategories();
     PageCustom<TopicResDTO.Categories> getCategories(Pageable pageable);
     List<TopicResDTO.TopicSummaries> getTodayTopicSummaries(Long userId);
-    List<TopicResDTO.TopicDetails> getTodayTopicDetails(TopicReqDTO.TodayTopics requestDTO);
+    List<TopicResDTO.TopicDetail> getTodayTopicDetails(TopicReqDTO.TodayTopics requestDTO);
+    TopicResDTO.TopicDetail getTopicDetail(Long topicId);
 }

@@ -1,4 +1,4 @@
-package talkPick.domain.topic.application;
+package talkPick.domain.topic.application.admin;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

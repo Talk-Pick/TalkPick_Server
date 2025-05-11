@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface AdminTopicQueryUseCase {
     List<TopicResDTO.TopicSummaries> getTopic(Long userId);
-    List<TopicResDTO.TopicDetails> getDetailTopic(TopicReqDTO.TodayTopics requestDTO);
+    List<TopicResDTO.TopicDetail> getDetailTopic(TopicReqDTO.TodayTopics requestDTO);
 }

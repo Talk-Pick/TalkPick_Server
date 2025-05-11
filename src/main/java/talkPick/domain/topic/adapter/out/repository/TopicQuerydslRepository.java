@@ -49,8 +49,8 @@ public class TopicQuerydslRepository {
         return new PageCustom<>(content, totalPages, totalElements, pageable.getPageSize(), pageable.getPageNumber());
     }
 
-    public List<TopicResDTO.TopicDetails> findTopicDetailsByIds(TopicReqDTO.TodayTopics requestDTO) {
-        return queryFactory.select(Projections.constructor(TopicResDTO.TopicDetails.class,
+    public List<TopicResDTO.TopicDetail> findTopicDetailsByIds(TopicReqDTO.TodayTopics requestDTO) {
+        return queryFactory.select(Projections.constructor(TopicResDTO.TopicDetail.class,
                         topic.id,
                         topic.title,
                         topic.thumbnail,
@@ -63,5 +63,21 @@ public class TopicQuerydslRepository {
                 .leftJoin(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
                 .where(topic.id.in(requestDTO.topicIds()))
                 .fetch();
+    }
+
+    public TopicResDTO.TopicDetail findTopicDetailById(Long topicId) {
+        return queryFactory.select(Projections.constructor(TopicResDTO.TopicDetail.class,
+                        topic.id,
+                        topic.title,
+                        topic.thumbnail,
+                        topic.averageTalkTime,
+                        topic.selectCount,
+                        topicCategory.category,
+                        topicKeyword.keyword
+                ))
+                .leftJoin(topicCategory).on(topic.id.eq(topicCategory.topicId))
+                .leftJoin(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
+                .where(topic.id.eq(topicId))
+                .fetchOne();
     }
 }

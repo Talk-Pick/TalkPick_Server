@@ -47,7 +47,12 @@ public class TopicQueryRepositoryAdapter implements TopicQueryRepositoryPort {
     }
 
     @Override
-    public List<TopicResDTO.TopicDetails> findTodayTopicDetails(TopicReqDTO.TodayTopics requestDTO) {
+    public List<TopicResDTO.TopicDetail> findTodayTopicDetails(TopicReqDTO.TodayTopics requestDTO) {
         return topicQuerydslRepository.findTopicDetailsByIds(requestDTO);
+    }
+
+    @Override
+    public TopicResDTO.TopicDetail findTopicDetail(Long topicId) {
+        return topicQuerydslRepository.findTopicDetailById(topicId);
     }
 }

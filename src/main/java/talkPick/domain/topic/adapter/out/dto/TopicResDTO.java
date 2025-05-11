@@ -17,7 +17,7 @@ public class TopicResDTO {
             Category category,
             Keyword keyword
     ) {}
-    public record TopicDetails(
+    public record TopicDetail(
             Long topicId,
             String title,
             String thumbnail,
