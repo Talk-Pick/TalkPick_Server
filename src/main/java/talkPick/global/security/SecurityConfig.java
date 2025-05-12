@@ -37,8 +37,13 @@ public class SecurityConfig {
             "/api/v1/admin/signup",
             "/api/v1/admin/login",
             "/swagger-ui/**",
-            "/v3/api-docs/**"
-    };
+            "/v3/api-docs/**",
+            "/oauth/kakao/authorize",
+            "/api/v1/topic/kakao",
+            "/api/v1/topic/additional",
+            "/api/v1/topic",
+            "/mbti-form.html"};
+
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
@@ -70,8 +75,8 @@ public class SecurityConfig {
                 .build();
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().requestMatchers(whiteList);
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return web -> web.ignoring().requestMatchers(whiteList);
+//    }
 }

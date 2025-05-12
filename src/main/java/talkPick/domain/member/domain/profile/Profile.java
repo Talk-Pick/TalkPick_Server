@@ -1,10 +1,8 @@
 package talkPick.domain.member.domain.profile;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.domain.type.MBTI;
 import talkPick.global.common.model.BaseTime;
 
@@ -17,6 +15,15 @@ public class Profile extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long memberId;
+    @OneToOne
+    @JoinColumn(name = "member_id", unique = true)
+    private Member member;
+
+    @Enumerated(EnumType.STRING)
     private MBTI mbti;
+
+    public Profile(Member member, MBTI mbti) {
+        this.member = member;
+        this.mbti = mbti;
+    }
 }
