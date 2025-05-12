@@ -80,7 +80,8 @@ public class KakaoAuthIntegrationTest {
                             .param("code", testCode)
                             .session(session))
                     .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                    .andExpect(MockMvcResultMatchers.redirectedUrl("/api/v1/topic/additional"));
+                    .andExpect(MockMvcResultMatchers.redirectedUrl("/mbti-form.html"));
+
 
             // 로그 추가: 콜백 후 세션에서 사용자 정보 확인
             System.out.println("Session attributes after /api/v1/topic/kakao: ");
