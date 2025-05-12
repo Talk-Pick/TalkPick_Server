@@ -1,9 +1,13 @@
 package talkPick.domain.random.adapter.in;
 
 import io.swagger.v3.oas.annotations.Operation;
+import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
 import talkPick.global.annotation.UserId;
 
 public interface RandomCommandApi {
-    @Operation(summary = "랜덤 토픽 시작 API", description = "랜덤 토픽 시작 API 입니다.")
+    @Operation(summary = "랜덤 토픽 1 : 랜덤 토픽 시작 API", description = "랜덤 토픽 1 : 랜덤 토픽 시작 API 입니다.")
     void start(@UserId final Long memberId);
+
+    @Operation(summary = "랜덤 토픽 3 : 카테고리 선택 API", description = "랜덤 토픽 3 : 카테고리 선택 API 입니다.")
+    void selectCategory(@UserId final Long memberId, RandomReqDTO.SelectCategory requestDTO);
 }
