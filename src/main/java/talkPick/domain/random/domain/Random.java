@@ -20,7 +20,7 @@ public class Random extends BaseTime {
     private Long memberId;
     private RandomType type;
 
-    public static Random of(final Long memberId) {
+    public static Random from(final Long memberId) {
         return Random.builder()
                 .memberId(memberId)
                 .type(RandomType.NOT_STARTED)
