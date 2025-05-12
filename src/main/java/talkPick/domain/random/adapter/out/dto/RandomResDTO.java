@@ -5,4 +5,14 @@ public class RandomResDTO {
             String category,
             String imageUrl
     ) {}
+
+    public record RandomTopic(
+            Integer order,
+            Long topicId,
+            String category,
+            String imageUrl,
+            String keyword,
+            String thumbnail,
+            String icon
+    ) {}
 }

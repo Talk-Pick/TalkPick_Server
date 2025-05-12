@@ -2,10 +2,12 @@ package talkPick.domain.random.adapter.in;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.port.in.RandomQueryUseCase;
+import talkPick.global.annotation.UserId;
 
 import java.util.List;
 
@@ -20,4 +22,12 @@ public class RandomQueryController implements RandomQueryApi {
     public List<RandomResDTO.Categories> getCategories() {
         return randomQueryUseCase.getCategories();
     }
+
+    @Override
+    @GetMapping("/topics/{randomId}")
+    public List<RandomResDTO.RandomTopic> getRandomTopics(@UserId final Long memberId, @PathVariable("randomId") Long randomId) {
+        return randomQueryUseCase.getRandomTopics(memberId, randomId);
+    }
+
+    //TODO 랜덤 톡픽 상세 보기 기능 구현
 }

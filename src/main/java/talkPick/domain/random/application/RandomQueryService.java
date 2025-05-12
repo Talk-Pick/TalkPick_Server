@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.port.in.RandomQueryUseCase;
 import talkPick.domain.random.port.out.RandomQueryRepositoryPort;
-
 import java.util.List;
 
 @Service
@@ -18,5 +17,11 @@ public class RandomQueryService implements RandomQueryUseCase {
     @Override
     public List<RandomResDTO.Categories> getCategories() {
         return randomQueryRepositoryPort.findCategories();
+    }
+
+    @Override
+    public List<RandomResDTO.RandomTopic> getRandomTopics(Long memberId, Long randomId) {
+        //TODO 랜덤 토픽 알고리즘 필요.
+        return List.of();
     }
 }
