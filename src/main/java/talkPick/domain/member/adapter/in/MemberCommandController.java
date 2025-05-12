@@ -18,7 +18,7 @@ public class MemberCommandController {
     private final MemberQueryService memberQueryService;
 
     //이메일 기반 회원가입
-    @PostMapping("/user/join")
+    @PostMapping("/members/join")
     public void joinEmailMember(@RequestBody MemberEmailReqDTO memberReqDto, HttpServletRequest request) {
         memberQueryService.setEmailMember(memberReqDto);
         HttpSession session = request.getSession();

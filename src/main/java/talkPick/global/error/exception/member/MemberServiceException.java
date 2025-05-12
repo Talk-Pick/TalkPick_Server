@@ -1,4 +1,4 @@
-package talkPick.domain.member.exception;
+package talkPick.global.error.exception.member;
 
 public class MemberServiceException extends RuntimeException {
     public MemberServiceException(String message) {

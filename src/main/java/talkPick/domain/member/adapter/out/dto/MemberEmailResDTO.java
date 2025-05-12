@@ -7,13 +7,15 @@ import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.domain.type.Gender;
 import talkPick.domain.member.domain.type.MBTI;
 
+import java.time.LocalDate;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberEmailResDTO {
     private String email;
     private String name;
-    private String birth;
+    private LocalDate birth;
     private Gender gender;
     private MBTI mbti;
 

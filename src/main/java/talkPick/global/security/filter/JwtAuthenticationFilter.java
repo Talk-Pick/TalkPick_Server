@@ -36,7 +36,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final List<String> whiteList = List.of(
             "/api/v1/admin/signup",
             "/api/v1/admin/login",
-            "/api/v1/member/login"
+            "/api/v1/member/login",
+            "/oauth/kakao/authorize",
+            "/api/v1/topic/kakao",
+            "/api/v1/topic/additional",
+            "/api/v1/topic",
+            "/mbti-form.html"
     );
 
     @Override

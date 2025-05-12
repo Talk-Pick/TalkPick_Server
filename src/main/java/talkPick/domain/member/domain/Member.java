@@ -11,6 +11,9 @@ import talkPick.domain.member.domain.type.MBTI;
 import talkPick.global.common.model.BaseTime;
 import talkPick.global.common.model.TalkPickStatus;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 @Getter
 @Entity
 @Builder
@@ -25,7 +28,7 @@ public class Member extends BaseTime {
     private Role memberRole;
     private String password;
     private String name;
-    private String birth;
+    private LocalDate birth;
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -54,7 +57,10 @@ public class Member extends BaseTime {
         this.email = String.valueOf(kakaoUserInfo.getKakao_account().get("email"));
         this.name = String.valueOf(kakaoUserInfo.getKakao_account().get("nickname"));
         this.password = null;
-        this.birth = String.valueOf(kakaoUserInfo.getKakao_account().get("birthday"));
+        String birthStr = String.valueOf(kakaoUserInfo.getKakao_account().get("birthday"));
+        this.birth = birthStr != null && !birthStr.equals("null") ?
+                LocalDate.parse(birthStr, DateTimeFormatter.ofPattern("yyyy-MM-dd")) : null;
+
         if (String.valueOf(kakaoUserInfo.getKakao_account().get("gender")).toUpperCase().equals("MALE")) {
             this.gender = Gender.MALE;
         } else {

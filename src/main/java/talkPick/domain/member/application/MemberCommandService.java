@@ -22,4 +22,12 @@ public class MemberCommandService {
         return memberJpaRepository.findByKakaoId((kakaoId));
     }
 
+    public Optional<Member> findById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("회원 ID는 null일 수 없습니다.");
+        }
+
+        return memberJpaRepository.findById(id);
+    }
+
 }

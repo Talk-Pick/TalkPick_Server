@@ -1,12 +1,10 @@
 package talkPick.domain.member.application;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
@@ -14,7 +12,11 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import talkPick.domain.member.adapter.in.dto.KakaoTokenResponse;
 import talkPick.domain.member.adapter.in.dto.KakaoUserInfo;
-import talkPick.domain.member.exception.KaKaoOAuthException;
+import talkPick.global.error.exception.member.KaKaoOAuthException;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
 
 @Slf4j
 public class KakaoOAuthHandler {
@@ -65,17 +67,79 @@ public class KakaoOAuthHandler {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(null, headers);
+        // POST 요청 본문은 비어 있을 수 있음
+        HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(new LinkedMultiValueMap<>(), headers);
 
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<KakaoUserInfo> response = restTemplate.postForEntity(
-                userInfoUrl,
-                request,
-                KakaoUserInfo.class
-        );
 
-        System.out.println("사용자 정보 요청 성공: " + response.getBody());
-        return response.getBody();
+        // 메시지 컨버터 설정
+        for (HttpMessageConverter<?> converter : restTemplate.getMessageConverters()) {
+            if (converter instanceof MappingJackson2HttpMessageConverter) {
+                MappingJackson2HttpMessageConverter jsonConverter = (MappingJackson2HttpMessageConverter) converter;
+                jsonConverter.setSupportedMediaTypes(Arrays.asList(
+                        MediaType.APPLICATION_JSON,
+                        MediaType.valueOf("application/json;charset=UTF-8")
+                ));
+            }
+        }
+
+        try {
+            // POST 메서드 사용
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+                    userInfoUrl,
+                    HttpMethod.POST,  // GET에서 POST로 변경
+                    entity,
+                    new ParameterizedTypeReference<Map<String, Object>>() {}
+            );
+
+            log.info("카카오 사용자 정보 원본 응답: {}", response.getBody());
+
+            // Map에서 KakaoUserInfo 객체 생성
+            KakaoUserInfo userInfo = new KakaoUserInfo();
+            Map<String, Object> responseBody = response.getBody();
+
+            if (responseBody != null) {
+                // ID 설정
+                if (responseBody.get("id") != null) {
+                    userInfo.setId(responseBody.get("id").toString());
+                }
+
+                // connected_at 설정
+                if (responseBody.get("connected_at") != null) {
+                    userInfo.setConnected_at(responseBody.get("connected_at").toString());
+                }
+
+                // properties 설정
+                if (responseBody.get("properties") != null) {
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> properties = (Map<String, Object>) responseBody.get("properties");
+                    userInfo.setProperties(properties);
+                }
+
+                // kakao_account 설정
+                if (responseBody.get("kakao_account") != null) {
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> kakaoAccount = (Map<String, Object>) responseBody.get("kakao_account");
+                    userInfo.setKakao_account(kakaoAccount);
+                }
+            }
+
+            log.info("변환된 카카오 사용자 정보: {}", userInfo);
+            return userInfo;
+        } catch (HttpClientErrorException e) {
+            log.error("카카오 API 클라이언트 오류: {}, 응답: {}", e.getMessage(), e.getResponseBodyAsString(), e);
+            throw new KaKaoOAuthException("카카오 인증 과정에서 오류가 발생했습니다: " + e.getMessage(), e);
+        } catch (HttpServerErrorException e) {
+            log.error("카카오 API 서버 오류: {}, 응답: {}", e.getMessage(), e.getResponseBodyAsString(), e);
+            throw new KaKaoOAuthException("카카오 서버에 문제가 발생했습니다. 잠시 후 다시 시도하세요: " + e.getMessage(), e);
+        } catch (Exception e) {
+            log.error("카카오 사용자 정보 요청 실패: {}", e.getMessage(), e);
+            throw new KaKaoOAuthException("카카오 사용자 정보 요청 중 오류 발생: " + e.getMessage(), e);
+        }
     }
+
+
+
 }

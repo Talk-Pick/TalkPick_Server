@@ -13,7 +13,7 @@ import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
 import talkPick.domain.member.adapter.out.repository.ProfileJpaRepository;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.domain.profile.Profile;
-import talkPick.domain.member.exception.MemberServiceException;
+import talkPick.global.error.exception.member.MemberServiceException;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
 
 import java.util.List;
@@ -49,11 +49,11 @@ public class MemberQueryService implements MemberQueryUseCase {
     }
 
     @Transactional
-    public void setKakaoMember(Member member) {
+    public Member setKakaoMember(Member member) {
         try {
             Profile saveProfile = new Profile(member, member.getMbti());
-            memberJpaRepository.save(member);
             profileJpaRepository.save(saveProfile);
+            return memberJpaRepository.save(member);
         } catch (DataIntegrityViolationException e) {
             // 데이터 무결성 위반 예외 (예: 중복 키, 제약 조건 위반 등)
             throw new MemberServiceException("회원 또는 프로필 저장 중 데이터 무결성 오류가 발생했습니다.", e);
