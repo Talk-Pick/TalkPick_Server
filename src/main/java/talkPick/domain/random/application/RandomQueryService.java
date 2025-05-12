@@ -24,4 +24,11 @@ public class RandomQueryService implements RandomQueryUseCase {
         //TODO 랜덤 토픽 알고리즘 필요.
         return List.of();
     }
+
+    @Override
+    public RandomResDTO.RandomTopicDetail getRandomTopicDetail(Long topicId) {
+        RandomResDTO.RandomTopicDetail result = randomQueryRepositoryPort.findRandomTopicDetail(topicId);
+        result.addTopicImage(randomQueryRepositoryPort.findTopicImages(topicId));
+        return result;
+    }
 }

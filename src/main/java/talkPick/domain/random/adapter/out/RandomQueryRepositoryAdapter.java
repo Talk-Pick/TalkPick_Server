@@ -18,4 +18,14 @@ public class RandomQueryRepositoryAdapter implements RandomQueryRepositoryPort {
     public List<RandomResDTO.Categories> findCategories() {
         return randomQuerydslRepository.findCategories();
     }
+
+    @Override
+    public RandomResDTO.RandomTopicDetail findRandomTopicDetail(Long topicId) {
+        return randomQuerydslRepository.findRandomTopicDetail(topicId);
+    }
+
+    @Override
+    public List<String> findTopicImages(Long topicId) {
+        return randomQuerydslRepository.findRandomTopicImages(topicId);
+    }
 }

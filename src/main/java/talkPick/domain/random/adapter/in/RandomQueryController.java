@@ -29,5 +29,9 @@ public class RandomQueryController implements RandomQueryApi {
         return randomQueryUseCase.getRandomTopics(memberId, randomId);
     }
 
-    //TODO 랜덤 톡픽 상세 보기 기능 구현
+    @Override
+    @GetMapping("/{topicId}")
+    public RandomResDTO.RandomTopicDetail getRandomTopicDetail(@PathVariable("topicId") Long topicId) {
+        return randomQueryUseCase.getRandomTopicDetail(topicId);
+    }
 }

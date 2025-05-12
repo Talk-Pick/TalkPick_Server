@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.PathVariable;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.global.annotation.UserId;
-
 import java.util.List;
 
 public interface RandomQueryApi {
@@ -13,4 +12,7 @@ public interface RandomQueryApi {
 
     @Operation(summary = "랜덤 토픽 4 : 랜덤 토픽 4개 조회 API", description = "랜덤 토픽 4 : 랜덤 토픽 4개 조회 API 입니다.")
     List<RandomResDTO.RandomTopic> getRandomTopics(@UserId final Long memberId, @PathVariable("randomId") Long randomId);
+
+    @Operation(summary = "랜덤 토픽 5 : 랜덤 토픽 상세 조회 API", description = "랜덤 토픽 5 : 랜덤 토픽 상세 조회 API 입니다.")
+    RandomResDTO.RandomTopicDetail getRandomTopicDetail(@PathVariable("topicId") Long topicId);
 }
