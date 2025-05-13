@@ -17,12 +17,8 @@ public class TopicCommandService implements TopicCommandUseCase {
 
     @Override
     public void addLike(Long memberId, Long topicId) {
-        try {
-            var findTopicStat = topicStatQueryRepositoryPort.findTopicStatByTopicId(topicId);
-            findTopicStat.addLike();
-            topicLikeHistoryCommandRepositoryPort.save(memberId, topicId);
-        } catch (Exception e) {
-            throw new AddLikeFailInRedisException(ErrorCode.ADD_LIKE_FAIL);
-        }
+        var findTopicStat = topicStatQueryRepositoryPort.findTopicStatByTopicId(topicId);
+        findTopicStat.addLike();
+        topicLikeHistoryCommandRepositoryPort.save(memberId, topicId);
     }
 }
