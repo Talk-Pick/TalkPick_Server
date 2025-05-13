@@ -43,8 +43,4 @@ public class RandomCommandController implements RandomCommandApi {
     public void end(Long memberId, Long randomId) {
         randomCommandUseCase.end(memberId, randomId);
     }
-
-    //TODO 랜덤 토픽 그만하기 기능 구현
-
-    //TODO 랜덤 토픽 종료 및 결과 보기 기능 구현
 }
