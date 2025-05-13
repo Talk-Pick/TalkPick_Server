@@ -1,6 +1,7 @@
 package talkPick.domain.random.adapter.in;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,8 +34,8 @@ public class RandomCommandController implements RandomCommandApi {
     }
 
     @Override
-    @PostMapping("/quit")
-    public void quit(Long memberId, Long randomId) {
+    @PostMapping("/quit/{randomId}")
+    public void quit(@UserId Long memberId, @PathVariable("randomId") Long randomId) {
         randomCommandUseCase.quit(memberId, randomId);
     }
 
