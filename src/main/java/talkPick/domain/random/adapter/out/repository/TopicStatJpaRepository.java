@@ -1,7 +1,7 @@
 package talkPick.domain.random.adapter.out.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import talkPick.domain.random.domain.TopicStat;
+import talkPick.domain.topic.domain.TopicStat;
 
 import java.util.Optional;
 

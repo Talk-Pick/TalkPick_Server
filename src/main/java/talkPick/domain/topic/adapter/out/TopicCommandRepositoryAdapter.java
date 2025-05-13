@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import talkPick.domain.random.adapter.out.repository.TopicStatJpaRepository;
-import talkPick.domain.random.domain.TopicStat;
+import talkPick.domain.topic.domain.TopicStat;
 import talkPick.domain.random.exception.TopicStatNotFoundException;
 import talkPick.domain.topic.domain.TopicLikeHistory;
 import talkPick.domain.topic.port.out.TopicCommandRepositoryPort;

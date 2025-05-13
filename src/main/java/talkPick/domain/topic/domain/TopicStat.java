@@ -1,4 +1,4 @@
-package talkPick.domain.random.domain;
+package talkPick.domain.topic.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -7,12 +7,14 @@ import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
 import talkPick.domain.random.domain.Random;
 import talkPick.domain.random.port.in.RandomCommandUseCase;
 import talkPick.domain.random.port.out.RandomCommandRepositoryPort;
+import talkPick.domain.random.port.out.RandomTopicCommandRepositoryPort;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class RandomCommandService implements RandomCommandUseCase {
     private final RandomCommandRepositoryPort randomCommandRepositoryPort;
+    private final RandomTopicCommandRepositoryPort randomTopicCommandRepositoryPort;
 
     @Override
     public void start(Long memberId) {
@@ -21,6 +23,6 @@ public class RandomCommandService implements RandomCommandUseCase {
 
     @Override
     public void selectCategory(Long memberId, RandomReqDTO.SelectCategory requestDTO) {
-        randomCommandRepositoryPort.selectCategory(memberId, requestDTO);
+        randomTopicCommandRepositoryPort.selectCategory(memberId, requestDTO);
     }
 }

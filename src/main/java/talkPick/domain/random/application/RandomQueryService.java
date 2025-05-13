@@ -22,6 +22,10 @@ public class RandomQueryService implements RandomQueryUseCase {
     @Override
     public List<RandomResDTO.RandomTopic> getRandomTopics(Long memberId, Long randomId) {
         //TODO 랜덤 토픽 알고리즘 필요.
+        //TODO 시나리오
+        /**
+         * 1. 사용자 MBTI + 연령대 기준으로 
+         * **/
         return List.of();
     }
 
