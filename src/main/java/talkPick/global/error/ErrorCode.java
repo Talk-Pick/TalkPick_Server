@@ -14,6 +14,10 @@ public enum ErrorCode {
     TOPIC_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 토픽입니다."),
     ADD_LIKE_FAIL(HttpStatus.BAD_REQUEST,"토픽 좋아요 실패했습니다."),
 
+    // Random
+    TOPIC_STAT_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 토픽 통계입니다."),
+    RANDOM_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 랜덤입니다."),
+
     // Admin
     ADMIN_NOT_FOUND(HttpStatus.BAD_REQUEST, "관리자 정보를 찾을 수 없습니다."),
     ADMIN_EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "해당 이메일로 가입된 관리자가 이미 존재합니다."),

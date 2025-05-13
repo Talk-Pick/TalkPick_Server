@@ -1,6 +1,7 @@
 package talkPick.domain.random.adapter.in;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,23 @@ public class RandomCommandController implements RandomCommandApi {
     @PostMapping("/select-category")
     public void selectCategory(@UserId Long memberId, RandomReqDTO.SelectCategory requestDTO) {
         randomCommandUseCase.selectCategory(memberId, requestDTO);
+    }
+
+    @Override
+    @PostMapping("/select-topic")
+    public void selectTopic(@UserId Long memberId, RandomReqDTO.SelectTopic requestDTO) {
+        randomCommandUseCase.selectTopic(memberId, requestDTO);
+    }
+
+    @Override
+    @PostMapping("/quit/{randomId}")
+    public void quit(@UserId Long memberId, @PathVariable("randomId") Long randomId) {
+        randomCommandUseCase.quit(memberId, randomId);
+    }
+
+    @Override
+    public void end(Long memberId, Long randomId) {
+        randomCommandUseCase.end(memberId, randomId);
     }
 
     //TODO 랜덤 토픽 그만하기 기능 구현
