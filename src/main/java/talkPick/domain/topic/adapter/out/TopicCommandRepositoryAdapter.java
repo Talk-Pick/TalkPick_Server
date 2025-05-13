@@ -24,6 +24,11 @@ public class TopicCommandRepositoryAdapter implements TopicCommandRepositoryPort
         findTopicStatByTopicId(topicId).addLike();
     }
 
+    @Override
+    public void save(Long topicId) {
+        topicStatJpaRepository.save(TopicStat.of(topicId));
+    }
+
     public TopicStat findTopicStatByTopicId(final Long topicId) {
         return topicStatJpaRepository.findByTopicId(topicId).orElseThrow(() -> new TopicStatNotFoundException(ErrorCode.TOPIC_STAT__NOT_FOUND));
     }

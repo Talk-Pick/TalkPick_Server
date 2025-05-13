@@ -8,11 +8,9 @@ import org.springframework.stereotype.Repository;
 import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import talkPick.global.common.model.PageCustom;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import static talkPick.domain.random.domain.QTopicStat.topicStat;
 import static talkPick.domain.topic.domain.QTopic.topic;
 import static talkPick.domain.topic.domain.QTopicCategory.topicCategory;

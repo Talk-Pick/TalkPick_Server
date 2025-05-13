@@ -41,10 +41,4 @@ public class Topic extends BaseTime {
         this.thumbnail = thumbnail;
         this.icon = icon;
     }
-
-    public void addLike(Long likeCount) {
-        //TODO 해결해야 함.
-
-//        this.likeCount = likeCount;
-    }
 }
