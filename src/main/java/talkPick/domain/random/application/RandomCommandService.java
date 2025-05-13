@@ -38,4 +38,9 @@ public class RandomCommandService implements RandomCommandUseCase {
     public void quit(Long memberId, Long randomId) {
         randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, randomId).quit();
     }
+
+    @Override
+    public void end(Long memberId, Long randomId) {
+        randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, randomId).end();
+    }
 }

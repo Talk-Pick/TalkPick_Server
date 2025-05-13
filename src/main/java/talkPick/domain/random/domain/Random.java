@@ -34,4 +34,8 @@ public class Random extends BaseTime {
     public void quit() {
         this.type = RandomType.QUIT;
     }
+
+    public void end() {
+        this.type = RandomType.COMPLETED;
+    }
 }

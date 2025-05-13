@@ -17,4 +17,7 @@ public interface RandomCommandApi {
 
     @Operation(summary = "랜덤 토픽 7 : 랜덤 토픽 그만하기 API", description = "랜덤 토픽 7 : 랜덤 토픽 그만하기 API 입니다.")
     void quit(@UserId Long memberId, @PathVariable("randomId") Long randomId);
+
+    @Operation(summary = "랜덤 토픽 8 : 랜덤 토픽 종료 및 결과 보기 API", description = "랜덤 토픽 8 : 랜덤 토픽 종료 및 결과 보기 API 입니다.")
+    void end(@UserId Long memberId, @PathVariable("randomId") Long randomId);
 }

@@ -7,4 +7,5 @@ public interface RandomCommandUseCase {
     void selectCategory(Long memberId, RandomReqDTO.SelectCategory requestDTO);
     void selectTopic(Long memberId, RandomReqDTO.SelectTopic requestDTO);
     void quit(Long memberId, Long randomId);
+    void end(Long memberId, Long randomId);
 }
