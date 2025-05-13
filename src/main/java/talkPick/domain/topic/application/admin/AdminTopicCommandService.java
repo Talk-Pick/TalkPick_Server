@@ -10,7 +10,7 @@ import talkPick.domain.admin.domain.Admin;
 import talkPick.domain.topic.domain.Topic;
 import talkPick.domain.topic.port.in.admin.AdminTopicCommandUseCase;
 import talkPick.domain.admin.port.out.AdminQueryRepositoryPort;
-import talkPick.domain.topic.port.out.TopicCommandRepositoryPort;
+import talkPick.domain.topic.port.out.TopicStatCommandRepositoryPort;
 import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
 import talkPick.domain.topic.port.out.admin.AdminTopicCommandRepositoryPort;
 
@@ -19,7 +19,7 @@ import talkPick.domain.topic.port.out.admin.AdminTopicCommandRepositoryPort;
 @RequiredArgsConstructor
 public class AdminTopicCommandService implements AdminTopicCommandUseCase {
     private final AdminTopicCommandRepositoryPort adminTopicCommandRepositoryPort;
-    private final TopicCommandRepositoryPort topicCommandRepositoryPort;
+    private final TopicStatCommandRepositoryPort topicStatCommandRepositoryPort;
     private final TopicQueryRepositoryPort topicQueryRepositoryPort;
     private final AdminQueryRepositoryPort adminQueryRepositoryPort;
     private final TopicReqMapper topicReqMapper;
@@ -35,7 +35,7 @@ public class AdminTopicCommandService implements AdminTopicCommandUseCase {
                         getValidAdmin(adminId)
                 )
         );
-        topicCommandRepositoryPort.save(topic.getId()); // topic 통계 생성
+        topicStatCommandRepositoryPort.save(topic.getId()); // topic 통계 생성
         return topicReqMapper.toTopicResponse(topic);
     }
 
