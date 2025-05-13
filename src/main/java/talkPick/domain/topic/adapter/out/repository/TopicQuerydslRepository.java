@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static talkPick.domain.random.domain.QTopicStat.topicStat;
 import static talkPick.domain.topic.domain.QTopic.topic;
 import static talkPick.domain.topic.domain.QTopicCategory.topicCategory;
 import static talkPick.domain.topic.domain.QTopicKeyword.topicKeyword;
@@ -54,13 +55,14 @@ public class TopicQuerydslRepository {
                         topic.id,
                         topic.title,
                         topic.thumbnail,
-                        topic.averageTalkTime,
-                        topic.selectCount,
+                        topicStat.averageTalkTime,
+                        topicStat.selectCount,
                         topicCategory.category,
                         topicKeyword.keyword
                 ))
                 .leftJoin(topicCategory).on(topic.id.eq(topicCategory.topicId))
                 .leftJoin(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
+                .leftJoin(topicStat).on(topic.id.eq(topicStat.topicId))
                 .where(topic.id.in(requestDTO.topicIds()))
                 .fetch();
     }
@@ -70,13 +72,14 @@ public class TopicQuerydslRepository {
                         topic.id,
                         topic.title,
                         topic.thumbnail,
-                        topic.averageTalkTime,
-                        topic.selectCount,
+                        topicStat.averageTalkTime,
+                        topicStat.selectCount,
                         topicCategory.category,
                         topicKeyword.keyword
                 ))
                 .leftJoin(topicCategory).on(topic.id.eq(topicCategory.topicId))
                 .leftJoin(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
+                .leftJoin(topicStat).on(topic.id.eq(topicStat.topicId))
                 .where(topic.id.eq(topicId))
                 .fetchOne();
     }

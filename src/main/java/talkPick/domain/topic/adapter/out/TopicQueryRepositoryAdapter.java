@@ -2,7 +2,6 @@ package talkPick.domain.topic.adapter.out;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import talkPick.domain.topic.domain.Topic;
 import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
@@ -11,15 +10,13 @@ import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import talkPick.domain.topic.adapter.out.repository.TopicJpaRepository;
 import talkPick.domain.topic.adapter.out.repository.TopicQuerydslRepository;
 import talkPick.global.error.ErrorCode;
-import talkPick.exception.topic.TopicNotFoundException;
-import talkPick.infra.cache.model.topic.TopicRanking;
+import talkPick.domain.topic.exception.TopicNotFoundException;
 import talkPick.global.common.model.PageCustom;
 import java.util.*;
 
 @Component
 @RequiredArgsConstructor
 public class TopicQueryRepositoryAdapter implements TopicQueryRepositoryPort {
-    private final RedisTemplate<String, TopicRanking> redisTemplate;
     private final TopicQuerydslRepository topicQuerydslRepository;
     private final TopicJpaRepository topicJpaRepository;
 
