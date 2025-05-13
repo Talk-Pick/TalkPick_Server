@@ -10,4 +10,7 @@ public interface RandomCommandApi {
 
     @Operation(summary = "랜덤 토픽 3 : 카테고리 선택 API", description = "랜덤 토픽 3 : 카테고리 선택 API 입니다.")
     void selectCategory(@UserId final Long memberId, RandomReqDTO.SelectCategory requestDTO);
+
+    @Operation(summary = "랜덤 토픽 6 : 토픽 선택 API", description = "랜덤 토픽 6 : 토픽 선택 API 입니다.")
+    void selectTopic(@UserId final Long memberId, RandomReqDTO.SelectTopic requestDTO);
 }

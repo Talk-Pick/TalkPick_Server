@@ -11,10 +11,10 @@ import talkPick.global.common.model.PageCustom;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import static talkPick.domain.random.domain.QTopicStat.topicStat;
 import static talkPick.domain.topic.domain.QTopic.topic;
 import static talkPick.domain.topic.domain.QTopicCategory.topicCategory;
 import static talkPick.domain.topic.domain.QTopicKeyword.topicKeyword;
+import static talkPick.domain.topic.domain.QTopicStat.topicStat;
 
 @Repository
 public class TopicQuerydslRepository {

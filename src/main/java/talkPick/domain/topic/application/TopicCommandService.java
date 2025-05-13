@@ -6,10 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.topic.port.out.TopicLikeHistoryCommandRepositoryPort;
 import talkPick.domain.topic.port.out.TopicStatQueryRepositoryPort;
 import talkPick.global.error.ErrorCode;
-import talkPick.domain.topic.exception.AddLikeFailInRedisException;
 import talkPick.domain.topic.port.in.TopicCommandUseCase;
-import talkPick.domain.topic.port.out.TopicStatCommandRepositoryPort;
-import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
 
 @Service
 @Transactional

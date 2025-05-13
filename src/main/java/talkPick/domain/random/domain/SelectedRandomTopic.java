@@ -11,7 +11,7 @@ import talkPick.domain.topic.domain.type.Keyword;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RandomTopic {
+public class SelectedRandomTopic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,14 +24,25 @@ public class RandomTopic {
     private Keyword keyword;
     private Integer order;
 
-    public static RandomTopic of(final Long memberId, RandomReqDTO.SelectCategory requestDTO) {
-        return RandomTopic.builder()
+    public static SelectedRandomTopic ofByCategory(final Long memberId, RandomReqDTO.SelectCategory requestDTO) {
+        return SelectedRandomTopic.builder()
                 .memberId(memberId)
                 .randomId(requestDTO.randomId())
                 .topicId(null)
                 .category(Category.valueOf(requestDTO.category()))
                 .keyword(null)
                 .order(0)
+                .build();
+    }
+
+    public static SelectedRandomTopic ofByTopic(final Long memberId, RandomReqDTO.SelectTopic requestDTO) {
+        return SelectedRandomTopic.builder()
+                .memberId(memberId)
+                .randomId(requestDTO.randomId())
+                .topicId(requestDTO.topicId())
+                .category(Category.valueOf(requestDTO.category()))
+                .keyword(Keyword.valueOf(requestDTO.keyword()))
+                .order(requestDTO.order())
                 .build();
     }
 }

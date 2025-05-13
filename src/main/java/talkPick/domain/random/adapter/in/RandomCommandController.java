@@ -26,6 +26,12 @@ public class RandomCommandController implements RandomCommandApi {
         randomCommandUseCase.selectCategory(memberId, requestDTO);
     }
 
+    @Override
+    @PostMapping("/select-topic")
+    public void selectTopic(@UserId Long memberId, RandomReqDTO.SelectTopic requestDTO) {
+        randomCommandUseCase.selectTopic(memberId, requestDTO);
+    }
+
     //TODO 랜덤 토픽 그만하기 기능 구현
 
     //TODO 랜덤 토픽 종료 및 결과 보기 기능 구현
