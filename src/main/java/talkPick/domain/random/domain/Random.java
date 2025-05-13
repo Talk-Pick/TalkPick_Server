@@ -26,4 +26,12 @@ public class Random extends BaseTime {
                 .type(RandomType.NOT_STARTED)
                 .build();
     }
+
+    public void start() {
+        this.type = RandomType.IN_PROGRESS;
+    }
+
+    public void quit() {
+        this.type = RandomType.QUIT;
+    }
 }

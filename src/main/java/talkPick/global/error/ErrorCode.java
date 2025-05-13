@@ -15,7 +15,8 @@ public enum ErrorCode {
     ADD_LIKE_FAIL(HttpStatus.BAD_REQUEST,"토픽 좋아요 실패했습니다."),
 
     // Random
-    TOPIC_STAT__NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 토픽 통계입니다."),
+    TOPIC_STAT_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 토픽 통계입니다."),
+    RANDOM_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 랜덤입니다."),
 
     // Admin
     ADMIN_NOT_FOUND(HttpStatus.BAD_REQUEST, "관리자 정보를 찾을 수 없습니다."),
