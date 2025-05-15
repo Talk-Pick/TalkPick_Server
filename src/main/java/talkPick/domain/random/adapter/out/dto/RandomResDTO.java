@@ -10,6 +10,7 @@ import java.util.List;
 
 public class RandomResDTO {
     public record Categories(
+            Long categoryId,
             String category,
             String imageUrl
     ) {}

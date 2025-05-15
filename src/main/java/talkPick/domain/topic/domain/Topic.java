@@ -19,12 +19,14 @@ public class Topic extends BaseTime {
     private String detail;
     private String thumbnail;
     private String icon;
+    private Long categoryId;
     @Enumerated(EnumType.STRING)
     private TalkPickStatus status;
     @ManyToOne(fetch = FetchType.LAZY)
     private Admin createdBy;
 
     public static Topic create(String title, String detail, String thumbnail, String icon, Admin createdBy) {
+        //TODO category_id 넣어줘야 함.
         return Topic.builder()
                 .title(title)
                 .detail(detail)
