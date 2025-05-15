@@ -3,30 +3,9 @@
 ## 🖥️ 프로젝트 소개
 대화 주제 추천 서비스입니다.
 
-<br>
-
-## 🟢 ERD
-
-<br>
-
-## 🛠️ 아키텍처 구조
-
-<br>
-
 ## 🕰️ 개발 기간
 * 25.01.13 - 진행 중
-  
-<br>
-  
-## ⚙️ 개발 환경
-- `Java 21`
-- **IDE** : IntelliJ IDEA
-- **Framework** : Springboot(3.3.7)
-- **Database** : PostgreSQL
-- **ORM** : Hibernate (Spring Data JPA 사용)
 
-<br>
-  
 ## 🧑‍🤝‍🧑 멤버 구성
 <p>
     <a href="https://github.com/M-ung">
@@ -39,3 +18,14 @@
       <img src="https://avatars.githubusercontent.com/u/80190240?v=4" width="100">
     </a>
 </p>
+
+## ⚙️ 개발 환경
+- `Java 21`
+- **IDE** : IntelliJ IDEA
+- **Framework** : Springboot(3.3.7)
+- **Database** : PostgreSQL
+- **ORM** : Hibernate (Spring Data JPA 사용)
+
+## 🟢 ERD
+
+## 🛠️ 아키텍처 구조
