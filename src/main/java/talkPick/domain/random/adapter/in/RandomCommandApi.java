@@ -3,6 +3,7 @@ package talkPick.domain.random.adapter.in;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.PathVariable;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
+import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.global.annotation.UserId;
 
 public interface RandomCommandApi {
@@ -19,5 +20,8 @@ public interface RandomCommandApi {
     void quit(@UserId Long memberId, @PathVariable("randomId") Long randomId);
 
     @Operation(summary = "랜덤 토픽 8 : 랜덤 토픽 종료 및 결과 보기 API", description = "랜덤 토픽 8 : 랜덤 토픽 종료 및 결과 보기 API 입니다.")
-    void end(@UserId Long memberId, @PathVariable("randomId") Long randomId);
+    RandomResDTO.Result end(@UserId Long memberId, @PathVariable("randomId") Long randomId);
+
+    @Operation(summary = "랜덤 토픽 9 : 랜덤 토픽 결과 저장 API", description = "랜덤 토픽 9 : 랜덤 토픽 결과 저장 API 입니다.")
+    void saveResult(@UserId Long memberId, @PathVariable("randomId") Long randomId, RandomReqDTO.Result requestDTO);
 }

@@ -13,4 +13,10 @@ public class RandomReqDTO {
             String keyword,
             Integer order
     ) {}
+
+    public record Result (
+            String title,
+            String comment,
+            String friends
+    ) {}
 }
