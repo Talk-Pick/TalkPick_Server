@@ -1,8 +1,6 @@
 package talkPick.domain.topic.adapter.in.dto;
 
-import talkPick.domain.topic.domain.type.Category;
 import talkPick.domain.topic.domain.type.Keyword;
-
 import java.util.List;
 
 public class TopicReqDTO {
@@ -12,7 +10,7 @@ public class TopicReqDTO {
             String detail,
             String thumbnail,
             String icon,
-            Category category,
+            String category,
             Keyword keyword
     ){}
 

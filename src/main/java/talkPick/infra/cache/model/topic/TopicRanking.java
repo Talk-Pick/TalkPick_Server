@@ -4,7 +4,7 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.redis.core.RedisHash;
-import talkPick.domain.topic.domain.type.Category;
+import talkPick.domain.topic.domain.type.CategoryGroup;
 import talkPick.domain.topic.domain.type.Keyword;
 
 import java.io.Serializable;
@@ -18,7 +18,7 @@ public class TopicRanking implements Serializable {
     private Long topicId;
     private String content;
     private Keyword keyword;
-    private Category category;
+    private CategoryGroup category;
     private String gender; //TODO Gender Enum으로 변환 작업해야 함. User 모듈에 있어서 그럼.
     private Age age;
     private int ECount;
