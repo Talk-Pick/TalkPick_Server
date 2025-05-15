@@ -47,4 +47,9 @@ public class RandomCommandService implements RandomCommandUseCase {
         randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, randomId).end();
         return selectedRandomTopicQueryRepositoryPort.getResult(randomId);
     }
+
+    @Override
+    public void saveResult(Long memberId, Long randomId, RandomReqDTO.Result requestDTO) {
+        //TODO 테이블을 새로 만들까 고민 중.
+    }
 }

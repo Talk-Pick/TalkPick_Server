@@ -9,4 +9,5 @@ public interface RandomCommandUseCase {
     void selectTopic(Long memberId, RandomReqDTO.SelectTopic requestDTO);
     void quit(Long memberId, Long randomId);
     RandomResDTO.Result end(Long memberId, Long randomId);
+    void saveResult(Long memberId, Long randomId, RandomReqDTO.Result requestDTO);
 }

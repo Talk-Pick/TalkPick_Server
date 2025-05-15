@@ -21,4 +21,7 @@ public interface RandomCommandApi {
 
     @Operation(summary = "랜덤 토픽 8 : 랜덤 토픽 종료 및 결과 보기 API", description = "랜덤 토픽 8 : 랜덤 토픽 종료 및 결과 보기 API 입니다.")
     RandomResDTO.Result end(@UserId Long memberId, @PathVariable("randomId") Long randomId);
+
+    @Operation(summary = "랜덤 토픽 9 : 랜덤 토픽 결과 저장 API", description = "랜덤 토픽 9 : 랜덤 토픽 결과 저장 API 입니다.")
+    void saveResult(@UserId Long memberId, @PathVariable("randomId") Long randomId, RandomReqDTO.Result requestDTO);
 }

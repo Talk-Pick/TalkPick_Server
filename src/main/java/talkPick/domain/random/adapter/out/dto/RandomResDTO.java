@@ -61,6 +61,7 @@ public class RandomResDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ResultDetail {
+        private Long topicId;
         private String title;
         private String category;
         private String keyword;

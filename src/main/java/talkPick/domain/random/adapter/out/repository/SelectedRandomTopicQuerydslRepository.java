@@ -21,6 +21,7 @@ public class SelectedRandomTopicQuerydslRepository {
 
     public RandomResDTO.Result findResultByRandomId(Long randomId) {
         List<RandomResDTO.ResultDetail> result = queryFactory.select(Projections.constructor(RandomResDTO.ResultDetail.class,
+                        topic.id,
                         topic.title,
                         selectedRandomTopic.category,
                         selectedRandomTopic.keyword,

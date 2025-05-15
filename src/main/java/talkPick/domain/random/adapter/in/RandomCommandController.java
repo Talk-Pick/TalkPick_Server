@@ -45,4 +45,10 @@ public class RandomCommandController implements RandomCommandApi {
     public RandomResDTO.Result end(Long memberId, @PathVariable("randomId") Long randomId) {
         return randomCommandUseCase.end(memberId, randomId);
     }
+
+    @Override
+    @PostMapping("/save-result/{randomId}")
+    public void saveResult(Long memberId, @PathVariable("randomId") Long randomId, RandomReqDTO.Result requestDTO) {
+        randomCommandUseCase.saveResult(memberId, randomId, requestDTO);
+    }
 }
