@@ -6,6 +6,8 @@ import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
 import talkPick.domain.topic.domain.type.Category;
 import talkPick.domain.topic.domain.type.Keyword;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Entity
 @Builder
@@ -23,6 +25,8 @@ public class SelectedRandomTopic {
     @Enumerated(EnumType.STRING)
     private Keyword keyword;
     private Integer order;
+    private LocalDateTime startAt;
+    private LocalDateTime endAt;
 
     public static SelectedRandomTopic ofByCategory(final Long memberId, RandomReqDTO.SelectCategory requestDTO) {
         return SelectedRandomTopic.builder()

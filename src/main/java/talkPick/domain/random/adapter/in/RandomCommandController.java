@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
+import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.port.in.RandomCommandUseCase;
 import talkPick.global.annotation.UserId;
 
@@ -40,7 +41,8 @@ public class RandomCommandController implements RandomCommandApi {
     }
 
     @Override
-    public void end(Long memberId, Long randomId) {
-        randomCommandUseCase.end(memberId, randomId);
+    @PostMapping("/end/{randomId}")
+    public RandomResDTO.Result end(Long memberId, @PathVariable("randomId") Long randomId) {
+        return randomCommandUseCase.end(memberId, randomId);
     }
 }
