@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+//TODO 동시성 고려해야 함.
 @Getter
 @Entity
 @Builder
@@ -14,24 +15,24 @@ import lombok.*;
 public class TopicStat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; //TODO 토픽 ID가 갈아치울 예정
     private Long topicId;
-    private long eCount;
-    private long iCount;
-    private long sCount;
-    private long nCount;
-    private long fCount;
-    private long tCount;
-    private long jCount;
-    private long pCount;
+    private Integer eCount;
+    private Integer iCount;
+    private Integer sCount;
+    private Integer nCount;
+    private Integer fCount;
+    private Integer tCount;
+    private Integer jCount;
+    private Integer pCount;
     private long averageTalkTime;
-    private long selectCount;
-    private long likeCount;
-    private long teenCount;
-    private long twentiesCount;
-    private long thirtiesCount;
-    private long fortiesCount;
-    private long fiftiesCount;
+    private Integer selectCount;
+    private Integer likeCount;
+    private Integer teenCount;
+    private Integer twentiesCount;
+    private Integer thirtiesCount;
+    private Integer fortiesCount;
+    private Integer fiftiesCount;
 
     public static TopicStat of(Long topicId) {
         return TopicStat.builder()

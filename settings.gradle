@@ -1,7 +1,2 @@
 rootProject.name = 'talkPick'
-include 'talkPick-common'
-include 'talkPick-topic'
-include 'talkPick-member'
-include 'talkPick-auth'
-include 'talkPick-admin'
 

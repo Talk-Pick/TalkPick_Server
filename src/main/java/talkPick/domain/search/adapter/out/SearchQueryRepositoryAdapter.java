@@ -17,4 +17,9 @@ public class SearchQueryRepositoryAdapter implements SearchQueryRepositoryPort {
     public PageCustom<SearchResDTO.Topic> findTopicsByCategoryWithPageable(String category, Pageable pageable) {
         return searchQuerydslRepository.findTopicsByCategoryWithPageable(category, pageable);
     }
+
+    @Override
+    public PageCustom<SearchResDTO.Topic> findTopicsByWordWithPageable(String word, Pageable pageable) {
+        return searchQuerydslRepository.findTopicsByWordWithPageable(word, pageable);
+    }
 }

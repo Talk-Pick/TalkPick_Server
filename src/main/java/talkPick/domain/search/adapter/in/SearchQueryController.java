@@ -17,8 +17,14 @@ public class SearchQueryController implements SearchQueryApi {
     private final SearchQueryUseCase searchQueryUseCase;
 
     @Override
+    @GetMapping("/topics")
+    public PageCustom<SearchResDTO.Topic> getTopics(@RequestParam(required = false) String category, Pageable pageable) {
+        return searchQueryUseCase.getTopics(category, pageable);
+    }
+
+    @Override
     @GetMapping("/")
-    public PageCustom<SearchResDTO.Topic> searchTopics(@RequestParam(required = false) String category, Pageable pageable) {
-        return searchQueryUseCase.search(category, pageable);
+    public PageCustom<SearchResDTO.Topic> search(@RequestParam(required = false) String word, Pageable pageable) {
+        return searchQueryUseCase.search(word, pageable);
     }
 }

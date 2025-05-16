@@ -16,7 +16,12 @@ public class SearchQueryService implements SearchQueryUseCase {
     private final SearchQueryRepositoryPort searchQueryRepositoryPort;
 
     @Override
-    public PageCustom<SearchResDTO.Topic> search(String category, Pageable pageable) {
+    public PageCustom<SearchResDTO.Topic> getTopics(String category, Pageable pageable) {
         return searchQueryRepositoryPort.findTopicsByCategoryWithPageable(category, pageable);
+    }
+
+    @Override
+    public PageCustom<SearchResDTO.Topic> search(String word, Pageable pageable) {
+        return searchQueryRepositoryPort.findTopicsByWordWithPageable(word, pageable);
     }
 }
