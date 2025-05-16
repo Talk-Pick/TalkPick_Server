@@ -16,14 +16,14 @@ public class TopicStat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long topicId;
-    private long ECount;
-    private long ICount;
-    private long SCount;
-    private long NCount;
-    private long FCount;
-    private long TCount;
-    private long JCount;
-    private long PCount;
+    private long eCount;
+    private long iCount;
+    private long sCount;
+    private long nCount;
+    private long fCount;
+    private long tCount;
+    private long jCount;
+    private long pCount;
     private long averageTalkTime;
     private long selectCount;
     private long likeCount;
@@ -36,14 +36,14 @@ public class TopicStat {
     public static TopicStat of(Long topicId) {
         return TopicStat.builder()
                 .topicId(topicId)
-                .ECount(0)
-                .ICount(0)
-                .SCount(0)
-                .NCount(0)
-                .FCount(0)
-                .TCount(0)
-                .JCount(0)
-                .PCount(0)
+                .eCount(0)
+                .iCount(0)
+                .sCount(0)
+                .nCount(0)
+                .fCount(0)
+                .tCount(0)
+                .jCount(0)
+                .pCount(0)
                 .averageTalkTime(0)
                 .selectCount(0)
                 .likeCount(0)
