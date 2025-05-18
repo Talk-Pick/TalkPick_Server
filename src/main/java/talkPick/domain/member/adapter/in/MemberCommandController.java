@@ -9,17 +9,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import talkPick.domain.auth.Role;
+import talkPick.domain.member.adapter.in.dto.MemberDetailResDto;
 import talkPick.domain.member.adapter.in.dto.MemberEmailReqDTO;
+import talkPick.domain.member.adapter.in.dto.MemberMbtiUpdateRequestDto;
 import talkPick.domain.member.adapter.out.dto.MemberEmailResDTO;
 import talkPick.domain.member.application.MemberCommandService;
 import talkPick.domain.member.application.MemberQueryService;
 import talkPick.domain.member.domain.Member;
+import talkPick.domain.member.domain.type.MBTI;
 import talkPick.global.security.jwt.dto.JwtResDTO;
 import talkPick.global.security.jwt.util.JwtProvider;
 
@@ -27,7 +29,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/members")
+@RequestMapping("/api/v1")
 @Slf4j
 public class MemberCommandController {
 
@@ -74,5 +76,37 @@ public class MemberCommandController {
         }
     }
 
+    // mbti 수정
+    @PutMapping("/members/mbti")
+    public ResponseEntity<?> updateMemberMbti(@RequestBody MemberMbtiUpdateRequestDto request) {
+        log.info("회원 MBTI 수정 요청 -  MBTI: {}", request.getMbti());
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            long memberId = Long.parseLong(authentication.getName());
+
+            Optional<Member> memberOpt = memberQueryService.findById(memberId);
+            if (memberOpt.isEmpty()) {
+                log.error("회원을 찾을 수 없음: ID {}", memberId);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원 정보를 찾을 수 없습니다.");
+            }
+
+            try {
+                MBTI mbti = request.getMbti();
+
+                Member updatedMember = memberCommandService.updateMemberMbti(memberId, mbti);
+
+                MemberDetailResDto memberInfo = memberQueryService.getMemberInfo(memberId);
+
+                return ResponseEntity.ok(memberInfo);
+            } catch (IllegalArgumentException e) {
+            log.error("유효하지 않은 MBTI 유형: {}", request.getMbti());
+            return ResponseEntity.badRequest().body("유효하지 않은 MBTI 유형입니다. 올바른 MBTI 유형을 입력해주세요.");
+            }
+        } catch (Exception e) {
+            log.error("회원 MBTI 수정 중 오류 발생: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("회원 MBTI 수정 중 오류가 발생했습니다: " + e.getMessage());
+        }
+    }
 
 }

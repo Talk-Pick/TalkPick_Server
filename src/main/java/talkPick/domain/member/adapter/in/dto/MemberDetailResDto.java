@@ -3,17 +3,20 @@ package talkPick.domain.member.adapter.in.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import talkPick.domain.member.domain.Member;
+import talkPick.domain.member.domain.type.MBTI;
 
 import java.time.format.DateTimeFormatter;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 public class MemberDetailResDto {
     private String email;
     private String birthDate;
-    private String mbti;
+    private MBTI mbti;
     private String nickname;
     private String imageUrl;
 
@@ -23,9 +26,9 @@ public class MemberDetailResDto {
             formattedBirth = member.getBirth().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
         }
 
-        String mbtiString = null;
+        MBTI mbtiString = null;
         if (member.getMbti() != null) {
-            mbtiString = member.getMbti().toString();
+            mbtiString = member.getMbti();
         }
         return MemberDetailResDto.builder()
                 .email(member.getEmail())

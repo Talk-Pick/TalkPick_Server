@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.member.adapter.in.dto.MemberEmailReqDTO;
 import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
 import talkPick.domain.member.domain.Member;
+import talkPick.domain.member.domain.type.MBTI;
 import talkPick.domain.member.port.in.MemberCommandUseCase;
 import talkPick.global.error.exception.member.MemberServiceException;
 
@@ -45,6 +46,24 @@ public class MemberCommandService implements MemberCommandUseCase {
             // 기타 예외
             throw new MemberServiceException("회원 및 프로필 저장 중 오류가 발생했습니다.", e);
         }
+
+    }
+
+    @Transactional
+    @Override
+    public Member updateMemberMbti(Long memberId, MBTI mbti) {
+        Optional<Member> memberOpt = memberJpaRepository.findById(memberId);
+        if (memberOpt.isEmpty()) {
+            throw new RuntimeException("회원을 찾을 수 없습니다. ID: " + memberId);
+        }
+
+        Member member = memberOpt.get();
+
+        // MBTI 값 업데이트
+        member.setMbti(mbti);
+
+        // 저장 및 반환
+        return memberJpaRepository.save(member);
 
     }
 
