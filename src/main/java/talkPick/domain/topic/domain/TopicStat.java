@@ -59,7 +59,6 @@ public class TopicStat {
                 .teenCount(0)
                 .twentiesCount(0)
                 .thirtiesCount(0)
-                .fortiesCount(0)
                 .fiftiesCount(0)
                 .maleCount(0)
                 .femaleCount(0)
@@ -70,7 +69,8 @@ public class TopicStat {
         this.likeCount++;
     }
 
-    public void update(Member member, Profile profile, long averageTalkTime) {
+    //TODO 이 메서드 호출할 때 락 체크 + 리트라이 필요
+    public void update(Member member, Profile profile, long talkTime) {
         MBTI mbti = MBTI.INFP;
         updateMBTI(mbti);
         updateAge(member.getBirth());
