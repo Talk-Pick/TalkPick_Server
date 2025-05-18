@@ -41,6 +41,8 @@ public class Member extends BaseTime {
     @Enumerated(EnumType.STRING)
     private MBTI mbti;
 
+    private String profileImageUrl;
+
     public Member(MemberEmailReqDTO memberResDto) {
         this.email = memberResDto.getEmail();
         this.name = memberResDto.getName();

@@ -30,4 +30,13 @@ public class MemberCommandService {
         return memberJpaRepository.findById(id);
     }
 
+    public Optional<Member> findByEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("이메일은 비어있을 수 없습니다.");
+        }
+
+        return memberJpaRepository.findByEmail(email);
+    }
+
+
 }
