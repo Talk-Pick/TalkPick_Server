@@ -19,6 +19,7 @@ import talkPick.global.annotation.UserId;
 import java.io.IOException;
 import java.util.List;
 
+@RestController
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api/v1")

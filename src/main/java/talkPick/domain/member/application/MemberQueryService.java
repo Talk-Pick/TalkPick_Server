@@ -8,18 +8,15 @@ import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.member.adapter.in.dto.MemberDetailResDto;
-import talkPick.domain.member.adapter.in.dto.MemberEmailReqDTO;
 import talkPick.domain.member.adapter.out.dto.MemberEmailResDTO;
 import talkPick.domain.member.adapter.out.dto.MemberKakaoResDTO;
 import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
 import talkPick.domain.member.domain.Member;
-import talkPick.global.error.exception.member.MemberServiceException;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static talkPick.domain.member.application.mapper.MemberMapper.fromDtoToMember;
 
 @Service
 @Transactional(readOnly = true)
@@ -27,14 +24,7 @@ import static talkPick.domain.member.application.mapper.MemberMapper.fromDtoToMe
 public class MemberQueryService implements MemberQueryUseCase {
     private final MemberJpaRepository memberJpaRepository;
 
-    @Transactional
-    public void setEmailMember(MemberEmailReqDTO memberReqDto) {
-        Member saveMember = fromDtoToMember(memberReqDto);
-
-        memberJpaRepository.save(saveMember);
-    }
-
-
+    @Override
     public List<MemberEmailResDTO> getEmailMembers() {
         List<Member> all = memberJpaRepository.findAll();
         List<MemberEmailResDTO> memberResDtoList = all.stream()
@@ -44,24 +34,7 @@ public class MemberQueryService implements MemberQueryUseCase {
         return memberResDtoList;
     }
 
-    @Transactional
-    public Member setKakaoMember(Member member) {
-        try {
-            return memberJpaRepository.save(member);
-        } catch (DataIntegrityViolationException e) {
-            // 데이터 무결성 위반 예외 (예: 중복 키, 제약 조건 위반 등)
-            throw new MemberServiceException("회원 또는 프로필 저장 중 데이터 무결성 오류가 발생했습니다.", e);
-        } catch (JpaSystemException | PersistenceException e) {
-            // JPA 관련 시스템 예외
-            throw new MemberServiceException("JPA 처리 중 오류가 발생했습니다.", e);
-        } catch (Exception e) {
-            // 기타 예외
-            throw new MemberServiceException("회원 및 프로필 저장 중 오류가 발생했습니다.", e);
-        }
-
-    }
-
-
+    @Override
     public List<MemberKakaoResDTO> getkakaoMembers() {
         List<Member> all = memberJpaRepository.findAll();
         List<MemberKakaoResDTO> memberResDtoList = all.stream()
@@ -71,9 +44,37 @@ public class MemberQueryService implements MemberQueryUseCase {
         return memberResDtoList;
     }
 
+    @Override
     public MemberDetailResDto getMemberInfo(Long memberId) {
         Member member = memberJpaRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found with id: " + memberId));
         return MemberDetailResDto.fromEntity(member);
+    }
+
+    @Override
+    public Optional<Member> findByKakaoId(String kakaoId) {
+        if (kakaoId == null || kakaoId.trim().isEmpty()) {
+            throw new IllegalArgumentException("카카오 ID는 비어있을 수 없습니다.");
+        }
+
+        return memberJpaRepository.findByKakaoId((kakaoId));
+    }
+
+    @Override
+    public Optional<Member> findById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("회원 ID는 null일 수 없습니다.");
+        }
+
+        return memberJpaRepository.findById(id);
+    }
+
+    @Override
+    public Optional<Member> findByEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("이메일은 비어있을 수 없습니다.");
+        }
+
+        return memberJpaRepository.findByEmail(email);
     }
 }

@@ -84,7 +84,7 @@ public class KakaoAuthController {
         session.setAttribute("userInfo", userInfo);
         log.info("세션에 저장된 사용자 정보: {}", session.getAttribute("userInfo"));
 
-        Optional<Member> existingMemberOpt = memberCommandService.findByKakaoId(userInfo.getId());
+        Optional<Member> existingMemberOpt = memberQueryService.findByKakaoId(userInfo.getId());
         if (existingMemberOpt.isPresent()) {
             Member existingMember = existingMemberOpt.get();
             log.info("기존 회원 정보: {}", existingMember);
@@ -130,7 +130,7 @@ public class KakaoAuthController {
         Member member = new Member(userInfo, mbti);
         log.info("새로운 회원 정보 생성: {}", member);
 
-        memberQueryService.setKakaoMember(member);
+        memberCommandService.setKakaoMember(member);
 
         JwtResDTO.Login jwtToken = jwtProvider.createJwt(
                 member.getId(),
@@ -160,7 +160,7 @@ public class KakaoAuthController {
         Long memberId = jwtProvider.getUserIdFromToken(accessToken);
 
         // 사용자 정보 조회
-        Optional<Member> memberOpt = memberCommandService.findById(memberId);
+        Optional<Member> memberOpt = memberQueryService.findById(memberId);
 
         return memberOpt.map(MemberKakaoResDTO::new).orElse(null);
 

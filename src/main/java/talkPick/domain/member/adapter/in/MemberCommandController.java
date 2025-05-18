@@ -27,7 +27,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/topic")
+@RequestMapping("/api/v1/members")
 @Slf4j
 public class MemberCommandController {
 
@@ -35,7 +35,6 @@ public class MemberCommandController {
     private final MemberCommandService memberCommandService;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder; //비밀번호 암호화 인터페이스
-    private boolean secureCookie = false; //개발 환경에서 false, 프로덕션에서 true
 
 
     //이메일 기반 회원가입
@@ -43,7 +42,7 @@ public class MemberCommandController {
     public ResponseEntity<?> joinEmailMember(@RequestBody MemberEmailReqDTO memberReqDto, HttpServletResponse response) {
         log.info("이메일 회원가입 요청: {}", memberReqDto.getEmail());
 
-        Optional<Member> existingMember = memberCommandService.findByEmail(memberReqDto.getEmail());
+        Optional<Member> existingMember = memberQueryService.findByEmail(memberReqDto.getEmail());
         if (existingMember.isPresent()) {
             return ResponseEntity.badRequest().body("이미 가입된 이메일입니다.");
         }
@@ -55,8 +54,8 @@ public class MemberCommandController {
 
         try {
             // 회원 저장
-            memberQueryService.setEmailMember(memberReqDto);
-            Optional<Member> memberOpt = memberCommandService.findByEmail(memberReqDto.getEmail());
+            memberCommandService.setEmailMember(memberReqDto);
+            Optional<Member> memberOpt = memberQueryService.findByEmail(memberReqDto.getEmail());
 
             if (memberOpt.isPresent()) {
                 Member member = memberOpt.get();

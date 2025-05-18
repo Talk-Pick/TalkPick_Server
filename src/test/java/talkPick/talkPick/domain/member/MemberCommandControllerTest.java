@@ -82,7 +82,7 @@ public class MemberCommandControllerTest {
                 .password(encodedPassword)
                 .build();
 
-        when(memberCommandService.findByEmail("test@example.com"))
+        when(memberQueryService.findByEmail("test@example.com"))
                 .thenReturn(Optional.empty()) // 첫 번째 호출 -> 회원 존재 x
                 .thenReturn(Optional.of(savedMember)); // 두 번째 호출 -> 회원 존재
 
@@ -102,14 +102,14 @@ public class MemberCommandControllerTest {
         MockHttpServletResponse response = new MockHttpServletResponse();
         ResponseEntity<?> responseEntity = memberCommandController.joinEmailMember(reqDTO, response);
 
-        verify(memberQueryService).setEmailMember(argThat(dto ->
+        verify(memberCommandService).setEmailMember(argThat(dto ->
                 dto.getEmail().equals("test@example.com") &&
                         dto.getPassword().equals(encodedPassword) &&
                         dto.getName().equals("테스터")
         ));
 
         // 중복 이메일 검사 후 회원 가입 완료 후 2번 검증
-        verify(memberCommandService, times(2)).findByEmail("test@example.com");
+        verify(memberQueryService, times(2)).findByEmail("test@example.com");
 
         // jwtProvider 토큰 생성 확인
         verify(jwtProvider).createJwt(eq(1L), eq(String.valueOf(Role.MEMBER)));

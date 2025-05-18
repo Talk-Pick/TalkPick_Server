@@ -1,4 +1,19 @@
 package talkPick.domain.member.port.in;
 
+import talkPick.domain.member.adapter.in.dto.MemberDetailResDto;
+import talkPick.domain.member.adapter.out.dto.MemberEmailResDTO;
+import talkPick.domain.member.adapter.out.dto.MemberKakaoResDTO;
+import talkPick.domain.member.domain.Member;
+
+import java.util.List;
+import java.util.Optional;
+
 public interface MemberQueryUseCase {
+    List<MemberEmailResDTO> getEmailMembers();
+    List<MemberKakaoResDTO> getkakaoMembers();
+    MemberDetailResDto getMemberInfo(Long memberId);
+    Optional<Member> findByKakaoId(String kakaoId);
+    Optional<Member> findById(Long id);
+    Optional<Member> findByEmail(String email);
+
 }
