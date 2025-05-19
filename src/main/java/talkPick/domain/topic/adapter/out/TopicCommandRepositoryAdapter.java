@@ -4,6 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
+import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
+import talkPick.domain.member.application.MemberCommandService;
+import talkPick.domain.member.application.MemberQueryService;
+import talkPick.domain.member.domain.Member;
 import talkPick.domain.topic.domain.Topic;
 import talkPick.domain.topic.domain.TopicLikeHistory;
 import talkPick.domain.topic.port.out.TopicCommandRepositoryPort;
@@ -13,19 +17,24 @@ import talkPick.global.common.constants.topic.TopicConstants;
 import talkPick.global.error.ErrorCode;
 import talkPick.exception.topic.TopicNotFoundException;
 
+import java.util.Optional;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class TopicCommandRepositoryAdapter implements TopicCommandRepositoryPort {
     private final TopicJpaRepository topicJpaRepository;
     private final TopicLikeHistoryJpaRepository topicLikeHistoryJpaRepository;
+    private final MemberJpaRepository memberJpaRepository;
     private final StringRedisTemplate redisTemplate;
 
     @Override
     public Long addLike(final Long memberId, final Long topicId) {
         var key = TopicConstants.LIKE_KEY_PREFIX + topicId;
+        Member member = memberJpaRepository.findById(memberId).get();
+        Topic topic = topicJpaRepository.findById(topicId).get();
         try {
-            topicLikeHistoryJpaRepository.save(TopicLikeHistory.of(memberId, topicId));
+            topicLikeHistoryJpaRepository.save(TopicLikeHistory.of(member, topic));
             return redisTemplate.opsForValue().increment(key);
         } catch (Exception e) {
             log.error("[ERROR] Redis INCR 실패: " + e.getMessage());

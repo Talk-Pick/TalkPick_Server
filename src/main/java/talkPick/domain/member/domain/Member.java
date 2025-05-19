@@ -8,11 +8,14 @@ import talkPick.domain.member.adapter.in.dto.MemberEmailReqDTO;
 import talkPick.domain.member.domain.type.Gender;
 import talkPick.domain.member.domain.type.LoginType;
 import talkPick.domain.member.domain.type.MBTI;
+import talkPick.domain.topic.domain.TopicLikeHistory;
 import talkPick.global.common.model.BaseTime;
 import talkPick.global.common.model.TalkPickStatus;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -43,6 +46,18 @@ public class Member extends BaseTime {
     private MBTI mbti;
 
     private String profileImageUrl;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TopicLikeHistory> likedTopics = new ArrayList<>();
+
+    public void addLikedTopic(TopicLikeHistory topicLikeHistory) {
+        this.likedTopics.add(topicLikeHistory);
+        if (topicLikeHistory.getMember() != this) {
+            topicLikeHistory.setMember(this);
+        }
+    }
+
+
 
     public Member(MemberEmailReqDTO memberResDto) {
         this.email = memberResDto.getEmail();

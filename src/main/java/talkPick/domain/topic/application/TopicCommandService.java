@@ -3,6 +3,7 @@ package talkPick.domain.topic.application;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
 import talkPick.global.error.ErrorCode;
 import talkPick.exception.topic.AddLikeFailInRedisException;
 import talkPick.domain.topic.port.in.TopicCommandUseCase;
@@ -19,6 +20,7 @@ public class TopicCommandService implements TopicCommandUseCase {
     @Override
     public void addLike(Long memberId, Long topicId) {
         // TODO: memberId 유효성 체크 → Kafka 적용 후 구현 예정
+        // addLike memberId 기반으로 member 조회 후 설정 해야함 (일대다, 다대일 설정했기에)
         try {
             var likeCountInRedis = topicCommandRepositoryPort.addLike(memberId, topicId);
             updateLikeCountEvery10(topicId, likeCountInRedis);

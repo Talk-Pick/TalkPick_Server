@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import talkPick.domain.auth.Role;
+import talkPick.domain.member.adapter.in.dto.KakaoUserInfo;
 import talkPick.domain.member.adapter.in.dto.MemberDetailResDto;
 import talkPick.domain.member.adapter.in.dto.MemberEmailReqDTO;
 import talkPick.domain.member.adapter.in.dto.MemberMbtiUpdateRequestDto;
@@ -25,6 +26,7 @@ import talkPick.domain.member.domain.type.MBTI;
 import talkPick.global.security.jwt.dto.JwtResDTO;
 import talkPick.global.security.jwt.util.JwtProvider;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @RestController
@@ -74,6 +76,23 @@ public class MemberCommandController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("회원가입 처리 중 오류가 발생했습니다: " + e.getMessage());
         }
+    }
+
+    //mbti 입력 페이지
+    @GetMapping("/topic/additional")
+    public String showMbtiForm(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        log.info("mbti 입력 페이지");
+        HttpSession session = request.getSession(false);
+
+        if (session == null || session.getAttribute("userInfo") == null) {
+            log.error("세션이 만료되었거나 카카오 사용자 정보가 없습니다.");
+            return "redirect:/oauth/kakao/authorize"; // 스프링 MVC의 리다이렉트 방식
+        }
+
+        KakaoUserInfo userInfo = (KakaoUserInfo) session.getAttribute("userInfo");
+
+        // 뷰 이름 반환
+        return "mbti-form";
     }
 
     // mbti 수정

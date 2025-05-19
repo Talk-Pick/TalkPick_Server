@@ -1,4 +1,4 @@
-package talkPick.talkPick;
+package talkPick;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import talkPick.domain.member.adapter.in.dto.KakaoUserInfo;
 import talkPick.domain.member.adapter.in.dto.MemberDetailResDto;
+import talkPick.domain.member.adapter.in.dto.MemberLikedTopicsResDto;
 import talkPick.domain.member.adapter.out.dto.MemberEmailResDTO;
 import talkPick.domain.member.adapter.out.dto.MemberKakaoResDTO;
 import talkPick.domain.member.application.MemberQueryService;
@@ -18,6 +19,8 @@ import talkPick.global.annotation.UserId;
 
 import java.io.IOException;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,24 +46,7 @@ public class MemberQueryController implements MemberQueryApi {
         return memberKakaoResDTOList;
     }
 
-    //mbti 입력 페이지
-    @GetMapping("/topic/additional")
-    public String showMbtiForm(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        log.info("mbti 입력 페이지");
-        HttpSession session = request.getSession(false);
-
-        if (session == null || session.getAttribute("userInfo") == null) {
-            log.error("세션이 만료되었거나 카카오 사용자 정보가 없습니다.");
-            return "redirect:/oauth/kakao/authorize"; // 스프링 MVC의 리다이렉트 방식
-        }
-
-        KakaoUserInfo userInfo = (KakaoUserInfo) session.getAttribute("userInfo");
-
-        // 뷰 이름 반환
-        return "mbti-form";
-    }
-
-    @GetMapping("/member/info")
+    @GetMapping("/members/me")
     @ResponseBody
     public MemberDetailResDto getMemberInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -70,11 +56,12 @@ public class MemberQueryController implements MemberQueryApi {
         return memberInfo;
     }
 
-
-
-
-
-
-
-
+    @GetMapping("/members/me/liked-topics")
+    @ResponseBody
+    public Page<MemberLikedTopicsResDto> getMemberLikedTopics(Pageable pageable) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberId = Long.parseLong(authentication.getName()); // JWT에서 추출된 사용자 ID
+        Page<MemberLikedTopicsResDto> memberLikedTopics = memberQueryService.getMemberLikedTopics(memberId, pageable);
+        return memberLikedTopics;
+    }
 }

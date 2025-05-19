@@ -1,18 +1,23 @@
 package talkPick.domain.member.application;
 
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.PersistenceException;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.orm.jpa.JpaSystemException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.member.adapter.in.dto.MemberDetailResDto;
+import talkPick.domain.member.adapter.in.dto.MemberLikedTopicsResDto;
 import talkPick.domain.member.adapter.out.dto.MemberEmailResDTO;
 import talkPick.domain.member.adapter.out.dto.MemberKakaoResDTO;
 import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
+import talkPick.global.error.exception.member.MemberNotFoundException.MemberLikedTopicsNotFoundException;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +28,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberQueryService implements MemberQueryUseCase {
     private final MemberJpaRepository memberJpaRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public List<MemberEmailResDTO> getEmailMembers() {
@@ -76,5 +84,41 @@ public class MemberQueryService implements MemberQueryUseCase {
         }
 
         return memberJpaRepository.findByEmail(email);
+    }
+
+    @Override
+    public Page<MemberLikedTopicsResDto> getMemberLikedTopics(Long memberId, Pageable pageable) {
+        String countJpql = "SELECT COUNT(DISTINCT t.id) " +
+                "FROM MemberTopicHistory mth " +
+                "JOIN mth.topic t " +
+                "JOIN TopicCategory c ON t.id = c.topicId " +
+                "JOIN TopicKeyword k ON t.id = k.topicId " +
+                "WHERE mth.member.id = :memberId " +
+                "AND mth.checkLiked = true";
+
+        Long totalCount = entityManager.createQuery(countJpql, Long.class)
+                .setParameter("memberId", memberId)
+                .getSingleResult();
+
+        String jpql = "SELECT DISTINCT new talkPick.domain.member.adapter.in.dto.MemberLikedTopicsResDto(" +
+                "t.title, t.averageTalkTime, t.selectCount, k.keyword, c.category) " +
+                "FROM MemberTopicHistory mth " +
+                "JOIN mth.topic t " +
+                "JOIN TopicCategory c ON t.id = c.topicId " +
+                "JOIN TopicKeyword k ON t.id = k.topicId " +
+                "WHERE mth.member.id = :memberId " +
+                "AND mth.checkLiked = true";
+
+        List<MemberLikedTopicsResDto> results = entityManager.createQuery(jpql, MemberLikedTopicsResDto.class)
+                .setParameter("memberId", memberId)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .getResultList();
+        if (results.isEmpty()) {
+            throw new MemberLikedTopicsNotFoundException("해당 회원이 좋아요한 토픽을 찾을 수 없습니다. 회원 ID: " + memberId);
+        }
+
+        // 페이지 객체 생성 및 반환
+        return new PageImpl<>(results, pageable, totalCount);
     }
 }

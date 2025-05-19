@@ -1,4 +1,4 @@
-package talkPick.talkPick.domain.member;
+package talkPick.domain.member;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
