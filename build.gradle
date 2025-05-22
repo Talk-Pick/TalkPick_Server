@@ -46,7 +46,7 @@ dependencies {
     // JPA (postgresql) 관련 의존성
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'org.postgresql:postgresql:42.7.1'
+    implementation 'mysql:mysql-connector-java:8.0.33'
 
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
