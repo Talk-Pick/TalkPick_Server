@@ -16,33 +16,20 @@ public class TopicLikeHistory extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    private Long memberId;
 
     private TalkPickStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "topic_Id")
-    private Topic topic;
-
-    public void setMember(Member member) {
-        this.member = member;
-    }
-
-    public void setTopic(Topic topic) {
-        this.topic = topic;
-    }
+    private Long topicId;
 
 
 
-    public static TopicLikeHistory of(Member member, Topic topic) {
+    public static TopicLikeHistory of(Long memberId, Long topicId) {
         TopicLikeHistory topicLikeHistory = TopicLikeHistory.builder()
                 .status(TalkPickStatus.ACTIVE)
+                .memberId(memberId)
+                .topicId(topicId)
                 .build();
-
-        topicLikeHistory.setMember(member);
-        topicLikeHistory.setTopic(topic);
         return topicLikeHistory;
     }
 
