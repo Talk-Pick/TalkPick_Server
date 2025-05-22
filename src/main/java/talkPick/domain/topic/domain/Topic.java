@@ -6,6 +6,9 @@ import talkPick.global.common.model.BaseTime;
 import talkPick.global.common.model.TalkPickStatus;
 import talkPick.domain.admin.domain.Admin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Entity
 @Builder
@@ -22,8 +25,12 @@ public class Topic extends BaseTime {
     private Long categoryId;
     @Enumerated(EnumType.STRING)
     private TalkPickStatus status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Admin createdBy;
+
+    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TopicLikeHistory> likedTopics = new ArrayList<>();
 
     public static Topic create(String title, String detail, String thumbnail, String icon, Admin createdBy) {
         //TODO category_id 넣어줘야 함.

@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import talkPick.domain.admin.adapter.out.repository.AdminJpaRepository;
@@ -31,7 +33,13 @@ public class SecurityConfig {
     private final AdminJpaRepository adminJpaRepository;
     private final MemberJpaRepository memberJpaRepository;
 
-//        private final CorsConfig corsConfig;
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+
+    //        private final CorsConfig corsConfig;
     private static final String[] whiteList = {
             "/api/v1/member/login",
             "/api/v1/admin/signup",

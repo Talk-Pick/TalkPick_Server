@@ -84,7 +84,7 @@ public class KakaoAuthController {
         session.setAttribute("userInfo", userInfo);
         log.info("세션에 저장된 사용자 정보: {}", session.getAttribute("userInfo"));
 
-        Optional<Member> existingMemberOpt = memberCommandService.findByKakaoId(userInfo.getId());
+        Optional<Member> existingMemberOpt = memberQueryService.findByKakaoId(userInfo.getId());
         if (existingMemberOpt.isPresent()) {
             Member existingMember = existingMemberOpt.get();
             log.info("기존 회원 정보: {}", existingMember);
@@ -93,7 +93,7 @@ public class KakaoAuthController {
                     existingMember.getId(),
                     String.valueOf(Role.MEMBER)
             );
-            addTokenCookies(response, jwtToken);
+            jwtProvider.addTokenCookies(response, jwtToken);
             session.removeAttribute("userInfo");
             log.info("기존 회원 - 세션 정보 삭제 후 리다이렉트");
             response.sendRedirect("/api/v1/topic");
@@ -130,7 +130,7 @@ public class KakaoAuthController {
         Member member = new Member(userInfo, mbti);
         log.info("새로운 회원 정보 생성: {}", member);
 
-        memberQueryService.setKakaoMember(member);
+        memberCommandService.setKakaoMember(member);
 
         JwtResDTO.Login jwtToken = jwtProvider.createJwt(
                 member.getId(),
@@ -138,7 +138,7 @@ public class KakaoAuthController {
         );
         log.info("JWT 생성 완료: {}", jwtToken);
 
-        addTokenCookies(response, jwtToken);
+        jwtProvider.addTokenCookies(response, jwtToken);
         session.removeAttribute("userInfo");
         log.info("사용자 세션 정보 삭제 및 리다이렉션");
         response.sendRedirect("/api/v1/topic");
@@ -160,7 +160,7 @@ public class KakaoAuthController {
         Long memberId = jwtProvider.getUserIdFromToken(accessToken);
 
         // 사용자 정보 조회
-        Optional<Member> memberOpt = memberCommandService.findById(memberId);
+        Optional<Member> memberOpt = memberQueryService.findById(memberId);
 
         return memberOpt.map(MemberKakaoResDTO::new).orElse(null);
 
@@ -176,27 +176,6 @@ public class KakaoAuthController {
             }
         }
         return null;
-    }
-
-
-    private void addTokenCookies(HttpServletResponse response, JwtResDTO.Login jwtToken) {
-        // 액세스 토큰 쿠키
-        Cookie accessTokenCookie = new Cookie("access_token", jwtToken.accessToken());
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setSecure(secureCookie);
-        accessTokenCookie.setMaxAge(3600);
-        accessTokenCookie.setAttribute("SameSite", "Lax");
-        response.addCookie(accessTokenCookie); // 이 줄 추가
-
-        // 리프레시 토큰 쿠키
-        Cookie refreshTokenCookie = new Cookie("refresh_token", jwtToken.refreshToken());
-        refreshTokenCookie.setPath("/api/v1/auth/refresh");
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setSecure(secureCookie);
-        refreshTokenCookie.setMaxAge(604800);
-        refreshTokenCookie.setAttribute("SameSite", "Strict");
-        response.addCookie(refreshTokenCookie); // 이 줄 추가
     }
 
 
