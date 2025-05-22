@@ -47,17 +47,6 @@ public class Member extends BaseTime {
 
     private String profileImageUrl;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TopicLikeHistory> likedTopics = new ArrayList<>();
-
-    public void addLikedTopic(TopicLikeHistory topicLikeHistory) {
-        this.likedTopics.add(topicLikeHistory);
-        if (topicLikeHistory.getMember() != this) {
-            topicLikeHistory.setMember(this);
-        }
-    }
-
-
 
     public Member(MemberEmailReqDTO memberResDto) {
         this.email = memberResDto.getEmail();

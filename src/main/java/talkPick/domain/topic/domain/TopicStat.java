@@ -3,7 +3,6 @@ package talkPick.domain.topic.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import talkPick.domain.member.domain.Member;
-import talkPick.domain.member.domain.profile.Profile;
 import talkPick.domain.member.domain.type.Gender;
 import talkPick.domain.member.domain.type.MBTI;
 
@@ -70,7 +69,7 @@ public class TopicStat {
     }
 
     //TODO 이 메서드 호출할 때 락 체크 + 리트라이 필요
-    public void update(Member member, Profile profile, long talkTime) {
+    public void update(Member member, long talkTime) {
         MBTI mbti = MBTI.INFP;
         updateMBTI(mbti);
         updateAge(member.getBirth());

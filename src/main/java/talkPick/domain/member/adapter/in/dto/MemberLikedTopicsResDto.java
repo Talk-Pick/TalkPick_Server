@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import talkPick.domain.topic.domain.type.Category;
+import talkPick.domain.topic.domain.Category;
 import talkPick.domain.topic.domain.type.Keyword;
 
 @Getter
