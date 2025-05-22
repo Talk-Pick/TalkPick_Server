@@ -1,10 +1,12 @@
 package talkPick.domain.random.adapter.in;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
+import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.port.in.RandomCommandUseCase;
 import talkPick.global.annotation.UserId;
 
@@ -26,7 +28,27 @@ public class RandomCommandController implements RandomCommandApi {
         randomCommandUseCase.selectCategory(memberId, requestDTO);
     }
 
-    //TODO 랜덤 토픽 그만하기 기능 구현
+    @Override
+    @PostMapping("/select-topic")
+    public void selectTopic(@UserId Long memberId, RandomReqDTO.SelectTopic requestDTO) {
+        randomCommandUseCase.selectTopic(memberId, requestDTO);
+    }
 
-    //TODO 랜덤 토픽 종료 및 결과 보기 기능 구현
+    @Override
+    @PostMapping("/quit/{randomId}")
+    public void quit(@UserId Long memberId, @PathVariable("randomId") Long randomId) {
+        randomCommandUseCase.quit(memberId, randomId);
+    }
+
+    @Override
+    @PostMapping("/end/{randomId}")
+    public RandomResDTO.Result end(Long memberId, @PathVariable("randomId") Long randomId) {
+        return randomCommandUseCase.end(memberId, randomId);
+    }
+
+    @Override
+    @PostMapping("/save-result/{randomId}")
+    public void saveResult(Long memberId, @PathVariable("randomId") Long randomId, RandomReqDTO.Result requestDTO) {
+        randomCommandUseCase.saveResult(memberId, randomId, requestDTO);
+    }
 }

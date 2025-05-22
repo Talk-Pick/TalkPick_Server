@@ -8,14 +8,11 @@ import org.springframework.stereotype.Repository;
 import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import talkPick.global.common.model.PageCustom;
-
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+import static talkPick.domain.topic.domain.QCategory.category;
 import static talkPick.domain.topic.domain.QTopic.topic;
-import static talkPick.domain.topic.domain.QTopicCategory.topicCategory;
 import static talkPick.domain.topic.domain.QTopicKeyword.topicKeyword;
+import static talkPick.domain.topic.domain.QTopicStat.topicStat;
 
 @Repository
 public class TopicQuerydslRepository {
@@ -25,24 +22,22 @@ public class TopicQuerydslRepository {
     }
 
     public PageCustom<TopicResDTO.Categories> findCategoriesWithPageable(Pageable pageable) {
-        long totalElements = Optional.ofNullable(
-                queryFactory.select(topicCategory.category.countDistinct())
-                        .select(topicCategory.category.countDistinct())
-                        .from(topicCategory)
-                        .fetchOne()
-        ).orElse(0L);
+        Long totalElements = queryFactory
+                .select(category.count())
+                .from(category)
+                .fetchOne();
 
-        List<TopicResDTO.Categories> content = queryFactory
-                .select(topicCategory.category)
-                .from(topicCategory)
-                .groupBy(topicCategory.category)
-                .orderBy(topicCategory.category.count().desc())
+        List<TopicResDTO.Categories> content = queryFactory.select(Projections.constructor(TopicResDTO.Categories.class,
+                        category.id,
+                        category.title,
+                        category.description,
+                        category.imageUrl,
+                        category.categoryGroup
+                ))
+                .from(category)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetch()
-                .stream()
-                .map(category -> new TopicResDTO.Categories(category.name(), category.getDescription(), category.getImageUrl()))
-                .collect(Collectors.toList());
+                .fetch();
 
         //TODO Count 쿼리 수 줄이기 위해 Redis 캐싱 적용해야 함.
         int totalPages = (int) Math.ceil((double) totalElements / pageable.getPageSize());
@@ -54,13 +49,15 @@ public class TopicQuerydslRepository {
                         topic.id,
                         topic.title,
                         topic.thumbnail,
-                        topic.averageTalkTime,
-                        topic.selectCount,
-                        topicCategory.category,
+                        topicStat.averageTalkTime,
+                        topicStat.selectCount,
+                        category.title,
+                        category.categoryGroup,
                         topicKeyword.keyword
                 ))
-                .leftJoin(topicCategory).on(topic.id.eq(topicCategory.topicId))
+                .leftJoin(category).on(topic.categoryId.eq(category.id))
                 .leftJoin(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
+                .leftJoin(topicStat).on(topic.id.eq(topicStat.topicId))
                 .where(topic.id.in(requestDTO.topicIds()))
                 .fetch();
     }
@@ -70,13 +67,15 @@ public class TopicQuerydslRepository {
                         topic.id,
                         topic.title,
                         topic.thumbnail,
-                        topic.averageTalkTime,
-                        topic.selectCount,
-                        topicCategory.category,
+                        topicStat.averageTalkTime,
+                        topicStat.selectCount,
+                        category.title,
+                        category.categoryGroup,
                         topicKeyword.keyword
                 ))
-                .leftJoin(topicCategory).on(topic.id.eq(topicCategory.topicId))
+                .leftJoin(category).on(topic.categoryId.eq(category.id))
                 .leftJoin(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
+                .leftJoin(topicStat).on(topic.id.eq(topicStat.topicId))
                 .where(topic.id.eq(topicId))
                 .fetchOne();
     }

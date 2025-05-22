@@ -11,7 +11,6 @@ import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import talkPick.global.annotation.UserId;
 import talkPick.global.common.model.PageCustom;
-
 import java.util.List;
 
 @RestController
@@ -19,12 +18,6 @@ import java.util.List;
 @RequestMapping("/api/v1/topic")
 public class TopicQueryController implements TopicQueryApi {
     private final TopicQueryUseCase topicQueryUseCase;
-
-    @Override
-    @GetMapping("/top-categories")
-    public List<TopicResDTO.Categories> getTopCategories() {
-        return topicQueryUseCase.getTopCategories();
-    }
 
     @Override
     @GetMapping("/total-categories")

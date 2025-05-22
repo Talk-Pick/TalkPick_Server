@@ -1,8 +1,5 @@
 package talkPick.domain.topic.adapter.out.dto;
 
-import talkPick.domain.topic.domain.type.Category;
-import talkPick.domain.topic.domain.type.Keyword;
-
 public class TopicResDTO {
     public record Topic(
             Long id,
@@ -14,8 +11,9 @@ public class TopicResDTO {
             String icon,
             long averageTalkTime,
             int selectCount,
-            Category category,
-            Keyword keyword
+            String category,
+            String categoryGroup,
+            String keyword
     ) {}
     public record TopicDetail(
             Long topicId,
@@ -23,12 +21,15 @@ public class TopicResDTO {
             String thumbnail,
             long averageTalkTime,
             int selectCount,
-            Category category,
-            Keyword keyword
+            String category,
+            String categoryGroup,
+            String keyword
     ) {}
     public record Categories(
-            String category,
+            Long categoryId,
+            String title,
             String description,
-            String imageUrl
+            String imageUrl,
+            String categoryGroup
     ) {}
 }

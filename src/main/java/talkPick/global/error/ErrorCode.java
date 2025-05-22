@@ -12,7 +12,13 @@ public enum ErrorCode {
 
     // Topic
     TOPIC_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 토픽입니다."),
+    CATEGORY_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 카테고리입니다."),
+    KEYWORD_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 키워드입니다."),
     ADD_LIKE_FAIL(HttpStatus.BAD_REQUEST,"토픽 좋아요 실패했습니다."),
+
+    // Random
+    TOPIC_STAT_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 토픽 통계입니다."),
+    RANDOM_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 랜덤입니다."),
 
     // Admin
     ADMIN_NOT_FOUND(HttpStatus.BAD_REQUEST, "관리자 정보를 찾을 수 없습니다."),
