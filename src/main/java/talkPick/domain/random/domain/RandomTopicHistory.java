@@ -27,6 +27,7 @@ public class RandomTopicHistory {
     private CategoryGroup categoryGroup;
     private String category;
 
+    @Column(name = "`order`")
     private Integer order;
     private LocalDateTime startAt;
     private LocalDateTime endAt;
