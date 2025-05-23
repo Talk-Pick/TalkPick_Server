@@ -31,8 +31,9 @@ public class LLMClientAdapter implements LLMClientPort {
                     .bodyValue(request)
                     .retrieve()
                     .bodyToFlux(RandomResDTO.RandomTopic.class)
+                    .retry(2)
                     .collectList()
-                    .block(); // ✅ 동기 + 블로킹 처리
+                    .block();
         } catch (WebClientResponseException ex) {
             log.error("[LLMClientAdapter] LLM 서버 응답 실패: {}", ex.getResponseBodyAsString());
             throw new LLMException(ErrorCode.LLM_REQUEST_FAILED, "LLM 서버 응답 실패: " + ex.getResponseBodyAsString());
