@@ -24,6 +24,7 @@ public class RandomTopicHistory {
     private String detail;
     @Enumerated(EnumType.STRING)
     private Keyword keyword;
+    private CategoryGroup categoryGroup;
     private String category;
 
     private Integer order;
@@ -38,6 +39,7 @@ public class RandomTopicHistory {
                 .title(null)
                 .detail(null)
                 .keyword(null)
+                .categoryGroup(CategoryGroup.valueOf(requestDTO.categoryGroup()))
                 .category(requestDTO.category())
                 .order(0)
                 .startAt(LocalDateTime.now())
@@ -49,12 +51,13 @@ public class RandomTopicHistory {
         return RandomTopicHistory.builder()
                 .memberId(memberId)
                 .randomId(requestDTO.randomId())
-                .topicId(null)
+                .topicId(requestDTO.topicId())
                 .title(null)
                 .detail(null)
-                .keyword(null)
+                .keyword(Keyword.valueOf(requestDTO.keyword()))
+                .categoryGroup(CategoryGroup.valueOf(requestDTO.categoryGroup()))
                 .category(requestDTO.category())
-                .order(0)
+                .order(requestDTO.order())
                 .startAt(LocalDateTime.now())
                 .endAt(null)
                 .build();

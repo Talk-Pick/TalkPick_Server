@@ -8,10 +8,10 @@ import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.domain.Random;
 import talkPick.domain.random.domain.RandomTopicHistory;
+import talkPick.domain.random.dto.RandomTopicHistoryDataDTO;
 import talkPick.domain.random.port.in.RandomCommandUseCase;
 import talkPick.domain.random.port.out.*;
 import talkPick.external.llm.port.LLMClientPort;
-
 import java.util.List;
 
 @Service
@@ -23,6 +23,7 @@ public class RandomCommandService implements RandomCommandUseCase {
     private final RandomQueryRepositoryPort randomQueryRepositoryPort;
     private final RandomTopicHistoryCommandRepositoryPort randomTopicCommandRepositoryPort;
     private final RandomTopicHistoryQueryRepositoryPort randomTopicHistoryQueryRepositoryPort;
+    private final TopicDataCacheManagerPort topicDataCacheManagerPort;
     private final LLMClientPort llmClientPort;
 
     @Override
@@ -30,18 +31,20 @@ public class RandomCommandService implements RandomCommandUseCase {
         randomCommandRepositoryPort.save(Random.from(memberId));
     }
 
-    // TODO: LLM_SERVER로 전달
-    /** Redis Cache -> 사용자 정보
+    /**
+     * LLM_SERVER로 전달
+     * Redis Cache -> 사용자 정보
      *  DB -> 사용자 정보 이전 데이터 List
      *  JVM Cache -> 모든 Topic 데이터
      **/
     @Override
     public List<RandomResDTO.RandomTopic> selectCategory(Long memberId, RandomReqDTO.SelectCategory requestDTO) {
         randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, requestDTO.randomId()).start();
-        RandomTopicHistory randomTopicHistory = randomTopicCommandRepositoryPort.selectCategory(memberId, requestDTO);
-        //TODO 사용자 데이터 Redis에 올려두기
-//        llmClientPort.random(randomTopicHistory);
-        return null;
+        var randomTopicHistoryData = RandomTopicHistoryDataDTO.from(randomTopicCommandRepositoryPort.selectCategory(memberId, requestDTO));
+        var memberData = memberQueryRepositoryPort.findMemberDataById(memberId);
+        var topicData = topicDataCacheManagerPort.getAll();
+
+        return llmClientPort.random(randomTopicHistoryData, memberData, topicData);
     }
 
     @Override

@@ -11,6 +11,7 @@ import java.util.List;
 public class RandomResDTO {
     public record Categories(
             Long categoryId,
+            String categoryGroup,
             String category,
             String imageUrl
     ) {}
@@ -18,6 +19,7 @@ public class RandomResDTO {
     public record RandomTopic(
             Integer order,
             Long topicId,
+            String categoryGroup,
             String category,
             String imageUrl,
             String keyword,

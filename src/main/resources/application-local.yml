@@ -59,3 +59,6 @@ kakao:
   client-id: ${KAKAO_CLIENT_ID}
   redirect-uri: ${KAKAO_REDIRECT_URI}
   response-type: ${KAKAO_RESPONSE_TYPE}
+
+llm:
+  base-url: ${LLM_BASE_URL}

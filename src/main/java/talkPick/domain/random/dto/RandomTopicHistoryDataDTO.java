@@ -1,21 +1,22 @@
 package talkPick.domain.random.dto;
 
 import talkPick.domain.random.domain.RandomTopicHistory;
-import talkPick.domain.topic.domain.type.Keyword;
 
-public record RandomTopicHistoryInfoDTO (
+public record RandomTopicHistoryDataDTO(
         Long id,
         String title,
         String detail,
-        Keyword keyword,
+        String keyword,
+        String categoryGroup,
         String category
 ) {
-    public static RandomTopicHistoryInfoDTO from(RandomTopicHistory history) {
-        return new RandomTopicHistoryInfoDTO(
+    public static RandomTopicHistoryDataDTO from(RandomTopicHistory history) {
+        return new RandomTopicHistoryDataDTO(
                 history.getId(),
                 history.getTitle(),
                 history.getDetail(),
-                history.getKeyword(),
+                history.getKeyword().toString(),
+                history.getCategoryGroup().toString(),
                 history.getCategory()
         );
     }

@@ -7,13 +7,13 @@ import talkPick.domain.member.domain.type.MBTI;
 import java.time.LocalDate;
 import java.time.Period;
 
-public record MemberInfoDTO(
+public record MemberDataDTO(
         MBTI mbti,
         Gender gender,
         Integer age
 ) {
-    public static MemberInfoDTO from(Member member) {
-        return new MemberInfoDTO(member.getMbti(), member.getGender(), calculateAge(member.getBirth()));
+    public static MemberDataDTO from(Member member) {
+        return new MemberDataDTO(member.getMbti(), member.getGender(), calculateAge(member.getBirth()));
     }
 
     private static int calculateAge(LocalDate birth) {

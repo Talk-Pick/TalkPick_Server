@@ -5,7 +5,6 @@ import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import talkPick.domain.topic.domain.Topic;
 import talkPick.global.common.model.PageCustom;
-
 import java.util.List;
 
 public interface TopicQueryRepositoryPort {

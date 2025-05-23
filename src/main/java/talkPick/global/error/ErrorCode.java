@@ -42,7 +42,10 @@ public enum ErrorCode {
     JASYPT_KEY_CONFIGURATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "jayspt 암호화 키가 유효하지 않습니다."),
 
     // Auth
-    INVALID_ROLE(HttpStatus.INTERNAL_SERVER_ERROR, "유효하지 않은 role입니다.");
+    INVALID_ROLE(HttpStatus.INTERNAL_SERVER_ERROR, "유효하지 않은 role입니다."),
+
+    // LLM
+    LLM_REQUEST_FAILED(HttpStatus.BAD_GATEWAY, "LLM 서버 요청 또는 응답 처리에 실패했습니다.");
 
     private final HttpStatus status;
     private final String message;

@@ -1,9 +1,9 @@
 package talkPick.domain.member.port.out;
 
-import talkPick.domain.random.dto.MemberInfoDTO;
-
-import java.util.Optional;
+import talkPick.domain.member.domain.Member;
+import talkPick.domain.random.dto.MemberDataDTO;
 
 public interface MemberQueryRepositoryPort {
-    Optional<MemberInfoDTO> findMemberInfoById(String memberId);
+    MemberDataDTO findMemberDataById(final Long memberId);
+    Member findMemberById(final Long memberId);
 }

@@ -16,4 +16,14 @@ public class TalkPickException extends RuntimeException {
         super(message);
         this.errorCode = errorCode;
     }
+
+    public TalkPickException(ErrorCode errorCode, String customMessage) {
+        super(customMessage);
+        this.errorCode = errorCode;
+    }
+
+    public ErrorCode getErrorCode() {
+        return errorCode;
+    }
+
 }
