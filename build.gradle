@@ -43,7 +43,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // JPA (postgresql) 관련 의존성
+    // JPA (MySQL) 관련 의존성
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'mysql:mysql-connector-java:8.0.33'
@@ -54,11 +54,6 @@ dependencies {
 
     // Jackson
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-
-    // Todo : 단일 모듈로 변경된 현재 아키텍처에서 필요한지 논의하기
-//    // kafka 의존성: 모듈간 통신 용도
-//    implementation 'org.springframework.kafka:spring-kafka'
-//    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
     // Querydsl
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
@@ -95,6 +90,9 @@ dependencies {
     // Monitoring
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    // WebFlux
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 test {
