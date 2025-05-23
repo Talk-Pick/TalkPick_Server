@@ -23,8 +23,8 @@
 - `Java 21`
 - **IDE** : IntelliJ IDEA
 - **Framework** : Springboot(3.3.7)
-- **Database** : PostgreSQL
-- **ORM** : Hibernate (Spring Data JPA 사용)
+- **Database** : MySQL
+- **ORM** : Hibernate (Spring Data JPA)
 
 ## 🟢 ERD
 
