@@ -11,9 +11,9 @@ import talkPick.global.common.model.BaseTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "topic_search", indexes = {
-        @Index(name = "idx_topic_search_text", columnList = "search_text", unique = false)
-})
+//@Table(name = "topic_search", indexes = {
+//        @Index(name = "idx_topic_search_text", columnList = "search_text", unique = false)
+//})
 public class TopicSearch extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

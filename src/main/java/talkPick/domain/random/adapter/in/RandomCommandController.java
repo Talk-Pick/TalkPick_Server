@@ -10,6 +10,8 @@ import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.port.in.RandomCommandUseCase;
 import talkPick.global.annotation.UserId;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/random")
@@ -24,14 +26,14 @@ public class RandomCommandController implements RandomCommandApi {
 
     @Override
     @PostMapping("/select-category")
-    public void selectCategory(@UserId Long memberId, RandomReqDTO.SelectCategory requestDTO) {
-        randomCommandUseCase.selectCategory(memberId, requestDTO);
+    public List<RandomResDTO.RandomTopic> selectCategory(@UserId Long memberId, RandomReqDTO.SelectCategory requestDTO) {
+        return randomCommandUseCase.selectCategory(memberId, requestDTO);
     }
 
     @Override
     @PostMapping("/select-topic")
-    public void selectTopic(@UserId Long memberId, RandomReqDTO.SelectTopic requestDTO) {
-        randomCommandUseCase.selectTopic(memberId, requestDTO);
+    public List<RandomResDTO.RandomTopic> selectTopic(@UserId Long memberId, RandomReqDTO.SelectTopic requestDTO) {
+        return randomCommandUseCase.selectTopic(memberId, requestDTO);
     }
 
     @Override

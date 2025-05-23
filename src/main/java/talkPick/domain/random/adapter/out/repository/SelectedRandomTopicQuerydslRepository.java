@@ -5,10 +5,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
-
 import java.util.List;
-
-import static talkPick.domain.random.domain.QSelectedRandomTopic.selectedRandomTopic;
+import static talkPick.domain.random.domain.QRandomTopicHistory.randomTopicHistory;
 import static talkPick.domain.topic.domain.QTopic.topic;
 
 @Repository
@@ -23,14 +21,14 @@ public class SelectedRandomTopicQuerydslRepository {
         List<RandomResDTO.ResultDetail> result = queryFactory.select(Projections.constructor(RandomResDTO.ResultDetail.class,
                         topic.id,
                         topic.title,
-                        selectedRandomTopic.category,
-                        selectedRandomTopic.keyword,
-                        selectedRandomTopic.startAt,
-                        selectedRandomTopic.endAt
+                        randomTopicHistory.category,
+                        randomTopicHistory.keyword,
+                        randomTopicHistory.startAt,
+                        randomTopicHistory.endAt
                 ))
-                .join(topic).on(selectedRandomTopic.topicId.eq(topic.id))
-                .where(selectedRandomTopic.randomId.eq(randomId))
-                .from(selectedRandomTopic)
+                .join(topic).on(randomTopicHistory.topicId.eq(topic.id))
+                .where(randomTopicHistory.randomId.eq(randomId))
+                .from(randomTopicHistory)
                 .fetch();
         return RandomResDTO.Result.of(randomId, result);
     }

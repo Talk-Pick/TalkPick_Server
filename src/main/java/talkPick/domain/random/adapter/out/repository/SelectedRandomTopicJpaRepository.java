@@ -1,7 +1,7 @@
 package talkPick.domain.random.adapter.out.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import talkPick.domain.random.domain.SelectedRandomTopic;
+import talkPick.domain.random.domain.RandomTopicHistory;
 
-public interface SelectedRandomTopicJpaRepository extends JpaRepository<SelectedRandomTopic, Long> {
+public interface SelectedRandomTopicJpaRepository extends JpaRepository<RandomTopicHistory, Long> {
 }

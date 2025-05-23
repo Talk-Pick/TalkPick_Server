@@ -13,40 +13,50 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SelectedRandomTopic {
+public class RandomTopicHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long memberId;
     private Long randomId;
     private Long topicId;
-    @Enumerated(EnumType.STRING)
-    private CategoryGroup category;
+    private String title;
+    private String detail;
     @Enumerated(EnumType.STRING)
     private Keyword keyword;
+    private String category;
+
     private Integer order;
     private LocalDateTime startAt;
     private LocalDateTime endAt;
 
-    public static SelectedRandomTopic ofByCategory(final Long memberId, RandomReqDTO.SelectCategory requestDTO) {
-        return SelectedRandomTopic.builder()
+    public static RandomTopicHistory ofByCategory(final Long memberId, RandomReqDTO.SelectCategory requestDTO) {
+        return RandomTopicHistory.builder()
                 .memberId(memberId)
                 .randomId(requestDTO.randomId())
                 .topicId(null)
-                .category(CategoryGroup.valueOf(requestDTO.category()))
+                .title(null)
+                .detail(null)
                 .keyword(null)
+                .category(requestDTO.category())
                 .order(0)
+                .startAt(LocalDateTime.now())
+                .endAt(null)
                 .build();
     }
 
-    public static SelectedRandomTopic ofByTopic(final Long memberId, RandomReqDTO.SelectTopic requestDTO) {
-        return SelectedRandomTopic.builder()
+    public static RandomTopicHistory ofByTopic(final Long memberId, RandomReqDTO.SelectTopic requestDTO) {
+        return RandomTopicHistory.builder()
                 .memberId(memberId)
                 .randomId(requestDTO.randomId())
-                .topicId(requestDTO.topicId())
-                .category(CategoryGroup.valueOf(requestDTO.category()))
-                .keyword(Keyword.valueOf(requestDTO.keyword()))
-                .order(requestDTO.order())
+                .topicId(null)
+                .title(null)
+                .detail(null)
+                .keyword(null)
+                .category(requestDTO.category())
+                .order(0)
+                .startAt(LocalDateTime.now())
+                .endAt(null)
                 .build();
     }
 }
