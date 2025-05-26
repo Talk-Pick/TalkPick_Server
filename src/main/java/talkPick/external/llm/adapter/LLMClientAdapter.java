@@ -8,7 +8,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.dto.MemberDataDTO;
 import talkPick.domain.random.dto.RandomTopicHistoryDataDTO;
-import talkPick.domain.random.dto.TopicDataDTO;
+import talkPick.domain.topic.dto.TopicDataDTO;
 import talkPick.external.llm.dto.LLMReqDTO;
 import talkPick.external.llm.exception.LLMException;
 import talkPick.external.llm.port.LLMClientPort;

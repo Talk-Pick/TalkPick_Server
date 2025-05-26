@@ -1,4 +1,4 @@
-package talkPick.domain.random.dto;
+package talkPick.domain.topic.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
