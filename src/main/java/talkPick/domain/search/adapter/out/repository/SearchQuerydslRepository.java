@@ -23,34 +23,6 @@ public class SearchQuerydslRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public PageCustom<SearchResDTO.Topic> findTopicsByCategoryWithPageable(String condition, Pageable pageable) {
-        List<SearchResDTO.Topic> content = queryFactory.select(Projections.constructor(SearchResDTO.Topic.class,
-                        topic.id,
-                        topic.title,
-                        category.title,
-                        topicKeyword.keyword,
-                        topicStat.selectCount,
-                        topicStat.averageTalkTime
-                ))
-                .from(topic)
-                .join(category).on(category.id.eq(topic.categoryId))
-                .join(topicKeyword).on(topicKeyword.topicId.eq(topic.id))
-                .where(category.title.eq(condition))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        Long totalElements = queryFactory
-                .select(topic.count())
-                .where(category.title.eq(condition))
-                .from(topic)
-                .fetchOne();
-
-        //TODO Count 쿼리 수 줄이기 위해 Redis 캐싱 적용해야 함.
-        int totalPages = (int) Math.ceil((double) totalElements / pageable.getPageSize());
-        return new PageCustom<>(content, totalPages, totalElements, pageable.getPageSize(), pageable.getPageNumber());
-    }
-
     public PageCustom<SearchResDTO.Topic> findTopicsByWordWithPageable(String word, Pageable pageable) {
         List<SearchResDTO.Topic> content = queryFactory
                 .select(Projections.constructor(SearchResDTO.Topic.class,

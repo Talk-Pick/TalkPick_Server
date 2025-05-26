@@ -10,6 +10,8 @@ import talkPick.domain.search.adapter.out.dto.SearchResDTO;
 import talkPick.domain.search.port.in.SearchQueryUseCase;
 import talkPick.global.common.model.PageCustom;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/search")
@@ -18,7 +20,7 @@ public class SearchQueryController implements SearchQueryApi {
 
     @Override
     @GetMapping("/topics")
-    public PageCustom<SearchResDTO.Topic> getTopics(@RequestParam(required = false) String category, Pageable pageable) {
+    public List<SearchResDTO.Topic> getTopics(@RequestParam(required = false) String category, Pageable pageable) {
         return searchQueryUseCase.getTopics(category, pageable);
     }
 

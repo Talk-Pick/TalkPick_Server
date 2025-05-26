@@ -5,9 +5,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import talkPick.domain.topic.dto.TopicDataDTO;
 import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
+import talkPick.domain.topic.dto.TopicDataDTO;
 import talkPick.global.common.model.PageCustom;
 import java.util.List;
 import static talkPick.domain.topic.domain.QCategory.category;
@@ -107,7 +107,9 @@ public class TopicQuerydslRepository {
                         topicStat.fortiesCount,
                         topicStat.fiftiesCount,
                         topicStat.maleCount,
-                        topicStat.femaleCount
+                        topicStat.femaleCount,
+                        topicStat.selectCount,
+                        topicStat.averageTalkTime
                 ))
                 .from(topic)
                 .join(topicStat).on(topic.id.eq(topicStat.topicId))
