@@ -9,6 +9,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import talkPick.domain.search.adapter.out.dto.TopicSearchResDTO;
 import talkPick.domain.search.port.in.TopicSearchQueryUseCase;
 import talkPick.domain.search.port.out.TopicSearchHistoryCommandRepositoryPort;
+import talkPick.domain.search.port.out.TopicSearchHistoryQueryRepositoryPort;
 import talkPick.domain.search.port.out.TopicSearchQueryRepositoryPort;
 import talkPick.domain.topic.port.out.TopicDataCacheManagerPort;
 import talkPick.global.common.model.PageCustom;
@@ -23,6 +24,7 @@ public class TopicSearchQueryService implements TopicSearchQueryUseCase {
     private final TopicSearchQueryRepositoryPort searchQueryRepositoryPort;
     private final TopicDataCacheManagerPort topicDataCacheManagerPort;
     private final TopicSearchHistoryCommandRepositoryPort topicSearchHistoryCommandRepositoryPort;
+    private final TopicSearchHistoryQueryRepositoryPort topicSearchHistoryQueryRepositoryPort;
 
     @Override
     public List<TopicSearchResDTO.Topic> getTopics(String category, Pageable pageable) {
@@ -66,6 +68,6 @@ public class TopicSearchQueryService implements TopicSearchQueryUseCase {
 
     @Override
     public List<TopicSearchResDTO.Recommendation> recommend() {
-        return List.of();
+        return topicSearchHistoryQueryRepositoryPort.recommend();
     }
 }
