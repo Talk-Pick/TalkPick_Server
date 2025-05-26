@@ -1,4 +1,4 @@
-package talkPick.domain.topic.port.out.admin;
+package talkPick.domain.admin.port.out;
 
 import talkPick.domain.topic.domain.Topic;
 

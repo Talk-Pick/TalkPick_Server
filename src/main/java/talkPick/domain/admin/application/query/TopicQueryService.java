@@ -1,4 +1,4 @@
-package talkPick.domain.topic.application;
+package talkPick.domain.admin.application.query;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

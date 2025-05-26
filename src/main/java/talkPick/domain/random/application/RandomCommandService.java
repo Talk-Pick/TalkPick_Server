@@ -11,6 +11,7 @@ import talkPick.domain.random.domain.RandomTopicHistory;
 import talkPick.domain.random.dto.RandomTopicHistoryDataDTO;
 import talkPick.domain.random.port.in.RandomCommandUseCase;
 import talkPick.domain.random.port.out.*;
+import talkPick.domain.topic.port.out.TopicDataCacheManagerPort;
 import talkPick.external.llm.port.LLMClientPort;
 import java.util.List;
 

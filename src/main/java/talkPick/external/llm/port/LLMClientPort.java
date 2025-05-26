@@ -8,5 +8,5 @@ import talkPick.domain.random.dto.TopicDataDTO;
 import java.util.List;
 
 public interface LLMClientPort {
-    List<RandomResDTO.RandomTopic>random(RandomTopicHistoryDataDTO randomTopicHistoryData, MemberDataDTO memberData, List<TopicDataDTO> topicData);
+    List<RandomResDTO.RandomTopic> random(RandomTopicHistoryDataDTO randomTopicHistoryData, MemberDataDTO memberData, List<TopicDataDTO> topicData);
 }

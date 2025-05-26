@@ -1,4 +1,4 @@
-package talkPick.domain.topic.port.in.admin;
+package talkPick.domain.admin.port.in;
 
 import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;

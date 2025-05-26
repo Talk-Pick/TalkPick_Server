@@ -1,4 +1,4 @@
-package talkPick.domain.random.port.out;
+package talkPick.domain.topic.port.out;
 
 import talkPick.domain.random.dto.TopicDataDTO;
 

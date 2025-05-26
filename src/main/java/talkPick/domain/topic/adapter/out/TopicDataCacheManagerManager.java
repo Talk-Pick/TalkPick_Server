@@ -1,4 +1,4 @@
-package talkPick.domain.random.adapter.out;
+package talkPick.domain.topic.adapter.out;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import talkPick.domain.random.dto.TopicDataDTO;
 import talkPick.domain.random.port.out.RandomQueryRepositoryPort;
-import talkPick.domain.random.port.out.TopicDataCacheManagerPort;
+import talkPick.domain.topic.port.out.TopicDataCacheManagerPort;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 

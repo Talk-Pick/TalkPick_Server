@@ -12,7 +12,7 @@ import talkPick.domain.admin.adapter.out.dto.AdminResDTO;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import talkPick.global.security.util.CustomUserDetails;
 import talkPick.global.security.jwt.dto.JwtResDTO;
-import talkPick.domain.topic.port.in.admin.AdminTopicCommandUseCase;
+import talkPick.domain.admin.port.in.AdminTopicCommandUseCase;
 
 @RestController
 @RequiredArgsConstructor
