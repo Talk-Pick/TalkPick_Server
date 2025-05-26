@@ -7,7 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import talkPick.domain.search.adapter.out.dto.SearchResDTO;
+import talkPick.domain.search.adapter.out.dto.TopicSearchResDTO;
 import talkPick.global.common.model.PageCustom;
 import java.util.List;
 import static talkPick.domain.search.domain.QTopicSearch.topicSearch;
@@ -17,15 +17,15 @@ import static talkPick.domain.topic.domain.QTopicKeyword.topicKeyword;
 import static talkPick.domain.topic.domain.QTopicStat.topicStat;
 
 @Repository
-public class SearchQuerydslRepository {
+public class TopicSearchQuerydslRepository {
     private final JPAQueryFactory queryFactory;
-    public SearchQuerydslRepository(EntityManager em) {
+    public TopicSearchQuerydslRepository(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public PageCustom<SearchResDTO.Topic> findTopicsByWordWithPageable(String word, Pageable pageable) {
-        List<SearchResDTO.Topic> content = queryFactory
-                .select(Projections.constructor(SearchResDTO.Topic.class,
+    public PageCustom<TopicSearchResDTO.Topic> findTopicsByWordWithPageable(String word, Pageable pageable) {
+        List<TopicSearchResDTO.Topic> content = queryFactory
+                .select(Projections.constructor(TopicSearchResDTO.Topic.class,
                         topic.id,
                         topic.title,
                         category.title,

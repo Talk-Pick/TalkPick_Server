@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class SearchResDTO {
+public class TopicSearchResDTO {
 
     @Getter
     @NoArgsConstructor
@@ -17,4 +17,9 @@ public class SearchResDTO {
         private long selectCount;
         private long averageTalkTime;
     }
+
+    public record Recommendation (
+            Integer order,
+            String keyword
+    ){}
 }
