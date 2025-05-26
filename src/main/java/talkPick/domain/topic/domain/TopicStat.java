@@ -27,8 +27,6 @@ public class TopicStat {
     private Integer tCount;
     private Integer jCount;
     private Integer pCount;
-    private long averageTalkTime;
-    private Integer selectCount;
     private Integer likeCount;
     private Integer teenCount;
     private Integer twentiesCount;
@@ -37,6 +35,8 @@ public class TopicStat {
     private Integer fiftiesCount;
     private Integer maleCount;
     private Integer femaleCount;
+    private Integer selectCount;
+    private long averageTalkTime;
 
     @Version
     private Long version;

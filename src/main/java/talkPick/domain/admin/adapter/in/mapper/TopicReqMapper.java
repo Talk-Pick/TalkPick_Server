@@ -1,4 +1,4 @@
-package talkPick.domain.topic.adapter.in.mapper;
+package talkPick.domain.admin.adapter.in.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

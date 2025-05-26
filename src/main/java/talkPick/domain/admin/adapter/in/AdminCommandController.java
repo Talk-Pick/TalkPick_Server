@@ -6,13 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import talkPick.domain.admin.adapter.in.dto.AdminReqDTO;
+import talkPick.domain.admin.port.in.AdminTopicCommandUseCase;
 import talkPick.domain.admin.port.in.AuthCommandUseCase;
 import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
 import talkPick.domain.admin.adapter.out.dto.AdminResDTO;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import talkPick.global.security.util.CustomUserDetails;
 import talkPick.global.security.jwt.dto.JwtResDTO;
-import talkPick.domain.topic.port.in.admin.AdminTopicCommandUseCase;
 
 @RestController
 @RequiredArgsConstructor

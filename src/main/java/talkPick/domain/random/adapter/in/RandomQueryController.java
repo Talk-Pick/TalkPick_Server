@@ -23,12 +23,6 @@ public class RandomQueryController implements RandomQueryApi {
         return randomQueryUseCase.getCategories();
     }
 
-//    @Override
-//    @GetMapping("/topics/{randomId}")
-//    public List<RandomResDTO.RandomTopic> getRandomTopics(@UserId final Long memberId, @PathVariable("randomId") Long randomId) {
-//        return randomQueryUseCase.getRandomTopics(memberId, randomId);
-//    }
-
     @Override
     @GetMapping("/{topicId}")
     public RandomResDTO.RandomTopicDetail getRandomTopicDetail(@PathVariable("topicId") Long topicId) {

@@ -1,18 +1,18 @@
-package talkPick.domain.topic.application.admin;
+package talkPick.domain.admin.application.command;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import talkPick.domain.topic.adapter.in.mapper.TopicReqMapper;
+import talkPick.domain.admin.adapter.in.mapper.TopicReqMapper;
+import talkPick.domain.admin.domain.Admin;
+import talkPick.domain.admin.port.in.AdminTopicCommandUseCase;
+import talkPick.domain.admin.port.out.AdminQueryRepositoryPort;
+import talkPick.domain.admin.port.out.AdminTopicCommandRepositoryPort;
 import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
-import talkPick.domain.admin.domain.Admin;
 import talkPick.domain.topic.domain.Topic;
-import talkPick.domain.topic.port.in.admin.AdminTopicCommandUseCase;
-import talkPick.domain.admin.port.out.AdminQueryRepositoryPort;
-import talkPick.domain.topic.port.out.TopicStatCommandRepositoryPort;
 import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
-import talkPick.domain.topic.port.out.admin.AdminTopicCommandRepositoryPort;
+import talkPick.domain.topic.port.out.TopicStatCommandRepositoryPort;
 
 @Service
 @Transactional

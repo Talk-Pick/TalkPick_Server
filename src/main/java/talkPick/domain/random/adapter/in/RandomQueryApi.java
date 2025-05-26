@@ -10,9 +10,6 @@ public interface RandomQueryApi {
     @Operation(summary = "랜덤 토픽 2 : 랜덤 토픽 카테고리 조회 API", description = "랜덤 토픽 2 : 랜덤 토픽 카테고리 조회 API 입니다.")
     List<RandomResDTO.Categories> getCategories();
 
-//    @Operation(summary = "랜덤 토픽 4 : 랜덤 토픽 4개 조회 API", description = "랜덤 토픽 4 : 랜덤 토픽 4개 조회 API 입니다.")
-//    List<RandomResDTO.RandomTopic> getRandomTopics(@UserId final Long memberId, @PathVariable("randomId") Long randomId);
-
     @Operation(summary = "랜덤 토픽 5 : 랜덤 토픽 상세 조회 API", description = "랜덤 토픽 5 : 랜덤 토픽 상세 조회 API 입니다.")
     RandomResDTO.RandomTopicDetail getRandomTopicDetail(@PathVariable("topicId") Long topicId);
 }

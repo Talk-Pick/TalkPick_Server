@@ -7,7 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import talkPick.domain.search.adapter.out.dto.SearchResDTO;
+import talkPick.domain.search.adapter.out.dto.TopicSearchResDTO;
 import talkPick.global.common.model.PageCustom;
 import java.util.List;
 import static talkPick.domain.search.domain.QTopicSearch.topicSearch;
@@ -17,43 +17,15 @@ import static talkPick.domain.topic.domain.QTopicKeyword.topicKeyword;
 import static talkPick.domain.topic.domain.QTopicStat.topicStat;
 
 @Repository
-public class SearchQuerydslRepository {
+public class TopicSearchQuerydslRepository {
     private final JPAQueryFactory queryFactory;
-    public SearchQuerydslRepository(EntityManager em) {
+    public TopicSearchQuerydslRepository(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public PageCustom<SearchResDTO.Topic> findTopicsByCategoryWithPageable(String condition, Pageable pageable) {
-        List<SearchResDTO.Topic> content = queryFactory.select(Projections.constructor(SearchResDTO.Topic.class,
-                        topic.id,
-                        topic.title,
-                        category.title,
-                        topicKeyword.keyword,
-                        topicStat.selectCount,
-                        topicStat.averageTalkTime
-                ))
-                .from(topic)
-                .join(category).on(category.id.eq(topic.categoryId))
-                .join(topicKeyword).on(topicKeyword.topicId.eq(topic.id))
-                .where(category.title.eq(condition))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        Long totalElements = queryFactory
-                .select(topic.count())
-                .where(category.title.eq(condition))
-                .from(topic)
-                .fetchOne();
-
-        //TODO Count 쿼리 수 줄이기 위해 Redis 캐싱 적용해야 함.
-        int totalPages = (int) Math.ceil((double) totalElements / pageable.getPageSize());
-        return new PageCustom<>(content, totalPages, totalElements, pageable.getPageSize(), pageable.getPageNumber());
-    }
-
-    public PageCustom<SearchResDTO.Topic> findTopicsByWordWithPageable(String word, Pageable pageable) {
-        List<SearchResDTO.Topic> content = queryFactory
-                .select(Projections.constructor(SearchResDTO.Topic.class,
+    public PageCustom<TopicSearchResDTO.Topic> findTopicsByWordWithPageable(String word, Pageable pageable) {
+        List<TopicSearchResDTO.Topic> content = queryFactory
+                .select(Projections.constructor(TopicSearchResDTO.Topic.class,
                         topic.id,
                         topic.title,
                         category.title,

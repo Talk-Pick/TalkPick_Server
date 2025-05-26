@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
+import talkPick.domain.topic.dto.TopicDataDTO;
 import talkPick.global.common.model.PageCustom;
 import java.util.List;
 import static talkPick.domain.topic.domain.QCategory.category;
@@ -78,5 +79,42 @@ public class TopicQuerydslRepository {
                 .leftJoin(topicStat).on(topic.id.eq(topicStat.topicId))
                 .where(topic.id.eq(topicId))
                 .fetchOne();
+    }
+
+    public List<TopicDataDTO> findAllTopicData() {
+        return queryFactory.select(Projections.constructor(TopicDataDTO.class,
+                        topic.id,
+                        topic.title,
+                        topic.detail,
+                        topicKeyword.keyword.stringValue(),
+                        topic.thumbnail,
+                        topic.icon,
+                        category.categoryGroup.stringValue(),
+                        category.title,
+                        category.description,
+                        category.imageUrl,
+                        topicStat.eCount,
+                        topicStat.iCount,
+                        topicStat.sCount,
+                        topicStat.nCount,
+                        topicStat.fCount,
+                        topicStat.tCount,
+                        topicStat.jCount,
+                        topicStat.pCount,
+                        topicStat.teenCount,
+                        topicStat.twentiesCount,
+                        topicStat.thirtiesCount,
+                        topicStat.fortiesCount,
+                        topicStat.fiftiesCount,
+                        topicStat.maleCount,
+                        topicStat.femaleCount,
+                        topicStat.selectCount,
+                        topicStat.averageTalkTime
+                ))
+                .from(topic)
+                .join(topicStat).on(topic.id.eq(topicStat.topicId))
+                .join(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
+                .join(category).on(topic.categoryId.eq(category.id))
+                .fetch();
     }
 }

@@ -1,6 +1,6 @@
-package talkPick.domain.random.port.out;
+package talkPick.domain.topic.port.out;
 
-import talkPick.domain.random.dto.TopicDataDTO;
+import talkPick.domain.topic.dto.TopicDataDTO;
 
 import java.util.List;
 

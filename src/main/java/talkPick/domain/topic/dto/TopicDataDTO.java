@@ -1,4 +1,4 @@
-package talkPick.domain.random.dto;
+package talkPick.domain.topic.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,4 +33,6 @@ public class TopicDataDTO {
     private Integer fiftiesCount;
     private Integer maleCount;
     private Integer femaleCount;
+    private Integer selectCount;
+    private long averageTalkTime;
 }

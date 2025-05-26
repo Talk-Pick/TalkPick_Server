@@ -1,10 +1,10 @@
-package talkPick.domain.topic.adapter.out;
+package talkPick.domain.admin.adapter.out;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import talkPick.domain.topic.adapter.out.repository.TopicJpaRepository;
 import talkPick.domain.topic.domain.Topic;
-import talkPick.domain.topic.port.out.admin.AdminTopicCommandRepositoryPort;
+import talkPick.domain.admin.port.out.AdminTopicCommandRepositoryPort;
 
 @Component
 @RequiredArgsConstructor
