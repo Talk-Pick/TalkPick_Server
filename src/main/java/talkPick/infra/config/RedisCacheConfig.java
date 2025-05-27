@@ -1,4 +1,4 @@
-package talkPick.infra.cache.config;
+package talkPick.infra.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

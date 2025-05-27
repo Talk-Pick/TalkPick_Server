@@ -1,4 +1,4 @@
-package talkPick.infra.cache.topic;
+package talkPick.infra.topic.adapter;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
