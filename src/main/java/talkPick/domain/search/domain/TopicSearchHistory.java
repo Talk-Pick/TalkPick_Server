@@ -17,14 +17,14 @@ public class TopicSearchHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long memberId;
-    private String keyword;
+    private String word;
     private LocalDateTime searchAt;
     private Boolean isResultShown;
 
-    public static TopicSearchHistory of(Long memberId, String keyword, Boolean isResultShown) {
+    public static TopicSearchHistory of(Long memberId, String word, Boolean isResultShown) {
         return TopicSearchHistory.builder()
                 .memberId(memberId)
-                .keyword(keyword)
+                .word(word)
                 .searchAt(LocalDateTime.now())
                 .isResultShown(isResultShown)
                 .build();
