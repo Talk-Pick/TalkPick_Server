@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import talkPick.global.common.model.BaseTime;
 
-//TODO 추후 ELK로 넘어갈 테이블 (일단 보류)
+//TODO 추후 ElasticSearch로 넘어갈 테이블 (일단 보류)
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
