@@ -10,21 +10,21 @@ import talkPick.domain.search.adapter.out.dto.TopicSearchResDTO;
 import talkPick.domain.search.port.in.TopicSearchQueryUseCase;
 import talkPick.domain.search.port.out.TopicSearchHistoryCommandRepositoryPort;
 import talkPick.domain.search.port.out.TopicSearchHistoryQueryRepositoryPort;
-import talkPick.domain.search.port.out.TopicSearchQueryRepositoryPort;
+import talkPick.domain.topic.dto.TopicDataDTO;
 import talkPick.domain.topic.port.out.TopicDataCacheManagerPort;
-import talkPick.global.common.model.PageCustom;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class TopicSearchQueryService implements TopicSearchQueryUseCase {
-    private final TopicSearchQueryRepositoryPort searchQueryRepositoryPort;
     private final TopicDataCacheManagerPort topicDataCacheManagerPort;
     private final TopicSearchHistoryCommandRepositoryPort topicSearchHistoryCommandRepositoryPort;
     private final TopicSearchHistoryQueryRepositoryPort topicSearchHistoryQueryRepositoryPort;
+    public final double threshold = 0.85;
 
     @Override
     public List<TopicSearchResDTO.Topic> getTopics(String category, Pageable pageable) {
@@ -43,27 +43,49 @@ public class TopicSearchQueryService implements TopicSearchQueryUseCase {
     }
 
     @Override
-    public PageCustom<TopicSearchResDTO.Topic> search(Long memberId, String word, Pageable pageable) {
+    public List<TopicSearchResDTO.Topic> search(Long memberId, String word) {
         //TODO 테스트할 때 할 일 : 트랜잭션/스레드 다른지 확인
         String threadName = Thread.currentThread().getName();
         boolean isActive = TransactionSynchronizationManager.isActualTransactionActive();
         Object txResource = TransactionSynchronizationManager.getResource("javax.persistence.EntityManager");
         log.info("[Search] thread = {}, tx active = {}, tx resource = {}", threadName, isActive, txResource);
 
-        var result = searchQueryRepositoryPort.findTopicsByWordWithPageable(word, pageable);
+        var cachedTopics = topicDataCacheManagerPort.getAll();
+        var normalizedWord = word.toLowerCase();
+
+        var result = cachedTopics.stream()
+                .filter(topic -> containsWord(topic, normalizedWord))
+                .map(t -> new TopicSearchResDTO.Topic(
+                        t.getId(),
+                        t.getTitle(),
+                        t.getCategoryTitle(),
+                        t.getKeyword(),
+                        t.getSelectCount() != null ? t.getSelectCount() : 0,
+                        t.getAverageTalkTime()
+                ))
+                .toList();
 
         saveSearchHistory(memberId, word, result);
 
         return result;
     }
 
-    private void saveSearchHistory(Long memberId, String word, PageCustom<TopicSearchResDTO.Topic> result) {
-        Optional.ofNullable(result.content())
-                .filter(list -> !list.isEmpty())
-                .ifPresentOrElse(
-                        content -> topicSearchHistoryCommandRepositoryPort.save(memberId, word, true),
-                        () -> topicSearchHistoryCommandRepositoryPort.save(memberId, word, false)
-                );
+    private boolean containsWord(TopicDataDTO topic, String word) {
+        return Stream.of(
+                        topic.getTitle(),
+                        topic.getDetail(),
+                        topic.getKeyword(),
+                        topic.getCategoryGroup(),
+                        topic.getCategoryTitle(),
+                        topic.getCategoryDescription()
+                )
+                .filter(Objects::nonNull)
+                .map(String::toLowerCase)
+                .anyMatch(field -> field.contains(word));
+    }
+
+    private void saveSearchHistory(Long memberId, String word, List<TopicSearchResDTO.Topic> result) {
+        topicSearchHistoryCommandRepositoryPort.save(memberId, word, result != null && !result.isEmpty());
     }
 
     @Override
