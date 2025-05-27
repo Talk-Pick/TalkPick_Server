@@ -11,7 +11,7 @@ import talkPick.domain.search.port.in.TopicSearchQueryUseCase;
 import talkPick.domain.search.port.out.TopicSearchHistoryCommandRepositoryPort;
 import talkPick.domain.search.port.out.TopicSearchHistoryQueryRepositoryPort;
 import talkPick.domain.topic.dto.TopicDataDTO;
-import talkPick.domain.topic.port.out.TopicDataCacheManagerPort;
+import talkPick.domain.topic.port.out.TopicDataCacheManager;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -21,14 +21,14 @@ import java.util.stream.Stream;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class TopicSearchQueryService implements TopicSearchQueryUseCase {
-    private final TopicDataCacheManagerPort topicDataCacheManagerPort;
+    private final TopicDataCacheManager topicDataCacheManager;
     private final TopicSearchHistoryCommandRepositoryPort topicSearchHistoryCommandRepositoryPort;
     private final TopicSearchHistoryQueryRepositoryPort topicSearchHistoryQueryRepositoryPort;
     public final double threshold = 0.85;
 
     @Override
     public List<TopicSearchResDTO.Topic> getTopics(String category, Pageable pageable) {
-        var topicDataList = topicDataCacheManagerPort.getAll();
+        var topicDataList = topicDataCacheManager.getAll();
         return topicDataList.stream()
                 .filter(t -> t.getCategoryTitle().equals(category))
                 .map(t -> new TopicSearchResDTO.Topic(
@@ -50,7 +50,7 @@ public class TopicSearchQueryService implements TopicSearchQueryUseCase {
         Object txResource = TransactionSynchronizationManager.getResource("javax.persistence.EntityManager");
         log.info("[Search] thread = {}, tx active = {}, tx resource = {}", threadName, isActive, txResource);
 
-        var cachedTopics = topicDataCacheManagerPort.getAll();
+        var cachedTopics = topicDataCacheManager.getAll();
         var normalizedWord = word.toLowerCase();
 
         var result = cachedTopics.stream()
