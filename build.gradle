@@ -93,9 +93,6 @@ dependencies {
 
     // WebFlux
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-
-    // Apache Commons Text
-    implementation 'org.apache.commons:commons-text:1.10.0'
 }
 
 test {

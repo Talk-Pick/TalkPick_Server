@@ -2,7 +2,6 @@ package talkPick.domain.search.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.text.similarity.JaroWinklerDistance;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +13,6 @@ import talkPick.domain.search.port.out.TopicSearchHistoryQueryRepositoryPort;
 import talkPick.domain.topic.dto.TopicDataDTO;
 import talkPick.domain.topic.port.out.TopicDataCacheManagerPort;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -52,28 +50,19 @@ public class TopicSearchQueryService implements TopicSearchQueryUseCase {
         Object txResource = TransactionSynchronizationManager.getResource("javax.persistence.EntityManager");
         log.info("[Search] thread = {}, tx active = {}, tx resource = {}", threadName, isActive, txResource);
 
-        JaroWinklerDistance distance = new JaroWinklerDistance();
         var cachedTopics = topicDataCacheManagerPort.getAll();
         var normalizedWord = word.toLowerCase();
 
         var result = cachedTopics.stream()
-                .map(topic -> {
-                    double score = getMaxSimilarityScore(topic, normalizedWord, distance);
-                    return Map.entry(topic, score);
-                })
-                .filter(entry -> entry.getValue() >= threshold)
-                .sorted((a, b) -> Double.compare(b.getValue(), a.getValue()))
-                .map(entry -> {
-                    TopicDataDTO t = entry.getKey();
-                    return new TopicSearchResDTO.Topic(
-                            t.getId(),
-                            t.getTitle(),
-                            t.getCategoryTitle(),
-                            t.getKeyword(),
-                            t.getSelectCount() != null ? t.getSelectCount() : 0,
-                            t.getAverageTalkTime()
-                    );
-                })
+                .filter(topic -> containsWord(topic, normalizedWord))
+                .map(t -> new TopicSearchResDTO.Topic(
+                        t.getId(),
+                        t.getTitle(),
+                        t.getCategoryTitle(),
+                        t.getKeyword(),
+                        t.getSelectCount() != null ? t.getSelectCount() : 0,
+                        t.getAverageTalkTime()
+                ))
                 .toList();
 
         saveSearchHistory(memberId, word, result);
@@ -81,7 +70,7 @@ public class TopicSearchQueryService implements TopicSearchQueryUseCase {
         return result;
     }
 
-    private double getMaxSimilarityScore(TopicDataDTO topic, String word, JaroWinklerDistance distance) {
+    private boolean containsWord(TopicDataDTO topic, String word) {
         return Stream.of(
                         topic.getTitle(),
                         topic.getDetail(),
@@ -89,11 +78,10 @@ public class TopicSearchQueryService implements TopicSearchQueryUseCase {
                         topic.getCategoryGroup(),
                         topic.getCategoryTitle(),
                         topic.getCategoryDescription()
-                ).filter(Objects::nonNull)
+                )
+                .filter(Objects::nonNull)
                 .map(String::toLowerCase)
-                .mapToDouble(field -> distance.apply(word, field))
-                .max()
-                .orElse(0.0);
+                .anyMatch(field -> field.contains(word));
     }
 
     private void saveSearchHistory(Long memberId, String word, List<TopicSearchResDTO.Topic> result) {
