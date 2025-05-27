@@ -3,35 +3,59 @@ package talkPick.infra.topic.adapter;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import talkPick.domain.topic.dto.TopicDataDTO;
 import talkPick.domain.topic.port.out.TopicDataCacheManager;
 import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
+import talkPick.infra.exception.JVMCacheException;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicReference;
+import static talkPick.global.error.ErrorCode.JVM_CACHE_REFRESH_FAILED;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class TopicDataCacheManagerAdapter implements TopicDataCacheManager {
     private final TopicQueryRepositoryPort topicQueryRepositoryPort;
-    private final List<TopicDataDTO> topicDataCache = new CopyOnWriteArrayList<>();
+    private final AtomicReference<List<TopicDataDTO>> cacheRef = new AtomicReference<>(List.of());
 
     @PostConstruct
     public void load() {
-        var topicData = topicQueryRepositoryPort.findAllTopicData();
-        topicDataCache.clear();
-        topicDataCache.addAll(topicData);
-        log.info("[TopicDataCacheManager] 캐시 로드 완료: {}개 항목", topicData.size());
+        refresh();
     }
 
     @Override
     public List<TopicDataDTO> getAll() {
-        return List.copyOf(topicDataCache);
+        return cacheRef.get();
     }
 
+
+    //TODO 실패 시 Slack 전송 필요
     @Override
+    @Retryable(
+            value = { RuntimeException.class },
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 2000)
+    )
     public void refresh() {
-        load();
+        log.info("[TopicCache] 캐시 갱신 시작");
+
+        try {
+            var newData = topicQueryRepositoryPort.findAllTopicData();
+            cacheRef.set(List.copyOf(newData));
+
+            long usedMB = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
+            long freeMB = Runtime.getRuntime().freeMemory() / 1024 / 1024;
+            long maxMB = Runtime.getRuntime().maxMemory() / 1024 / 1024;
+
+            log.info("[TopicCache] 캐시 갱신 완료 - 항목 수: {}개 | 사용 메모리: {}MB | 여유 메모리: {}MB | 최대 메모리: {}MB", newData.size(), usedMB, freeMB, maxMB);
+
+            log.info("[TopicCache] 캐시 갱신 시작");
+
+        } catch (Exception e) {
+            throw new JVMCacheException(JVM_CACHE_REFRESH_FAILED);
+        }
     }
 }

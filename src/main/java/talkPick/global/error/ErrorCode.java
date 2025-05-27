@@ -45,7 +45,11 @@ public enum ErrorCode {
     INVALID_ROLE(HttpStatus.INTERNAL_SERVER_ERROR, "유효하지 않은 role입니다."),
 
     // LLM
-    LLM_REQUEST_FAILED(HttpStatus.BAD_GATEWAY, "LLM 서버 요청 또는 응답 처리에 실패했습니다.");
+    LLM_REQUEST_FAILED(HttpStatus.BAD_GATEWAY, "LLM 서버 요청 또는 응답 처리에 실패했습니다."),
+
+    // JVM
+    JVM_CACHE_REFRESH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "JVM 캐시 Refresh 중 예외가 발생했습니다.")
+    ;
 
     private final HttpStatus status;
     private final String message;
