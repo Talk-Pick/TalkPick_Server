@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import talkPick.domain.search.adapter.out.dto.TopicSearchResDTO;
 import talkPick.domain.search.port.in.TopicSearchQueryUseCase;
 import talkPick.global.annotation.UserId;
-import talkPick.global.common.model.PageCustom;
-
 import java.util.List;
 
 @RestController
@@ -27,8 +25,8 @@ public class TopicSearchController implements TopicSearchApi {
 
     @Override
     @GetMapping("/")
-    public PageCustom<TopicSearchResDTO.Topic> search(@UserId Long memberId, @RequestParam(required = false) String word, Pageable pageable) {
-        return topicSearchQueryUseCase.search(memberId, word, pageable);
+    public List<TopicSearchResDTO.Topic> search(@UserId Long memberId, @RequestParam(required = false) String word) {
+        return topicSearchQueryUseCase.search(memberId, word);
     }
 
     @Override
