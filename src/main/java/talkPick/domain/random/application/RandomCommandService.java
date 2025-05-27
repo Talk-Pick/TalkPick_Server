@@ -11,7 +11,7 @@ import talkPick.domain.random.domain.RandomTopicHistory;
 import talkPick.domain.random.dto.RandomTopicHistoryDataDTO;
 import talkPick.domain.random.port.in.RandomCommandUseCase;
 import talkPick.domain.random.port.out.*;
-import talkPick.domain.topic.port.out.TopicDataCacheManagerPort;
+import talkPick.domain.topic.port.out.TopicDataCacheManager;
 import talkPick.external.llm.port.LLMClientPort;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class RandomCommandService implements RandomCommandUseCase {
     private final RandomQueryRepositoryPort randomQueryRepositoryPort;
     private final RandomTopicHistoryCommandRepositoryPort randomTopicCommandRepositoryPort;
     private final RandomTopicHistoryQueryRepositoryPort randomTopicHistoryQueryRepositoryPort;
-    private final TopicDataCacheManagerPort topicDataCacheManagerPort;
+    private final TopicDataCacheManager topicDataCacheManager;
     private final LLMClientPort llmClientPort;
 
     @Override
@@ -43,7 +43,7 @@ public class RandomCommandService implements RandomCommandUseCase {
         randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, requestDTO.randomId()).start();
         var randomTopicHistoryData = RandomTopicHistoryDataDTO.from(randomTopicCommandRepositoryPort.selectCategory(memberId, requestDTO));
         var memberData = memberQueryRepositoryPort.findMemberDataById(memberId);
-        var topicData = topicDataCacheManagerPort.getAll();
+        var topicData = topicDataCacheManager.getAll();
 
         return llmClientPort.random(randomTopicHistoryData, memberData, topicData);
     }

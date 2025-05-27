@@ -1,11 +1,11 @@
-package talkPick.domain.topic.adapter.out;
+package talkPick.infra.cache.topic;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import talkPick.domain.topic.dto.TopicDataDTO;
-import talkPick.domain.topic.port.out.TopicDataCacheManagerPort;
+import talkPick.domain.topic.port.out.TopicDataCacheManager;
 import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -13,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class TopicDataCacheManagerManager implements TopicDataCacheManagerPort {
+public class TopicDataCacheManagerAdapter implements TopicDataCacheManager {
     private final TopicQueryRepositoryPort topicQueryRepositoryPort;
     private final List<TopicDataDTO> topicDataCache = new CopyOnWriteArrayList<>();
 
