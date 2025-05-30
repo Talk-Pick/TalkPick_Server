@@ -2,6 +2,7 @@ package talkPick.domain.topic.adapter.in;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +11,6 @@ import talkPick.domain.topic.port.in.TopicQueryUseCase;
 import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import talkPick.global.annotation.UserId;
-import talkPick.global.common.model.PageCustom;
 import java.util.List;
 
 @RestController
@@ -21,7 +21,7 @@ public class TopicQueryController implements TopicQueryApi {
 
     @Override
     @GetMapping("/total-categories")
-    public PageCustom<TopicResDTO.Categories> getCategories(Pageable pageable) {
+    public Slice<TopicResDTO.Categories> getCategories(Pageable pageable) {
         return topicQueryUseCase.getCategories(pageable);
     }
 
