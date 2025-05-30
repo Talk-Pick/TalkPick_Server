@@ -1,11 +1,14 @@
 package talkPick.domain.topic.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import talkPick.domain.topic.exception.DuplicateLikeException;
 import talkPick.domain.topic.port.out.TopicLikeHistoryCommandRepositoryPort;
 import talkPick.domain.topic.port.out.TopicStatQueryRepositoryPort;
 import talkPick.domain.topic.port.in.TopicCommandUseCase;
+import talkPick.global.error.ErrorCode;
 
 @Service
 @Transactional
@@ -18,6 +21,10 @@ public class TopicCommandService implements TopicCommandUseCase {
     public void addLike(Long memberId, Long topicId) {
         var findTopicStat = topicStatQueryRepositoryPort.findTopicStatByTopicId(topicId);
         findTopicStat.addLike();
-        topicLikeHistoryCommandRepositoryPort.save(memberId, topicId);
+        try {
+            topicLikeHistoryCommandRepositoryPort.save(memberId, topicId);
+        } catch (DataIntegrityViolationException e) {
+            throw new DuplicateLikeException(ErrorCode.DUPLICATE_LIKE);
+        }
     }
 }
