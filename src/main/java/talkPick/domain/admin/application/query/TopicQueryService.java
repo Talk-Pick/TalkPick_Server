@@ -2,11 +2,11 @@ package talkPick.domain.admin.application.query;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
-import talkPick.global.common.model.PageCustom;
 import talkPick.domain.topic.port.in.TopicQueryUseCase;
 import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
 import java.util.List;
@@ -18,7 +18,7 @@ public class TopicQueryService implements TopicQueryUseCase {
     private final TopicQueryRepositoryPort topicQueryRepositoryPort;
 
     @Override
-    public PageCustom<TopicResDTO.Categories> getCategories(Pageable pageable) {
+    public Slice<TopicResDTO.Categories> getCategories(Pageable pageable) {
         return topicQueryRepositoryPort.findCategoriesWithPageable(pageable);
     }
 

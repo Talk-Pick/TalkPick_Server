@@ -2,6 +2,7 @@ package talkPick.domain.topic.adapter.out;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 import talkPick.domain.topic.dto.TopicDataDTO;
 import talkPick.domain.topic.domain.Topic;
@@ -12,7 +13,6 @@ import talkPick.domain.topic.adapter.out.repository.TopicJpaRepository;
 import talkPick.domain.topic.adapter.out.repository.TopicQuerydslRepository;
 import talkPick.global.error.ErrorCode;
 import talkPick.domain.topic.exception.TopicNotFoundException;
-import talkPick.global.common.model.PageCustom;
 import java.util.*;
 
 @Component
@@ -27,7 +27,7 @@ public class TopicQueryRepositoryAdapter implements TopicQueryRepositoryPort {
     }
 
     @Override
-    public PageCustom<TopicResDTO.Categories> findCategoriesWithPageable(Pageable pageable) {
+    public Slice<TopicResDTO.Categories> findCategoriesWithPageable(Pageable pageable) {
         return topicQuerydslRepository.findCategoriesWithPageable(pageable);
     }
 

@@ -4,11 +4,12 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import talkPick.domain.topic.dto.TopicDataDTO;
-import talkPick.global.common.model.PageCustom;
 import java.util.List;
 import static talkPick.domain.topic.domain.QCategory.category;
 import static talkPick.domain.topic.domain.QTopic.topic;
@@ -22,13 +23,9 @@ public class TopicQuerydslRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public PageCustom<TopicResDTO.Categories> findCategoriesWithPageable(Pageable pageable) {
-        Long totalElements = queryFactory
-                .select(category.count())
-                .from(category)
-                .fetchOne();
-
-        List<TopicResDTO.Categories> content = queryFactory.select(Projections.constructor(TopicResDTO.Categories.class,
+    public Slice<TopicResDTO.Categories> findCategoriesWithPageable(Pageable pageable) {
+        var content = queryFactory
+                .select(Projections.constructor(TopicResDTO.Categories.class,
                         category.id,
                         category.title,
                         category.description,
@@ -37,12 +34,13 @@ public class TopicQuerydslRepository {
                 ))
                 .from(category)
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
 
-        //TODO Count 쿼리 수 줄이기 위해 Redis 캐싱 적용해야 함.
-        int totalPages = (int) Math.ceil((double) totalElements / pageable.getPageSize());
-        return new PageCustom<>(content, totalPages, totalElements, pageable.getPageSize(), pageable.getPageNumber());
+        var hasNext = content.size() > pageable.getPageSize();
+        var result = hasNext ? content.subList(0, pageable.getPageSize()) : content;
+
+        return new SliceImpl<>(result, pageable, hasNext);
     }
 
     public List<TopicResDTO.TopicDetail> findTopicDetailsByIds(TopicReqDTO.TodayTopics requestDTO) {
