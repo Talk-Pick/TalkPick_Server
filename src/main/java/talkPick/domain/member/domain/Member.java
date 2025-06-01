@@ -15,7 +15,9 @@ import talkPick.global.common.model.TalkPickStatus;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -61,17 +63,61 @@ public class Member extends BaseTime {
     }
 
     public Member(KakaoUserInfo kakaoUserInfo, MBTI mbti) {
-        this.email = String.valueOf(kakaoUserInfo.getKakao_account().get("email"));
-        this.name = String.valueOf(kakaoUserInfo.getKakao_account().get("nickname"));
-        this.password = null;
-        String birthStr = String.valueOf(kakaoUserInfo.getKakao_account().get("birthday"));
-        this.birth = birthStr != null && !birthStr.equals("null") ?
-                LocalDate.parse(birthStr, DateTimeFormatter.ofPattern("yyyy-MM-dd")) : null;
+        // Initialize maps to prevent NullPointerException
+        Map<String, Object> kakaoAccount = (kakaoUserInfo.getKakao_account() != null) 
+                ? kakaoUserInfo.getKakao_account() : new HashMap<>();
+        Map<String, Object> properties = (kakaoUserInfo.getProperties() != null) 
+                ? kakaoUserInfo.getProperties() : new HashMap<>();
 
-        if (String.valueOf(kakaoUserInfo.getKakao_account().get("gender")).toUpperCase().equals("MALE")) {
-            this.gender = Gender.MALE;
+        // Handle email safely
+        Object emailObj = kakaoAccount.get("email");
+        this.email = (emailObj != null) ? String.valueOf(emailObj) : null;
+
+        // Try to get nickname from kakao_account first, then from properties if not found
+        Object nicknameObj = kakaoAccount.get("nickname");
+        if (nicknameObj == null) {
+            nicknameObj = properties.get("nickname");
+        }
+        this.name = (nicknameObj != null) ? String.valueOf(nicknameObj) : null;
+        this.password = null;
+
+        // Handle birth date safely
+        String birthStr = String.valueOf(kakaoAccount.get("birthday"));
+        if (birthStr != null && !birthStr.equals("null")) {
+            try {
+                this.birth = LocalDate.parse(birthStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            } catch (Exception e) {
+                // If parsing fails, try other common date formats or set to null
+                try {
+                    // Try MM/dd format (common in some APIs)
+                    String[] parts = birthStr.split("/");
+                    if (parts.length == 2) {
+                        // Assume current year if only month and day are provided
+                        String fullDate = LocalDate.now().getYear() + "-" + parts[0] + "-" + parts[1];
+                        this.birth = LocalDate.parse(fullDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    } else {
+                        this.birth = null;
+                    }
+                } catch (Exception ex) {
+                    this.birth = null;
+                }
+            }
         } else {
-            this.gender = Gender.FEMALE;
+            this.birth = null;
+        }
+
+        // Handle gender safely
+        String genderStr = String.valueOf(kakaoAccount.get("gender"));
+        if (genderStr != null && !genderStr.equals("null")) {
+            if (genderStr.toUpperCase().equals("MALE")) {
+                this.gender = Gender.MALE;
+            } else if (genderStr.toUpperCase().equals("FEMALE")) {
+                this.gender = Gender.FEMALE;
+            } else {
+                this.gender = null; // Default to null if gender is not recognized
+            }
+        } else {
+            this.gender = null; // Default to null if gender is not provided
         }
         this.mbti = mbti;
         this.kakaoId = kakaoUserInfo.getId();

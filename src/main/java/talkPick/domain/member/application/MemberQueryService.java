@@ -91,8 +91,9 @@ public class MemberQueryService implements MemberQueryUseCase {
         String countJpql = "SELECT COUNT(DISTINCT t.id) " +
                 "FROM MemberTopicHistory mth " +
                 "JOIN mth.topic t " +
-                "JOIN TopicCategory c ON t.id = c.topicId " +
+                "JOIN Category c ON t.categoryId = c.id " +
                 "JOIN TopicKeyword k ON t.id = k.topicId " +
+                "JOIN TopicStat ts ON t.id = ts.topicId " +
                 "WHERE mth.member.id = :memberId " +
                 "AND mth.checkLiked = true";
 
@@ -101,11 +102,12 @@ public class MemberQueryService implements MemberQueryUseCase {
                 .getSingleResult();
 
         String jpql = "SELECT DISTINCT new talkPick.domain.member.adapter.in.dto.MemberLikedTopicsResDto(" +
-                "t.title, t.averageTalkTime, t.selectCount, k.keyword, c.category) " +
+                "t.title, ts.averageTalkTime, ts.selectCount, k.keyword, c) " +
                 "FROM MemberTopicHistory mth " +
                 "JOIN mth.topic t " +
-                "JOIN TopicCategory c ON t.id = c.topicId " +
+                "JOIN Category c ON t.categoryId = c.id " +
                 "JOIN TopicKeyword k ON t.id = k.topicId " +
+                "JOIN TopicStat ts ON t.id = ts.topicId " +
                 "WHERE mth.member.id = :memberId " +
                 "AND mth.checkLiked = true";
 
