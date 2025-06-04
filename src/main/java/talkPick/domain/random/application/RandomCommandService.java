@@ -41,11 +41,11 @@ public class RandomCommandService implements RandomCommandUseCase {
     @Override
     public List<RandomResDTO.RandomTopic> selectCategory(Long memberId, RandomReqDTO.SelectCategory requestDTO) {
         randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, requestDTO.randomId()).start();
-        var randomTopicHistoryData = RandomTopicHistoryDataDTO.from(randomTopicCommandRepositoryPort.selectCategory(memberId, requestDTO));
+        randomTopicCommandRepositoryPort.selectCategory(memberId, requestDTO);
+        var randomTopicHistoryData = randomTopicHistoryQueryRepositoryPort.getRandomTopicHistoriesByRandomId(requestDTO.randomId());
         var memberData = memberQueryRepositoryPort.findMemberDataById(memberId);
-        var topicData = topicDataCacheManager.getAll();
 
-        return llmClientPort.random(randomTopicHistoryData, memberData, topicData);
+        return llmClientPort.getRandomTopics(randomTopicHistoryData, memberData);
     }
 
     @Override

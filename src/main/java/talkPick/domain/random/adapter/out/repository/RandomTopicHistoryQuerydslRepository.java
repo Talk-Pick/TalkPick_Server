@@ -5,14 +5,16 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
+import talkPick.domain.random.dto.RandomTopicHistoryDataDTO;
+
 import java.util.List;
 import static talkPick.domain.random.domain.QRandomTopicHistory.randomTopicHistory;
 import static talkPick.domain.topic.domain.QTopic.topic;
 
 @Repository
-public class SelectedRandomTopicQuerydslRepository {
+public class RandomTopicHistoryQuerydslRepository {
     private final JPAQueryFactory queryFactory;
-    public SelectedRandomTopicQuerydslRepository(EntityManager em) {
+    public RandomTopicHistoryQuerydslRepository(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
@@ -31,5 +33,19 @@ public class SelectedRandomTopicQuerydslRepository {
                 .from(randomTopicHistory)
                 .fetch();
         return RandomResDTO.Result.of(randomId, result);
+    }
+
+    public List<RandomTopicHistoryDataDTO> getRandomTopicHistoriesByRandomId(Long randomId) {
+        return queryFactory.select(Projections.constructor(RandomTopicHistoryDataDTO.class,
+                        randomTopicHistory.topicId,
+                        randomTopicHistory.title,
+                        randomTopicHistory.detail,
+                        randomTopicHistory.keyword,
+                        randomTopicHistory.categoryGroup,
+                        randomTopicHistory.category
+                ))
+                .where(randomTopicHistory.randomId.eq(randomId))
+                .from(randomTopicHistory)
+                .fetch();
     }
 }

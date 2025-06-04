@@ -31,7 +31,6 @@ public class TopicDataCacheManagerAdapter implements TopicDataCacheManager {
         return cacheRef.get();
     }
 
-
     //TODO 실패 시 Slack 전송 필요
     @Override
     @Retryable(

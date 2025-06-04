@@ -9,7 +9,7 @@ import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.dto.MemberDataDTO;
 import talkPick.domain.random.dto.RandomTopicHistoryDataDTO;
 import talkPick.domain.topic.dto.TopicDataDTO;
-import talkPick.external.llm.dto.LLMReqDTO;
+import talkPick.external.llm.adapter.dto.LLMReqDTO;
 import talkPick.external.llm.exception.LLMException;
 import talkPick.external.llm.port.LLMClientPort;
 import talkPick.global.error.ErrorCode;
@@ -22,8 +22,8 @@ public class LLMClientAdapter implements LLMClientPort {
     private final WebClient llmWebClient;
 
     @Override
-    public List<RandomResDTO.RandomTopic> random(RandomTopicHistoryDataDTO randomTopicHistoryData, MemberDataDTO memberData, List<TopicDataDTO> topicData) {
-        LLMReqDTO request = new LLMReqDTO(randomTopicHistoryData, memberData, topicData);
+    public List<RandomResDTO.RandomTopic> getRandomTopics(List<RandomTopicHistoryDataDTO> randomTopicHistoryData, MemberDataDTO memberData) {
+        LLMReqDTO request = new LLMReqDTO(randomTopicHistoryData, memberData);
 
         try {
             return llmWebClient.post()
