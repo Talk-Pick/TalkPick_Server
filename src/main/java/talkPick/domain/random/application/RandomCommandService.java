@@ -8,10 +8,8 @@ import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.domain.Random;
 import talkPick.domain.random.domain.RandomTopicHistory;
-import talkPick.domain.random.dto.RandomTopicHistoryDataDTO;
 import talkPick.domain.random.port.in.RandomCommandUseCase;
 import talkPick.domain.random.port.out.*;
-import talkPick.domain.topic.port.out.TopicDataCacheManager;
 import talkPick.external.llm.port.LLMClientPort;
 import java.util.List;
 
@@ -24,7 +22,6 @@ public class RandomCommandService implements RandomCommandUseCase {
     private final RandomQueryRepositoryPort randomQueryRepositoryPort;
     private final RandomTopicHistoryCommandRepositoryPort randomTopicCommandRepositoryPort;
     private final RandomTopicHistoryQueryRepositoryPort randomTopicHistoryQueryRepositoryPort;
-    private final TopicDataCacheManager topicDataCacheManager;
     private final LLMClientPort llmClientPort;
 
     @Override

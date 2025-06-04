@@ -10,8 +10,8 @@ import talkPick.domain.search.adapter.out.dto.TopicSearchResDTO;
 import talkPick.domain.search.port.in.TopicSearchQueryUseCase;
 import talkPick.domain.search.port.out.TopicSearchHistoryCommandRepositoryPort;
 import talkPick.domain.search.port.out.TopicSearchHistoryQueryRepositoryPort;
-import talkPick.domain.topic.dto.TopicDataDTO;
-import talkPick.domain.topic.port.out.TopicDataCacheManager;
+import talkPick.domain.topic.dto.TopicCacheDTO;
+import talkPick.domain.topic.port.out.TopicCacheManager;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -21,14 +21,13 @@ import java.util.stream.Stream;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class TopicSearchQueryService implements TopicSearchQueryUseCase {
-    private final TopicDataCacheManager topicDataCacheManager;
+    private final TopicCacheManager topicCacheManager;
     private final TopicSearchHistoryCommandRepositoryPort topicSearchHistoryCommandRepositoryPort;
     private final TopicSearchHistoryQueryRepositoryPort topicSearchHistoryQueryRepositoryPort;
-    public final double threshold = 0.85;
 
     @Override
     public List<TopicSearchResDTO.Topic> getTopics(String category, Pageable pageable) {
-        var topicDataList = topicDataCacheManager.getAll();
+        var topicDataList = topicCacheManager.getAll();
         return topicDataList.stream()
                 .filter(t -> t.getCategoryTitle().equals(category))
                 .map(t -> new TopicSearchResDTO.Topic(
@@ -50,7 +49,7 @@ public class TopicSearchQueryService implements TopicSearchQueryUseCase {
         Object txResource = TransactionSynchronizationManager.getResource("javax.persistence.EntityManager");
         log.info("[Search] thread = {}, tx active = {}, tx resource = {}", threadName, isActive, txResource);
 
-        var cachedTopics = topicDataCacheManager.getAll();
+        var cachedTopics = topicCacheManager.getAll();
         var normalizedWord = word.toLowerCase();
 
         var result = cachedTopics.stream()
@@ -70,7 +69,7 @@ public class TopicSearchQueryService implements TopicSearchQueryUseCase {
         return result;
     }
 
-    private boolean containsWord(TopicDataDTO topic, String word) {
+    private boolean containsWord(TopicCacheDTO topic, String word) {
         return Stream.of(
                         topic.getTitle(),
                         topic.getDetail(),

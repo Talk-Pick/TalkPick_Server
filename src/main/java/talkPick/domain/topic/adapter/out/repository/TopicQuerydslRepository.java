@@ -9,7 +9,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
-import talkPick.domain.topic.dto.TopicDataDTO;
+import talkPick.domain.topic.dto.TopicCacheDTO;
 import java.util.List;
 import static talkPick.domain.topic.domain.QCategory.category;
 import static talkPick.domain.topic.domain.QTopic.topic;
@@ -79,8 +79,8 @@ public class TopicQuerydslRepository {
                 .fetchOne();
     }
 
-    public List<TopicDataDTO> findAllTopicData() {
-        return queryFactory.select(Projections.constructor(TopicDataDTO.class,
+    public List<TopicCacheDTO> findAllTopicData() {
+        return queryFactory.select(Projections.constructor(TopicCacheDTO.class,
                         topic.id,
                         topic.title,
                         topic.detail,

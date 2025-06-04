@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TopicDataDTO {
+public class TopicCacheDTO {
     private Long id;
     private String title;
     private String detail;

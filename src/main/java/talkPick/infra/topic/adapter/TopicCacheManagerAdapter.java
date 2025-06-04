@@ -6,9 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
-import talkPick.domain.topic.dto.TopicDataDTO;
-import talkPick.domain.topic.port.out.TopicDataCacheManager;
+import talkPick.domain.topic.dto.TopicCacheDTO;
+import talkPick.domain.topic.port.out.TopicCacheManager;
 import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
+import talkPick.external.llm.exception.LLMException;
+import talkPick.external.llm.port.LLMClientPort;
 import talkPick.infra.exception.JVMCacheException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -17,9 +19,10 @@ import static talkPick.global.error.ErrorCode.JVM_CACHE_REFRESH_FAILED;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class TopicDataCacheManagerAdapter implements TopicDataCacheManager {
+public class TopicCacheManagerAdapter implements TopicCacheManager {
+    private final LLMClientPort llmClientPort;
     private final TopicQueryRepositoryPort topicQueryRepositoryPort;
-    private final AtomicReference<List<TopicDataDTO>> cacheRef = new AtomicReference<>(List.of());
+    private final AtomicReference<List<TopicCacheDTO>> cacheRef = new AtomicReference<>(List.of());
 
     @PostConstruct
     public void load() {
@@ -27,7 +30,7 @@ public class TopicDataCacheManagerAdapter implements TopicDataCacheManager {
     }
 
     @Override
-    public List<TopicDataDTO> getAll() {
+    public List<TopicCacheDTO> getAll() {
         return cacheRef.get();
     }
 
@@ -42,7 +45,7 @@ public class TopicDataCacheManagerAdapter implements TopicDataCacheManager {
         log.info("[TopicCache] 캐시 갱신 시작");
 
         try {
-            var newData = topicQueryRepositoryPort.findAllTopicData();
+            var newData = topicQueryRepositoryPort.findAllTopicCache();
             cacheRef.set(List.copyOf(newData));
 
             long usedMB = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
@@ -50,9 +53,12 @@ public class TopicDataCacheManagerAdapter implements TopicDataCacheManager {
             long maxMB = Runtime.getRuntime().maxMemory() / 1024 / 1024;
 
             log.info("[TopicCache] 캐시 갱신 완료 - 항목 수: {}개 | 사용 메모리: {}MB | 여유 메모리: {}MB | 최대 메모리: {}MB", newData.size(), usedMB, freeMB, maxMB);
-
             log.info("[TopicCache] 캐시 갱신 시작");
 
+            llmClientPort.send(newData);
+        } catch (LLMException e) {
+            log.error("[TopicCache] LLM 서버와의 통신 중 오류 발생: {}", e.getMessage());
+            throw e;
         } catch (Exception e) {
             throw new JVMCacheException(JVM_CACHE_REFRESH_FAILED);
         }

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
-import talkPick.domain.topic.dto.TopicDataDTO;
+import talkPick.domain.topic.dto.TopicCacheDTO;
 import talkPick.domain.topic.domain.Topic;
 import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
 import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
@@ -48,7 +48,7 @@ public class TopicQueryRepositoryAdapter implements TopicQueryRepositoryPort {
     }
 
     @Override
-    public List<TopicDataDTO> findAllTopicData() {
+    public List<TopicCacheDTO> findAllTopicCache() {
         return topicQuerydslRepository.findAllTopicData();
     }
 }
