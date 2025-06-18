@@ -1,4 +1,4 @@
-package talkPick.infra.topic.scheduler;
+package talkPick.batch.topic.scheduler;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
