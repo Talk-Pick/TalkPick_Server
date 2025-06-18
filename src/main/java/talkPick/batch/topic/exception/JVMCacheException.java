@@ -1,4 +1,4 @@
-package talkPick.infra.exception;
+package talkPick.batch.topic.exception;
 
 import talkPick.global.error.ErrorCode;
 import talkPick.global.error.exception.TalkPickException;

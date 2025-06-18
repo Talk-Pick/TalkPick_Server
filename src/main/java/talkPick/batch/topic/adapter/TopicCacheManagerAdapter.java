@@ -11,7 +11,7 @@ import talkPick.domain.topic.port.out.TopicCacheManager;
 import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
 import talkPick.external.llm.exception.LLMException;
 import talkPick.external.llm.port.LLMClientPort;
-import talkPick.infra.exception.JVMCacheException;
+import talkPick.batch.topic.exception.JVMCacheException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import static talkPick.global.error.ErrorCode.JVM_CACHE_REFRESH_FAILED;
