@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
@@ -71,10 +72,10 @@ public class MemberQueryController implements MemberQueryApi {
     //멤버 캘린더 토픽 결과 조회
     @GetMapping("/members/topic/Results")
     @ResponseBody
-    public Page<MemberTopicResultResDto> getMemberTopicResults(Pageable pageable) {
+    public Page<MemberTopicResultResDto> getMemberTopicResults(@RequestParam("date") LocalDate date, Pageable pageable) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long memberId = Long.parseLong(authentication.getName());
-        Page<MemberTopicResultResDto> memberTopicResults = memberQueryService.getMemberTopicResults(memberId, pageable);
+        Page<MemberTopicResultResDto> memberTopicResults = memberQueryService.getMemberTopicResultsByCreatedDate(memberId, date, pageable);
         return memberTopicResults;
     }
 }

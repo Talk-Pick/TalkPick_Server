@@ -12,6 +12,7 @@ import talkPick.domain.member.adapter.in.dto.MemberTopicResultResDto;
 import talkPick.domain.topic.domain.member.QMemberTopicResult;
 import talkPick.global.error.exception.member.MemberNotFoundException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -20,8 +21,11 @@ public class MemberTopicResultQuerydslRepository {
     private final JPAQueryFactory queryFactory;
     QMemberTopicResult mtr = QMemberTopicResult.memberTopicResult;
 
-    public Page<MemberTopicResultResDto> findMemberTopicResults(Long memberId, Pageable pageable){
-        BooleanExpression condition = mtr.member.id.eq(memberId);
+    public Page<MemberTopicResultResDto> findMemberTopicResults(Long memberId, LocalDate date, Pageable pageable){
+        BooleanExpression condition = mtr.member.id.eq(memberId)
+            .and(mtr.createdDate.year().eq(date.getYear()))
+            .and(mtr.createdDate.month().eq(date.getMonthValue()))
+            .and(mtr.createdDate.dayOfMonth().eq(date.getDayOfMonth()));
 
         long total = queryFactory
                 .select(mtr.id.countDistinct())

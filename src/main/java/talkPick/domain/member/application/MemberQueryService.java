@@ -24,6 +24,7 @@ import talkPick.domain.member.port.in.MemberQueryUseCase;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.time.LocalDate;
 
 @Service
 @Transactional(readOnly = true)
@@ -93,8 +94,8 @@ public class MemberQueryService implements MemberQueryUseCase {
     }
 
     @Override
-    public Page<MemberTopicResultResDto> getMemberTopicResults(Long memberId, Pageable pageable) {
-        return memberTopicResultQuerydslRepository.findMemberTopicResults(memberId, pageable);
+    public Page<MemberTopicResultResDto> getMemberTopicResultsByCreatedDate(Long memberId, LocalDate date, Pageable pageable) {
+        return memberTopicResultQuerydslRepository.findMemberTopicResults(memberId, date, pageable);
     }
 
 
