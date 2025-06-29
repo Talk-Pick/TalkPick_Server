@@ -13,4 +13,8 @@ public class MemberNotFoundException extends TalkPickException {
             super(message);
         }
     }
+
+    public static class MemberTopicResultsNotFoundException extends RuntimeException {
+        public MemberTopicResultsNotFoundException(String message) {super(message);}
+    }
 }
