@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -23,7 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import talkPick.domain.auth.Role;
 import talkPick.domain.member.adapter.in.MemberCommandController;
 import talkPick.domain.member.adapter.in.dto.MemberDetailResDto;
-import talkPick.domain.member.adapter.in.dto.MemberEmailReqDTO;
+import talkPick.domain.member.adapter.in.dto.MemberEmailReqDto;
 import talkPick.domain.member.adapter.in.dto.MemberMbtiUpdateRequestDto;
 import talkPick.domain.member.adapter.out.dto.MemberEmailResDTO;
 import talkPick.domain.member.application.MemberCommandService;
@@ -74,7 +73,7 @@ public class MemberCommandControllerTest {
     @Test
     @DisplayName("이메일 기반 회원가입")
     void testJoinEmailMemberSuccess() throws Exception {
-        MemberEmailReqDTO reqDTO = new MemberEmailReqDTO();
+        MemberEmailReqDto reqDTO = new MemberEmailReqDto();
         reqDTO.setEmail("test@example.com");
         reqDTO.setPassword("password123");
         reqDTO.setName("테스터");

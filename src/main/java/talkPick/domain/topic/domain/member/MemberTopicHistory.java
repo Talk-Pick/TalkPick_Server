@@ -27,6 +27,10 @@ public class MemberTopicHistory extends BaseTime {
     @JoinColumn(name = "topic_id")
     private Topic topic;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MemberTopicResult_id")
+    private MemberTopicResult memberTopicResult;
+
     private long talkTime;
     private boolean checkLiked;
     private int sequence;

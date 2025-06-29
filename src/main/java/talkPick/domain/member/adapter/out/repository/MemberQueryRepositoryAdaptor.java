@@ -1,4 +1,4 @@
-package talkPick.domain.member.adapter.out;
+package talkPick.domain.member.adapter.out.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

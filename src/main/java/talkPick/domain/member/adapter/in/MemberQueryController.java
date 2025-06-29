@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import talkPick.domain.member.adapter.in.dto.KakaoUserInfo;
 import talkPick.domain.member.adapter.in.dto.MemberDetailResDto;
 import talkPick.domain.member.adapter.in.dto.MemberLikedTopicsResDto;
+import talkPick.domain.member.adapter.in.dto.MemberTopicResultResDto;
 import talkPick.domain.member.adapter.out.dto.MemberEmailResDTO;
 import talkPick.domain.member.adapter.out.dto.MemberKakaoResDTO;
 import talkPick.domain.member.application.MemberQueryService;
@@ -46,6 +47,7 @@ public class MemberQueryController implements MemberQueryApi {
         return memberKakaoResDTOList;
     }
 
+    //멤버 마이 페이지 정보 조회
     @GetMapping("/members/me")
     @ResponseBody
     public MemberDetailResDto getMemberInfo() {
@@ -56,6 +58,7 @@ public class MemberQueryController implements MemberQueryApi {
         return memberInfo;
     }
 
+    //멤버 좋아요 누른 토픽 조회
     @GetMapping("/members/me/liked-topics")
     @ResponseBody
     public Page<MemberLikedTopicsResDto> getMemberLikedTopics(Pageable pageable) {
@@ -63,5 +66,15 @@ public class MemberQueryController implements MemberQueryApi {
         Long memberId = Long.parseLong(authentication.getName()); // JWT에서 추출된 사용자 ID
         Page<MemberLikedTopicsResDto> memberLikedTopics = memberQueryService.getMemberLikedTopics(memberId, pageable);
         return memberLikedTopics;
+    }
+
+    //멤버 캘린더 토픽 결과 조회
+    @GetMapping("/members/topic/Results")
+    @ResponseBody
+    public Page<MemberTopicResultResDto> getMemberTopicResults(Pageable pageable) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberId = Long.parseLong(authentication.getName());
+        Page<MemberTopicResultResDto> memberTopicResults = memberQueryService.getMemberTopicResults(memberId, pageable);
+        return memberTopicResults;
     }
 }

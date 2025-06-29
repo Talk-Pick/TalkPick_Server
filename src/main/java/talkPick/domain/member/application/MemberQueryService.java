@@ -11,12 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.member.adapter.in.dto.MemberDetailResDto;
 import talkPick.domain.member.adapter.in.dto.MemberLikedTopicsResDto;
+import talkPick.domain.member.adapter.in.dto.MemberTopicResultResDto;
 import talkPick.domain.member.adapter.out.dto.MemberEmailResDTO;
 import talkPick.domain.member.adapter.out.dto.MemberKakaoResDTO;
 import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
+import talkPick.domain.member.adapter.out.repository.MemberLikedTopicsQuerydslRepository;
+import talkPick.domain.member.adapter.out.repository.MemberTopicResultQuerydslRepository;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
-import talkPick.global.error.exception.member.MemberNotFoundException.MemberLikedTopicsNotFoundException;
 
 
 import java.util.List;
@@ -28,9 +30,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberQueryService implements MemberQueryUseCase {
     private final MemberJpaRepository memberJpaRepository;
-
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final MemberLikedTopicsQuerydslRepository memberLikedTopicsQuerydslRepository;
+    private final MemberTopicResultQuerydslRepository memberTopicResultQuerydslRepository;
 
     @Override
     public List<MemberEmailResDTO> getEmailMembers() {
@@ -88,39 +89,13 @@ public class MemberQueryService implements MemberQueryUseCase {
 
     @Override
     public Page<MemberLikedTopicsResDto> getMemberLikedTopics(Long memberId, Pageable pageable) {
-        String countJpql = "SELECT COUNT(DISTINCT t.id) " +
-                "FROM MemberTopicHistory mth " +
-                "JOIN mth.topic t " +
-                "JOIN Category c ON t.categoryId = c.id " +
-                "JOIN TopicKeyword k ON t.id = k.topicId " +
-                "JOIN TopicStat ts ON t.id = ts.topicId " +
-                "WHERE mth.member.id = :memberId " +
-                "AND mth.checkLiked = true";
-
-        Long totalCount = entityManager.createQuery(countJpql, Long.class)
-                .setParameter("memberId", memberId)
-                .getSingleResult();
-
-        String jpql = "SELECT DISTINCT new talkPick.domain.member.adapter.in.dto.MemberLikedTopicsResDto(" +
-                "t.title, ts.averageTalkTime, ts.selectCount, k.keyword, c) " +
-                "FROM MemberTopicHistory mth " +
-                "JOIN mth.topic t " +
-                "JOIN Category c ON t.categoryId = c.id " +
-                "JOIN TopicKeyword k ON t.id = k.topicId " +
-                "JOIN TopicStat ts ON t.id = ts.topicId " +
-                "WHERE mth.member.id = :memberId " +
-                "AND mth.checkLiked = true";
-
-        List<MemberLikedTopicsResDto> results = entityManager.createQuery(jpql, MemberLikedTopicsResDto.class)
-                .setParameter("memberId", memberId)
-                .setFirstResult((int) pageable.getOffset())
-                .setMaxResults(pageable.getPageSize())
-                .getResultList();
-        if (results.isEmpty()) {
-            throw new MemberLikedTopicsNotFoundException("해당 회원이 좋아요한 토픽을 찾을 수 없습니다. 회원 ID: " + memberId);
-        }
-
-        // 페이지 객체 생성 및 반환
-        return new PageImpl<>(results, pageable, totalCount);
+        return memberLikedTopicsQuerydslRepository.findMemberLikedTopics(memberId, pageable);
     }
+
+    @Override
+    public Page<MemberTopicResultResDto> getMemberTopicResults(Long memberId, Pageable pageable) {
+        return memberTopicResultQuerydslRepository.findMemberTopicResults(memberId, pageable);
+    }
+
+
 }
