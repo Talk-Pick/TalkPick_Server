@@ -41,7 +41,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/api/v1/topic/kakao",
             "/api/v1/topic/additional",
             "/api/v1/topic",
-            "/mbti-form.html"
+            "/mbti-form.html",
+            "/test"
     );
 
     @Override

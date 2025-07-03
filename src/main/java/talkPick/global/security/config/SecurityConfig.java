@@ -49,7 +49,9 @@ public class SecurityConfig {
             "/api/v1/topic/kakao",
             "/api/v1/topic/additional",
             "/api/v1/topic",
-            "/mbti-form.html"};
+            "/mbti-form.html",
+            "/test"
+    };
 
 
     @Bean
