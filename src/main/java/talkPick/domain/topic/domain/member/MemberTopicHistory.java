@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.topic.domain.Topic;
-import talkPick.domain.topic.domain.TopicLikeHistory;
 import talkPick.domain.topic.domain.type.TopicType;
-import talkPick.global.common.model.BaseTime;
-import talkPick.global.common.model.TalkPickStatus;
+import talkPick.global.model.BaseTime;
 
 @Getter
 @Entity

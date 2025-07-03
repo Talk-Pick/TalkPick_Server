@@ -7,14 +7,14 @@ import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import talkPick.domain.topic.dto.TopicCacheDTO;
-import talkPick.domain.topic.port.out.TopicCacheManager;
+import talkPick.batch.topic.port.TopicCacheManager;
 import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
 import talkPick.external.llm.exception.LLMException;
 import talkPick.external.llm.port.LLMClientPort;
 import talkPick.batch.topic.exception.JVMCacheException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-import static talkPick.global.error.ErrorCode.JVM_CACHE_REFRESH_FAILED;
+import static talkPick.global.exception.ErrorCode.JVM_CACHE_REFRESH_FAILED;
 
 @Slf4j
 @Component

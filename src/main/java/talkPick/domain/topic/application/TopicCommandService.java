@@ -8,7 +8,8 @@ import talkPick.domain.topic.exception.DuplicateLikeException;
 import talkPick.domain.topic.port.out.TopicLikeHistoryCommandRepositoryPort;
 import talkPick.domain.topic.port.out.TopicStatQueryRepositoryPort;
 import talkPick.domain.topic.port.in.TopicCommandUseCase;
-import talkPick.global.error.ErrorCode;
+import talkPick.global.exception.ErrorCode;
+import talkPick.global.security.annotation.UserId;
 
 @Service
 @Transactional
@@ -18,7 +19,7 @@ public class TopicCommandService implements TopicCommandUseCase {
     private final TopicLikeHistoryCommandRepositoryPort topicLikeHistoryCommandRepositoryPort;
 
     @Override
-    public void addLike(Long memberId, Long topicId) {
+    public void addLike(@UserId Long memberId, Long topicId) {
         var findTopicStat = topicStatQueryRepositoryPort.findTopicStatByTopicId(topicId);
         findTopicStat.addLike();
         try {

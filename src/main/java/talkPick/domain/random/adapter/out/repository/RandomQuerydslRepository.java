@@ -5,7 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
-import talkPick.global.common.model.TalkPickStatus;
+import talkPick.global.model.TalkPickStatus;
 import java.util.List;
 import static talkPick.domain.topic.domain.QCategory.category;
 import static talkPick.domain.topic.domain.QTopic.topic;

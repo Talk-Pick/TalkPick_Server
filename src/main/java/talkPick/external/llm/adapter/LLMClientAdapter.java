@@ -12,7 +12,7 @@ import talkPick.domain.topic.dto.TopicCacheDTO;
 import talkPick.external.llm.adapter.dto.LLMReqDTO;
 import talkPick.external.llm.exception.LLMException;
 import talkPick.external.llm.port.LLMClientPort;
-import talkPick.global.error.ErrorCode;
+import talkPick.global.exception.ErrorCode;
 import java.util.List;
 
 @Slf4j

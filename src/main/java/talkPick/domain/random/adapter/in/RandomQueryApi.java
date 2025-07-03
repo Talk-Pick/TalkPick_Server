@@ -3,7 +3,7 @@ package talkPick.domain.random.adapter.in;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.PathVariable;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
-import talkPick.global.annotation.UserId;
+
 import java.util.List;
 
 public interface RandomQueryApi {

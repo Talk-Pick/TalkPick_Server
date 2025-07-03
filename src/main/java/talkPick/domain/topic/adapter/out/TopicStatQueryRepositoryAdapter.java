@@ -6,7 +6,7 @@ import talkPick.domain.random.adapter.out.repository.TopicStatJpaRepository;
 import talkPick.domain.random.exception.TopicStatNotFoundException;
 import talkPick.domain.topic.domain.TopicStat;
 import talkPick.domain.topic.port.out.TopicStatQueryRepositoryPort;
-import talkPick.global.error.ErrorCode;
+import talkPick.global.exception.ErrorCode;
 
 @Component
 @RequiredArgsConstructor

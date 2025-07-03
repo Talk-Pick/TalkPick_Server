@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 import talkPick.domain.random.domain.type.RandomType;
-import talkPick.global.common.model.BaseTime;
+import talkPick.global.model.BaseTime;
 
 @Getter
 @Entity

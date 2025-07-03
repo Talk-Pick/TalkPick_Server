@@ -11,7 +11,7 @@ import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import talkPick.domain.topic.adapter.out.repository.TopicJpaRepository;
 import talkPick.domain.topic.adapter.out.repository.TopicQuerydslRepository;
-import talkPick.global.error.ErrorCode;
+import talkPick.global.exception.ErrorCode;
 import talkPick.domain.topic.exception.TopicNotFoundException;
 import java.util.*;
 

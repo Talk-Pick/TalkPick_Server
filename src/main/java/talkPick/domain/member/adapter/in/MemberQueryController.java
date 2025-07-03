@@ -1,23 +1,17 @@
 package talkPick.domain.member.adapter.in;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import talkPick.domain.member.adapter.in.dto.KakaoUserInfo;
 import talkPick.domain.member.adapter.in.dto.MemberDetailResDto;
 import talkPick.domain.member.adapter.in.dto.MemberLikedTopicsResDto;
 import talkPick.domain.member.adapter.out.dto.MemberEmailResDTO;
 import talkPick.domain.member.adapter.out.dto.MemberKakaoResDTO;
 import talkPick.domain.member.application.MemberQueryService;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
-import talkPick.global.annotation.UserId;
 
-import java.io.IOException;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

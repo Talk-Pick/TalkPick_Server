@@ -2,7 +2,7 @@ package talkPick.domain.topic.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import talkPick.global.common.model.TalkPickStatus;
+import talkPick.global.model.TalkPickStatus;
 
 @Getter
 @Entity
