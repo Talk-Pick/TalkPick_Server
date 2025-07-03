@@ -2,7 +2,7 @@ package talkPick.domain.topic.adapter.in;
 
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.PathVariable;
-import talkPick.global.annotation.UserId;
+import talkPick.global.security.annotation.UserId;
 
 public interface TopicCommandApi {
     @Operation(summary = "토픽 좋아요 API", description = "토픽 좋아요 API 입니다.")

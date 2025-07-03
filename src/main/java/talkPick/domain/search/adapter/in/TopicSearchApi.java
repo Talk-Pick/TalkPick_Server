@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestParam;
 import talkPick.domain.search.adapter.out.dto.TopicSearchResDTO;
-import talkPick.global.annotation.UserId;
+import talkPick.global.security.annotation.UserId;
 import java.util.List;
 
 public interface TopicSearchApi {

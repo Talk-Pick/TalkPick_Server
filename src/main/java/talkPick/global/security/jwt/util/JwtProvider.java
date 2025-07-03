@@ -4,7 +4,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import talkPick.global.error.ErrorCode;
+import talkPick.global.exception.ErrorCode;
 import talkPick.global.security.jwt.dto.JwtResDTO;
 
 @RequiredArgsConstructor

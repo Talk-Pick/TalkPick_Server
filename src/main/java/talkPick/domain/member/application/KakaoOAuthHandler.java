@@ -12,7 +12,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import talkPick.domain.member.adapter.in.dto.KakaoTokenResponse;
 import talkPick.domain.member.adapter.in.dto.KakaoUserInfo;
-import talkPick.global.error.exception.member.KaKaoOAuthException;
+import talkPick.batch.topic.exception.KaKaoOAuthException;
 
 import java.util.Arrays;
 import java.util.Collections;

@@ -8,7 +8,7 @@ import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.search.adapter.out.dto.SearchResDTO;
-import talkPick.global.common.model.PageCustom;
+import talkPick.global.model.PageCustom;
 import java.util.List;
 import static talkPick.domain.search.domain.QTopicSearch.topicSearch;
 import static talkPick.domain.topic.domain.QTopic.topic;

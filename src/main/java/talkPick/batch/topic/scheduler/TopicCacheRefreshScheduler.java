@@ -3,7 +3,7 @@ package talkPick.batch.topic.scheduler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import talkPick.domain.topic.port.out.TopicCacheManager;
+import talkPick.batch.topic.port.TopicCacheManager;
 
 @Component
 @RequiredArgsConstructor

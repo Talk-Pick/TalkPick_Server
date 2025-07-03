@@ -11,7 +11,7 @@ import talkPick.domain.search.port.in.TopicSearchQueryUseCase;
 import talkPick.domain.search.port.out.TopicSearchHistoryCommandRepositoryPort;
 import talkPick.domain.search.port.out.TopicSearchHistoryQueryRepositoryPort;
 import talkPick.domain.topic.dto.TopicCacheDTO;
-import talkPick.domain.topic.port.out.TopicCacheManager;
+import talkPick.batch.topic.port.TopicCacheManager;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;

@@ -6,8 +6,8 @@ import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import talkPick.global.error.ErrorCode;
-import talkPick.global.error.exception.CommonException;
+import talkPick.global.exception.ErrorCode;
+import talkPick.global.exception.TalkPickException;
 
 @Configuration
 @EnableEncryptableProperties
@@ -46,7 +46,7 @@ public class JasyptConfig {
 
     private void validateKey(String key) {
         if (key == null || key.isBlank()) {
-            throw new CommonException(ErrorCode.JASYPT_KEY_CONFIGURATION_ERROR);
+            throw new TalkPickException(ErrorCode.JASYPT_KEY_CONFIGURATION_ERROR);
         }
     }
 }

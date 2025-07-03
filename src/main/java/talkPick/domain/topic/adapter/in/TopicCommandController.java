@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import talkPick.global.annotation.UserId;
+import talkPick.global.security.annotation.UserId;
 import talkPick.domain.topic.port.in.TopicCommandUseCase;
 
 @RestController

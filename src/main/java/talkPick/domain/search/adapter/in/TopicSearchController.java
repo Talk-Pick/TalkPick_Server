@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import talkPick.domain.search.adapter.out.dto.TopicSearchResDTO;
 import talkPick.domain.search.port.in.TopicSearchQueryUseCase;
-import talkPick.global.annotation.UserId;
+import talkPick.global.security.annotation.UserId;
 import java.util.List;
 
 @RestController

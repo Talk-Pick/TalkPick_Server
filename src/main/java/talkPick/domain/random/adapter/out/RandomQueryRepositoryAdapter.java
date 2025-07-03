@@ -8,7 +8,7 @@ import talkPick.domain.random.adapter.out.repository.RandomQuerydslRepository;
 import talkPick.domain.random.domain.Random;
 import talkPick.domain.random.exception.RandomNotFoundException;
 import talkPick.domain.random.port.out.RandomQueryRepositoryPort;
-import talkPick.global.error.ErrorCode;
+import talkPick.global.exception.ErrorCode;
 
 import java.util.List;
 

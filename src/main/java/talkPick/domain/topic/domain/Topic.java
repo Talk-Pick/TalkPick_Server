@@ -2,12 +2,9 @@ package talkPick.domain.topic.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import talkPick.global.common.model.BaseTime;
-import talkPick.global.common.model.TalkPickStatus;
+import talkPick.global.model.BaseTime;
+import talkPick.global.model.TalkPickStatus;
 import talkPick.domain.admin.domain.Admin;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity

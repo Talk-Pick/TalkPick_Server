@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.port.in.RandomCommandUseCase;
-import talkPick.global.annotation.UserId;
+import talkPick.global.security.annotation.UserId;
 
 import java.util.List;
 

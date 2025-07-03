@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import talkPick.domain.topic.port.in.TopicQueryUseCase;
 import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
-import talkPick.global.annotation.UserId;
+import talkPick.global.security.annotation.UserId;
 import java.util.List;
 
 @RestController

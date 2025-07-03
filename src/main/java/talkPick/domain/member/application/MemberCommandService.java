@@ -11,7 +11,7 @@ import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.domain.type.MBTI;
 import talkPick.domain.member.port.in.MemberCommandUseCase;
-import talkPick.global.error.exception.member.MemberServiceException;
+import talkPick.batch.topic.exception.MemberServiceException;
 
 import java.util.Optional;
 

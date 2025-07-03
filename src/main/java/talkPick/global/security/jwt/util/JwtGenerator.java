@@ -6,8 +6,8 @@ import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import talkPick.global.error.ErrorCode;
-import talkPick.global.error.exception.auth.UnauthorizedException;
+import talkPick.global.exception.ErrorCode;
+import talkPick.global.security.exception.UnauthorizedException;
 import talkPick.global.security.jwt.JwtProperties;
 import talkPick.global.security.jwt.dto.JwtResDTO;
 

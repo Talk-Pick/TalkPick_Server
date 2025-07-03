@@ -2,7 +2,7 @@ package talkPick.domain.admin.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import talkPick.global.common.model.BaseTime;
+import talkPick.global.model.BaseTime;
 import talkPick.domain.auth.Role;
 
 import java.util.ArrayList;

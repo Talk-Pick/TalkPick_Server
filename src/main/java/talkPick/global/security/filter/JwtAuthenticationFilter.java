@@ -13,16 +13,16 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import talkPick.domain.admin.adapter.out.repository.AdminJpaRepository;
 import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
-import talkPick.global.common.constants.auth.AuthConstants;
-import talkPick.global.error.ErrorCode;
-import talkPick.global.error.exception.admin.AdminException;
-import talkPick.global.error.exception.auth.UnauthorizedException;
+import talkPick.global.security.constants.AuthConstants;
+import talkPick.global.exception.ErrorCode;
+import talkPick.domain.admin.exception.AdminException;
+import talkPick.global.security.exception.UnauthorizedException;
 import talkPick.global.security.jwt.util.JwtProvider;
 import talkPick.global.security.util.CustomUserDetails;
 import talkPick.domain.admin.domain.Admin;
 import talkPick.domain.member.domain.Member;
-import talkPick.global.error.exception.auth.AuthException;
-import talkPick.global.error.exception.member.MemberNotFoundException;
+import talkPick.global.security.exception.AuthException;
+import talkPick.batch.topic.exception.MemberNotFoundException;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,7 +41,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/api/v1/topic/kakao",
             "/api/v1/topic/additional",
             "/api/v1/topic",
-            "/mbti-form.html"
+            "/mbti-form.html",
+            "/test"
     );
 
     @Override

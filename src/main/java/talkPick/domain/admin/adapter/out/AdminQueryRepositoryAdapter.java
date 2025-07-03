@@ -3,8 +3,8 @@ package talkPick.domain.admin.adapter.out;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import talkPick.domain.admin.adapter.out.repository.AdminJpaRepository;
-import talkPick.global.error.ErrorCode;
-import talkPick.global.error.exception.admin.AdminException;
+import talkPick.global.exception.ErrorCode;
+import talkPick.domain.admin.exception.AdminException;
 import talkPick.domain.admin.domain.Admin;
 import talkPick.domain.admin.port.out.AdminQueryRepositoryPort;
 
