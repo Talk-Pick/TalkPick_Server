@@ -62,3 +62,12 @@ kakao:
 
 llm:
   base-url: ${LLM_BASE_URL}
+
+  resilience4j:
+    circuitbreaker:
+      instances:
+        llm:
+          registerHealthIndicator: true
+          slidingWindowSize: 10
+          failureRateThreshold: 50
+          waitDurationInOpenState: 10s

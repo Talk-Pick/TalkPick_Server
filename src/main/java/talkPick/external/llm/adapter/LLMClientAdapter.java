@@ -1,5 +1,6 @@
 package talkPick.external.llm.adapter;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,8 +21,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LLMClientAdapter implements LLMClientPort {
     private final WebClient llmWebClient;
+    private static final String CIRCUIT_BREAKER_NAME = "llm";
 
     @Override
+    @CircuitBreaker(name = CIRCUIT_BREAKER_NAME, fallbackMethod = "")
     public List<RandomResDTO.RandomTopic> getRandomTopics(List<RandomTopicHistoryDataDTO> randomTopicHistoryData, MemberDataDTO memberData) {
         LLMReqDTO request = new LLMReqDTO(randomTopicHistoryData, memberData);
 
@@ -44,17 +47,16 @@ public class LLMClientAdapter implements LLMClientPort {
     }
 
     @Override
+    @CircuitBreaker(name = CIRCUIT_BREAKER_NAME, fallbackMethod = "")
     public void send(List<TopicCacheDTO> topicCaches) {
         try {
             llmWebClient.post()
-                    .uri("/api/v1/llm/send")  // FastAPI 쪽 수신 경로
+                    .uri("/api/v1/llm/send")
                     .bodyValue(topicCaches)
                     .retrieve()
                     .toBodilessEntity()
                     .block();
-
             log.info("[LLMClientAdapter] Topic cache 전송 성공 - 전송 개수: {}", topicCaches.size());
-
         } catch (WebClientResponseException ex) {
             log.error("[LLMClientAdapter] topic-cache 응답 실패: {}", ex.getResponseBodyAsString());
             throw new LLMException(ErrorCode.LLM_REQUEST_FAILED, "LLM 서버 send 응답 실패: " + ex.getResponseBodyAsString());
@@ -63,4 +65,8 @@ public class LLMClientAdapter implements LLMClientPort {
             throw new LLMException(ErrorCode.LLM_REQUEST_FAILED, "LLM 서버 send 요청 중 오류: " + e.getMessage());
         }
     }
+
+    /**
+     * TODO circuit breaker fallback 메서드 필요합니다
+     * **/
 }

@@ -103,8 +103,11 @@ dependencies {
     // Bucket4j
     implementation group: 'com.github.vladimir-bukhtoyarov', name: 'bucket4j-core', version: '7.6.0'
 
-    //  Caffeine
+    // Caffeine
     implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.2.1'
+
+    // Resilience4j
+    implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.1.0'
 }
 
 test {
