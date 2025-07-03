@@ -1,7 +1,6 @@
 package talkPick.domain.search.adapter.in;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,8 +18,8 @@ public class TopicSearchController implements TopicSearchApi {
 
     @Override
     @GetMapping("/topics")
-    public List<TopicSearchResDTO.Topic> getTopics(@RequestParam(required = false) String category, Pageable pageable) {
-        return topicSearchQueryUseCase.getTopics(category, pageable);
+    public List<TopicSearchResDTO.Topic> getTopics(@RequestParam(required = false) String category) {
+        return topicSearchQueryUseCase.getTopics(category);
     }
 
     @Override
