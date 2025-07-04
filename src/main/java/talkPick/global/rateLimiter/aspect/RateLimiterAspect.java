@@ -13,7 +13,7 @@ import talkPick.global.rateLimiter.exception.RateLimitExceededException;
 import talkPick.global.rateLimiter.port.RateLimiterManager;
 
 @Aspect
-@Component
+@Component("CustomRateLimiterAspect")
 @RequiredArgsConstructor
 public class RateLimiterAspect {
     private final RateLimiterManager rateLimiterManager;
