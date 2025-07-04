@@ -1,8 +1,8 @@
-package talkPick.domain.admin.application.validator.annotation;
+package talkPick.domain.admin.validator.annotation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import talkPick.domain.admin.application.validator.PasswordConstraintValidator;
+import talkPick.domain.admin.validator.PasswordConstraintValidator;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

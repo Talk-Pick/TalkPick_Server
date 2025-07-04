@@ -1,4 +1,4 @@
-package talkPick.batch.topic.exception;
+package talkPick.domain.member.exception;
 
 public class KaKaoOAuthException extends RuntimeException{
     // 기본 생성자

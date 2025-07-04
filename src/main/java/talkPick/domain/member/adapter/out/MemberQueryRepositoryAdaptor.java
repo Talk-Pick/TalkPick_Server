@@ -8,7 +8,7 @@ import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.port.out.MemberQueryRepositoryPort;
 import talkPick.domain.random.dto.MemberDataDTO;
 import talkPick.global.exception.ErrorCode;
-import talkPick.batch.topic.exception.MemberNotFoundException;
+import talkPick.domain.member.exception.MemberNotFoundException;
 
 import java.time.Duration;
 

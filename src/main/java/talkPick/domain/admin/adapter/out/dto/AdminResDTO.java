@@ -1,6 +1,6 @@
 package talkPick.domain.admin.adapter.out.dto;
 
-import talkPick.domain.auth.Role;
+import talkPick.domain.admin.domain.type.Role;
 
 public class AdminResDTO {
 
