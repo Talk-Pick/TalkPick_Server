@@ -3,7 +3,7 @@ jwt:
   accessTokenExpireTime: ${JWT_ACCESS_EXPIRE_TIME}
 
 server:
-  port: ${TALKPICK_PORT}
+  port: ${SERVER_PORT}
   tomcat:
     threads:
       max: ${THREADS_MAX}
@@ -63,11 +63,11 @@ kakao:
 llm:
   base-url: ${LLM_BASE_URL}
 
-  resilience4j:
-    circuitbreaker:
-      instances:
-        llm:
-          registerHealthIndicator: true
-          slidingWindowSize: 10
-          failureRateThreshold: 50
-          waitDurationInOpenState: 10s
+resilience4j:
+  circuitbreaker:
+    instances:
+      llm:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s

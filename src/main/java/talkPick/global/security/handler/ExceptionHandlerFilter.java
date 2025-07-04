@@ -43,7 +43,6 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     }
 
     private void handleException(HttpServletResponse response, Exception e) throws IOException {
-        log.error(">>> Exception Handler Filter : ", e);
         setResponse(response, HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.INTERNAL_SERVER_ERROR);
     }
 

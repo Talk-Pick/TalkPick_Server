@@ -1,10 +1,10 @@
-package talkPick.global.security.util;
+package talkPick.global.security.model;
 
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import talkPick.domain.admin.domain.Admin;
-import talkPick.domain.auth.Role;
+import talkPick.domain.admin.domain.type.Role;
 import talkPick.domain.member.domain.Member;
 
 import java.util.ArrayList;
