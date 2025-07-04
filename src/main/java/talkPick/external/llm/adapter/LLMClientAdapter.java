@@ -11,6 +11,7 @@ import talkPick.domain.random.dto.MemberDataDTO;
 import talkPick.domain.random.dto.RandomTopicHistoryDataDTO;
 import talkPick.domain.topic.dto.TopicCacheDTO;
 import talkPick.external.llm.adapter.dto.LLMReqDTO;
+import talkPick.external.llm.constants.LLMConstants;
 import talkPick.external.llm.exception.LLMException;
 import talkPick.external.llm.port.LLMClientPort;
 import talkPick.global.exception.ErrorCode;
@@ -21,10 +22,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LLMClientAdapter implements LLMClientPort {
     private final WebClient llmWebClient;
-    private static final String CIRCUIT_BREAKER_NAME = "llm";
 
     @Override
-    @CircuitBreaker(name = CIRCUIT_BREAKER_NAME, fallbackMethod = "")
+    @CircuitBreaker(name = LLMConstants.CIRCUIT_BREAKER_NAME, fallbackMethod = "")
     public List<RandomResDTO.RandomTopic> getRandomTopics(List<RandomTopicHistoryDataDTO> randomTopicHistoryData, MemberDataDTO memberData) {
         LLMReqDTO request = new LLMReqDTO(randomTopicHistoryData, memberData);
 
@@ -47,7 +47,7 @@ public class LLMClientAdapter implements LLMClientPort {
     }
 
     @Override
-    @CircuitBreaker(name = CIRCUIT_BREAKER_NAME, fallbackMethod = "")
+    @CircuitBreaker(name = LLMConstants.CIRCUIT_BREAKER_NAME, fallbackMethod = "")
     public void send(List<TopicCacheDTO> topicCaches) {
         try {
             llmWebClient.post()
