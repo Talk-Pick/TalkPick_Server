@@ -1,4 +1,4 @@
-package talkPick.domain.auth.application.command;
+package talkPick.domain.admin.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import talkPick.domain.admin.domain.Admin;
 import talkPick.domain.admin.domain.AdminAuthInfo;
 import talkPick.global.exception.ErrorCode;
 import talkPick.domain.admin.exception.AdminException;
-import talkPick.domain.auth.Role;
+import talkPick.domain.admin.domain.type.Role;
 import talkPick.domain.admin.port.in.AuthCommandUseCase;
 import talkPick.domain.admin.port.out.AdminCommandRepositoryPort;
 import talkPick.global.security.jwt.dto.JwtResDTO;

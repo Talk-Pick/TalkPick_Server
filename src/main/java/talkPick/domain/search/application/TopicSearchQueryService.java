@@ -2,7 +2,6 @@ package talkPick.domain.search.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -26,7 +25,7 @@ public class TopicSearchQueryService implements TopicSearchQueryUseCase {
     private final TopicSearchHistoryQueryRepositoryPort topicSearchHistoryQueryRepositoryPort;
 
     @Override
-    public List<TopicSearchResDTO.Topic> getTopics(String category, Pageable pageable) {
+    public List<TopicSearchResDTO.Topic> getTopics(String category) {
         var topicDataList = topicCacheManager.getAll();
         return topicDataList.stream()
                 .filter(t -> t.getCategoryTitle().equals(category))

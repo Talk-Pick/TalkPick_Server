@@ -1,11 +1,11 @@
-package talkPick.domain.admin.application.validator;
+package talkPick.domain.admin.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
 import org.passay.*;
 import org.springframework.stereotype.Component;
-import talkPick.domain.admin.application.validator.annotation.ValidPassword;
+import talkPick.domain.admin.validator.annotation.ValidPassword;
 
 import java.util.Arrays;
 

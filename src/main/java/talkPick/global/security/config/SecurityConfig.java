@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,10 +20,11 @@ import talkPick.global.security.handler.ExceptionHandlerFilter;
 import talkPick.global.security.handler.JwtAuthenticationEntryPoint;
 import talkPick.global.security.filter.JwtAuthenticationFilter;
 import talkPick.global.security.jwt.util.JwtProvider;
+import static talkPick.global.security.model.WhiteList.PATHS;
 
-@RequiredArgsConstructor
-@EnableWebSecurity
 @Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -37,23 +39,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
-    //        private final CorsConfig corsConfig;
-    private static final String[] whiteList = {
-            "/api/v1/member/login",
-            "/api/v1/admin/signup",
-            "/api/v1/admin/login",
-            "/swagger-ui/**",
-            "/v3/api-docs/**",
-            "/oauth/kakao/authorize",
-            "/api/v1/topic/kakao",
-            "/api/v1/topic/additional",
-            "/api/v1/topic",
-            "/mbti-form.html",
-            "/test"
-    };
-
-
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter(jwtProvider, adminJpaRepository, memberJpaRepository);
@@ -62,7 +47,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-//                .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource())) // CORS 설정 추가
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
@@ -71,21 +55,20 @@ public class SecurityConfig {
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(
                         exceptionHandlingConfigurer -> exceptionHandlingConfigurer.authenticationEntryPoint(jwtAuthenticationEntryPoint))
-                .authorizeHttpRequests(
-                        authorizationManagerRequestMatcherRegistry ->
-                                authorizationManagerRequestMatcherRegistry
-                                        .requestMatchers(whiteList).permitAll()
-                                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                                        .anyRequest()
-                                        .authenticated())
-                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class) // CorsFilter 추가
+                .authorizeHttpRequests(registry ->
+                        registry
+                                .requestMatchers(PATHS).permitAll()
+                                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                                .anyRequest().authenticated()
+                )
+                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class)
                 .build();
     }
 
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return web -> web.ignoring().requestMatchers(whiteList);
-//    }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring().requestMatchers(PATHS);
+    }
 }

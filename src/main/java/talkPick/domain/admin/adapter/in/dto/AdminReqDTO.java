@@ -2,8 +2,8 @@ package talkPick.domain.admin.adapter.in.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import talkPick.domain.admin.application.validator.annotation.ValidPassword;
-import talkPick.domain.auth.Role;
+import talkPick.domain.admin.validator.annotation.ValidPassword;
+import talkPick.domain.admin.domain.type.Role;
 
 public class AdminReqDTO {
 

@@ -16,7 +16,7 @@ import talkPick.domain.member.adapter.out.dto.MemberKakaoResDTO;
 import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
-import talkPick.batch.topic.exception.MemberNotFoundException.MemberLikedTopicsNotFoundException;
+import talkPick.domain.member.exception.MemberNotFoundException.MemberLikedTopicsNotFoundException;
 
 
 import java.util.List;

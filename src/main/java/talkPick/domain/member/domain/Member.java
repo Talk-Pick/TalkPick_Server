@@ -2,7 +2,7 @@ package talkPick.domain.member.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import talkPick.domain.auth.Role;
+import talkPick.domain.admin.domain.type.Role;
 import talkPick.domain.member.adapter.in.dto.KakaoUserInfo;
 import talkPick.domain.member.adapter.in.dto.MemberEmailReqDTO;
 import talkPick.domain.member.domain.type.Gender;

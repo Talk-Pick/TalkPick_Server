@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import talkPick.domain.auth.Role;
+import talkPick.domain.admin.domain.type.Role;
 import talkPick.domain.member.adapter.in.dto.KakaoTokenResponse;
 import talkPick.domain.member.adapter.in.dto.KakaoUserInfo;
 import talkPick.domain.member.adapter.out.dto.MemberKakaoResDTO;

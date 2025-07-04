@@ -11,7 +11,7 @@ import talkPick.domain.admin.port.in.AuthCommandUseCase;
 import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
 import talkPick.domain.admin.adapter.out.dto.AdminResDTO;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
-import talkPick.global.security.util.CustomUserDetails;
+import talkPick.global.security.model.CustomUserDetails;
 import talkPick.global.security.jwt.dto.JwtResDTO;
 
 @RestController

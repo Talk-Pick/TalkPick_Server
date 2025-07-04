@@ -1,4 +1,4 @@
-package talkPick.batch.topic.exception;
+package talkPick.domain.member.exception;
 
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.TalkPickException;
