@@ -8,9 +8,9 @@ assignees: ''
 ---
 
 ## ⚒️ Issue
-wite
+write
 
 ## 📝 To-do
-- [ ] wite
+- [ ] write
 
 ## 📂 ETC
