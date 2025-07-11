@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.member.adapter.in.dto.MemberLikedTopicsResDto;
+import talkPick.domain.member.exception.MemberNotFoundException;
 import talkPick.domain.topic.domain.member.QMemberTopicHistory;
 import talkPick.domain.topic.domain.QTopic;
 import talkPick.domain.topic.domain.QCategory;
@@ -35,7 +36,7 @@ public class MemberLikedTopicsQuerydslRepository {
         long total = queryFactory.select(t.id.countDistinct())
                 .from(mth)
                 .join(mth.topic, t)
-                .join(c).on(t.categoryId.eq(c.id))
+                .join(c).on(t.category.id.eq(c.id))
                 .join(k).on(k.topicId.eq(t.id))
                 .join(ts).on(ts.topicId.eq(t.id))
                 .where(condition)
@@ -52,7 +53,7 @@ public class MemberLikedTopicsQuerydslRepository {
                 ))
                 .from(mth)
                 .join(mth.topic, t)
-                .join(c).on(t.categoryId.eq(c.id))
+                .join(c).on(t.category.id.eq(c.id))
                 .join(k).on(k.topicId.eq(t.id))
                 .join(ts).on(ts.topicId.eq(t.id))
                 .where(condition)
@@ -62,9 +63,9 @@ public class MemberLikedTopicsQuerydslRepository {
                 .fetch();
 
         if (content.isEmpty()) {
-            throw new talkPick.global.error.exception.member.MemberNotFoundException.MemberLikedTopicsNotFoundException("해당 회원이 좋아요한 토픽을 찾을 수 없습니다. 회원 ID: " + memberId);
+            throw new MemberNotFoundException.MemberLikedTopicsNotFoundException("해당 회원이 좋아요한 토픽을 찾을 수 없습니다. 회원 ID: " + memberId);
         }
 
         return new PageImpl<>(content, pageable, total);
     }
-} 
+}

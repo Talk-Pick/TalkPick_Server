@@ -54,7 +54,7 @@ public class TopicQuerydslRepository {
                         category.categoryGroup,
                         topicKeyword.keyword
                 ))
-                .leftJoin(category).on(topic.categoryId.eq(category.id))
+                .leftJoin(category).on(topic.category.id.eq(category.id))
                 .leftJoin(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
                 .leftJoin(topicStat).on(topic.id.eq(topicStat.topicId))
                 .where(topic.id.in(requestDTO.topicIds()))
@@ -72,7 +72,7 @@ public class TopicQuerydslRepository {
                         category.categoryGroup,
                         topicKeyword.keyword
                 ))
-                .leftJoin(category).on(topic.categoryId.eq(category.id))
+                .leftJoin(category).on(topic.category.id.eq(category.id))
                 .leftJoin(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
                 .leftJoin(topicStat).on(topic.id.eq(topicStat.topicId))
                 .where(topic.id.eq(topicId))
@@ -112,7 +112,7 @@ public class TopicQuerydslRepository {
                 .from(topic)
                 .join(topicStat).on(topic.id.eq(topicStat.topicId))
                 .join(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
-                .join(category).on(topic.categoryId.eq(category.id))
+                .join(category).on(topic.category.id.eq(category.id))
                 .fetch();
     }
 }

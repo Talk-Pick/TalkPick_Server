@@ -9,8 +9,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.member.adapter.in.dto.MemberTopicResultResDto;
+import talkPick.domain.member.exception.MemberNotFoundException;
 import talkPick.domain.topic.domain.member.QMemberTopicResult;
-import talkPick.global.error.exception.member.MemberNotFoundException;
 
 import java.util.List;
 

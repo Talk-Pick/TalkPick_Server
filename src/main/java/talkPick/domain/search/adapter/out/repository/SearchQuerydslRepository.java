@@ -33,7 +33,7 @@ public class SearchQuerydslRepository {
                         topicStat.averageTalkTime
                 ))
                 .from(topic)
-                .join(category).on(category.id.eq(topic.categoryId))
+                .join(category).on(category.id.eq(topic.category.id))
                 .join(topicKeyword).on(topicKeyword.topicId.eq(topic.id))
                 .where(category.title.eq(condition))
                 .offset(pageable.getOffset())
@@ -63,7 +63,7 @@ public class SearchQuerydslRepository {
                 ))
                 .from(topicSearch)
                 .join(topic).on(topicSearch.topicId.eq(topic.id))
-                .join(category).on(topic.categoryId.eq(category.id))
+                .join(category).on(topic.category.id.eq(category.id))
                 .join(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
                 .join(topicStat).on(topic.id.eq(topicStat.topicId))
                 .where(containsSearchText(word))

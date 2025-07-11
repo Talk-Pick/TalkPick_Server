@@ -6,6 +6,9 @@ import talkPick.global.model.BaseTime;
 import talkPick.global.model.TalkPickStatus;
 import talkPick.domain.admin.domain.Admin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Entity
 @Builder
@@ -19,7 +22,6 @@ public class Topic extends BaseTime {
     private String detail;
     private String thumbnail;
     private String icon;
-    private Long categoryId;
     @Enumerated(EnumType.STRING)
     private TalkPickStatus status;
 
@@ -27,8 +29,8 @@ public class Topic extends BaseTime {
     private Admin createdBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private talkPick.domain.topic.domain.Category category;
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private Category category;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_id", referencedColumnName = "id", insertable = false, updatable = false)
@@ -38,14 +40,14 @@ public class Topic extends BaseTime {
     @JoinColumn(name = "topic_id", referencedColumnName = "id", insertable = false, updatable = false)
     private TopicStat topicStat;
 
-    public static Topic create(String title, String detail, String thumbnail, String icon, Admin createdBy) {
-        //TODO category_id 넣어줘야 함.
+    public static Topic create(String title, String detail, String thumbnail, String icon, Admin createdBy, Category category) {
         return Topic.builder()
                 .title(title)
                 .detail(detail)
                 .thumbnail(thumbnail)
                 .icon(icon)
                 .createdBy(createdBy)
+                .category(category)
                 .status(TalkPickStatus.ACTIVE) // 상태 초기화
                 .build();
     }
