@@ -22,18 +22,18 @@ public interface RandomCommandApi {
     List<RandomResDTO.RandomTopic> selectCategory(@UserId final Long memberId, RandomReqDTO.SelectCategory requestDTO);
 
     @PostMapping("/select-topic")
-    @Operation(summary = "랜덤 토픽 6 : 토픽 선택 API", description = "랜덤 토픽 6 : 토픽 선택 API 입니다.")
+    @Operation(summary = "랜덤 토픽 5 : 토픽 선택 API", description = "랜덤 토픽 5 : 토픽 선택 API 입니다.")
     List<RandomResDTO.RandomTopic> selectTopic(@UserId final Long memberId, RandomReqDTO.SelectTopic requestDTO);
 
     @PostMapping("/quit/{randomId}")
-    @Operation(summary = "랜덤 토픽 7 : 랜덤 토픽 그만하기 API", description = "랜덤 토픽 7 : 랜덤 토픽 그만하기 API 입니다.")
+    @Operation(summary = "랜덤 토픽 6 : 랜덤 토픽 그만하기 API", description = "랜덤 토픽 6 : 랜덤 토픽 그만하기 API 입니다.")
     void quit(@UserId Long memberId, @PathVariable("randomId") Long randomId);
 
     @PostMapping("/end/{randomId}")
-    @Operation(summary = "랜덤 토픽 8 : 랜덤 토픽 종료 및 결과 보기 API", description = "랜덤 토픽 8 : 랜덤 토픽 종료 및 결과 보기 API 입니다.")
+    @Operation(summary = "랜덤 토픽78 : 랜덤 토픽 종료 및 결과 보기 API", description = "랜덤 토픽 7 : 랜덤 토픽 종료 및 결과 보기 API 입니다.")
     RandomResDTO.Result end(@UserId Long memberId, @PathVariable("randomId") Long randomId);
 
     @PostMapping("/save-result/{randomId}")
-    @Operation(summary = "랜덤 토픽 9 : 랜덤 토픽 결과 저장 API", description = "랜덤 토픽 9 : 랜덤 토픽 결과 저장 API 입니다.")
+    @Operation(summary = "랜덤 토픽 8 : 랜덤 토픽 결과 저장 API", description = "랜덤 토픽 8 : 랜덤 토픽 결과 저장 API 입니다.")
     void saveResult(@UserId Long memberId, @PathVariable("randomId") Long randomId, RandomReqDTO.Result requestDTO);
 }
