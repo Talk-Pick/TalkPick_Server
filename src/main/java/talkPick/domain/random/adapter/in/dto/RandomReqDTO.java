@@ -18,7 +18,6 @@ public class RandomReqDTO {
 
     public record Result (
             String title,
-            String comment,
-            String friends
+            String comment
     ) {}
 }

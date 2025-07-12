@@ -30,7 +30,7 @@ public interface RandomCommandApi {
     void quit(@UserId Long memberId, @PathVariable("randomId") Long randomId);
 
     @PostMapping("/end/{randomId}")
-    @Operation(summary = "랜덤 토픽78 : 랜덤 토픽 종료 및 결과 보기 API", description = "랜덤 토픽 7 : 랜덤 토픽 종료 및 결과 보기 API 입니다.")
+    @Operation(summary = "랜덤 토픽7 : 랜덤 토픽 종료 및 결과 보기 API", description = "랜덤 토픽 7 : 랜덤 토픽 종료 및 결과 보기 API 입니다.")
     RandomResDTO.Result end(@UserId Long memberId, @PathVariable("randomId") Long randomId);
 
     @PostMapping("/save-result/{randomId}")
