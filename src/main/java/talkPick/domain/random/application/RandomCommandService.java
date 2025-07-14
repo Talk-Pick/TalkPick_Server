@@ -7,7 +7,6 @@ import talkPick.domain.member.port.out.MemberQueryRepositoryPort;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.domain.Random;
-import talkPick.domain.random.domain.RandomTopicHistory;
 import talkPick.domain.random.port.in.RandomCommandUseCase;
 import talkPick.domain.random.port.out.*;
 import talkPick.external.llm.port.LLMClientPort;
@@ -47,9 +46,12 @@ public class RandomCommandService implements RandomCommandUseCase {
 
     @Override
     public List<RandomResDTO.RandomTopic> selectTopic(Long memberId, RandomReqDTO.SelectTopic requestDTO) {
-        RandomTopicHistory randomTopicHistory = randomTopicCommandRepositoryPort.selectTopic(memberId, requestDTO);
+        randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, requestDTO.randomId()).start();
+        randomTopicCommandRepositoryPort.selectTopic(memberId, requestDTO);
+        var randomTopicHistoryData = randomTopicHistoryQueryRepositoryPort.getRandomTopicHistoriesByRandomId(requestDTO.randomId());
+        var memberData = memberQueryRepositoryPort.findMemberDataById(memberId);
 
-        return null;
+        return llmClientPort.getRandomTopics(randomTopicHistoryData, memberData);
     }
 
     @Override
