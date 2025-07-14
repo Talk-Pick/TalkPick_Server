@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import java.util.List;
 import static talkPick.domain.random.domain.QRandomTopicHistory.randomTopicHistory;
+import static talkPick.domain.topic.domain.QCategory.category;
 import static talkPick.domain.topic.domain.QTopic.topic;
+import static talkPick.domain.topic.domain.QTopicKeyword.topicKeyword;
 
 @Repository
 public class SelectedRandomTopicQuerydslRepository {
@@ -21,14 +23,16 @@ public class SelectedRandomTopicQuerydslRepository {
         List<RandomResDTO.ResultDetail> result = queryFactory.select(Projections.constructor(RandomResDTO.ResultDetail.class,
                         topic.id,
                         topic.title,
-                        randomTopicHistory.category,
+                        category.title,
                         randomTopicHistory.keyword,
                         randomTopicHistory.startAt,
                         randomTopicHistory.endAt
                 ))
-                .join(topic).on(randomTopicHistory.topicId.eq(topic.id))
-                .where(randomTopicHistory.randomId.eq(randomId))
                 .from(randomTopicHistory)
+                .join(topic).on(randomTopicHistory.topicId.eq(topic.id))
+                .join(category).on(topic.categoryId.eq(category.id))
+                .join(topicKeyword).on(randomTopicHistory.topicId.eq(topicKeyword.topicId))
+                .where(randomTopicHistory.randomId.eq(randomId))
                 .fetch();
         return RandomResDTO.Result.of(randomId, result);
     }
