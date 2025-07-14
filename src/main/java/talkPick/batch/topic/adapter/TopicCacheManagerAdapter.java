@@ -59,9 +59,9 @@ public class TopicCacheManagerAdapter implements TopicCacheManager {
 //            llmClientPort.send(newData);
         } catch (LLMException e) {
             log.error("[TopicCache] LLM 서버와의 통신 중 오류 발생: {}", e.getMessage());
-            throw e;
+            throw new JVMCacheException(JVM_CACHE_REFRESH_FAILED, e.getMessage());
         } catch (Exception e) {
-            throw new JVMCacheException(JVM_CACHE_REFRESH_FAILED);
+            throw new JVMCacheException(JVM_CACHE_REFRESH_FAILED, e.getMessage());
         }
     }
 }
