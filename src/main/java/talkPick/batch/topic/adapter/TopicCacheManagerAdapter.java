@@ -6,14 +6,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
+import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.topic.dto.TopicCacheDTO;
 import talkPick.batch.topic.port.TopicCacheManager;
 import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
 import talkPick.external.llm.exception.LLMException;
 import talkPick.external.llm.port.LLMClientPort;
 import talkPick.batch.topic.exception.JVMCacheException;
+
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+
 import static talkPick.global.exception.ErrorCode.JVM_CACHE_REFRESH_FAILED;
 
 @Slf4j
@@ -63,5 +69,19 @@ public class TopicCacheManagerAdapter implements TopicCacheManager {
         } catch (Exception e) {
             throw new JVMCacheException(JVM_CACHE_REFRESH_FAILED, e.getMessage());
         }
+    }
+
+    @Override
+    public List<RandomResDTO.RandomTopic> getRandomTopics(final Integer orderId) {
+        List<TopicCacheDTO> topicCacheDTOS = cacheRef.get();
+        Collections.shuffle(topicCacheDTOS);
+        return topicCacheDTOS.stream()
+                .limit(4)
+                .map(dto -> toRandomTopic(orderId, dto))
+                .collect(Collectors.toList());
+    }
+
+    private RandomResDTO.RandomTopic toRandomTopic(final Integer order, TopicCacheDTO dto) {
+        return RandomResDTO.RandomTopic.of(order, dto);
     }
 }

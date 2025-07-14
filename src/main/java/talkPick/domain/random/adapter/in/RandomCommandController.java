@@ -20,13 +20,13 @@ public class RandomCommandController implements RandomCommandApi {
     }
 
     @Override
-    public List<RandomResDTO.RandomTopic> selectCategory(@UserId Long memberId, RandomReqDTO.SelectCategory requestDTO) {
-        return randomCommandUseCase.selectCategory(memberId, requestDTO);
+    public List<RandomResDTO.RandomTopic> selectByCategories(@UserId Long memberId, RandomReqDTO.SelectCategory requestDTO) {
+        return randomCommandUseCase.selectByCategories(memberId, requestDTO);
     }
 
     @Override
-    public List<RandomResDTO.RandomTopic> selectTopic(@UserId Long memberId, RandomReqDTO.SelectTopic requestDTO) {
-        return randomCommandUseCase.selectTopic(memberId, requestDTO);
+    public List<RandomResDTO.RandomTopic> selectByTopics(@UserId Long memberId, RandomReqDTO.SelectTopic requestDTO) {
+        return randomCommandUseCase.selectByTopics(memberId, requestDTO);
     }
 
     @Override
