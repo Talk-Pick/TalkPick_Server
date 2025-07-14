@@ -55,7 +55,8 @@ public class TopicCacheManagerAdapter implements TopicCacheManager {
             log.info("[TopicCache] 캐시 갱신 완료 - 항목 수: {}개 | 사용 메모리: {}MB | 여유 메모리: {}MB | 최대 메모리: {}MB", newData.size(), usedMB, freeMB, maxMB);
             log.info("[TopicCache] 캐시 갱신 시작");
 
-            llmClientPort.send(newData);
+            // TODO 추후 LLM 서버 적용 시, 사용할 예정
+//            llmClientPort.send(newData);
         } catch (LLMException e) {
             log.error("[TopicCache] LLM 서버와의 통신 중 오류 발생: {}", e.getMessage());
             throw e;
