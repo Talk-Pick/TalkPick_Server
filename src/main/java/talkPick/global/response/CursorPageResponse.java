@@ -5,14 +5,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 public class CursorPageResponse<T> {
     private List<T> items;
     private boolean hasNext;
     private Cursor nextCursor;
 
+    @Getter
+    @AllArgsConstructor
     public static class Cursor {
         private LocalDateTime createdAt;
         private Long id;

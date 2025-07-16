@@ -15,7 +15,7 @@ public class NoticeQueryRepositoryAdapter implements NoticeQueryRepositoryPort {
 
     @Override
     public CursorPageResponse<NoticeResDTO.NoticeSummary> findNoticesWithCursor(NoticeReqDTO.Cursor cursor) {
-        return null;
+        return noticeQuerydslRepository.findNoticesWithCursor(cursor);
     }
 
     @Override
