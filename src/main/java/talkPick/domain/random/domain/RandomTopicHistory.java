@@ -5,7 +5,6 @@ import lombok.*;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
 import talkPick.domain.topic.domain.type.CategoryGroup;
 import talkPick.domain.topic.domain.type.Keyword;
-
 import java.time.LocalDateTime;
 
 @Getter
@@ -20,12 +19,6 @@ public class RandomTopicHistory {
     private Long memberId;
     private Long randomId;
     private Long topicId;
-    private String title;
-    private String detail;
-    @Enumerated(EnumType.STRING)
-    private Keyword keyword;
-    private CategoryGroup categoryGroup;
-    private String category;
 
     @Column(name = "`order`")
     private Integer order;
@@ -37,11 +30,6 @@ public class RandomTopicHistory {
                 .memberId(memberId)
                 .randomId(requestDTO.randomId())
                 .topicId(null)
-                .title(null)
-                .detail(null)
-                .keyword(null)
-                .categoryGroup(CategoryGroup.valueOf(requestDTO.categoryGroup()))
-                .category(requestDTO.category())
                 .order(0)
                 .startAt(LocalDateTime.now())
                 .endAt(null)
@@ -53,11 +41,6 @@ public class RandomTopicHistory {
                 .memberId(memberId)
                 .randomId(requestDTO.randomId())
                 .topicId(requestDTO.topicId())
-                .title(null)
-                .detail(null)
-                .keyword(Keyword.valueOf(requestDTO.keyword()))
-                .categoryGroup(CategoryGroup.valueOf(requestDTO.categoryGroup()))
-                .category(requestDTO.category())
                 .order(requestDTO.order())
                 .startAt(LocalDateTime.now())
                 .endAt(null)

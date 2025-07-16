@@ -1,7 +1,6 @@
 package talkPick.domain.random.adapter.in;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
@@ -20,27 +19,27 @@ public class RandomCommandController implements RandomCommandApi {
     }
 
     @Override
-    public List<RandomResDTO.RandomTopic> selectCategory(@UserId Long memberId, RandomReqDTO.SelectCategory requestDTO) {
-        return randomCommandUseCase.selectCategory(memberId, requestDTO);
+    public List<RandomResDTO.RandomTopic> selectByCategories(Long memberId, RandomReqDTO.SelectCategory requestDTO) {
+        return randomCommandUseCase.selectByCategories(memberId, requestDTO);
     }
 
     @Override
-    public List<RandomResDTO.RandomTopic> selectTopic(@UserId Long memberId, RandomReqDTO.SelectTopic requestDTO) {
-        return randomCommandUseCase.selectTopic(memberId, requestDTO);
+    public List<RandomResDTO.RandomTopic> selectByTopics(Long memberId, RandomReqDTO.SelectTopic requestDTO) {
+        return randomCommandUseCase.selectByTopics(memberId, requestDTO);
     }
 
     @Override
-    public void quit(@UserId Long memberId, @PathVariable("randomId") Long randomId) {
+    public void quit(@UserId Long memberId, Long randomId) {
         randomCommandUseCase.quit(memberId, randomId);
     }
 
     @Override
-    public RandomResDTO.Result end(Long memberId, @PathVariable("randomId") Long randomId) {
+    public RandomResDTO.Result end(Long memberId, Long randomId) {
         return randomCommandUseCase.end(memberId, randomId);
     }
 
     @Override
-    public void saveResult(Long memberId, @PathVariable("randomId") Long randomId, RandomReqDTO.Result requestDTO) {
+    public void saveResult(Long memberId, Long randomId, RandomReqDTO.Result requestDTO) {
         randomCommandUseCase.saveResult(memberId, randomId, requestDTO);
     }
 }

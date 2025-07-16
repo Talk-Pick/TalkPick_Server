@@ -4,19 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import talkPick.domain.topic.dto.TopicCacheDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class RandomResDTO {
-    public record Categories(
+    public record Categories (
             Long categoryId,
             String categoryGroup,
             String category,
             String imageUrl
     ) {}
 
-    public record RandomTopic(
+    public record RandomTopic (
             Integer order,
             Long topicId,
             String categoryGroup,
@@ -25,7 +26,20 @@ public class RandomResDTO {
             String keyword,
             String thumbnail,
             String icon
-    ) {}
+    ) {
+        public static RandomTopic of(final Integer orderId, TopicCacheDTO dto) {
+            return new RandomTopic(
+                    orderId,
+                    dto.getId(),
+                    dto.getCategoryGroup(),
+                    dto.getCategoryTitle(),
+                    dto.getCategoryImageUrl(),
+                    dto.getKeyword(),
+                    dto.getThumbnail(),
+                    dto.getIcon()
+            );
+        }
+    }
 
     @Getter
     @NoArgsConstructor

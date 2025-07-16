@@ -6,6 +6,6 @@ import talkPick.domain.random.dto.RandomTopicHistoryDataDTO;
 import java.util.List;
 
 public interface RandomTopicHistoryQueryRepositoryPort {
-    RandomResDTO.Result getResult(Long randomId);
     List<RandomTopicHistoryDataDTO > getRandomTopicHistoriesByRandomId(Long randomId);
+    RandomResDTO.Result getResult(Long randomId);
 }

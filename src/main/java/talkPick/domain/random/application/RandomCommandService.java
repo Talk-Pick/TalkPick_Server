@@ -3,11 +3,11 @@ package talkPick.domain.random.application;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import talkPick.batch.topic.port.TopicCacheManager;
 import talkPick.domain.member.port.out.MemberQueryRepositoryPort;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.domain.Random;
-import talkPick.domain.random.domain.RandomTopicHistory;
 import talkPick.domain.random.port.in.RandomCommandUseCase;
 import talkPick.domain.random.port.out.*;
 import talkPick.external.llm.port.LLMClientPort;
@@ -18,10 +18,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RandomCommandService implements RandomCommandUseCase {
     private final MemberQueryRepositoryPort memberQueryRepositoryPort;
-    private final RandomCommandRepositoryPort randomCommandRepositoryPort;
     private final RandomQueryRepositoryPort randomQueryRepositoryPort;
+    private final RandomCommandRepositoryPort randomCommandRepositoryPort;
     private final RandomTopicHistoryCommandRepositoryPort randomTopicCommandRepositoryPort;
     private final RandomTopicHistoryQueryRepositoryPort randomTopicHistoryQueryRepositoryPort;
+    private final TopicCacheManager topicCacheManager;
     private final LLMClientPort llmClientPort;
 
     @Override
@@ -36,20 +37,22 @@ public class RandomCommandService implements RandomCommandUseCase {
      *  JVM Cache -> 모든 Topic 데이터
      **/
     @Override
-    public List<RandomResDTO.RandomTopic> selectCategory(Long memberId, RandomReqDTO.SelectCategory requestDTO) {
+    public List<RandomResDTO.RandomTopic> selectByCategories(Long memberId, RandomReqDTO.SelectCategory requestDTO) {
         randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, requestDTO.randomId()).start();
-        randomTopicCommandRepositoryPort.selectCategory(memberId, requestDTO);
-        var randomTopicHistoryData = randomTopicHistoryQueryRepositoryPort.getRandomTopicHistoriesByRandomId(requestDTO.randomId());
-        var memberData = memberQueryRepositoryPort.findMemberDataById(memberId);
+        randomTopicCommandRepositoryPort.saveByCategory(memberId, requestDTO);
 
-        return llmClientPort.getRandomTopics(randomTopicHistoryData, memberData);
+        // TODO 추후 LLM 서버 적용 시, 사용할 예정
+//        return sendToLLM(requestDTO.randomId(), memberId);
+        return topicCacheManager.getRandomTopics(0);
     }
 
     @Override
-    public List<RandomResDTO.RandomTopic> selectTopic(Long memberId, RandomReqDTO.SelectTopic requestDTO) {
-        RandomTopicHistory randomTopicHistory = randomTopicCommandRepositoryPort.selectTopic(memberId, requestDTO);
+    public List<RandomResDTO.RandomTopic> selectByTopics(Long memberId, RandomReqDTO.SelectTopic requestDTO) {
+        randomTopicCommandRepositoryPort.saveByTopic(memberId, requestDTO);
 
-        return null;
+        // TODO 추후 LLM 서버 적용 시, 사용할 예정
+//        return sendToLLM(requestDTO.randomId(), memberId);
+        return topicCacheManager.getRandomTopics(requestDTO.order());
     }
 
     @Override
@@ -65,6 +68,12 @@ public class RandomCommandService implements RandomCommandUseCase {
 
     @Override
     public void saveResult(Long memberId, Long randomId, RandomReqDTO.Result requestDTO) {
-        //TODO 테이블을 새로 만들까 고민 중.
+        randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, randomId).saveResult(requestDTO);
+    }
+
+    private List<RandomResDTO.RandomTopic> sendToLLM(Long requestDTO, Long memberId) {
+        var randomTopicHistoryData = randomTopicHistoryQueryRepositoryPort.getRandomTopicHistoriesByRandomId(requestDTO);
+        var memberData = memberQueryRepositoryPort.findMemberDataById(memberId);
+        return llmClientPort.getRandomTopics(randomTopicHistoryData, memberData);
     }
 }
