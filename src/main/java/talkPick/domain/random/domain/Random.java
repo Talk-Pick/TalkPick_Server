@@ -44,7 +44,7 @@ public class Random extends BaseTime {
         this.type = RandomType.COMPLETED;
     }
 
-    public void write(RandomReqDTO.Result requestDTO) {
+    public void saveResult(RandomReqDTO.Result requestDTO) {
         this.oneLine = requestDTO.oneLine();
     }
 }

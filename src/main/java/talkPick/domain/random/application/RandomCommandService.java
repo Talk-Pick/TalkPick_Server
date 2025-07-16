@@ -68,7 +68,7 @@ public class RandomCommandService implements RandomCommandUseCase {
 
     @Override
     public void saveResult(Long memberId, Long randomId, RandomReqDTO.Result requestDTO) {
-        randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, randomId).write(requestDTO);
+        randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, randomId).saveResult(requestDTO);
     }
 
     private List<RandomResDTO.RandomTopic> sendToLLM(Long requestDTO, Long memberId) {
