@@ -29,6 +29,9 @@ public enum ErrorCode {
     ADMIN_LOGIN_PASSWORD_FAULT(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
     ADMIN_PASSWORD_NOT_ALLOWED(HttpStatus.BAD_REQUEST,"비밀번호가 보안 정책을 만족하지 않습니다."),
 
+    // Notice
+    NOTICE_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 공지사항 입니다."),
+
     // Server
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "리소스 접근 권한이 없습니다."),
