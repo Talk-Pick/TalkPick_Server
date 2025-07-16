@@ -9,8 +9,10 @@ import talkPick.domain.random.domain.Random;
 import talkPick.domain.random.exception.RandomNotFoundException;
 import talkPick.domain.random.port.out.RandomQueryRepositoryPort;
 import talkPick.global.exception.ErrorCode;
-
 import java.util.List;
+import java.util.Optional;
+
+import static talkPick.global.exception.ErrorCode.RANDOM_NOT_FOUND;
 
 @Component
 @RequiredArgsConstructor
@@ -25,7 +27,8 @@ public class RandomQueryRepositoryAdapter implements RandomQueryRepositoryPort {
 
     @Override
     public RandomResDTO.RandomTopicDetail findRandomTopicDetail(Long topicId) {
-        return randomQuerydslRepository.findRandomTopicDetail(topicId);
+        return Optional.ofNullable(randomQuerydslRepository.findRandomTopicDetail(topicId))
+                .orElseThrow(() -> new RandomNotFoundException(RANDOM_NOT_FOUND));
     }
 
     @Override
@@ -35,6 +38,6 @@ public class RandomQueryRepositoryAdapter implements RandomQueryRepositoryPort {
 
     @Override
     public Random findRandomByMemberIdAndId(Long memberId, Long randomId) {
-        return randomJpaRepository.findRandomByMemberIdAndId(memberId, randomId).orElseThrow(() -> new RandomNotFoundException(ErrorCode.RANDOM_NOT_FOUND));
+        return randomJpaRepository.findRandomByMemberIdAndId(memberId, randomId).orElseThrow(() -> new RandomNotFoundException(RANDOM_NOT_FOUND));
     }
 }

@@ -9,7 +9,6 @@ import talkPick.domain.notice.adapter.in.dto.NoticeReqDTO;
 import talkPick.domain.notice.adapter.out.dto.NoticeResDTO;
 import talkPick.domain.notice.exception.NoticeNotFoundException;
 import talkPick.global.response.CursorPageResponse;
-
 import java.util.List;
 import static talkPick.domain.notice.domain.QNotice.notice;
 import static talkPick.domain.notice.domain.QNoticeImage.noticeImage;

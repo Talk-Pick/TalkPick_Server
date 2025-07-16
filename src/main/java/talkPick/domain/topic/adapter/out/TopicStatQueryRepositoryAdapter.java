@@ -8,6 +8,8 @@ import talkPick.domain.topic.domain.TopicStat;
 import talkPick.domain.topic.port.out.TopicStatQueryRepositoryPort;
 import talkPick.global.exception.ErrorCode;
 
+import static talkPick.global.exception.ErrorCode.*;
+
 @Component
 @RequiredArgsConstructor
 public class TopicStatQueryRepositoryAdapter implements TopicStatQueryRepositoryPort {
@@ -15,6 +17,6 @@ public class TopicStatQueryRepositoryAdapter implements TopicStatQueryRepository
 
     @Override
     public TopicStat findTopicStatByTopicId(final Long topicId) {
-        return topicStatJpaRepository.findByTopicId(topicId).orElseThrow(() -> new TopicStatNotFoundException(ErrorCode.TOPIC_STAT_NOT_FOUND));
+        return topicStatJpaRepository.findByTopicId(topicId).orElseThrow(() -> new TopicStatNotFoundException(TOPIC_STAT_NOT_FOUND));
     }
 }
