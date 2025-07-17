@@ -15,6 +15,15 @@ public class TopicKeyword extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long topicId;
+
     @Enumerated(EnumType.STRING)
+    @Column(length = 50, nullable = false)
     private Keyword keyword;
+
+    public static TopicKeyword of(Long topicId, Keyword keyword) {
+        return TopicKeyword.builder()
+                .topicId(topicId)
+                .keyword(keyword)
+                .build();
+    }
 }

@@ -55,7 +55,7 @@ public class MemberQueryService implements MemberQueryUseCase {
     @Override
     public MemberDetailResDto getMemberInfo(Long memberId) {
         Member member = memberJpaRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("Member not found with id: " + memberId));
+                .orElseThrow(() -> new EntityNotFoundException("Member not found with topicId: " + memberId));
         return MemberDetailResDto.fromEntity(member);
     }
 

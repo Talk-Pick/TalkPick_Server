@@ -1,7 +1,6 @@
 package talkPick.domain.random.adapter.in;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.port.in.RandomQueryUseCase;
@@ -18,7 +17,7 @@ public class RandomQueryController implements RandomQueryApi {
     }
 
     @Override
-    public RandomResDTO.RandomTopicDetail getRandomTopicDetail(@PathVariable("topicId") Long topicId) {
+    public RandomResDTO.RandomTopicDetail getRandomTopicDetail(Long topicId) {
         return randomQueryUseCase.getRandomTopicDetail(topicId);
     }
 }

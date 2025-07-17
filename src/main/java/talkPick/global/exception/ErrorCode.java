@@ -20,6 +20,7 @@ public enum ErrorCode {
     // Random
     TOPIC_STAT_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 토픽 통계입니다."),
     RANDOM_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 랜덤입니다."),
+    RANDOM_TOPIC_HISTORY_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 랜덤 토픽 기록입니다."),
 
     // Admin
     ADMIN_NOT_FOUND(HttpStatus.BAD_REQUEST, "관리자 정보를 찾을 수 없습니다."),
@@ -28,6 +29,9 @@ public enum ErrorCode {
     ADMIN_PASSWORD_NOT_FOUND(HttpStatus.BAD_REQUEST, "관리자 비밀번호 정보가 존재하지 않습니다."),
     ADMIN_LOGIN_PASSWORD_FAULT(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
     ADMIN_PASSWORD_NOT_ALLOWED(HttpStatus.BAD_REQUEST,"비밀번호가 보안 정책을 만족하지 않습니다."),
+
+    // Notice
+    NOTICE_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 공지사항 입니다."),
 
     // Server
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다."),

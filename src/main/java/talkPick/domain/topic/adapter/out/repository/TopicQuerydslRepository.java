@@ -54,6 +54,7 @@ public class TopicQuerydslRepository {
                         category.categoryGroup,
                         topicKeyword.keyword
                 ))
+                .from(topic)
                 .leftJoin(category).on(topic.categoryId.eq(category.id))
                 .leftJoin(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
                 .leftJoin(topicStat).on(topic.id.eq(topicStat.topicId))
@@ -72,6 +73,7 @@ public class TopicQuerydslRepository {
                         category.categoryGroup,
                         topicKeyword.keyword
                 ))
+                .from(topic)
                 .leftJoin(category).on(topic.categoryId.eq(category.id))
                 .leftJoin(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
                 .leftJoin(topicStat).on(topic.id.eq(topicStat.topicId))

@@ -40,6 +40,7 @@ public class RandomQuerydslRepository {
                         category.title,
                         topicKeyword.keyword
                 ))
+                .from(topic)
                 .leftJoin(category).on(topic.categoryId.eq(category.id))
                 .leftJoin(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
                 .where(topic.id.eq(topicId))

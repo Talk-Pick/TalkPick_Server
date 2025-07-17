@@ -19,11 +19,11 @@ public interface RandomCommandApi {
 
     @PostMapping("/select-category")
     @Operation(summary = "랜덤 토픽 3 : 카테고리 선택 API", description = "랜덤 토픽 3 : 카테고리 선택 API 입니다.")
-    List<RandomResDTO.RandomTopic> selectCategory(@UserId final Long memberId, RandomReqDTO.SelectCategory requestDTO);
+    List<RandomResDTO.RandomTopic> selectByCategories(@UserId final Long memberId, RandomReqDTO.SelectCategory requestDTO);
 
     @PostMapping("/select-topic")
     @Operation(summary = "랜덤 토픽 5 : 토픽 선택 API", description = "랜덤 토픽 5 : 토픽 선택 API 입니다.")
-    List<RandomResDTO.RandomTopic> selectTopic(@UserId final Long memberId, RandomReqDTO.SelectTopic requestDTO);
+    List<RandomResDTO.RandomTopic> selectByTopics(@UserId final Long memberId, RandomReqDTO.SelectTopic requestDTO);
 
     @PostMapping("/quit/{randomId}")
     @Operation(summary = "랜덤 토픽 6 : 랜덤 토픽 그만하기 API", description = "랜덤 토픽 6 : 랜덤 토픽 그만하기 API 입니다.")

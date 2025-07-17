@@ -20,7 +20,7 @@ public interface TopicSearchApi {
     @Operation(summary = "토픽 검색 API", description = "토픽 검색 API API 입니다.")
     List<TopicSearchResDTO.Topic> search(@UserId Long memberId, @RequestParam(required = false) String word);
 
-    @GetMapping("/recommend")
+    @GetMapping("/recommendations")
     @Operation(summary = "추천 검색어 API", description = "추천 검색어 API API 입니다.")
     List<TopicSearchResDTO.Recommendation> recommend();
 }
