@@ -8,8 +8,6 @@ import talkPick.domain.topic.adapter.out.repository.*;
 import talkPick.domain.topic.domain.*;
 import talkPick.domain.topic.domain.type.CategoryGroup;
 import talkPick.domain.topic.domain.type.Keyword;
-import talkPick.global.model.TalkPickStatus;
-
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -35,6 +33,8 @@ public class DummyDataScheduler {
 
     @PostConstruct
     public void generateDummyData() {
+        //TODO Member 더미 데이터 + JWT 토큰 만들어야 함.
+
         List<Category> categories = saveCategories();
 
         for (int i = 0; i < 40; i++) {
