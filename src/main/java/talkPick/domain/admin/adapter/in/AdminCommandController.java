@@ -35,13 +35,13 @@ public class AdminCommandController {
 
     @PostMapping("/topic-card")
     @Operation(summary = "topic 카드 추가", description = "POST")
-    public TopicResDTO.Topic createTopicCard(@AuthenticationPrincipal CustomUserDetails user, @RequestBody @Valid TopicReqDTO.CreateTopic topicRequest) {
+    public TopicResDTO.Topic createTopicCard(@AuthenticationPrincipal CustomUserDetails user, @RequestBody @Valid TopicReqDTO.Create topicRequest) {
         return adminTopicCommandUseCase.createTopicByAdmin(user.getId(), topicRequest);
     }
 
     @PutMapping("/topic-card/{topicId}")
     @Operation(summary = "topic 카드 수정", description = "PUT")
-    public TopicResDTO.Topic updateTopicCard(@AuthenticationPrincipal CustomUserDetails user,  @PathVariable Long topicId, @RequestBody @Valid TopicReqDTO.CreateTopic topicRequest) {
+    public TopicResDTO.Topic updateTopicCard(@AuthenticationPrincipal CustomUserDetails user,  @PathVariable Long topicId, @RequestBody @Valid TopicReqDTO.Create topicRequest) {
         return adminTopicCommandUseCase.updateTopicByAdmin(topicId, topicRequest);
     }
 

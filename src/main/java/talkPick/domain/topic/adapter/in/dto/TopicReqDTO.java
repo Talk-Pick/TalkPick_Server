@@ -4,8 +4,7 @@ import talkPick.domain.topic.domain.type.Keyword;
 import java.util.List;
 
 public class TopicReqDTO {
-
-    public record CreateTopic(
+    public record Create(
             String title,
             String detail,
             String thumbnail,

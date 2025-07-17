@@ -19,4 +19,13 @@ public class Category {
 
     @Enumerated(EnumType.STRING)
     private CategoryGroup categoryGroup;
+
+    public static Category of(String title, String description, String imageUrl, CategoryGroup categoryGroup) {
+        return Category.builder()
+                .title(title)
+                .description(description)
+                .imageUrl(imageUrl)
+                .categoryGroup(categoryGroup)
+                .build();
+    }
 }

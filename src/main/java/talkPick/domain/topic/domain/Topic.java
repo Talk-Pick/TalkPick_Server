@@ -6,6 +6,8 @@ import talkPick.global.model.BaseTime;
 import talkPick.global.model.TalkPickStatus;
 import talkPick.domain.admin.domain.Admin;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Entity
 @Builder
@@ -22,19 +24,29 @@ public class Topic extends BaseTime {
     private Long categoryId;
     @Enumerated(EnumType.STRING)
     private TalkPickStatus status;
+    private Long adminId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Admin createdBy;
-
-    public static Topic create(String title, String detail, String thumbnail, String icon, Admin createdBy) {
+    public static Topic create(String title, String detail, String thumbnail, String icon, Long adminId) {
         //TODO category_id 넣어줘야 함.
         return Topic.builder()
                 .title(title)
                 .detail(detail)
                 .thumbnail(thumbnail)
                 .icon(icon)
-                .createdBy(createdBy)
-                .status(TalkPickStatus.ACTIVE) // 상태 초기화
+                .status(TalkPickStatus.ACTIVE)
+                .adminId(adminId)
+                .build();
+    }
+
+    public static Topic of(String title, String detail, String thumbnail, String icon, Long categoryId, Long adminId) {
+        return Topic.builder()
+                .title(title)
+                .detail(detail)
+                .thumbnail(thumbnail)
+                .icon(icon)
+                .categoryId(categoryId)
+                .status(TalkPickStatus.ACTIVE)
+                .adminId(adminId)
                 .build();
     }
 

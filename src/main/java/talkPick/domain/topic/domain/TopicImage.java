@@ -17,4 +17,12 @@ public class TopicImage {
     private String imageUrl;
     @Enumerated(EnumType.STRING)
     private TalkPickStatus status;
+
+    public static TopicImage of(Long topicId, String imageUrl) {
+        return TopicImage.builder()
+                .topicId(topicId)
+                .imageUrl(imageUrl)
+                .status(TalkPickStatus.ACTIVE)
+                .build();
+    }
 }
