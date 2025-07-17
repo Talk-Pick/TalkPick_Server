@@ -25,14 +25,14 @@ public class AdminTopicCommandService implements AdminTopicCommandUseCase {
     private final TopicReqMapper topicReqMapper;
 
     @Override
-    public TopicResDTO.Topic createTopicByAdmin(Long adminId, TopicReqDTO.CreateTopic createTopic) {
+    public TopicResDTO.Topic createTopicByAdmin(Long adminId, TopicReqDTO.Create create) {
         Topic topic = adminTopicCommandRepositoryPort.save(
                 Topic.create( // topic 생성
-                        createTopic.title(),
-                        createTopic.detail(),
-                        createTopic.thumbnail(),
-                        createTopic.icon(),
-                        getValidAdmin(adminId)
+                        create.title(),
+                        create.detail(),
+                        create.thumbnail(),
+                        create.icon(),
+                        adminId
                 )
         );
         topicStatCommandRepositoryPort.save(topic.getId()); // topic 통계 생성
@@ -40,7 +40,7 @@ public class AdminTopicCommandService implements AdminTopicCommandUseCase {
     }
 
     @Override
-    public TopicResDTO.Topic updateTopicByAdmin(Long topicId, TopicReqDTO.CreateTopic updateTopic) {
+    public TopicResDTO.Topic updateTopicByAdmin(Long topicId, TopicReqDTO.Create updateTopic) {
 
         // 해당 topic 찾아 업데이트
         Topic topic = getValidTopic(topicId);
