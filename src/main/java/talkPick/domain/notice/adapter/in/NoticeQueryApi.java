@@ -9,7 +9,7 @@ import talkPick.domain.notice.adapter.in.dto.NoticeReqDTO;
 import talkPick.domain.notice.adapter.out.dto.NoticeResDTO;
 import talkPick.global.response.CursorPageResponse;
 
-@RequestMapping("/api/v1/notice")
+@RequestMapping("/api/v1/notices")
 @Tag(name = "공지사항 API", description = "공지사항 관련 API 입니다.")
 public interface NoticeQueryApi {
     @GetMapping("/")
