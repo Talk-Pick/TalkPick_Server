@@ -123,4 +123,6 @@ public class MemberQueryService implements MemberQueryUseCase {
         // 페이지 객체 생성 및 반환
         return new PageImpl<>(results, pageable, totalCount);
     }
+
+
 }

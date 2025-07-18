@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import talkPick.domain.member.adapter.in.dto.MemberDetailResDto;
 import talkPick.domain.member.adapter.in.dto.MemberLikedTopicsResDto;
+import talkPick.domain.member.adapter.in.dto.MemberTopicResultResDto;
 import talkPick.domain.member.adapter.out.dto.MemberEmailResDTO;
 import talkPick.domain.member.adapter.out.dto.MemberKakaoResDTO;
 import talkPick.domain.member.application.MemberQueryService;
