@@ -6,11 +6,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.member.adapter.in.dto.MemberTopicResultResDto;
 import talkPick.domain.member.port.out.MemberTopicResultQueryRepositoryPort;
-
-import java.awt.print.Pageable;
+import talkPick.domain.topic.domain.member.QMemberTopicResult;
 import java.time.LocalDate;
 import java.util.List;
 

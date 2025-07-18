@@ -31,7 +31,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
 @Slf4j
-public class MemberCommandController {
+public class MemberCommandController implements MemberCommandApi {
 
     private final MemberQueryService memberQueryService;
     private final MemberCommandService memberCommandService;

@@ -24,13 +24,12 @@ import org.springframework.data.domain.Pageable;
 @RequestMapping("/api/v1")
 public class MemberQueryController implements MemberQueryApi {
     private final MemberQueryUseCase memberQueryUseCase;
-    private final MemberQueryService memberQueryService;
 
     //이메일 가입 회원 조회
     @GetMapping("/members/email")
     @ResponseBody
     public List<MemberEmailResDTO> getEmailMembers() {
-        List<MemberEmailResDTO> memberEmailResDtoList = memberQueryService.getEmailMembers();
+        List<MemberEmailResDTO> memberEmailResDtoList = memberQueryUseCase.getEmailMembers();
         return memberEmailResDtoList;
     }
 
@@ -38,7 +37,7 @@ public class MemberQueryController implements MemberQueryApi {
     @GetMapping("/members/kakao")
     @ResponseBody
     public List<MemberKakaoResDTO> getKakaoMembers() {
-        List<MemberKakaoResDTO> memberKakaoResDTOList = memberQueryService.getkakaoMembers();
+        List<MemberKakaoResDTO> memberKakaoResDTOList = memberQueryUseCase.getkakaoMembers();
         return memberKakaoResDTOList;
     }
 
@@ -48,7 +47,7 @@ public class MemberQueryController implements MemberQueryApi {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long memberId = Long.parseLong(authentication.getName()); // JWT에서 추출된 사용자 ID
 
-        MemberDetailResDto memberInfo = memberQueryService.getMemberInfo(memberId);
+        MemberDetailResDto memberInfo = memberQueryUseCase.getMemberInfo(memberId);
         return memberInfo;
     }
 
@@ -57,7 +56,7 @@ public class MemberQueryController implements MemberQueryApi {
     public Page<MemberLikedTopicsResDto> getMemberLikedTopics(Pageable pageable) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long memberId = Long.parseLong(authentication.getName()); // JWT에서 추출된 사용자 ID
-        Page<MemberLikedTopicsResDto> memberLikedTopics = memberQueryService.getMemberLikedTopics(memberId, pageable);
+        Page<MemberLikedTopicsResDto> memberLikedTopics = memberQueryUseCase.getMemberLikedTopics(memberId, pageable);
         return memberLikedTopics;
     }
 
@@ -68,7 +67,7 @@ public class MemberQueryController implements MemberQueryApi {
     public Page<MemberTopicResultResDto> getMemberTopicResults(@RequestParam("date") LocalDate date, Pageable pageable) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long memberId = Long.parseLong(authentication.getName());
-        Page<MemberTopicResultResDto> memberTopicResults = memberQueryService.getMemberTopicResultsByCreatedDate(memberId, date, pageable);
+        Page<MemberTopicResultResDto> memberTopicResults = memberQueryUseCase.getMemberTopicResultsByCreatedDate(memberId, date, pageable);
         return memberTopicResults;
     }
 }
