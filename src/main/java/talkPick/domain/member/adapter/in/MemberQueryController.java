@@ -12,6 +12,7 @@ import talkPick.domain.member.adapter.out.dto.MemberKakaoResDTO;
 import talkPick.domain.member.application.MemberQueryService;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,5 +58,16 @@ public class MemberQueryController implements MemberQueryApi {
         Long memberId = Long.parseLong(authentication.getName()); // JWT에서 추출된 사용자 ID
         Page<MemberLikedTopicsResDto> memberLikedTopics = memberQueryService.getMemberLikedTopics(memberId, pageable);
         return memberLikedTopics;
+    }
+
+
+    //멤버 캘린더 토픽 결과 조회
+    @GetMapping("/members/topic/Results")
+    @ResponseBody
+    public Page<MemberTopicResultResDto> getMemberTopicResults(@RequestParam("date") LocalDate date, Pageable pageable) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberId = Long.parseLong(authentication.getName());
+        Page<MemberTopicResultResDto> memberTopicResults = memberQueryService.getMemberTopicResultsByCreatedDate(memberId, date, pageable);
+        return memberTopicResults;
     }
 }
