@@ -20,4 +20,12 @@ public class NoticeImage extends BaseTime {
     private Long noticeId;
     private String imageUrl;
     private TalkPickStatus status;
+
+    public static NoticeImage of(Long noticeId, String imageUrl, TalkPickStatus status) {
+        return NoticeImage.builder()
+                .noticeId(noticeId)
+                .imageUrl(imageUrl)
+                .status(status)
+                .build();
+    }
 }
