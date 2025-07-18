@@ -7,11 +7,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import talkPick.domain.member.adapter.in.dto.MemberDetailResDto;
 import talkPick.domain.member.adapter.in.dto.MemberLikedTopicsResDto;
+import talkPick.domain.member.adapter.in.dto.MemberTopicResultResDto;
 import talkPick.domain.member.adapter.out.dto.MemberEmailResDTO;
 import talkPick.domain.member.adapter.out.dto.MemberKakaoResDTO;
 import talkPick.domain.member.application.MemberQueryService;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,13 +24,12 @@ import org.springframework.data.domain.Pageable;
 @RequestMapping("/api/v1")
 public class MemberQueryController implements MemberQueryApi {
     private final MemberQueryUseCase memberQueryUseCase;
-    private final MemberQueryService memberQueryService;
 
     //이메일 가입 회원 조회
     @GetMapping("/members/email")
     @ResponseBody
     public List<MemberEmailResDTO> getEmailMembers() {
-        List<MemberEmailResDTO> memberEmailResDtoList = memberQueryService.getEmailMembers();
+        List<MemberEmailResDTO> memberEmailResDtoList = memberQueryUseCase.getEmailMembers();
         return memberEmailResDtoList;
     }
 
@@ -36,7 +37,7 @@ public class MemberQueryController implements MemberQueryApi {
     @GetMapping("/members/kakao")
     @ResponseBody
     public List<MemberKakaoResDTO> getKakaoMembers() {
-        List<MemberKakaoResDTO> memberKakaoResDTOList = memberQueryService.getkakaoMembers();
+        List<MemberKakaoResDTO> memberKakaoResDTOList = memberQueryUseCase.getkakaoMembers();
         return memberKakaoResDTOList;
     }
 
@@ -46,7 +47,7 @@ public class MemberQueryController implements MemberQueryApi {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long memberId = Long.parseLong(authentication.getName()); // JWT에서 추출된 사용자 ID
 
-        MemberDetailResDto memberInfo = memberQueryService.getMemberInfo(memberId);
+        MemberDetailResDto memberInfo = memberQueryUseCase.getMemberInfo(memberId);
         return memberInfo;
     }
 
@@ -55,7 +56,18 @@ public class MemberQueryController implements MemberQueryApi {
     public Page<MemberLikedTopicsResDto> getMemberLikedTopics(Pageable pageable) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long memberId = Long.parseLong(authentication.getName()); // JWT에서 추출된 사용자 ID
-        Page<MemberLikedTopicsResDto> memberLikedTopics = memberQueryService.getMemberLikedTopics(memberId, pageable);
+        Page<MemberLikedTopicsResDto> memberLikedTopics = memberQueryUseCase.getMemberLikedTopics(memberId, pageable);
         return memberLikedTopics;
+    }
+
+
+    //멤버 캘린더 토픽 결과 조회
+    @GetMapping("/members/topic/Results")
+    @ResponseBody
+    public Page<MemberTopicResultResDto> getMemberTopicResults(@RequestParam("date") LocalDate date, Pageable pageable) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberId = Long.parseLong(authentication.getName());
+        Page<MemberTopicResultResDto> memberTopicResults = memberQueryUseCase.getMemberTopicResultsByCreatedDate(memberId, date, pageable);
+        return memberTopicResults;
     }
 }

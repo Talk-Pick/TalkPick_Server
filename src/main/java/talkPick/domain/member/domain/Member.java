@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import talkPick.domain.admin.domain.type.Role;
 import talkPick.domain.member.adapter.in.dto.KakaoUserInfo;
-import talkPick.domain.member.adapter.in.dto.MemberEmailReqDTO;
+import talkPick.domain.member.adapter.in.dto.MemberEmailReqDto;
 import talkPick.domain.member.domain.type.Gender;
 import talkPick.domain.member.domain.type.LoginType;
 import talkPick.domain.member.domain.type.MBTI;
@@ -47,7 +47,7 @@ public class Member extends BaseTime {
     private String profileImageUrl;
 
 
-    public Member(MemberEmailReqDTO memberResDto) {
+    public Member(MemberEmailReqDto memberResDto) {
         this.email = memberResDto.getEmail();
         this.name = memberResDto.getName();
         this.password = memberResDto.getPassword();
