@@ -78,19 +78,20 @@ public class MemberCommandController {
 
     //mbti 입력 페이지
     @GetMapping("/topic/additional")
-    public String showMbtiForm(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void showMbtiForm(HttpServletRequest request, HttpServletResponse response) throws IOException {
         log.info("mbti 입력 페이지");
         HttpSession session = request.getSession(false);
 
         if (session == null || session.getAttribute("userInfo") == null) {
             log.error("세션이 만료되었거나 카카오 사용자 정보가 없습니다.");
-            return "redirect:/oauth/kakao/authorize"; // 스프링 MVC의 리다이렉트 방식
+            response.sendRedirect("/oauth/kakao/authorize");
+            return;
         }
 
         KakaoUserInfo userInfo = (KakaoUserInfo) session.getAttribute("userInfo");
 
-        // 뷰 이름 반환
-        return "mbti-form";
+        // 뷰로 리다이렉트
+        response.sendRedirect("/mbti-form.html");
     }
 
     // mbti 수정

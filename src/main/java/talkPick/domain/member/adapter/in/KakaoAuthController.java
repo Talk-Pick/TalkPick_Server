@@ -53,7 +53,7 @@ public class KakaoAuthController {
 
 
     //카카오 회원가입
-    @GetMapping("/oauth/kakao/authorize")
+    @GetMapping("/api/v1/oauth/kakao/authorize")
     public void joinKakaoMember(HttpServletResponse response) throws IOException {
         // 카카오 로그인 URL 생성
         String kakaoAuthUrl = "https://kauth.kakao.com/oauth/authorize"
@@ -99,7 +99,7 @@ public class KakaoAuthController {
             response.sendRedirect("/api/v1/topic");
         } else {
             log.info("신규 회원 - 추가 정보 입력 페이지로 리다이렉트");
-            response.sendRedirect("/mbti-form.html");
+            response.sendRedirect("/api/v1/topic/additional");
         }
     }
 
