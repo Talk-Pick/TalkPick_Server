@@ -3,6 +3,7 @@ package talkPick.domain.member.adapter.out.repository.querydsl;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -16,9 +17,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
 public class MemberTopicResultQuerydslRepository implements MemberTopicResultQueryRepositoryPort {
     private final JPAQueryFactory queryFactory;
+    public MemberTopicResultQuerydslRepository(EntityManager em) {
+        this.queryFactory = new JPAQueryFactory(em);
+    }
     QRandom random = QRandom.random;
 
     @Override

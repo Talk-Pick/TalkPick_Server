@@ -3,6 +3,7 @@ package talkPick.domain.member.adapter.out.repository.querydsl;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,10 +20,11 @@ import talkPick.domain.topic.domain.member.QMemberTopicHistory;
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
 public class MemberLikedTopicsQuerydslRepository implements MemberLikedTopicsQueryRepositoryPort {
     private final JPAQueryFactory queryFactory;
-
+    public MemberLikedTopicsQuerydslRepository(EntityManager em) {
+        this.queryFactory = new JPAQueryFactory(em);
+    }
     @Override
     public Page<MemberLikedTopicsResDto> findMemberLikedTopics(Long memberId, Pageable pageable) {
         QMemberTopicHistory mth = QMemberTopicHistory.memberTopicHistory;
