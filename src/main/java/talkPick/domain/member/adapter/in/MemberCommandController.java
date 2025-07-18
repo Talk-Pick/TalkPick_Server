@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import talkPick.domain.admin.domain.type.Role;
 import talkPick.domain.member.adapter.in.dto.KakaoUserInfo;
 import talkPick.domain.member.adapter.in.dto.MemberDetailResDto;
-import talkPick.domain.member.adapter.in.dto.MemberEmailReqDTO;
+import talkPick.domain.member.adapter.in.dto.MemberEmailReqDto;
 import talkPick.domain.member.adapter.in.dto.MemberMbtiUpdateRequestDto;
 import talkPick.domain.member.adapter.out.dto.MemberEmailResDTO;
 import talkPick.domain.member.application.MemberCommandService;
@@ -41,7 +41,7 @@ public class MemberCommandController {
 
     //이메일 기반 회원가입
     @PostMapping("/members/join")
-    public ResponseEntity<?> joinEmailMember(@RequestBody MemberEmailReqDTO memberReqDto, HttpServletResponse response) {
+    public ResponseEntity<?> joinEmailMember(@RequestBody MemberEmailReqDto memberReqDto, HttpServletResponse response) {
         log.info("이메일 회원가입 요청: {}", memberReqDto.getEmail());
 
         Optional<Member> existingMember = memberQueryService.findByEmail(memberReqDto.getEmail());

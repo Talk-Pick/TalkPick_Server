@@ -5,7 +5,6 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +16,8 @@ import talkPick.domain.member.adapter.out.dto.MemberKakaoResDTO;
 import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
-import talkPick.domain.member.exception.MemberNotFoundException.MemberLikedTopicsNotFoundException;
+import talkPick.domain.member.port.out.MemberLikedTopicsQueryRepositoryPort;
+import talkPick.domain.member.port.out.MemberTopicResultQueryRepositoryPort;
 
 
 import java.time.LocalDate;
@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberQueryService implements MemberQueryUseCase {
     private final MemberJpaRepository memberJpaRepository;
+    private final MemberLikedTopicsQueryRepositoryPort memberLikedTopicsQueryRepositoryPort;
+    private final MemberTopicResultQueryRepositoryPort memberTopicResultQueryRepositoryPort;
 
     @PersistenceContext
     private EntityManager entityManager;

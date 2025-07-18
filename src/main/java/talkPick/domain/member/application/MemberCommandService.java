@@ -6,7 +6,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import talkPick.domain.member.adapter.in.dto.MemberEmailReqDTO;
+import talkPick.domain.member.adapter.in.dto.MemberEmailReqDto;
 import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.domain.type.MBTI;
@@ -25,7 +25,7 @@ public class MemberCommandService implements MemberCommandUseCase {
 
     @Transactional
     @Override
-    public void setEmailMember(MemberEmailReqDTO memberReqDto) {
+    public void setEmailMember(MemberEmailReqDto memberReqDto) {
         Member saveMember = fromDtoToMember(memberReqDto);
 
         memberJpaRepository.save(saveMember);

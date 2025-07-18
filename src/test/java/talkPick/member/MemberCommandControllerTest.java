@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import talkPick.domain.admin.domain.type.Role;
 import talkPick.domain.member.adapter.in.MemberCommandController;
 import talkPick.domain.member.adapter.in.dto.MemberDetailResDto;
-import talkPick.domain.member.adapter.in.dto.MemberEmailReqDTO;
+import talkPick.domain.member.adapter.in.dto.MemberEmailReqDto;
 import talkPick.domain.member.adapter.in.dto.MemberMbtiUpdateRequestDto;
 import talkPick.domain.member.adapter.out.dto.MemberEmailResDTO;
 import talkPick.domain.member.application.MemberCommandService;
@@ -73,7 +73,7 @@ public class MemberCommandControllerTest {
     @Test
     @DisplayName("이메일 기반 회원가입")
     void testJoinEmailMemberSuccess() throws Exception {
-        MemberEmailReqDTO reqDTO = new MemberEmailReqDTO();
+        MemberEmailReqDto reqDTO = new MemberEmailReqDto();
         reqDTO.setEmail("test@example.com");
         reqDTO.setPassword("password123");
         reqDTO.setName("테스터");
