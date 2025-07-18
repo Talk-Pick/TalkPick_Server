@@ -7,7 +7,7 @@ public final class WhiteList {
             "/api/v1/admin/signup",
             "/api/v1/admin/login",
             "/api/v1/member/login",
-            "/oauth/kakao/authorize",
+            "/api/v1/oauth/kakao/authorize",
             "/api/v1/topic/kakao",
             "/api/v1/topic/additional",
             "/api/v1/topic",
