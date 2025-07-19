@@ -12,6 +12,6 @@ import java.io.IOException;
 public interface MemberCommandApi {
 
     ResponseEntity<?> joinEmailMember(@RequestBody MemberEmailReqDto memberReqDto, HttpServletResponse response);
-    String showMbtiForm(HttpServletRequest request, HttpServletResponse response)throws IOException;
+    void showMbtiForm(HttpServletRequest request, HttpServletResponse response)throws IOException;
     ResponseEntity<?> updateMemberMbti(@RequestBody MemberMbtiUpdateRequestDto request);
 }

@@ -22,6 +22,15 @@ public class NoticeQuerydslRepository {
     }
 
     public NoticeResDTO.NoticeDetail findNoticeDetailById(Long noticeId) {
+        long updated = queryFactory.update(notice)
+                .set(notice.readCount, notice.readCount.add(1))
+                .where(notice.id.eq(noticeId))
+                .execute();
+
+        if (updated == 0) {
+            throw new NoticeNotFoundException(NOTICE_NOT_FOUND);
+        }
+
         var result =  queryFactory.select(Projections.constructor(NoticeResDTO.NoticeDetail.class,
                         notice.id,
                         notice.title,
