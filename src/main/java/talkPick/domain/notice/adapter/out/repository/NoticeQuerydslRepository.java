@@ -22,14 +22,15 @@ public class NoticeQuerydslRepository {
     }
 
     public NoticeResDTO.NoticeDetail findNoticeDetailById(Long noticeId) {
-        long updated = queryFactory.update(notice)
-                .set(notice.readCount, notice.readCount.add(1))
-                .where(notice.id.eq(noticeId))
-                .execute();
-
-        if (updated == 0) {
-            throw new NoticeNotFoundException(NOTICE_NOT_FOUND);
-        }
+        //TODO 조회 수 업데이트 구현해야 함.
+//        long updated = queryFactory.update(notice)
+//                .set(notice.readCount, notice.readCount.add(1))
+//                .where(notice.id.eq(noticeId))
+//                .execute();
+//
+//        if (updated == 0) {
+//            throw new NoticeNotFoundException(NOTICE_NOT_FOUND);
+//        }
 
         var result =  queryFactory.select(Projections.constructor(NoticeResDTO.NoticeDetail.class,
                         notice.id,

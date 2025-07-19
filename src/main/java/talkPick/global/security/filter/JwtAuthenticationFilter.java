@@ -26,7 +26,6 @@ import talkPick.domain.member.exception.MemberNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-
 import static talkPick.global.security.model.WhiteList.PATHS;
 
 @RequiredArgsConstructor

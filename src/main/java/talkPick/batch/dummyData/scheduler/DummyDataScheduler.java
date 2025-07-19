@@ -4,6 +4,12 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import talkPick.batch.dummyData.dto.CategoryReqDTO;
+import talkPick.domain.admin.domain.type.Role;
+import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
+import talkPick.domain.member.domain.Member;
+import talkPick.domain.member.domain.type.Gender;
+import talkPick.domain.member.domain.type.LoginType;
+import talkPick.domain.member.domain.type.MBTI;
 import talkPick.domain.notice.adapter.out.repository.NoticeImageJpaRepository;
 import talkPick.domain.notice.adapter.out.repository.NoticeJpaRepository;
 import talkPick.domain.notice.domain.Notice;
@@ -13,13 +19,15 @@ import talkPick.domain.topic.domain.*;
 import talkPick.domain.topic.domain.type.CategoryGroup;
 import talkPick.domain.topic.domain.type.Keyword;
 import talkPick.global.model.TalkPickStatus;
-
+import talkPick.global.security.jwt.util.JwtProvider;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 @RequiredArgsConstructor
 public class DummyDataScheduler {
+    private final JwtProvider jwtProvider;
     private final CategoryJpaRepository categoryJpaRepository;
     private final TopicJpaRepository topicJpaRepository;
     private final TopicStatJpaRepository topicStatJpaRepository;
@@ -27,6 +35,7 @@ public class DummyDataScheduler {
     private final TopicImageJpaRepository topicImageJpaRepository;
     private final NoticeJpaRepository noticeJpaRepository;
     private final NoticeImageJpaRepository noticeImageJpaRepository;
+    private final MemberJpaRepository memberJpaRepository;
 
     private static final List<CategoryReqDTO.Create> FIXED_CATEGORIES = List.of(
             CategoryReqDTO.Create.of("소개팅/과팅", "처음 만나는 이성과의 대화", "https://dummyimage.com/600x400/000/fff&text=소개팅", CategoryGroup.STRANGER),
@@ -43,6 +52,11 @@ public class DummyDataScheduler {
     @PostConstruct
     public void generateDummyData() {
         //TODO Member 더미 데이터 + JWT 토큰 만들어야 함.
+        Member member = saveDummyMember();
+        var accessToken = jwtProvider.createJwt(member.getId(), String.valueOf(Role.MEMBER));
+
+        System.out.println("[JWT Dummy Data] " + "UserId : " + accessToken.userId() + " AccessToken : " + accessToken.accessToken());
+
         List<Category> categories = saveCategories();
 
         generateTopicDummyData(categories);
@@ -122,4 +136,23 @@ public class DummyDataScheduler {
         topicKeywordRepository.save(topicKeyword);
     }
 
+    private Member saveDummyMember() {
+        return memberJpaRepository.findByEmail("user@talkpick.com")
+                .orElseGet(() -> {
+                    Member member = Member.builder()
+                            .kakaoId(null)
+                            .email("user@talkpick.com")
+                            .memberRole(Role.MEMBER)
+                            .password("encrypted-password")
+                            .name("테스트유저")
+                            .birth(LocalDate.of(2000, 1, 1))
+                            .gender(Gender.FEMALE)
+                            .loginType(LoginType.EMAIL)
+                            .status(TalkPickStatus.ACTIVE)
+                            .mbti(MBTI.INFP)
+                            .profileImageUrl("https://dummyimage.com/100x100/ccc/fff&text=User")
+                            .build();
+                    return memberJpaRepository.save(member);
+                });
+    }
 }

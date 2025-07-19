@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
+import talkPick.domain.topic.domain.type.CategoryGroup;
+import talkPick.domain.topic.domain.type.Keyword;
 import talkPick.domain.topic.dto.TopicCacheDTO;
 import talkPick.domain.topic.domain.Topic;
 import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
@@ -35,8 +37,59 @@ public class TopicQueryRepositoryAdapter implements TopicQueryRepositoryPort {
 
     @Override
     public List<TopicResDTO.TopicSummaries> findTodayTopicSummaries(Long userId) {
-        //TODO ADMIN에서 오늘의 토픽 5개를 지정해야 함으로 따로 테이블 팔까 고민 중
-        return null;
+        //TODO 수정해야 함.
+        return List.of(
+                new TopicResDTO.TopicSummaries(
+                        1L,
+                        "첫 만남에 어색함을 깨는 방법은?",
+                        "https://dummyimage.com/600x400/111/fff&text=그룹모임",
+                        150L,
+                        42,
+                        "그룹 첫 모임",
+                        CategoryGroup.STRANGER,
+                        Keyword.GAME
+                ),
+                new TopicResDTO.TopicSummaries(
+                        2L,
+                        "내 룸메이트와의 첫 대화는?",
+                        "https://dummyimage.com/600x400/222/fff&text=룸메",
+                        130L,
+                        37,
+                        "룸메 첫 만남",
+                        CategoryGroup.STRANGER,
+                        Keyword.DAILY_LIFE
+                ),
+                new TopicResDTO.TopicSummaries(
+                        3L,
+                        "가족들과 떠났던 가장 기억에 남는 여행은?",
+                        "https://dummyimage.com/600x400/444/fff&text=가족",
+                        170L,
+                        55,
+                        "가족",
+                        CategoryGroup.CLOSE,
+                        Keyword.TRAVEL
+                ),
+                new TopicResDTO.TopicSummaries(
+                        4L,
+                        "친구와의 우정 테스트! 너라면?",
+                        "https://dummyimage.com/600x400/555/fff&text=친구",
+                        110L,
+                        28,
+                        "친구",
+                        CategoryGroup.CLOSE,
+                        Keyword.WHAT_IF
+                ),
+                new TopicResDTO.TopicSummaries(
+                        5L,
+                        "요즘 빠진 음식은?",
+                        "https://dummyimage.com/600x400/666/fff&text=연인",
+                        90L,
+                        18,
+                        "연인",
+                        CategoryGroup.CLOSE,
+                        Keyword.TASTE
+                )
+        );
     }
 
     @Override
