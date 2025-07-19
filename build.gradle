@@ -87,9 +87,9 @@ dependencies {
     implementation 'org.passay:passay:1.6.2'
     implementation 'org.springframework.security:spring-security-crypto'
 
-    // Monitoring
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'io.micrometer:micrometer-registry-prometheus'
+//    // Monitoring
+//    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+//    implementation 'io.micrometer:micrometer-registry-prometheus'
 
     // WebFlux
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
