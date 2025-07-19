@@ -37,14 +37,13 @@ spring:
   messages:
     basename: messages,errors
 
-logging.level:
-  org.hibernate.SQL: debug
-  org.hibernate.orm.jdbc.bind: trace
-  org.springframework.web.cors: debug
-  org.apache.coyote.http11: debug
-  logging:
-    level:
-      root: debug
+logging:
+  level:
+    root: info
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
+    org.springframework.web.cors: debug
+    org.apache.coyote.http11: debug
 
 management:
   endpoint:

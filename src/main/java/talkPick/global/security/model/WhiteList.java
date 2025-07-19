@@ -17,6 +17,8 @@ public final class WhiteList {
             "/swagger-resources/**",
             "/v3/api-docs/**",
             "/favicon.ico",
-            "/test"
+            "/test",
+            //TODO JWT 테스트 후 삭제해야 함.
+            "/api/v1/**"
     };
 }

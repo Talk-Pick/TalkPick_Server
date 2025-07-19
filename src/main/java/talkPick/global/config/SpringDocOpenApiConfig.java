@@ -33,15 +33,6 @@ public class SpringDocOpenApiConfig {
                 .security(Arrays.asList(securityRequirement));
     }
 
-//    @Bean
-//    public GroupedOpenApi memberOpenApi() {
-//        return GroupedOpenApi.builder()
-//                .group("Member")
-//                .displayName("Member")
-//                .pathsToMatch("/api/v1/member/my-page/**")
-//                .build();
-//    }
-
     @Bean
     public GroupedOpenApi topicOpenApi() {
         return GroupedOpenApi.builder()
@@ -66,6 +57,15 @@ public class SpringDocOpenApiConfig {
                 .group("랜덤 대화 코스 API")
                 .displayName("랜덤 대화 코스 API")
                 .pathsToMatch("/api/v1/random/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi noticeOpenApi() {
+        return GroupedOpenApi.builder()
+                .group("공지사항 API")
+                .displayName("공지사항 API")
+                .pathsToMatch("/api/v1/notices/**")
                 .build();
     }
 }

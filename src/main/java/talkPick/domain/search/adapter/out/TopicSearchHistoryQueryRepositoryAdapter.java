@@ -15,6 +15,11 @@ public class TopicSearchHistoryQueryRepositoryAdapter implements TopicSearchHist
     @Override
     public List<TopicSearchResDTO.Recommendation> recommend() {
         //TODO 검색어를 어떻게 저장하고, 어떻게 보여줄 건가..?
-        return List.of();
+        //TODO 구현해야 함.
+        return List.of(
+                new TopicSearchResDTO.Recommendation(1, "인공지능"),
+                new TopicSearchResDTO.Recommendation(2, "자기계발"),
+                new TopicSearchResDTO.Recommendation(3, "연애")
+        );
     }
 }

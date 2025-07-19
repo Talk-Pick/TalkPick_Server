@@ -16,7 +16,7 @@ public interface TopicSearchApi {
     @Operation(summary = "토픽 필터 조회 API", description = "토픽 필터 조회 API 입니다.")
     List<TopicSearchResDTO.Topic> getTopics(@RequestParam(required = false) String category);
 
-    @GetMapping("/")
+    @GetMapping("")
     @Operation(summary = "토픽 검색 API", description = "토픽 검색 API API 입니다.")
     List<TopicSearchResDTO.Topic> search(@UserId Long memberId, @RequestParam(required = false) String word);
 
