@@ -8,10 +8,11 @@ files:
     overwrite: yes
 
 permissions:
-  - object: /home/ubuntu/TalkPick_Server/scripts/start-server.sh
-    mode: "755"
+  - object: /home/ubuntu/TalkPick_Server
+    pattern: "**"
     owner: ubuntu
     group: ubuntu
+    mode: "755"
 
 hooks:
   ApplicationStart:
