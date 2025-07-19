@@ -3,7 +3,7 @@ version: '3.8'
 services:
   ## talkpick
   talkpick-server:
-    image: 718513646976.dkr.ecr.ap-northeast-2.amazonaws.com/talkpick-server/talkpick-server:latest
+    image: 718513646976.dkr.ecr.ap-northeast-2.amazonaws.com/talkpick-server:latest
     container_name: talkpick-server
     ports:
       - "8080:8080"
