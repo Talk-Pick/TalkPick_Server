@@ -60,17 +60,14 @@ public class Member extends BaseTime {
     }
 
     public Member(KakaoUserInfo kakaoUserInfo, MBTI mbti) {
-        // Initialize maps to prevent NullPointerException
         Map<String, Object> kakaoAccount = (kakaoUserInfo.getKakao_account() != null) 
                 ? kakaoUserInfo.getKakao_account() : new HashMap<>();
         Map<String, Object> properties = (kakaoUserInfo.getProperties() != null) 
                 ? kakaoUserInfo.getProperties() : new HashMap<>();
 
-        // Handle email safely
         Object emailObj = kakaoAccount.get("email");
         this.email = (emailObj != null) ? String.valueOf(emailObj) : null;
 
-        // Try to get nickname from kakao_account first, then from properties if not found
         Object nicknameObj = kakaoAccount.get("nickname");
         if (nicknameObj == null) {
             nicknameObj = properties.get("nickname");
@@ -78,18 +75,17 @@ public class Member extends BaseTime {
         this.name = (nicknameObj != null) ? String.valueOf(nicknameObj) : null;
         this.password = null;
 
-        // Handle birth date safely
         String birthStr = String.valueOf(kakaoAccount.get("birthday"));
         if (birthStr != null && !birthStr.equals("null")) {
             try {
                 this.birth = LocalDate.parse(birthStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             } catch (Exception e) {
-                // If parsing fails, try other common date formats or set to null
+
                 try {
-                    // Try MM/dd format (common in some APIs)
+
                     String[] parts = birthStr.split("/");
                     if (parts.length == 2) {
-                        // Assume current year if only month and day are provided
+
                         String fullDate = LocalDate.now().getYear() + "-" + parts[0] + "-" + parts[1];
                         this.birth = LocalDate.parse(fullDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                     } else {
@@ -103,7 +99,7 @@ public class Member extends BaseTime {
             this.birth = null;
         }
 
-        // Handle gender safely
+
         String genderStr = String.valueOf(kakaoAccount.get("gender"));
         if (genderStr != null && !genderStr.equals("null")) {
             if (genderStr.toUpperCase().equals("MALE")) {
@@ -111,10 +107,10 @@ public class Member extends BaseTime {
             } else if (genderStr.toUpperCase().equals("FEMALE")) {
                 this.gender = Gender.FEMALE;
             } else {
-                this.gender = null; // Default to null if gender is not recognized
+                this.gender = null;
             }
         } else {
-            this.gender = null; // Default to null if gender is not provided
+            this.gender = null;
         }
         this.mbti = mbti;
         this.kakaoId = kakaoUserInfo.getId();

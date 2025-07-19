@@ -8,7 +8,6 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import java.util.Arrays;
 
 // http://localhost:8080/swagger-ui/index.html
@@ -66,6 +65,32 @@ public class SpringDocOpenApiConfig {
                 .group("공지사항 API")
                 .displayName("공지사항 API")
                 .pathsToMatch("/api/v1/notices/**")
+                .build();
+    }
+    
+    @Bean
+    public GroupedOpenApi signupOpenApi() {
+        return GroupedOpenApi.builder()
+                .group("회원가입 API")
+                .displayName("회원가입 API")
+                .pathsToMatch(
+                    "/api/v1/auth/kakao/authorize",
+                    "/api/v1/auth/kakao/callback",
+                    "/api/v1/auth/kakao/additional",
+                    "/api/v1/members/join"
+                )
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi memberCommandOpenApi() {
+        return GroupedOpenApi.builder()
+                .group("회원 명령 API")
+                .displayName("회원 명령 API")
+                .pathsToMatch(
+                    "/api/v1/members/mbti",
+                    "/api/v1/topic/additional"
+                )
                 .build();
     }
 }
