@@ -4,12 +4,12 @@ os: linux
 files:
   - source: /
     destination: /home/ubuntu/TalkPick_Server
-
-permissions:
-  - object: /home/ubuntu/TalkPick_Server
-    owner: ubuntu
-    group: ubuntu
-    mode: 755
+    overwrite: yes
+    permissions:
+      - object: scripts/start-server.sh
+        owner: ubuntu
+        group: ubuntu
+        mode: 755
 
 hooks:
   ApplicationStart:
