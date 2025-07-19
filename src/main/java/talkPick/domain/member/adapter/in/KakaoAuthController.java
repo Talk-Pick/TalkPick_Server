@@ -117,13 +117,13 @@ public class KakaoAuthController {
 
                 // 카카오 ID 저장
                 cookieUtil.addCookie(response, "kakao_id", userInfo.getId(),
-                    "/", 1800, true, "Lax", secureCookie);
+                        "/", 1800, true, "Lax", secureCookie);
 
                 // 닉네임 저장 (있는 경우)
                 if (userInfo.getProperties() != null && userInfo.getProperties().get("nickname") != null) {
                     cookieUtil.addCookie(response, "kakao_nickname",
-                        String.valueOf(userInfo.getProperties().get("nickname")),
-                        "/", 1800, true, "Lax", secureCookie);
+                            String.valueOf(userInfo.getProperties().get("nickname")),
+                            "/", 1800, true, "Lax", secureCookie);
                 }
                 response.sendRedirect("/api/v1/members/additional");
             }
@@ -198,7 +198,7 @@ public class KakaoAuthController {
      */
     private void handleKakaoOAuthError(HttpServletResponse response, KaKaoOAuthException e) throws IOException {
         log.error("카카오 OAuth 처리 중 오류 발생: {}", e.getMessage(), e);
-        
+
         // 오류 메시지에 따라 다른 사용자 친화적인 메시지 제공
         String errorMessage;
         if (e.getMessage().contains("요청이 너무 많습니다")) {
@@ -208,7 +208,7 @@ public class KakaoAuthController {
         } else {
             errorMessage = "카카오 로그인 중 오류가 발생했습니다. 다시 시도해주세요.";
         }
-        
+
         redirectToErrorPage(response, errorMessage);
     }
 

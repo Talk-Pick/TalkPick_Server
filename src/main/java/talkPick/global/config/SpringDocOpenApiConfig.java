@@ -70,6 +70,15 @@ public class SpringDocOpenApiConfig {
     }
 
     @Bean
+    public GroupedOpenApi noticeOpenApi() {
+        return GroupedOpenApi.builder()
+                .group("공지사항 코스 API")
+                .displayName("공지사항 API")
+                .pathsToMatch("/api/v1/notices/**")
+                .build();
+    }
+
+    @Bean
     public GroupedOpenApi signupOpenApi() {
         return GroupedOpenApi.builder()
                 .group("회원가입 API")
