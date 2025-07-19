@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import talkPick.domain.topic.domain.type.Keyword;
 import talkPick.domain.topic.dto.TopicCacheDTO;
 
 import java.time.LocalDateTime;
@@ -51,10 +52,22 @@ public class RandomResDTO {
         private String thumbnail;
         private String icon;
         private String category;
+        private Keyword keyword;
+
         private List<String> topicImages;
 
         public void addTopicImage(List<String> topicImages) {
             this.topicImages = topicImages;
+        }
+
+        public RandomTopicDetail(Long topicId, String title, String detail, String thumbnail, String icon, String category, Keyword keyword) {
+            this.topicId = topicId;
+            this.title = title;
+            this.detail = detail;
+            this.thumbnail = thumbnail;
+            this.icon = icon;
+            this.category = category;
+            this.keyword = keyword;
         }
     }
 
