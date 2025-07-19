@@ -1,17 +1,22 @@
 package talkPick.global.security.jwt.util;
 
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.security.jwt.dto.JwtResDTO;
+import talkPick.global.util.CookieUtil;
 
 @RequiredArgsConstructor
 @Component
 public class JwtProvider {
     private final JwtGenerator jwtGenerator;
     private final RefreshTokenGenerator refreshTokenGenerator;
+    private final CookieUtil cookieUtil;
+    
+    @Value("${app.secure-cookie:false}")
+    private boolean secureCookie;
 
     public JwtResDTO.Login createJwt(final Long userId, final String role) {
         return JwtResDTO.Login.of(
@@ -39,22 +44,8 @@ public class JwtProvider {
      * @param jwtToken JWT 토큰 정보
      */
     public void addTokenCookies(HttpServletResponse response, JwtResDTO.Login jwtToken) {
-        // 액세스 토큰 쿠키
-        Cookie accessTokenCookie = new Cookie("access_token", jwtToken.accessToken());
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setMaxAge(3600);
-        accessTokenCookie.setAttribute("SameSite", "Lax");
-        response.addCookie(accessTokenCookie);
-
-        // 리프레시 토큰 쿠키
-        Cookie refreshTokenCookie = new Cookie("refresh_token", jwtToken.refreshToken());
-        refreshTokenCookie.setPath("/api/v1/auth/refresh");
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setMaxAge(604800);
-        refreshTokenCookie.setAttribute("SameSite", "Strict");
-        response.addCookie(refreshTokenCookie);
+        // CookieUtil을 사용하여 토큰 쿠키 추가
+        cookieUtil.addAccessTokenCookie(response, jwtToken.accessToken(), secureCookie);
+        cookieUtil.addRefreshTokenCookie(response, jwtToken.refreshToken(), secureCookie);
     }
-
-
 }
