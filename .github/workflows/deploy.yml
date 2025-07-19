@@ -9,53 +9,53 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: GIT - Checkout Repository =====================
+      - name: ✔️ GIT - Checkout Repository ✔️
         uses: actions/checkout@v4
 
-      - name: SETUP - Install JDK 21 ========================
+      - name: 🔻 SETUP - Install JDK 21 🔻
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
 
-      - name: CONFIG - Create application.yml ========================
+      - name: 🔗 CONFIG - Create application.yml 🔗
         run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application.yml
 
-      - name: CONFIG - Create .env ===========================
+      - name: 🔗 CONFIG - Create .env 🔗
         run: |
           touch .env
           echo '${{ secrets.ENV }}' >> .env
 
-      - name: BUILD - Run Test & Build JAR ===================
+      - name: ⏳ BUILD - Run Test & Build JAR ⏳
         run: ./gradlew clean build
 
-      - name: CONFIG - Configure AWS Credentials ================
+      - name: ☁️ CONFIG - Configure AWS Credentials ☁️
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ap-northeast-2
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: ECR - Login to Amazon ECR =======================
+      - name: ☁️ AWS - Login to Amazon ECR ☁️
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: DOCKER - Build Docker Image ======================
+      - name: 🐳 DOCKER - Build Docker Image 🐳
         run: docker build -t talkpick-server .
 
-      - name: DOCKER - Tag Docker Image ========================
+      - name: 🐳 DOCKER - Tag Docker Image 🐳
         run: docker tag talkpick-server ${{ steps.login-ecr.outputs.registry }}/talkpick-server:latest
 
-      - name: ECR - Push Docker Image to ECR ===================
+      - name: ☁️ AWS - Push Docker Image to ECR ☁️
         run: docker push ${{ steps.login-ecr.outputs.registry }}/talkpick-server:latest
 
-      - name: ARCHIVE - Compress for CodeDeploy ================
-        run: tar -czvf $GITHUB_SHA.tar.gz appspec.yml scripts
+      - name: ☁️ AWS - Compress for CodeDeploy ☁️
+        run: tar -czvf $GITHUB_SHA.tar.gz appspec.yml scripts docker-compose.yml
 
-      - name: S3 - Upload Archive to S3 ========================
+      - name: ☁️ AWS - Upload Archive to S3 ☁️
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.tar.gz s3://talkpick-server/$GITHUB_SHA.tar.gz
 
-      - name: CODEDEPLOY - Create Deployment to EC2 ============
+      - name: ☁️ AWS - Create Deployment to EC2 ☁️
         run: |
           aws deploy create-deployment \
             --application-name talkpick-server \
