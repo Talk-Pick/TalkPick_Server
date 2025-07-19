@@ -49,6 +49,12 @@ jobs:
       - name: ☁️ AWS - Push Docker Image to ECR ☁️
         run: docker push ${{ steps.login-ecr.outputs.registry }}/talkpick-server:latest
 
+      - name: 🛠️ PERMISSIONS - Fix file ownership and permission before tar
+        run: |
+          sudo chown -R $(whoami):$(whoami) .
+          chmod -R 755 scripts
+          chmod 644 docker-compose.yml
+
       - name: ☁️ AWS - Compress for CodeDeploy ☁️
         run: tar -czvf $GITHUB_SHA.tar.gz appspec.yml scripts docker-compose.yml
 
