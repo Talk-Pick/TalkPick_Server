@@ -14,7 +14,7 @@ if [ ! -f docker-compose.yml ]; then
   exit 1
 fi
 
-docker compose down || true
-docker compose up -d
+docker-compose down || true
+docker-compose up -d
 
 echo "--------------- SUCCESS : Talkpick Server Deploy -----------------"
