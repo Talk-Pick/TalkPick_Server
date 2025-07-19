@@ -7,6 +7,8 @@ services:
     container_name: talkpick-server
     ports:
       - "8080:8080"
+    env_file:
+      - .env
     networks:
       - talk-pick-network
 
