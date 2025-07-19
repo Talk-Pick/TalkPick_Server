@@ -11,6 +11,11 @@ permissions:
     group: ubuntu
     mode: 755
 
+  - objects: /home/ubuntu/TalkPick_Server/scripts/start-server.sh
+    owner: ubuntu
+    group: ubuntu
+    mode: 755
+
 hooks:
   ApplicationStart:
     - location: scripts/start-server.sh
