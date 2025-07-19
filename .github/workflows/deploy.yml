@@ -56,8 +56,9 @@ jobs:
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.tar.gz s3://talkpick-server/$GITHUB_SHA.tar.gz
 
       - name: CODEDEPLOY - Create Deployment to EC2 ============
-        run: aws deploy create-deployment \
-          --application-name talkpick-server \
-          --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --deployment-group-name Production \
-          --s3-location bucket=talkpick-server,bundleType=tgz,key=$GITHUB_SHA.tar.gz
+        run: |
+          aws deploy create-deployment \
+            --application-name talkpick-server \
+            --deployment-config-name CodeDeployDefault.AllAtOnce \
+            --deployment-group-name Production \
+            --s3-location "bucket=talkpick-server,bundleType=tgz,key=$GITHUB_SHA.tar.gz"
