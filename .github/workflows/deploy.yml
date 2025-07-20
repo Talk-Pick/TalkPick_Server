@@ -59,7 +59,12 @@ jobs:
           chmod 644 docker-compose.yml
 
       - name: ☁️ AWS - Compress for CodeDeploy ☁️
-        run: tar -czvf $GITHUB_SHA.tar.gz appspec.yml scripts docker-compose.yml .env
+        run: |
+          mkdir -p deploy-files
+          cp docker-compose.yml .env -t deploy-files
+          cp -r scripts deploy-files
+          cp src/main/resources/application*.yml deploy-files
+          tar -czvf $GITHUB_SHA.tar.gz -C deploy-files .
 
       - name: ☁️ AWS - Upload Archive to S3 ☁️
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.tar.gz s3://talkpick-server/$GITHUB_SHA.tar.gz
