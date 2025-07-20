@@ -21,6 +21,9 @@ jobs:
       - name: 🔗 CONFIG - Create application.yml 🔗
         run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application.yml
 
+      - name: 🔗 CONFIG - Create application.yml 🔗
+        run: echo "${{ secrets.APPLICATION_PROD_PROPERTIES }}" > ./src/main/resources/application-prod.yml
+
       - name: 🔗 CONFIG - Create .env 🔗
         run: |
           touch .env
@@ -56,7 +59,7 @@ jobs:
           chmod 644 docker-compose.yml
 
       - name: ☁️ AWS - Compress for CodeDeploy ☁️
-        run: tar -czvf $GITHUB_SHA.tar.gz appspec.yml scripts docker-compose.yml
+        run: tar -czvf $GITHUB_SHA.tar.gz appspec.yml scripts docker-compose.yml .env
 
       - name: ☁️ AWS - Upload Archive to S3 ☁️
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.tar.gz s3://talkpick-server/$GITHUB_SHA.tar.gz

@@ -9,6 +9,8 @@ services:
       - "8080:8080"
     networks:
       - talk-pick-network
+    env_file:
+      - .env
 
   ## redis
   redis:
