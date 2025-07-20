@@ -16,8 +16,8 @@ import talkPick.global.response.ErrorResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     private final ObjectMapper objectMapper;
 

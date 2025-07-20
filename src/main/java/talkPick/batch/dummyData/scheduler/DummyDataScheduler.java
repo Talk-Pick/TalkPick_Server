@@ -19,7 +19,6 @@ import talkPick.domain.topic.domain.*;
 import talkPick.domain.topic.domain.type.CategoryGroup;
 import talkPick.domain.topic.domain.type.Keyword;
 import talkPick.global.model.TalkPickStatus;
-import talkPick.global.security.jwt.util.JwtProvider;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -27,7 +26,6 @@ import java.util.concurrent.ThreadLocalRandom;
 @Component
 @RequiredArgsConstructor
 public class DummyDataScheduler {
-    private final JwtProvider jwtProvider;
     private final CategoryJpaRepository categoryJpaRepository;
     private final TopicJpaRepository topicJpaRepository;
     private final TopicStatJpaRepository topicStatJpaRepository;
@@ -49,14 +47,8 @@ public class DummyDataScheduler {
     );
 
 
-    @PostConstruct
+//    @PostConstruct
     public void generateDummyData() {
-        //TODO Member 더미 데이터 + JWT 토큰 만들어야 함.
-        Member member = saveDummyMember();
-        var accessToken = jwtProvider.createJwt(member.getId(), String.valueOf(Role.MEMBER));
-
-        System.out.println("[JWT Dummy Data] " + "UserId : " + accessToken.userId() + " AccessToken : " + accessToken.accessToken());
-
         List<Category> categories = saveCategories();
 
         generateTopicDummyData(categories);
