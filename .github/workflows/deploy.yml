@@ -61,7 +61,7 @@ jobs:
       - name: ☁️ AWS - Compress for CodeDeploy ☁️
         run: |
           mkdir -p deploy-files
-          cp docker-compose.yml .env -t deploy-files
+          cp appspec.yml docker-compose.yml .env -t deploy-files
           cp -r scripts deploy-files
           cp src/main/resources/application*.yml deploy-files
           tar -czvf $GITHUB_SHA.tar.gz -C deploy-files .
