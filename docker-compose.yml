@@ -15,8 +15,7 @@ services:
       - ./application.yml:/app/config/application.yml
       - ./application-prod.yml:/app/config/application-prod.yml
     environment:
-      - SPRING_CONFIG_LOCATION=classpath:/,classpath:/config/,file:/app/config/
-
+      - SPRING_CONFIG_LOCATION=optional:classpath:/,optional:classpath:/config/,file:/app/config/
   ## redis
   redis:
     image: redis:latest
