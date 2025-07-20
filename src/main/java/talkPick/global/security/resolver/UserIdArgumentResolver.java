@@ -13,10 +13,7 @@ import talkPick.global.security.annotation.UserId;
 public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        //UserId 어노테이션을 parameter가 가지고 있는지 확인
         var isParamHasUserIdAnnotation = parameter.hasParameterAnnotation(UserId.class);
-
-        //parameter의 타입이 Long인지 확인
         var isParamLongType = Long.class.equals(parameter.getParameterType());
         return isParamHasUserIdAnnotation && isParamLongType;
     }

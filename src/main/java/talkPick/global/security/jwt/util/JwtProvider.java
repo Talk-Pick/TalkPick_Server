@@ -5,8 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import talkPick.global.exception.ErrorCode;
+import talkPick.global.security.exception.RoleNotFoundException;
 import talkPick.global.security.jwt.dto.JwtResDTO;
 import talkPick.global.util.CookieUtil;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -26,8 +29,8 @@ public class JwtProvider {
     }
 
     public Long getUserIdFromToken(String token) {
-        var subject = jwtGenerator.parseToken(token).getBody().getSubject();
         try {
+            var subject = jwtGenerator.parseToken(token).getBody().getSubject();
             return Long.parseLong(subject);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException(String.valueOf(ErrorCode.TOKEN_SUBJECT_NOT_NUMERIC_STRING));
@@ -35,9 +38,14 @@ public class JwtProvider {
     }
 
     public String getRoleFromToken(String token) {
-        return jwtGenerator.parseToken(token).getBody().get("role", String.class);
-    }
+        List<String> roles = jwtGenerator.parseToken(token).getBody().get("roles", List.class);
 
+        if (roles == null || roles.isEmpty()) {
+            throw new RoleNotFoundException(ErrorCode.ROLE_NOT_FOUND);
+        }
+
+        return roles.getFirst();
+    }
     /**
      * JWT 토큰을 쿠키에 추가하는 메소드
      * @param response HTTP 응답 객체

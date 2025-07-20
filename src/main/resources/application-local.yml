@@ -1,6 +1,7 @@
 jwt:
   secret: ${JWT_SECRET}
   accessTokenExpireTime: ${JWT_ACCESS_EXPIRE_TIME}
+  refreshTokenExpireTime: ${JWT_REFRESH_EXPIRE_TIME}
 
 server:
   port: ${SERVER_PORT}
@@ -43,7 +44,7 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
     org.springframework.web.cors: debug
-    org.apache.coyote.http11: debug
+#    org.apache.coyote.http11: trace
 
 management:
   endpoint:

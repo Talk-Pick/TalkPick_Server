@@ -1,8 +1,8 @@
 package talkPick.global.security.jwt.util;
 
-
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -10,12 +10,12 @@ import talkPick.global.exception.ErrorCode;
 import talkPick.global.security.exception.UnauthorizedException;
 import talkPick.global.security.jwt.JwtProperties;
 import talkPick.global.security.jwt.dto.JwtResDTO;
-
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -30,12 +30,14 @@ public class JwtGenerator {
         var accessToken = Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setSubject(String.valueOf(userId))
-                .claim("role", role)
+                .claim("roles", List.of(role))
                 .setIssuedAt(convertToDate(now))
                 .setExpiration(convertToDate(expireDate))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
 
+        log.info("[AccessToken 생성] {}", accessToken);
+        log.info("[UserId, Role] [{}, {}]", userId, role);
         return JwtResDTO.AccessToken.of(userId, role, accessToken, expireDate);
     }
 
@@ -58,13 +60,15 @@ public class JwtGenerator {
     public Jws<Claims> parseToken(String token) {
         try {
             var jwtParser = getJwtParser();
-            return jwtParser.parseClaimsJws(token);
+            return jwtParser.parseClaimsJws(token.trim());
         } catch (ExpiredJwtException e) {
             throw new UnauthorizedException(ErrorCode.EXPIRED_ACCESS_TOKEN);
         } catch (UnsupportedJwtException e) {
             throw new UnauthorizedException(ErrorCode.UNSUPPORTED_TOKEN_TYPE);
+        } catch (SignatureException e) {
+            throw new UnauthorizedException(ErrorCode.INVALID_SIGNATURE_TOKEN);
         } catch (Exception e) {
-            log.warn("Expired JWT token: {}", token);
+            e.printStackTrace();
             throw new UnauthorizedException(ErrorCode.MALFORMED_TOKEN);
         }
     }

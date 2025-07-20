@@ -15,5 +15,9 @@ public class TopicReqDTO {
 
     public record TodayTopics(
             List<Long> topicIds
-    ) {}
+    ) {
+        public static TodayTopics of(List<Long> topicIds) {
+            return new TodayTopics((topicIds));
+        }
+    }
 }

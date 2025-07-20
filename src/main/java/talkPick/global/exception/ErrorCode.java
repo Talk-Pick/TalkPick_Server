@@ -56,7 +56,9 @@ public enum ErrorCode {
     JVM_CACHE_REFRESH_FAILED(HttpStatus.BAD_REQUEST, "JVM 캐시 Refresh 중 예외가 발생했습니다."),
 
     // RateLimit
-    RATE_LIMIT_EXCEEDED(HttpStatus.TOO_MANY_REQUESTS, "사용자 요청이 너무 많습니다.");
+    RATE_LIMIT_EXCEEDED(HttpStatus.TOO_MANY_REQUESTS, "사용자 요청이 너무 많습니다."),
+
+    ROLE_NOT_FOUND(HttpStatus.BAD_REQUEST, "Role이 존재하지 않습니다.");
 
     private final HttpStatus status;
     private final String message;
