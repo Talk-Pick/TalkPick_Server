@@ -13,7 +13,7 @@ public class TodayTopicCommandRepositoryAdapter implements TodayTopicCommandRepo
     private final TodayTopicQuerydslRepository todayTopicQuerydslRepository;
 
     @Override
-    public List<TodayTopicResDTO.TopicSummaries> findTodayTopicSummaries(Long userId) {
-        return todayTopicQuerydslRepository.findTodayTopicSummaries(userId);
+    public List<TodayTopicResDTO.TopicSummaries> findTodayTopicSummaries(Long memberId) {
+        return todayTopicQuerydslRepository.findTodayTopicSummaries(memberId);
     }
 }

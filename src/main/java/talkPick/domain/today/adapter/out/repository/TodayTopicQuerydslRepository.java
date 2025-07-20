@@ -38,7 +38,7 @@ public class TodayTopicQuerydslRepository {
                 .fetch();
     }
 
-    public List<TodayTopicResDTO.TopicSummaries> findTodayTopicSummaries(Long userId) {
+    public List<TodayTopicResDTO.TopicSummaries> findTodayTopicSummaries(Long memberId) {
         return null;
     }
 }

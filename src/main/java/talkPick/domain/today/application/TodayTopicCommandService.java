@@ -15,7 +15,11 @@ public class TodayTopicCommandService implements TodayTopicCommandUseCase {
 
     @Override
     public List<TodayTopicResDTO.TopicSummaries> getTodayTopicSummaries(Long userId) {
-        // 새로고침이 가능한 지 확인
+        //TODO 오늘 저장한 topic개수가 10개인지 확인(새로고침 1번까지만 가능) 만약 10개 초과면 불가 x
+
+        //TODO 오늘 조회한 TodayTopic들 다 가져와서 이를 제외하고 topic 5개 조회
+
+        //TODO 조회한 5개 테이블에 저장
         return todayTopicCommandRepositoryPort.findTodayTopicSummaries(userId);
     }
 }
