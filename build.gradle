@@ -88,8 +88,10 @@ dependencies {
     implementation 'org.springframework.security:spring-security-crypto'
 
     // Monitoring
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    // Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     // WebFlux
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
