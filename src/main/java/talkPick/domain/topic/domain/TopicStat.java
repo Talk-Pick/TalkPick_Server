@@ -58,6 +58,7 @@ public class TopicStat {
                 .teenCount(0)
                 .twentiesCount(0)
                 .thirtiesCount(0)
+                .fortiesCount(0)
                 .fiftiesCount(0)
                 .maleCount(0)
                 .femaleCount(0)
