@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
@@ -19,11 +20,11 @@ public interface RandomCommandApi {
 
     @PostMapping("/select-category")
     @Operation(summary = "랜덤 토픽 3 : 카테고리 선택 API", description = "랜덤 토픽 3 : 카테고리 선택 API 입니다.")
-    List<RandomResDTO.RandomTopic> selectByCategories(@UserId final Long memberId, RandomReqDTO.SelectCategory requestDTO);
+    List<RandomResDTO.RandomTopic> selectByCategories(@UserId final Long memberId, @RequestBody RandomReqDTO.SelectByCategory requestDTO);
 
     @PostMapping("/select-topic")
     @Operation(summary = "랜덤 토픽 5 : 토픽 선택 API", description = "랜덤 토픽 5 : 토픽 선택 API 입니다.")
-    List<RandomResDTO.RandomTopic> selectByTopics(@UserId final Long memberId, RandomReqDTO.SelectTopic requestDTO);
+    List<RandomResDTO.RandomTopic> selectByTopics(@UserId final Long memberId, @RequestBody RandomReqDTO.SelectByTopic requestDTO);
 
     @PostMapping("/{randomId}/quit")
     @Operation(summary = "랜덤 토픽 6 : 랜덤 토픽 그만하기 API", description = "랜덤 토픽 6 : 랜덤 토픽 그만하기 API 입니다.")
@@ -35,5 +36,5 @@ public interface RandomCommandApi {
 
     @PostMapping("/{randomId}/save-result")
     @Operation(summary = "랜덤 토픽 8 : 랜덤 토픽 결과 저장 API", description = "랜덤 토픽 8 : 랜덤 토픽 결과 저장 API 입니다.")
-    void saveResult(@UserId Long memberId, @PathVariable("randomId") Long randomId, RandomReqDTO.Result requestDTO);
+    void saveResult(@UserId Long memberId, @PathVariable("randomId") Long randomId, @RequestBody RandomReqDTO.Result requestDTO);
 }

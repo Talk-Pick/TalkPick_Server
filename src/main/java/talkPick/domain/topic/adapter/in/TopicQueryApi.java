@@ -7,7 +7,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
+import org.springframework.web.bind.annotation.RequestParam;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import talkPick.global.security.annotation.UserId;
 import java.util.List;
@@ -25,7 +25,7 @@ public interface TopicQueryApi {
 
     @GetMapping("/today-topic-details")
     @Operation(summary = "오늘의 토픽 5개 상세 조회 API", description = "오늘의 토픽 5개 상세 조회 API 입니다.")
-    List<TopicResDTO.TopicDetail> getTodayTopicDetails(TopicReqDTO.TodayTopics requestDTO);
+    List<TopicResDTO.TopicDetail> getTodayTopicDetails(@RequestParam List<Long> topicIds);
 
     @GetMapping("/{topicId}")
     @Operation(summary = "토픽 상세 조회 API", description = "토픽 상세 조회 API 입니다.")

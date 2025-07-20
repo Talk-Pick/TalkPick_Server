@@ -3,8 +3,7 @@ package talkPick.domain.random.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
-import talkPick.domain.topic.domain.type.CategoryGroup;
-import talkPick.domain.topic.domain.type.Keyword;
+
 import java.time.LocalDateTime;
 
 @Getter
@@ -25,7 +24,7 @@ public class RandomTopicHistory {
     private LocalDateTime startAt;
     private LocalDateTime endAt;
 
-    public static RandomTopicHistory ofByCategory(final Long memberId, RandomReqDTO.SelectCategory requestDTO) {
+    public static RandomTopicHistory ofByCategory(final Long memberId, RandomReqDTO.SelectByCategory requestDTO) {
         return RandomTopicHistory.builder()
                 .memberId(memberId)
                 .randomId(requestDTO.randomId())
@@ -36,7 +35,7 @@ public class RandomTopicHistory {
                 .build();
     }
 
-    public static RandomTopicHistory ofByTopic(final Long memberId, RandomReqDTO.SelectTopic requestDTO) {
+    public static RandomTopicHistory ofByTopic(final Long memberId, RandomReqDTO.SelectByTopic requestDTO) {
         return RandomTopicHistory.builder()
                 .memberId(memberId)
                 .randomId(requestDTO.randomId())

@@ -37,7 +37,7 @@ public class RandomCommandService implements RandomCommandUseCase {
      *  JVM Cache -> 모든 Topic 데이터
      **/
     @Override
-    public List<RandomResDTO.RandomTopic> selectByCategories(Long memberId, RandomReqDTO.SelectCategory requestDTO) {
+    public List<RandomResDTO.RandomTopic> selectByCategories(Long memberId, RandomReqDTO.SelectByCategory requestDTO) {
         randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, requestDTO.randomId()).start();
         randomTopicCommandRepositoryPort.saveByCategory(memberId, requestDTO);
 
@@ -47,7 +47,7 @@ public class RandomCommandService implements RandomCommandUseCase {
     }
 
     @Override
-    public List<RandomResDTO.RandomTopic> selectByTopics(Long memberId, RandomReqDTO.SelectTopic requestDTO) {
+    public List<RandomResDTO.RandomTopic> selectByTopics(Long memberId, RandomReqDTO.SelectByTopic requestDTO) {
         randomTopicCommandRepositoryPort.saveByTopic(memberId, requestDTO);
 
         // TODO 추후 LLM 서버 적용 시, 사용할 예정

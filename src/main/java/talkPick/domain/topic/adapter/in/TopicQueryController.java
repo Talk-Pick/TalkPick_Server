@@ -3,6 +3,7 @@ package talkPick.domain.topic.adapter.in;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import talkPick.domain.topic.port.in.TopicQueryUseCase;
 import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
@@ -25,8 +26,8 @@ public class TopicQueryController implements TopicQueryApi {
     }
 
     @Override
-    public List<TopicResDTO.TopicDetail> getTodayTopicDetails(TopicReqDTO.TodayTopics requestDTO) {
-        return topicQueryUseCase.getTodayTopicDetails(requestDTO);
+    public List<TopicResDTO.TopicDetail> getTodayTopicDetails(List<Long> topicIds) {
+        return topicQueryUseCase.getTodayTopicDetails(TopicReqDTO.TodayTopics.of(topicIds));
     }
 
     @Override

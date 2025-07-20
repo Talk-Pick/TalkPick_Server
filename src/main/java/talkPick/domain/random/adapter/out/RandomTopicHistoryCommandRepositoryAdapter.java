@@ -13,12 +13,12 @@ public class RandomTopicHistoryCommandRepositoryAdapter implements RandomTopicHi
     private final RandomTopicHistoryJpaRepository selectedRandomTopicJpaRepository;
 
     @Override
-    public RandomTopicHistory saveByCategory(Long memberId, RandomReqDTO.SelectCategory requestDTO) {
+    public RandomTopicHistory saveByCategory(Long memberId, RandomReqDTO.SelectByCategory requestDTO) {
         return selectedRandomTopicJpaRepository.save(RandomTopicHistory.ofByCategory(memberId, requestDTO));
     }
 
     @Override
-    public RandomTopicHistory saveByTopic(Long memberId, RandomReqDTO.SelectTopic selectTopic) {
-        return selectedRandomTopicJpaRepository.save(RandomTopicHistory.ofByTopic(memberId, selectTopic));
+    public RandomTopicHistory saveByTopic(Long memberId, RandomReqDTO.SelectByTopic selectByTopic) {
+        return selectedRandomTopicJpaRepository.save(RandomTopicHistory.ofByTopic(memberId, selectByTopic));
     }
 }
