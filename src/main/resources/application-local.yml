@@ -53,7 +53,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "prometheus"
+        include: health, prometheus
 
 kakao:
   client-id: ${KAKAO_CLIENT_ID}
@@ -71,3 +71,6 @@ resilience4j:
         slidingWindowSize: 10
         failureRateThreshold: 50
         waitDurationInOpenState: 10s
+
+healthcheck:
+  url: ${HEALTH_CHECK_URL}

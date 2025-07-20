@@ -58,6 +58,11 @@ public enum ErrorCode {
     // RateLimit
     RATE_LIMIT_EXCEEDED(HttpStatus.TOO_MANY_REQUESTS, "사용자 요청이 너무 많습니다."),
 
+    // Health Check
+    DB_HEALTH_CHECK_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "DB 연결 실패 에러입니다."),
+    URL_HEALTH_CHECK_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "URL 연결 실패 에러입니다."),
+
+    // Role
     ROLE_NOT_FOUND(HttpStatus.BAD_REQUEST, "Role이 존재하지 않습니다.");
 
     private final HttpStatus status;

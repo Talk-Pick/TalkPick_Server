@@ -19,6 +19,7 @@ public final class WhiteList {
             "/swagger-resources/**",
             "/v3/api-docs/**",
             "/favicon.ico",
-            "/test"
+            "/test",
+            "/actuator/health/**"
     };
 }
