@@ -35,9 +35,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         final var accessToken = getAccessToken(request);
-        final var userId = jwtProvider.getUserIdFromToken(accessToken);
+        final var memberId = jwtProvider.getMemberIdFromToken(accessToken);
         final var role = jwtProvider.getRoleFromToken(accessToken);
-        doAuthentication(accessToken, userId, role);
+        doAuthentication(accessToken, memberId, role);
         filterChain.doFilter(request, response);
     }
 
@@ -49,8 +49,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         throw new UnauthorizedException(ErrorCode.UNAUTHORIZED);
     }
 
-    private void doAuthentication(final String token, final Long userId, final String role) {
-        var tokenAuthentication = TokenAuthentication.createTokenAuthentication(token, userId, role);
+    private void doAuthentication(final String token, final Long memberId, final String role) {
+        var tokenAuthentication = TokenAuthentication.createTokenAuthentication(token, memberId, role);
         var securityContext = SecurityContextHolder.getContext();
         securityContext.setAuthentication(tokenAuthentication);
     }

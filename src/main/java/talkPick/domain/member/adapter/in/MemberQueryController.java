@@ -86,7 +86,7 @@ public class MemberQueryController implements MemberQueryApi {
      */
     @GetMapping("/topic")
     @Tag(name = "홈 화면")
-    public MemberKakaoResDTO getUserInfoFromToken(HttpServletRequest request) {
+    public MemberKakaoResDTO getMemberInfoFromToken(HttpServletRequest request) {
         String accessToken = cookieUtil.getCookieValue(request, "access_token");
 
         if (accessToken == null) {
@@ -96,7 +96,7 @@ public class MemberQueryController implements MemberQueryApi {
 
         try {
             // 토큰에서 사용자 ID 추출
-            Long memberId = jwtProvider.getUserIdFromToken(accessToken);
+            Long memberId = jwtProvider.getMemberIdFromToken(accessToken);
 
             // 사용자 정보 조회
             Optional<Member> memberOpt = memberQueryService.findById(memberId);

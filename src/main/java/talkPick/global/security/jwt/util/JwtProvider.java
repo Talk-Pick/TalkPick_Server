@@ -21,14 +21,14 @@ public class JwtProvider {
     @Value("${app.secure-cookie:false}")
     private boolean secureCookie;
 
-    public JwtResDTO.Login createJwt(final Long userId, final String role) {
+    public JwtResDTO.Login createJwt(final Long memberId, final String role) {
         return JwtResDTO.Login.of(
-                jwtGenerator.generateAccessToken(userId, role),
-                refreshTokenGenerator.generateRefreshToken(userId, role)
+                jwtGenerator.generateAccessToken(memberId, role),
+                refreshTokenGenerator.generateRefreshToken(memberId, role)
         );
     }
 
-    public Long getUserIdFromToken(String token) {
+    public Long getMemberIdFromToken(String token) {
         try {
             var subject = jwtGenerator.parseToken(token).getBody().getSubject();
             return Long.parseLong(subject);

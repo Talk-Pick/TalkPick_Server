@@ -7,13 +7,13 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import talkPick.global.security.annotation.UserId;
+import talkPick.global.security.annotation.MemberId;
 
 @Component
-public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
+public class MemberIdArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        var isParamHasUserIdAnnotation = parameter.hasParameterAnnotation(UserId.class);
+        var isParamHasUserIdAnnotation = parameter.hasParameterAnnotation(MemberId.class);
         var isParamLongType = Long.class.equals(parameter.getParameterType());
         return isParamHasUserIdAnnotation && isParamLongType;
     }

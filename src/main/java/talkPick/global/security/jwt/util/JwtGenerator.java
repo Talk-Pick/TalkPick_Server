@@ -23,13 +23,13 @@ import java.util.List;
 public class JwtGenerator {
     private final JwtProperties jwtProperties;
 
-    public JwtResDTO.AccessToken generateAccessToken(final long userId, final String role) {
+    public JwtResDTO.AccessToken generateAccessToken(final long memberId, final String role) {
         final var now = LocalDateTime.now();
         final var expireDate = generateExpirationDate(now);
 
         var accessToken = Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-                .setSubject(String.valueOf(userId))
+                .setSubject(String.valueOf(memberId))
                 .claim("roles", List.of(role))
                 .setIssuedAt(convertToDate(now))
                 .setExpiration(convertToDate(expireDate))
@@ -37,8 +37,8 @@ public class JwtGenerator {
                 .compact();
 
         log.info("[AccessToken 생성] {}", accessToken);
-        log.info("[UserId, Role] [{}, {}]", userId, role);
-        return JwtResDTO.AccessToken.of(userId, role, accessToken, expireDate);
+        log.info("[MemberId, Role] [{}, {}]", memberId, role);
+        return JwtResDTO.AccessToken.of(memberId, role, accessToken, expireDate);
     }
 
     private LocalDateTime generateExpirationDate(final LocalDateTime now) {

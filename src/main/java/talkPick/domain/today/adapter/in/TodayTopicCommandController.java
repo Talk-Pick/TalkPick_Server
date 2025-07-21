@@ -12,7 +12,7 @@ public class TodayTopicCommandController implements TodayTopicCommandApi {
     private final TodayTopicCommandUseCase todayTopicCommandUseCase;
 
     @Override
-    public List<TodayTopicResDTO.TopicSummaries> getTodayTopicSummaries(Long userId) {
-        return todayTopicCommandUseCase.getTodayTopicSummaries(userId);
+    public List<TodayTopicResDTO.TopicSummaries> getTodayTopicSummaries(Long memberId) {
+        return todayTopicCommandUseCase.getTodayTopicSummaries(memberId);
     }
 }
