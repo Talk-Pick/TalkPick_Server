@@ -12,9 +12,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TodayTopicQueryRepositoryAdapter implements TodayTopicQueryRepositoryPort {
     private final TodayTopicQuerydslRepository todayTopicQuerydslRepository;
-
-    @Override
-    public List<TodayTopicResDTO.TopicDetail> findTodayTopicDetails(TodayTopicReqDTO.TodayTopics requestDTO) {
-        return todayTopicQuerydslRepository.findTopicDetailsByIds(requestDTO);
-    }
+//
+//    @Override
+//    public List<TodayTopicResDTO.TopicDetail> findTodayTopicDetails(TodayTopicReqDTO.TodayTopics requestDTO) {
+//        return todayTopicQuerydslRepository.findTopicDetailsByIds(requestDTO);
+//    }
 }

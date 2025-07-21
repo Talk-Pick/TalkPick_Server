@@ -17,4 +17,11 @@ public class TodayTopic {
     private Long id;
     private Long memberId;
     private Long topicId;
+
+    public static TodayTopic of(Long memberId, Long topicId) {
+        return TodayTopic.builder()
+                .memberId(memberId)
+                .topicId(topicId)
+                .build();
+    }
 }

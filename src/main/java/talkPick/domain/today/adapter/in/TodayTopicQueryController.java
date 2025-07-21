@@ -12,8 +12,8 @@ import java.util.List;
 public class TodayTopicQueryController implements TodayTopicQueryApi {
     private final TodayTopicQueryUseCase todayTopicQueryUseCase;
 
-    @Override
-    public List<TodayTopicResDTO.TopicDetail> getTodayTopicDetails(List<Long> topicIds) {
-        return todayTopicQueryUseCase.getTodayTopicDetails(TodayTopicReqDTO.TodayTopics.of(topicIds));
-    }
+//    @Override
+//    public List<TodayTopicResDTO.TopicDetail> getTodayTopicDetails(List<Long> topicIds) {
+//        return todayTopicQueryUseCase.getTodayTopicDetails(TodayTopicReqDTO.TodayTopics.of(topicIds));
+//    }
 }

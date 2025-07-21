@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/api/v1/topic")
 @Tag(name = "톡픽 API", description = "톡픽 관련 API 입니다.")
 public interface TodayTopicQueryApi {
-    @GetMapping("/today-topic-details")
-    @Operation(summary = "오늘의 토픽 5개 상세 조회 API", description = "오늘의 토픽 5개 상세 조회 API 입니다.")
-    List<TodayTopicResDTO.TopicDetail> getTodayTopicDetails(@RequestParam List<Long> topicIds);
+//    @GetMapping("/today-topic-details")
+//    @Operation(summary = "오늘의 토픽 5개 상세 조회 API", description = "오늘의 토픽 5개 상세 조회 API 입니다.")
+//    List<TodayTopicResDTO.TopicDetail> getTodayTopicDetails(@RequestParam List<Long> topicIds);
 }

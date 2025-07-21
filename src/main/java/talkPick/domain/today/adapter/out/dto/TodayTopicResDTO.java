@@ -11,17 +11,17 @@ public class TodayTopicResDTO {
             long averageTalkTime,
             int selectCount,
             String category,
-            CategoryGroup categoryGroup,
             Keyword keyword
     ) {}
-    public record TopicDetail(
-            Long topicId,
-            String title,
-            String thumbnail,
-            long averageTalkTime,
-            int selectCount,
-            String category,
-            CategoryGroup categoryGroup,
-            Keyword keyword
-    ) {}
+//    public record TopicDetail(
+//            Long topicId,
+//            String title,
+//            String detail,
+//            String thumbnail,
+//            long averageTalkTime,
+//            int selectCount,
+//            String category,
+//            CategoryGroup categoryGroup,
+//            Keyword keyword
+//    ) {}
 }

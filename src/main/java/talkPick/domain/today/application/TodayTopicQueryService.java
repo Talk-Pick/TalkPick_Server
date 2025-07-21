@@ -13,8 +13,8 @@ import java.util.List;
 public class TodayTopicQueryService implements TodayTopicQueryUseCase {
     private final TodayTopicQueryRepositoryPort todayTopicQueryRepositoryPort;
 
-    @Override
-    public List<TodayTopicResDTO.TopicDetail> getTodayTopicDetails(TodayTopicReqDTO.TodayTopics requestDTO) {
-        return todayTopicQueryRepositoryPort.findTodayTopicDetails(requestDTO);
-    }
+//    @Override
+//    public List<TodayTopicResDTO.TopicDetail> getTodayTopicDetails(TodayTopicReqDTO.TodayTopics requestDTO) {
+//        return todayTopicQueryRepositoryPort.findTodayTopicDetails(requestDTO);
+//    }
 }
