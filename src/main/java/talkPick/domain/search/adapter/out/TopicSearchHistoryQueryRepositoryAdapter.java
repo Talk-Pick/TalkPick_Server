@@ -17,9 +17,12 @@ public class TopicSearchHistoryQueryRepositoryAdapter implements TopicSearchHist
         //TODO 검색어를 어떻게 저장하고, 어떻게 보여줄 건가..?
         //TODO 구현해야 함.
         return List.of(
-                new TopicSearchResDTO.Recommendation(1, "인공지능"),
-                new TopicSearchResDTO.Recommendation(2, "자기계발"),
-                new TopicSearchResDTO.Recommendation(3, "연애")
+                new TopicSearchResDTO.Recommendation(1, "토스"),
+                new TopicSearchResDTO.Recommendation(2, "올인원 금융 관리"),
+                new TopicSearchResDTO.Recommendation(3, "밸런스 게임"),
+                new TopicSearchResDTO.Recommendation(4, "모바일 간편결제"),
+                new TopicSearchResDTO.Recommendation(5, "신용점수"),
+                new TopicSearchResDTO.Recommendation(6, "연애")
         );
     }
 }
