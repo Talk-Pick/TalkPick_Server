@@ -8,6 +8,6 @@ import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import java.util.List;
 
 public interface AdminTopicQueryUseCase {
-    List<TodayTopicResDTO.TopicSummaries> getTopic(Long userId);
+    List<TodayTopicResDTO.TopicSummaries> getTopic(Long memberId);
     List<TopicResDTO.TopicDetail> getDetailTopic(TodayTopicReqDTO.TodayTopics requestDTO);
 }

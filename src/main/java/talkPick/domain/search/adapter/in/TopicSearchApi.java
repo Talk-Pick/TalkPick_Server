@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import talkPick.domain.search.adapter.out.dto.TopicSearchResDTO;
-import talkPick.global.security.annotation.UserId;
+import talkPick.global.security.annotation.MemberId;
 import java.util.List;
 
 @RequestMapping("/api/v1/search")
@@ -18,7 +18,7 @@ public interface TopicSearchApi {
 
     @GetMapping("")
     @Operation(summary = "토픽 검색 API", description = "토픽 검색 API API 입니다.")
-    List<TopicSearchResDTO.Topic> search(@UserId Long memberId, @RequestParam(required = false) String word);
+    List<TopicSearchResDTO.Topic> search(@MemberId Long memberId, @RequestParam(required = false) String word);
 
     @GetMapping("/recommendations")
     @Operation(summary = "추천 검색어 API", description = "추천 검색어 API API 입니다.")

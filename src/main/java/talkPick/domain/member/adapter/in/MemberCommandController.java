@@ -114,7 +114,7 @@ public class MemberCommandController implements MemberCommandApi {
         if (accessToken != null) {
             try {
                 // 토큰 유효성 검증 (예외가 발생하지 않으면 유효한 토큰)
-                jwtProvider.getUserIdFromToken(accessToken);
+                jwtProvider.getMemberIdFromToken(accessToken);
             } catch (Exception e) {
                 log.error("유효하지 않은 토큰입니다: {}", e.getMessage());
                 response.sendRedirect("/api/v1/oauth/kakao/authorize");

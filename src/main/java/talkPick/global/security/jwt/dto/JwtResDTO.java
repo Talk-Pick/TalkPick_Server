@@ -7,7 +7,7 @@ import java.time.ZoneId;
 
 public class JwtResDTO {
     public record Login(
-            Long userId,
+            Long memberId,
             String role,
             String accessToken,
             String refreshToken,
@@ -16,7 +16,7 @@ public class JwtResDTO {
     ){
         public static Login of(final AccessToken accessToken, final RefreshToken refreshToken) {
             return new Login(
-                    refreshToken.getUserId(),
+                    refreshToken.getMemberId(),
                     refreshToken.getRole(),
                     accessToken.accessToken,
                     refreshToken.getToken(),
@@ -27,14 +27,14 @@ public class JwtResDTO {
     }
 
     public record AccessToken(
-            Long userId,
+            Long memberId,
             String role,
             String accessToken,
             Long accessExpiredTime
     ) {
-        public static AccessToken of(final Long userId, final String role, final String accessToken, final LocalDateTime expiredAt) {
+        public static AccessToken of(final Long memberId, final String role, final String accessToken, final LocalDateTime expiredAt) {
             return new AccessToken(
-                    userId,
+                    memberId,
                     role,
                     accessToken,
                     expiredAt.atZone(ZoneId.systemDefault()).toEpochSecond()

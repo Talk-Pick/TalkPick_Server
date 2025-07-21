@@ -15,11 +15,11 @@ public class TodayTopicCommandService implements TodayTopicCommandUseCase {
     private final TodayTopicCommandRepositoryPort todayTopicCommandRepositoryPort;
 
     @Override
-    public List<TodayTopicResDTO.TopicSummaries> getTodayTopicSummaries(Long userId) {
-        List<TodayTopicResDTO.TopicSummaries> todayTopics = todayTopicCommandRepositoryPort.findTodayTopicSummaries(userId);
+    public List<TodayTopicResDTO.TopicSummaries> getTodayTopicSummaries(Long memberId) {
+        List<TodayTopicResDTO.TopicSummaries> todayTopics = todayTopicCommandRepositoryPort.findTodayTopicSummaries(memberId);
 
         todayTopicCommandRepositoryPort.saveAll(todayTopics.stream()
-                .map(t -> TodayTopic.of(userId, t.topicId()))
+                .map(t -> TodayTopic.of(memberId, t.topicId()))
                 .toList());
 
         return todayTopics;

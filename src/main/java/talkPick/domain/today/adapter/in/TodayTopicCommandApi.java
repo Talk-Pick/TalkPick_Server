@@ -5,8 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import talkPick.domain.today.adapter.out.dto.TodayTopicResDTO;
-import talkPick.global.security.annotation.UserId;
-
+import talkPick.global.security.annotation.MemberId;
 import java.util.List;
 
 @RequestMapping("/api/v1/topic")
@@ -14,5 +13,5 @@ import java.util.List;
 public interface TodayTopicCommandApi {
     @GetMapping("/today-topics")
     @Operation(summary = "오늘의 토픽 5개 조회 API", description = "오늘의 토픽 5개 조회 API 입니다.")
-    List<TodayTopicResDTO.TopicSummaries> getTodayTopicSummaries(@UserId Long userId);
+    List<TodayTopicResDTO.TopicSummaries> getTodayTopicSummaries(@MemberId Long memberId);
 }

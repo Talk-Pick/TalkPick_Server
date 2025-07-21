@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.port.in.RandomCommandUseCase;
-import talkPick.global.security.annotation.UserId;
+import talkPick.global.security.annotation.MemberId;
 import java.util.List;
 
 @RestController
@@ -14,7 +14,7 @@ public class RandomCommandController implements RandomCommandApi {
     private final RandomCommandUseCase randomCommandUseCase;
 
     @Override
-    public void start(@UserId final Long memberId) {
+    public void start(@MemberId final Long memberId) {
         randomCommandUseCase.start(memberId);
     }
 
@@ -29,7 +29,7 @@ public class RandomCommandController implements RandomCommandApi {
     }
 
     @Override
-    public void quit(@UserId Long memberId, Long randomId) {
+    public void quit(@MemberId Long memberId, Long randomId) {
         randomCommandUseCase.quit(memberId, randomId);
     }
 

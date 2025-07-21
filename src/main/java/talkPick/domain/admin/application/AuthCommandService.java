@@ -64,7 +64,7 @@ public class AuthCommandService implements AuthCommandUseCase {
         }
     }
 
-    private JwtResDTO.Login getToken(final Long userId) {
-        return jwtProvider.createJwt(userId, String.valueOf(Role.ADMIN));
+    private JwtResDTO.Login getToken(final Long memberId) {
+        return jwtProvider.createJwt(memberId, String.valueOf(Role.ADMIN));
     }
 }
