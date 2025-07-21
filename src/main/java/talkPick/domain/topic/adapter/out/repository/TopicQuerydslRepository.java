@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
-import talkPick.domain.topic.adapter.in.dto.TopicReqDTO;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import talkPick.domain.topic.dto.TopicCacheDTO;
 import java.util.List;
@@ -41,25 +40,6 @@ public class TopicQuerydslRepository {
         var result = hasNext ? content.subList(0, pageable.getPageSize()) : content;
 
         return new SliceImpl<>(result, pageable, hasNext);
-    }
-
-    public List<TopicResDTO.TopicDetail> findTopicDetailsByIds(TopicReqDTO.TodayTopics requestDTO) {
-        return queryFactory.select(Projections.constructor(TopicResDTO.TopicDetail.class,
-                        topic.id,
-                        topic.title,
-                        topic.thumbnail,
-                        topicStat.averageTalkTime,
-                        topicStat.selectCount,
-                        category.title,
-                        category.categoryGroup,
-                        topicKeyword.keyword
-                ))
-                .from(topic)
-                .leftJoin(category).on(topic.categoryId.eq(category.id))
-                .leftJoin(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
-                .leftJoin(topicStat).on(topic.id.eq(topicStat.topicId))
-                .where(topic.id.in(requestDTO.topicIds()))
-                .fetch();
     }
 
     public TopicResDTO.TopicDetail findTopicDetailById(Long topicId) {

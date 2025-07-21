@@ -4,9 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import talkPick.global.model.BaseTime;
 import talkPick.global.model.TalkPickStatus;
-import talkPick.domain.admin.domain.Admin;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Entity

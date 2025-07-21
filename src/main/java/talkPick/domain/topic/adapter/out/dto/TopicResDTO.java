@@ -8,15 +8,12 @@ public class TopicResDTO {
             Long id,
             String title
     ){}
-    public record TopicSummaries(
-            Long topicId,
+    public record Categories(
+            Long categoryId,
             String title,
-            String icon,
-            long averageTalkTime,
-            int selectCount,
-            String category,
-            CategoryGroup categoryGroup,
-            Keyword keyword
+            String description,
+            String imageUrl,
+            CategoryGroup categoryGroup
     ) {}
     public record TopicDetail(
             Long topicId,
@@ -27,12 +24,5 @@ public class TopicResDTO {
             String category,
             CategoryGroup categoryGroup,
             Keyword keyword
-    ) {}
-    public record Categories(
-            Long categoryId,
-            String title,
-            String description,
-            String imageUrl,
-            CategoryGroup categoryGroup
     ) {}
 }
