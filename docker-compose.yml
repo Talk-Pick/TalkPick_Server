@@ -9,11 +9,10 @@ services:
       - "8080:8080"
     networks:
       - talk-pick-network
-    env_file:
-      - .env
     volumes:
       - ./application.yml:/app/config/application.yml
       - ./application-prod.yml:/app/config/application-prod.yml
+      - ./.env:/app/config/.env
     environment:
       - SPRING_CONFIG_LOCATION=optional:classpath:/,optional:classpath:/config/,file:/app/config/
   ## redis

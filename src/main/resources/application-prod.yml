@@ -11,7 +11,7 @@ server:
 
 spring:
   config:
-    import: optional:file:.env[.properties]
+    import: optional:file:/app/config/.env[.properties]
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${RDS_DB_HOST}:${RDS_DB_PORT}/${RDS_DB_NAME}
