@@ -21,13 +21,15 @@ jobs:
       - name: 🔗 CONFIG - Create application.yml 🔗
         run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application.yml
 
-      - name: 🔗 CONFIG - Create application.yml 🔗
+      - name: 🔗 CONFIG - Create application-prod.yml 🔗
         run: echo "${{ secrets.APPLICATION_PROD_PROPERTIES }}" > ./src/main/resources/application-prod.yml
 
       - name: 🔗 CONFIG - Create .env 🔗
         run: |
-          touch .env
-          echo '${{ secrets.ENV }}' >> .env
+          cat <<EOF > .env
+          ${{ secrets.ENV }}
+          EOF
+          echo ".env 파일 생성했습니다."
 
       - name: ⏳ BUILD - Run Test & Build JAR ⏳
         run: ./gradlew clean build
