@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 import talkPick.domain.search.adapter.out.dto.TopicSearchResDTO;
 import talkPick.domain.search.port.in.TopicSearchQueryUseCase;
 import talkPick.domain.search.port.out.TopicSearchHistoryCommandRepositoryPort;
@@ -48,7 +47,7 @@ public class TopicSearchQueryService implements TopicSearchQueryUseCase {
 //        Object txResource = TransactionSynchronizationManager.getResource("javax.persistence.EntityManager");
 //        log.info("[Search] thread = {}, tx active = {}, tx resource = {}", threadName, isActive, txResource);
         var cachedTopics = topicCacheManager.getAll();
-        var normalizedWord = word.toLowerCase();
+        var normalizedWord = word == null ? "" : word.trim().toLowerCase();
 
         var result = cachedTopics.stream()
                 .filter(topic -> containsWord(topic, normalizedWord))
@@ -70,11 +69,8 @@ public class TopicSearchQueryService implements TopicSearchQueryUseCase {
     private boolean containsWord(TopicCacheDTO topic, String word) {
         return Stream.of(
                         topic.getTitle(),
-                        topic.getDetail(),
-                        topic.getKeyword(),
-                        topic.getCategoryGroup(),
                         topic.getCategoryTitle(),
-                        topic.getCategoryDescription()
+                        topic.getKeyword()
                 )
                 .filter(Objects::nonNull)
                 .map(String::toLowerCase)
