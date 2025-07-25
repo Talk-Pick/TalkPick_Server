@@ -24,13 +24,6 @@ jobs:
       - name: 🔗 CONFIG - Create application-prod.yml 🔗
         run: echo "${{ secrets.APPLICATION_PROD_PROPERTIES }}" > ./src/main/resources/application-prod.yml
 
-      - name: 🔗 CONFIG - Create .env 🔗
-        run: |
-          cat <<EOF > .env
-          ${{ secrets.ENV }}
-          EOF
-          echo ".env 파일 생성했습니다."
-
       - name: ⏳ BUILD - Run Test & Build JAR ⏳
         run: ./gradlew clean build
 
@@ -63,7 +56,7 @@ jobs:
       - name: ☁️ AWS - Compress for CodeDeploy ☁️
         run: |
           mkdir -p deploy-files
-          cp appspec.yml docker-compose.yml .env -t deploy-files
+          cp appspec.yml docker-compose.yml -t deploy-files
           cp -r scripts deploy-files
           cp src/main/resources/application*.yml deploy-files
           tar -czvf $GITHUB_SHA.tar.gz -C deploy-files .

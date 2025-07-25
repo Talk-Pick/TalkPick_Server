@@ -12,7 +12,7 @@ services:
     volumes:
       - ./application.yml:/app/config/application.yml
       - ./application-prod.yml:/app/config/application-prod.yml
-      - ./.env:/app/config/.env
+      - ./env/.env:/app/config/.env
     environment:
       - SPRING_CONFIG_LOCATION=optional:classpath:/,optional:classpath:/config/,file:/app/config/
   ## redis

@@ -53,7 +53,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "prometheus"
+        include: 'prometheus'
 
 kakao:
   client-id: ${KAKAO_CLIENT_ID}
