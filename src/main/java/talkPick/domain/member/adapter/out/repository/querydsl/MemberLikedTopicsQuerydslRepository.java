@@ -4,12 +4,11 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import talkPick.domain.member.adapter.in.dto.MemberLikedTopicsResDto;
+import talkPick.domain.member.dto.MemberResDto;
 import talkPick.domain.member.port.out.MemberLikedTopicsQueryRepositoryPort;
 import talkPick.domain.topic.domain.QCategory;
 import talkPick.domain.topic.domain.QTopic;
@@ -26,7 +25,7 @@ public class MemberLikedTopicsQuerydslRepository implements MemberLikedTopicsQue
         this.queryFactory = new JPAQueryFactory(em);
     }
     @Override
-    public Page<MemberLikedTopicsResDto> findMemberLikedTopics(Long memberId, Pageable pageable) {
+    public Page<MemberResDto.MemberLikedTopicsResDto> findMemberLikedTopics(Long memberId, Pageable pageable) {
         QMemberTopicHistory mth = QMemberTopicHistory.memberTopicHistory;
         QTopic t = QTopic.topic;
         QCategory c = QCategory.category;
@@ -44,8 +43,8 @@ public class MemberLikedTopicsQuerydslRepository implements MemberLikedTopicsQue
                 .fetchOne();
 
         // 실제 데이터 쿼리
-        List<MemberLikedTopicsResDto> content = queryFactory
-                .select(Projections.constructor(MemberLikedTopicsResDto.class,
+        List<MemberResDto.MemberLikedTopicsResDto> content = queryFactory
+                .select(Projections.constructor(MemberResDto.MemberLikedTopicsResDto.class,
                         t.title,
                         ts.averageTalkTime,
                         ts.selectCount,

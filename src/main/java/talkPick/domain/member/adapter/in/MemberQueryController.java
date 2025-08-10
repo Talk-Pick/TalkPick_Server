@@ -1,17 +1,15 @@
 package talkPick.domain.member.adapter.in;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import talkPick.domain.member.adapter.in.dto.MemberDetailResDto;
-import talkPick.domain.member.adapter.in.dto.MemberLikedTopicsResDto;
-import talkPick.domain.member.adapter.in.dto.MemberTopicResultResDto;
-import talkPick.domain.member.adapter.out.dto.MemberEmailResDTO;
-import talkPick.domain.member.adapter.out.dto.MemberKakaoResDTO;
+import talkPick.domain.member.dto.*;
 import talkPick.domain.member.application.MemberQueryService;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
@@ -35,38 +33,20 @@ public class MemberQueryController implements MemberQueryApi {
     private final CookieUtil cookieUtil;
     private final MemberQueryService memberQueryService;
 
-    //이메일 가입 회원 조회
-    @GetMapping("/members/email")
-    @ResponseBody
-    public List<MemberEmailResDTO> getEmailMembers() {
-        List<MemberEmailResDTO> memberEmailResDtoList = memberQueryUseCase.getEmailMembers();
-        return memberEmailResDtoList;
-    }
-
-    //카카오 가입 회원 조회
-    @GetMapping("/members/kakao")
-    @ResponseBody
-    public List<MemberKakaoResDTO> getKakaoMembers() {
-        List<MemberKakaoResDTO> memberKakaoResDTOList = memberQueryUseCase.getkakaoMembers();
-        return memberKakaoResDTOList;
-    }
 
     @GetMapping("/members/me")
-    @ResponseBody
-    public MemberDetailResDto getMemberInfo() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long memberId = Long.parseLong(authentication.getName()); // JWT에서 추출된 사용자 ID
-
-        MemberDetailResDto memberInfo = memberQueryUseCase.getMemberInfo(memberId);
-        return memberInfo;
+    @Operation(summary = "마이페이지 프로필 조회 API", description = "회원의 프로필 정보와 통계를 조회하는 API입니다.")
+    public ResponseEntity<MemberResDto.ProfileResponse> getProfile(
+            @RequestHeader(value = "Authorization", required = false) String authorization) {
+        return ResponseEntity.ok(memberQueryUseCase.getProfile(authorization));
     }
 
     @GetMapping("/members/me/liked-topics")
     @ResponseBody
-    public Page<MemberLikedTopicsResDto> getMemberLikedTopics(Pageable pageable) {
+    public Page<MemberResDto.MemberLikedTopicsResDto> getMemberLikedTopics(Pageable pageable) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long memberId = Long.parseLong(authentication.getName()); // JWT에서 추출된 사용자 ID
-        Page<MemberLikedTopicsResDto> memberLikedTopics = memberQueryUseCase.getMemberLikedTopics(memberId, pageable);
+        Page<MemberResDto.MemberLikedTopicsResDto> memberLikedTopics = memberQueryUseCase.getMemberLikedTopics(memberId, pageable);
         return memberLikedTopics;
     }
 
@@ -74,36 +54,10 @@ public class MemberQueryController implements MemberQueryApi {
     //멤버 캘린더 토픽 결과 조회
     @GetMapping("/members/topic/Results")
     @ResponseBody
-    public Page<MemberTopicResultResDto> getMemberTopicResults(@RequestParam("date") LocalDate date, Pageable pageable) {
+    public Page<MemberResDto.MemberTopicResultResDto> getMemberTopicResults(@RequestParam("date") LocalDate date, Pageable pageable) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long memberId = Long.parseLong(authentication.getName());
-        Page<MemberTopicResultResDto> memberTopicResults = memberQueryUseCase.getMemberTopicResultsByCreatedDate(memberId, date, pageable);
+        Page<MemberResDto.MemberTopicResultResDto> memberTopicResults = memberQueryUseCase.getMemberTopicResultsByCreatedDate(memberId, date, pageable);
         return memberTopicResults;
-    }
-
-    /**
-     * 로그인 이후 화면 (홈화면)에서 사용자 정보를 조회합니다.
-     */
-    @GetMapping("/topic")
-    @Tag(name = "홈 화면")
-    public MemberKakaoResDTO getMemberInfoFromToken(HttpServletRequest request) {
-        String accessToken = cookieUtil.getCookieValue(request, "access_token");
-
-        if (accessToken == null) {
-            log.error("액세스 토큰이 없습니다.");
-            return null;
-        }
-
-        try {
-            // 토큰에서 사용자 ID 추출
-            Long memberId = jwtProvider.getMemberIdFromToken(accessToken);
-
-            // 사용자 정보 조회
-            Optional<Member> memberOpt = memberQueryService.findById(memberId);
-            return memberOpt.map(MemberKakaoResDTO::new).orElse(null);
-        } catch (Exception e) {
-            log.error("토큰 처리 중 오류 발생: {}", e.getMessage(), e);
-            return null;
-        }
     }
 }

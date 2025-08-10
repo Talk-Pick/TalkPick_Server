@@ -4,12 +4,11 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import talkPick.domain.member.adapter.in.dto.MemberTopicResultResDto;
+import talkPick.domain.member.dto.MemberResDto;
 import talkPick.domain.member.port.out.MemberTopicResultQueryRepositoryPort;
 import talkPick.domain.random.domain.QRandom;
 import talkPick.domain.random.domain.type.RandomType;
@@ -25,7 +24,7 @@ public class MemberTopicResultQuerydslRepository implements MemberTopicResultQue
     QRandom random = QRandom.random;
 
     @Override
-    public Page<MemberTopicResultResDto> findMemberTopicResults(Long memberId, LocalDate date, Pageable pageable){
+    public Page<MemberResDto.MemberTopicResultResDto> findMemberTopicResults(Long memberId, LocalDate date, Pageable pageable){
         BooleanExpression condition = random.memberId.eq(memberId)
                 .and(random.createdDate.between(date.atStartOfDay(), date.atTime(23, 59, 59)))
                 .and(random.type.eq(RandomType.COMPLETED));
@@ -36,8 +35,8 @@ public class MemberTopicResultQuerydslRepository implements MemberTopicResultQue
                 .where(condition)
                 .fetchOne();
 
-        List<MemberTopicResultResDto> content = queryFactory
-                .select(Projections.constructor(MemberTopicResultResDto.class,
+        List<MemberResDto.MemberTopicResultResDto> content = queryFactory
+                .select(Projections.constructor(MemberResDto.MemberTopicResultResDto.class,
                         random.id,
                         random.oneLine,
                         random.createdDate))

@@ -8,7 +8,7 @@ import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.port.out.MemberQueryRepositoryPort;
 import talkPick.domain.random.dto.MemberDataDTO;
 import talkPick.global.exception.ErrorCode;
-import talkPick.domain.member.exception.MemberNotFoundException;
+import talkPick.global.exception.handler.MemberHandler;
 
 import java.time.Duration;
 
@@ -35,6 +35,7 @@ public class MemberQueryRepositoryAdaptor implements MemberQueryRepositoryPort {
 
     @Override
     public Member findMemberById(final Long memberId) {
-        return memberJpaRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+        return memberJpaRepository.findById(memberId)
+                .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
     }
 }

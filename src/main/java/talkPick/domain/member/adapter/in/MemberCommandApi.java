@@ -1,17 +1,20 @@
 package talkPick.domain.member.adapter.in;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
-import talkPick.domain.member.adapter.in.dto.MemberEmailReqDto;
-import talkPick.domain.member.adapter.in.dto.MemberMbtiUpdateRequestDto;
-
-import java.io.IOException;
+import org.springframework.web.bind.annotation.RequestHeader;
+import talkPick.domain.member.dto.MemberReqDto;
+import talkPick.domain.member.dto.MemberResDto;
 
 public interface MemberCommandApi {
-
-    ResponseEntity<?> joinEmailMember(@RequestBody MemberEmailReqDto memberReqDto, HttpServletResponse response);
-    void showMbtiForm(HttpServletRequest request, HttpServletResponse response)throws IOException;
-    ResponseEntity<?> updateMemberMbti(@RequestBody MemberMbtiUpdateRequestDto request);
+    ResponseEntity<MemberResDto.LoginTokenResponse> joinEmailMember
+            (@RequestBody MemberReqDto.MemberEmailReqDto memberReqDto);
+    ResponseEntity<MemberResDto.LoginTokenResponse> kakaoOAuth2Login
+            (@RequestBody MemberReqDto.KakaoOAuth2LoginRequest request);
+    ResponseEntity<MemberResDto.MemberSignupResponse> signup
+            (@RequestHeader(value = "Authorization", required = false) String authorization,
+             @RequestBody MemberReqDto.MemberSignupRequest request);
+    ResponseEntity<MemberResDto.TermAgreementResponse> termAgreement(
+            @RequestHeader(value = "Authorization", required = false) String authorization,
+            @RequestBody MemberReqDto.TermAgreementRequest request);
 }

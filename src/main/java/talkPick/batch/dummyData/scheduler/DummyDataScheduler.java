@@ -132,11 +132,10 @@ public class DummyDataScheduler {
         return memberJpaRepository.findByEmail("user@talkpick.com")
                 .orElseGet(() -> {
                     Member member = Member.builder()
-                            .kakaoId(null)
                             .email("user@talkpick.com")
                             .memberRole(Role.MEMBER)
                             .password("encrypted-password")
-                            .name("테스트유저")
+                            .nickname("테스트유저")
                             .birth(LocalDate.of(2000, 1, 1))
                             .gender(Gender.FEMALE)
                             .loginType(LoginType.EMAIL)
