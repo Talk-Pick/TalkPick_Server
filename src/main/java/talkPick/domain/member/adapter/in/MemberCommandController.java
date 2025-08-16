@@ -73,5 +73,32 @@ public class MemberCommandController implements MemberCommandApi {
         return ResponseEntity.ok(memberCommandUseCase.termAgreement(authorization, request));
     }
 
+    @Override
+    @PatchMapping("/me")
+    @Operation(summary = "프로필 수정 API", description = "회원의 프로필 정보(닉네임, 생년월일, MBTI)를 수정하는 API입니다.")
+    public ResponseEntity<MemberResDto.ProfileUpdateResponse> updateProfile(
+            @RequestHeader(value = "Authorization", required = false) String authorization,
+            MemberReqDto.ProfileUpdateRequest request) {
+        return ResponseEntity.ok(memberCommandUseCase.updateProfile(authorization, request));
+    }
+
+    @Override
+    @DeleteMapping("/logout")
+    @Operation(summary = "로그아웃 API", description = "로그아웃 API입니다.")
+    public ResponseEntity<Void> logout(
+            @RequestHeader(value = "Authorization", required = false) String authorization){
+        memberCommandUseCase.logout(authorization);
+        return ResponseEntity.ok(null);
+    }
+
+    @PatchMapping
+    @Operation(summary = "계정 탈퇴 API", description = "계정 탈퇴 API입니다.")
+    public ResponseEntity<Void> deleteMember(
+            @RequestHeader(value = "Authorization", required = false) String authorization) {
+        memberCommandUseCase.delete(authorization);
+        return ResponseEntity.ok(null);
+    }
+
+
 
 }

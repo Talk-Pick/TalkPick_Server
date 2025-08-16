@@ -29,6 +29,16 @@ public class MemberConverter {
 
     }
 
+    public static MemberResDto.ProfileUpdateResponse toProfileUpdateResponse(Member member) {
+        return MemberResDto.ProfileUpdateResponse.builder()
+                .nickname(member.getNickname())
+                .gender(member.getGender() != null ? member.getGender().name().toLowerCase() : null)
+                .birth(member.getBirth() != null ? member.getBirth().toString() : null)
+                .mbti(member.getMbti() != null ? member.getMbti().toString() : null)
+                .message("프로필 수정이 완료되었습니다.")
+                .build();
+    }
+
     public static Member toEmailMember(MemberReqDto.MemberEmailReqDto emailReqDto){
         return Member.builder()
                 .email(emailReqDto.getEmail())

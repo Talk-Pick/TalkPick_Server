@@ -56,17 +56,6 @@ public class MemberResDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class MemberEmailSignupResponse {
-        private Long memberId;
-        private String nickname;
-        private String profileImgUrl;
-    }
-
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
     public static class ProfileResponse {
         private String nickname;
         private String profileImgUrl;
@@ -93,5 +82,17 @@ public class MemberResDto {
         private long selectCount; //선택된 횟수 (Topic 테이블)
         private Keyword keyword; //키워드 (Topickeyword 테이블)
         private Category category; //카테고리 (TopicCategory 테이블)
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ProfileUpdateResponse {
+        private String nickname;
+        private String gender;
+        private String birth;
+        private String message;
+        private String mbti;
     }
 }

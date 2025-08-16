@@ -50,6 +50,22 @@ public class MemberReqDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class ProfileUpdateRequest {
+        @NotNull(message = "닉네임은 필수입니다.")
+        @Size(max = 25, message = "닉네임은 최대 25자입니다.")
+        private String nickname;
+        @NotNull(message = "성별은 필수입니다.")
+        private Gender gender;
+        @NotNull(message = "생년월일은 필수입니다.")
+        private LocalDate birth;
+        @NotNull(message = "MBTI는 필수입니다.")
+        private MBTI mbti;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class TermAgreementRequest {
         @NotNull(message = "동의 약관 목록은 null일 수 없습니다.")
         private List<Long> agreeTermIdList;

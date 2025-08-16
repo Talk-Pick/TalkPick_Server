@@ -10,12 +10,12 @@ import talkPick.domain.member.domain.mapping.MemberTerm;
 import talkPick.domain.member.dto.MemberDataDto;
 import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
 import talkPick.domain.member.domain.Member;
-import talkPick.domain.member.domain.type.MBTI;
 import talkPick.domain.member.dto.MemberReqDto;
 import talkPick.domain.member.dto.MemberResDto;
 import talkPick.domain.member.port.in.MemberCommandUseCase;
 import talkPick.domain.term.adapter.out.repository.TermJpaRepository;
 import talkPick.domain.term.domain.Term;
+import talkPick.domain.token.adapter.out.repository.MemberTokenJpaRepository;
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.handler.MemberHandler;
 import talkPick.global.exception.handler.TermHandler;
@@ -23,15 +23,15 @@ import talkPick.global.model.TalkPickStatus;
 import talkPick.global.security.jwt.util.JwtProvider;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class MemberCommandService implements MemberCommandUseCase {
     private final MemberJpaRepository memberJpaRepository;
     private final TermJpaRepository termJpaRepository;
     private final MemberTermJpaRepository memberTermJpaRepository;
+    private final MemberTokenJpaRepository memberTokenJpaRepository;
     private final JwtProvider jwtProvider;
 
     private static final String DEFAULT_PROFILE_IMG_URL = "https://example.com/images/default-profile.png";
@@ -39,20 +39,30 @@ public class MemberCommandService implements MemberCommandUseCase {
 
 
     @Override
-    @Transactional
-    public Member updateMemberMbti(Long memberId, MBTI mbti) {
-        Optional<Member> memberOpt = memberJpaRepository.findById(memberId);
-        if (memberOpt.isEmpty()) {
-            throw new RuntimeException("회원을 찾을 수 없습니다. ID: " + memberId);
+    public MemberResDto.ProfileUpdateResponse updateProfile(String authorization, MemberReqDto.ProfileUpdateRequest request) {
+        Long memberId = jwtProvider.getMemberId(authorization);
+
+        // 회원 조회
+        Member findMember = memberJpaRepository.findById(memberId)
+                .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
+
+        // 프로필 정보 업데이트
+        if (request.getNickname() != null) {
+            findMember.updateNickname(request.getNickname());
+        }
+        if (request.getGender() != null) {
+            findMember.updateGender(request.getGender());
+        }
+        if (request.getBirth() != null) {
+            findMember.updateBirth(request.getBirth());
+        }
+        if (request.getMbti() != null) {
+            findMember.updateMbti(request.getMbti());
         }
 
-        Member member = memberOpt.get();
+        memberJpaRepository.save(findMember);
 
-        // MBTI 값 업데이트
-        member.setMbti(mbti);
-
-        // 저장 및 반환
-        return memberJpaRepository.save(member);
+        return MemberConverter.toProfileUpdateResponse(findMember);
 
     }
 
@@ -164,6 +174,30 @@ public class MemberCommandService implements MemberCommandUseCase {
         return MemberConverter.toTermAgreementResponse(findMember);
 
 
+    }
+
+    @Override
+    public void logout(String authorization) {
+        Long memberId = jwtProvider.getMemberId(authorization);
+
+        // 회원 조회
+        Member findMember = memberJpaRepository.findById(memberId)
+                .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
+
+        memberTokenJpaRepository.deleteByMember(findMember);
+    }
+
+    @Override
+    public void delete(String authorization) {
+        Long memberId = jwtProvider.getMemberId(authorization);
+
+        // 회원 조회
+        Member findMember = memberJpaRepository.findById(memberId)
+                .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
+
+        findMember.updateStatus(TalkPickStatus.DIS_ACTIVE);
+
+        memberTokenJpaRepository.deleteByMember(findMember);
     }
 
     // 추가 정보 필수 입력값 검증

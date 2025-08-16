@@ -17,4 +17,11 @@ public interface MemberCommandApi {
     ResponseEntity<MemberResDto.TermAgreementResponse> termAgreement(
             @RequestHeader(value = "Authorization", required = false) String authorization,
             @RequestBody MemberReqDto.TermAgreementRequest request);
+    ResponseEntity<MemberResDto.ProfileUpdateResponse> updateProfile(
+            @RequestHeader(value = "Authorization", required = false) String authorization,
+            MemberReqDto.ProfileUpdateRequest request);
+    ResponseEntity<Void> logout(
+            @RequestHeader(value = "Authorization", required = false) String authorization);
+    ResponseEntity<Void> deleteMember(
+            @RequestHeader(value = "Authorization", required = false) String authorization);
 }
