@@ -10,6 +10,7 @@ import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.dto.*;
 import talkPick.domain.member.port.in.MemberCommandUseCase;
 import talkPick.domain.token.application.MemberTokenCommandUseCase;
+import talkPick.domain.member.converter.MemberConverter;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,15 +24,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/members")
 @Slf4j
-@Tag(name = "회원가입 API", description = "회원가입(카카오/이메일) 관련 API")
 public class MemberCommandController implements MemberCommandApi {
     private final KakaoOidcService kakaoOidcService;
     private final MemberCommandUseCase memberCommandUseCase;
     private final MemberTokenCommandUseCase memberTokenCommandUseCase;
 
     @Override
-    @Operation(summary = "이메일 회원가입", description = "이메일, 비밀번호 등으로 회원가입을 처리합니다.")
-    @PostMapping("/email/login")
+    @Operation(summary = "이메일 회원가입", description = "이메일, 비밀번호 등으로 회원가입을 처리합니다. 회원가입 후 약관 동의와 추가 정보 입력이 필요합니다.")
+    @PostMapping("/email/signup")
     public ResponseEntity<MemberResDto.LoginTokenResponse> joinEmailMember(
             @Parameter(description = "회원가입 요청 DTO", required = true)
             @Valid @RequestBody MemberReqDto.MemberEmailReqDto memberReqDto
@@ -39,6 +39,18 @@ public class MemberCommandController implements MemberCommandApi {
         Member findOrCreateEmailMember = memberCommandUseCase.findOrCreateEmailMember(memberReqDto);
 
         return ResponseEntity.ok(memberTokenCommandUseCase.generateToken(findOrCreateEmailMember));
+    }
+
+    @Override
+    @Operation(summary = "이메일 로그인", description = "이메일, 비밀번호로 로그인을 처리합니다.")
+    @PostMapping("/email/login")
+    public ResponseEntity<MemberResDto.LoginTokenResponse> emailLogin(
+            @Parameter(description = "로그인 요청 DTO", required = true)
+            @Valid @RequestBody MemberReqDto.MemberEmailReqDto memberReqDto
+           ) {
+        Member member = memberCommandUseCase.loginEmailMember(memberReqDto);
+
+        return ResponseEntity.ok(memberTokenCommandUseCase.generateToken(member));
     }
 
     @Override
@@ -91,7 +103,7 @@ public class MemberCommandController implements MemberCommandApi {
         return ResponseEntity.ok(null);
     }
 
-    @PatchMapping
+    @PatchMapping("/delete")
     @Operation(summary = "계정 탈퇴 API", description = "계정 탈퇴 API입니다.")
     public ResponseEntity<Void> deleteMember(
             @RequestHeader(value = "Authorization", required = false) String authorization) {

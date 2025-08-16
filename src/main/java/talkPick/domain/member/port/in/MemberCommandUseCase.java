@@ -7,6 +7,7 @@ import talkPick.domain.member.dto.MemberResDto;
 
 public interface MemberCommandUseCase {
     Member findOrCreateEmailMember(MemberReqDto.MemberEmailReqDto emailReqDto);
+    Member loginEmailMember(MemberReqDto.MemberEmailReqDto emailReqDto);
     MemberResDto.ProfileUpdateResponse updateProfile(String authorization, MemberReqDto.ProfileUpdateRequest request);
     Member findOrCreateKakaoMember(MemberDataDto.KakaoMemberData kakaoMemberData);
     MemberResDto.MemberSignupResponse memberSignup(String authorization, MemberReqDto.MemberSignupRequest request);

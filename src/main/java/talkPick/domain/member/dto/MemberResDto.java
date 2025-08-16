@@ -21,6 +21,17 @@ public class MemberResDto {
         private TalkPickStatus talkPickStatus;
     }
 
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SignupResponse {
+        private Long memberId;
+        private String email;
+        private String message;
+        private TalkPickStatus talkPickStatus;
+    }
+
 
     @Getter
     @Builder

@@ -26,12 +26,12 @@ public class Member extends BaseTime {
     @Column(length = 100, nullable = false)
     private String email;
 
+    @Column(length = 100)
+    private String password;
+
     @Enumerated(EnumType.STRING)
     @Column(length = 6, nullable = false)
     private Role memberRole;
-
-    @Column(length = 255)
-    private String password;
 
     @Column(length = 25, nullable = false)
     private String nickname;
@@ -42,6 +42,7 @@ public class Member extends BaseTime {
     private Gender gender;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 6, nullable = false)
     private LoginType loginType;
 
     @Enumerated(EnumType.STRING)
@@ -78,5 +79,8 @@ public class Member extends BaseTime {
 
     public void updateStatus(TalkPickStatus talkPickStatus) {this.status = talkPickStatus;}
 
+    public void updatePassword(String password) {
+        this.password = password;
+    }
 
 }

@@ -81,26 +81,9 @@ public class SpringDocOpenApiConfig {
     @Bean
     public GroupedOpenApi signupOpenApi() {
         return GroupedOpenApi.builder()
-                .group("회원가입 API")
-                .displayName("회원가입 API")
-                .pathsToMatch(
-                    "/api/v1/auth/kakao/authorize",
-                    "/api/v1/auth/kakao/callback",
-                    "/api/v1/auth/kakao/additional",
-                    "/api/v1/members/join"
-                )
-                .build();
-    }
-
-    @Bean
-    public GroupedOpenApi memberCommandOpenApi() {
-        return GroupedOpenApi.builder()
-                .group("회원 명령 API")
-                .displayName("회원 명령 API")
-                .pathsToMatch(
-                    "/api/v1/members/mbti",
-                    "/api/v1/topic/additional"
-                )
+                .group("유저 API")
+                .displayName("유저 API")
+                .pathsToMatch("/api/v1/members/**")
                 .build();
     }
 }

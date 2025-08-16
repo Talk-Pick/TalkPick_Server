@@ -2,6 +2,7 @@ package talkPick.domain.member.converter;
 
 import talkPick.domain.admin.domain.type.Role;
 import talkPick.domain.member.domain.Member;
+import talkPick.domain.member.domain.MemberLoginHistory;
 import talkPick.domain.member.domain.mapping.MemberTerm;
 import talkPick.domain.member.domain.type.Gender;
 import talkPick.domain.member.domain.type.LoginType;
@@ -10,6 +11,7 @@ import talkPick.domain.member.dto.MemberReqDto;
 import talkPick.domain.member.dto.MemberResDto;
 import talkPick.domain.term.domain.Term;
 import talkPick.global.model.TalkPickStatus;
+import java.time.LocalDateTime;
 
 public class MemberConverter {
     private static final String DEFAULT_PROFILE_IMG_URL = "https://example.com/images/default-profile.png";
@@ -77,12 +79,27 @@ public class MemberConverter {
                 .build();
     }
 
+    public static MemberResDto.SignupResponse toSignupResponse(Member member) {
+        return MemberResDto.SignupResponse.builder()
+                .memberId(member.getId())
+                .email(member.getEmail())
+                .talkPickStatus(member.getStatus())
+                .build();
+    }
+
     public static MemberResDto.ProfileResponse toProfileResponse(Member member) {
         return MemberResDto.ProfileResponse.builder()
                 .nickname(member.getNickname())
                 .profileImgUrl(member.getProfileImageUrl() != null ? member.getProfileImageUrl() : DEFAULT_PROFILE_IMG_URL)
                 .mbti(member.getMbti())
                 .gender(member.getGender())
+                .build();
+    }
+
+    public static MemberLoginHistory toLoginHistory(Member member) {
+        return MemberLoginHistory.builder()
+                .memberId(member.getId())
+                .loginTime(LocalDateTime.now())
                 .build();
     }
 

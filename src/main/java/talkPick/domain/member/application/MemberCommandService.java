@@ -7,9 +7,12 @@ import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.member.adapter.out.repository.MemberTermJpaRepository;
 import talkPick.domain.member.converter.MemberConverter;
 import talkPick.domain.member.domain.mapping.MemberTerm;
+import talkPick.domain.member.domain.type.LoginType;
 import talkPick.domain.member.dto.MemberDataDto;
 import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
+import talkPick.domain.member.adapter.out.repository.MemberLoginHistoryJpaRepository;
 import talkPick.domain.member.domain.Member;
+import talkPick.domain.member.domain.MemberLoginHistory;
 import talkPick.domain.member.dto.MemberReqDto;
 import talkPick.domain.member.dto.MemberResDto;
 import talkPick.domain.member.port.in.MemberCommandUseCase;
@@ -21,6 +24,7 @@ import talkPick.global.exception.handler.MemberHandler;
 import talkPick.global.exception.handler.TermHandler;
 import talkPick.global.model.TalkPickStatus;
 import talkPick.global.security.jwt.util.JwtProvider;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -32,7 +36,9 @@ public class MemberCommandService implements MemberCommandUseCase {
     private final TermJpaRepository termJpaRepository;
     private final MemberTermJpaRepository memberTermJpaRepository;
     private final MemberTokenJpaRepository memberTokenJpaRepository;
+    private final MemberLoginHistoryJpaRepository memberLoginHistoryJpaRepository;
     private final JwtProvider jwtProvider;
+    private final PasswordEncoder passwordEncoder;
 
     private static final String DEFAULT_PROFILE_IMG_URL = "https://example.com/images/default-profile.png";
     private final FileDescriptorMetrics fileDescriptorMetrics;
@@ -72,10 +78,36 @@ public class MemberCommandService implements MemberCommandUseCase {
         // 비밀번호 검증
         validatePassword(emailReqDto.getPassword());
 
-        Member findOrNewMember = memberJpaRepository.findByEmail(emailReqDto.getEmail())
-                .orElseGet(() -> MemberConverter.toEmailMember(emailReqDto));
+        // 기존 회원이 있는지 확인
+        if (memberJpaRepository.findByEmail(emailReqDto.getEmail()).isPresent()) {
+            throw new MemberHandler(ErrorCode.MEMBER_EMAIL_ALREADY_EXISTS);
+        }
 
-        return memberJpaRepository.save(findOrNewMember);
+        // 새 회원 생성 (PENDING 상태) - 비밀번호 암호화
+        Member newMember = MemberConverter.toEmailMember(emailReqDto);
+        newMember.updatePassword(passwordEncoder.encode(emailReqDto.getPassword()));
+        return memberJpaRepository.save(newMember);
+    }
+
+    @Override
+    public Member loginEmailMember(MemberReqDto.MemberEmailReqDto emailReqDto) {
+        // 비밀번호 검증
+        validatePassword(emailReqDto.getPassword());
+
+        // 기존 회원만 로그인 가능
+        Member member = memberJpaRepository.findByEmail(emailReqDto.getEmail())
+                .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
+
+        // 암호화된 비밀번호 검증
+        if (!passwordEncoder.matches(emailReqDto.getPassword(), member.getPassword())) {
+            throw new MemberHandler(ErrorCode.INVALID_PASSWORD);
+        }
+
+        // 이메일 로그인 시 로그인 기록 저장
+        MemberLoginHistory loginHistory = MemberConverter.toLoginHistory(member);
+        memberLoginHistoryJpaRepository.save(loginHistory);
+
+        return member;
     }
 
     /**
@@ -119,6 +151,17 @@ public class MemberCommandService implements MemberCommandUseCase {
 
         findMember.updateStatus(TalkPickStatus.ACTIVE);
         memberJpaRepository.save(findMember);
+
+        // 이메일로 가입한 회원의 경우에만 임시 토큰 삭제
+        if (findMember.getLoginType() == LoginType.EMAIL) {
+            memberTokenJpaRepository.deleteByMember(findMember);
+        }
+
+        // 카카오 로그인의 경우 signup 완료 시 로그인 기록 저장
+        if (findMember.getLoginType() == LoginType.KAKAO) {
+            MemberLoginHistory loginHistory = MemberConverter.toLoginHistory(findMember);
+            memberLoginHistoryJpaRepository.save(loginHistory);
+        }
 
         return MemberConverter.toMemberSignupResponse(findMember);
     }
@@ -184,7 +227,11 @@ public class MemberCommandService implements MemberCommandUseCase {
         Member findMember = memberJpaRepository.findById(memberId)
                 .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
 
+        // 토큰 삭제
         memberTokenJpaRepository.deleteByMember(findMember);
+
+        // 로그인 기록에서 삭제
+        memberLoginHistoryJpaRepository.deleteByMember(findMember);
     }
 
     @Override
@@ -195,9 +242,15 @@ public class MemberCommandService implements MemberCommandUseCase {
         Member findMember = memberJpaRepository.findById(memberId)
                 .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
 
+        // 회원 상태를 비활성화로 변경
         findMember.updateStatus(TalkPickStatus.DIS_ACTIVE);
+        memberJpaRepository.save(findMember);
 
+        // 토큰 삭제
         memberTokenJpaRepository.deleteByMember(findMember);
+
+        // 로그인 기록에서 삭제
+        memberLoginHistoryJpaRepository.deleteByMember(findMember);
     }
 
     // 추가 정보 필수 입력값 검증

@@ -3,17 +3,12 @@ package talkPick.global.security.jwt.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import talkPick.domain.member.domain.Member;
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.handler.JwtHandler;
 import talkPick.global.security.exception.RoleNotFoundException;
 import talkPick.global.security.jwt.dto.JwtResDTO;
-import talkPick.global.util.CookieUtil;
 
 import java.security.Key;
 import java.util.List;
@@ -23,11 +18,6 @@ import java.util.List;
 public class JwtProvider {
     private final JwtGenerator jwtGenerator;
     private final RefreshTokenGenerator refreshTokenGenerator;
-    private final CookieUtil cookieUtil;
-    
-    @Value("${app.secure-cookie:false}")
-    private boolean secureCookie;
-
     private Key key;
 
 
@@ -100,16 +90,5 @@ public class JwtProvider {
         } catch (Exception e) {
             throw new JwtHandler(ErrorCode.INVALID_JWT_TOKEN);
         }
-    }
-
-    /**
-     * JWT 토큰을 쿠키에 추가하는 메소드
-     * @param response HTTP 응답 객체
-     * @param jwtToken JWT 토큰 정보
-     */
-    public void addTokenCookies(HttpServletResponse response, JwtResDTO.Login jwtToken) {
-        // CookieUtil을 사용하여 토큰 쿠키 추가
-        cookieUtil.addAccessTokenCookie(response, jwtToken.accessToken(), secureCookie);
-        cookieUtil.addRefreshTokenCookie(response, jwtToken.refreshToken(), secureCookie);
     }
 }
