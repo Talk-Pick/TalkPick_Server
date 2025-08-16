@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import talkPick.domain.member.dto.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public interface MemberQueryApi {
     Page<MemberResDto.MemberLikedTopicsResDto> getMemberLikedTopics(Pageable pageable);

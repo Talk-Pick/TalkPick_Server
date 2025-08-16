@@ -17,23 +17,28 @@ public class MemberConverter {
 
     public static Member toKakaoMember(MemberDataDto.KakaoMemberData kakaoMemberData) {
         return Member.builder()
-                .loginType(LoginType.KAKAO)
                 .email(kakaoMemberData.getEmail())
-                .providerId(kakaoMemberData.getSub())
-                .gender(Gender.NONE)
-                .status(TalkPickStatus.PENDING)
                 .memberRole(Role.MEMBER)
                 .nickname(DEFAULT_NICKNAME)
+                .gender(Gender.NONE)
+                .loginType(LoginType.KAKAO)
+                .status(TalkPickStatus.PENDING)
                 .profileImageUrl(DEFAULT_PROFILE_IMG_URL)
+                .providerId(kakaoMemberData.getSub())
                 .build();
 
     }
 
     public static Member toEmailMember(MemberReqDto.MemberEmailReqDto emailReqDto){
         return Member.builder()
-                .loginType(LoginType.EMAIL)
                 .email(emailReqDto.getEmail())
                 .password(emailReqDto.getPassword())
+                .memberRole(Role.MEMBER)
+                .nickname(DEFAULT_NICKNAME)
+                .gender(Gender.NONE)
+                .loginType(LoginType.EMAIL)
+                .status(TalkPickStatus.PENDING)
+                .profileImageUrl(DEFAULT_PROFILE_IMG_URL)
                 .build();
     }
 
@@ -41,6 +46,7 @@ public class MemberConverter {
         return MemberResDto.MemberSignupResponse.builder()
                 .memberId(member.getId())
                 .nickname(member.getNickname())
+                .mbti(member.getMbti())
                 .profileImgUrl(member.getProfileImageUrl() != null ? member.getProfileImageUrl() : DEFAULT_PROFILE_IMG_URL)
                 .build();
     }
@@ -57,6 +63,7 @@ public class MemberConverter {
         return MemberResDto.TermAgreementResponse.builder()
                 .memberId(member.getId())
                 .message("약관 동의가 완료되었습니다.")
+                .talkPickStatus(TalkPickStatus.AGREE)
                 .build();
     }
 

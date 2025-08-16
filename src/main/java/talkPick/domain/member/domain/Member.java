@@ -30,7 +30,7 @@ public class Member extends BaseTime {
     @Column(length = 6, nullable = false)
     private Role memberRole;
 
-    @Column(nullable = false, length = 255)
+    @Column(length = 255)
     private String password;
 
     @Column(length = 25, nullable = false)
@@ -55,7 +55,7 @@ public class Member extends BaseTime {
     @Column(length = 255, nullable = false)
     private String profileImageUrl;
 
-    @Column(length = 255, nullable = false)
+    @Column(length = 255)
     private String providerId;
 
     public void updateNickname(String nickname) {
@@ -75,6 +75,8 @@ public class Member extends BaseTime {
     }
 
     public void updateMbti(MBTI mbti) {this.mbti = mbti;}
+
+    public void updateStatus(TalkPickStatus talkPickStatus) {this.status = talkPickStatus;}
 
 
 }

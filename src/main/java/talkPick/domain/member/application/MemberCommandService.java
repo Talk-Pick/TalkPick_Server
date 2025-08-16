@@ -1,5 +1,6 @@
 package talkPick.domain.member.application;
 
+import io.micrometer.core.instrument.binder.system.FileDescriptorMetrics;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import talkPick.domain.term.domain.Term;
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.handler.MemberHandler;
 import talkPick.global.exception.handler.TermHandler;
+import talkPick.global.model.TalkPickStatus;
 import talkPick.global.security.jwt.util.JwtProvider;
 
 import java.util.List;
@@ -33,6 +35,7 @@ public class MemberCommandService implements MemberCommandUseCase {
     private final JwtProvider jwtProvider;
 
     private static final String DEFAULT_PROFILE_IMG_URL = "https://example.com/images/default-profile.png";
+    private final FileDescriptorMetrics fileDescriptorMetrics;
 
 
     @Override
@@ -82,7 +85,7 @@ public class MemberCommandService implements MemberCommandUseCase {
     }
 
     @Override
-    public MemberResDto.MemberSignupResponse memberKakaoSignup(String authorization, MemberReqDto.MemberSignupRequest request) {
+    public MemberResDto.MemberSignupResponse memberSignup(String authorization, MemberReqDto.MemberSignupRequest request) {
         Long memberId = jwtProvider.getMemberId(authorization);
         Member findMember = memberJpaRepository.findById(memberId)
                 .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
@@ -96,10 +99,15 @@ public class MemberCommandService implements MemberCommandUseCase {
         findMember.updateGender(request.getGender());
         findMember.updateMbti(request.getMbti());
         findMember.updateNickname(request.getNickname());
-        if (request.getProfileImgUrl() == null || request.getProfileImgUrl().isBlank()) {
+
+        String profileImgUrl = request.getProfileImgUrl();
+        if (profileImgUrl == null || profileImgUrl.trim().isEmpty()) {
             findMember.updateProfileImgUrl(DEFAULT_PROFILE_IMG_URL);
+        } else {
+            findMember.updateProfileImgUrl(profileImgUrl);
         }
 
+        findMember.updateStatus(TalkPickStatus.ACTIVE);
         memberJpaRepository.save(findMember);
 
         return MemberConverter.toMemberSignupResponse(findMember);
@@ -109,9 +117,11 @@ public class MemberCommandService implements MemberCommandUseCase {
     public MemberResDto.TermAgreementResponse termAgreement(String authorization, MemberReqDto.TermAgreementRequest request) {
         Long memberId = jwtProvider.getMemberId(authorization);
 
+        // 회원 조회
         Member findMember = memberJpaRepository.findById(memberId)
                 .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
 
+        // 약관 동의 정보 저장
         List<Long> agreeTermIdList = request.getAgreeTermIdList();
         List<Long> disagreeTermIdList = request.getDisagreeTermIdList();
 
@@ -119,9 +129,11 @@ public class MemberCommandService implements MemberCommandUseCase {
             throw new TermHandler(ErrorCode.REQUIRED_TERM_NOT_AGREED);
         }
 
-        for (Long termId : disagreeTermIdList) {
+        // 동의한 약관
+        for (Long termId : agreeTermIdList) {
             Term term = termJpaRepository.findById(termId)
                     .orElseThrow(() -> new TermHandler(ErrorCode.TERM_NOT_FOUND));
+
             memberTermJpaRepository.findByMemberAndTerm(findMember, term)
                     .ifPresentOrElse(
                             mt -> mt.updateIsAgree(true),
@@ -145,6 +157,9 @@ public class MemberCommandService implements MemberCommandUseCase {
                             }
                     );
         }
+
+        findMember.updateStatus(TalkPickStatus.AGREE);
+        memberJpaRepository.save(findMember);
 
         return MemberConverter.toTermAgreementResponse(findMember);
 

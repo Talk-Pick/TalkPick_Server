@@ -1,18 +1,15 @@
 package talkPick.domain.member.adapter.in;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import talkPick.domain.kakao.service.KakaoOidcService;
-import talkPick.domain.member.application.MemberQueryService;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.dto.*;
 import talkPick.domain.member.port.in.MemberCommandUseCase;
 import talkPick.domain.token.application.MemberTokenCommandUseCase;
-import talkPick.global.security.jwt.util.JwtProvider;
-import talkPick.global.util.CookieUtil;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,34 +21,31 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/members")
 @Slf4j
 @Tag(name = "회원가입 API", description = "회원가입(카카오/이메일) 관련 API")
 public class MemberCommandController implements MemberCommandApi {
-
-    private final MemberQueryService memberQueryService;
     private final KakaoOidcService kakaoOidcService;
-    private final JwtProvider jwtProvider;
-    private final PasswordEncoder passwordEncoder;
-    private final CookieUtil cookieUtil;
     private final MemberCommandUseCase memberCommandUseCase;
     private final MemberTokenCommandUseCase memberTokenCommandUseCase;
 
+    @Override
     @Operation(summary = "이메일 회원가입", description = "이메일, 비밀번호 등으로 회원가입을 처리합니다.")
-    @PostMapping("/members/email/login")
+    @PostMapping("/email/login")
     public ResponseEntity<MemberResDto.LoginTokenResponse> joinEmailMember(
             @Parameter(description = "회원가입 요청 DTO", required = true)
-            @RequestBody MemberReqDto.MemberEmailReqDto memberReqDto
+            @Valid @RequestBody MemberReqDto.MemberEmailReqDto memberReqDto
            ) {
         Member findOrCreateEmailMember = memberCommandUseCase.findOrCreateEmailMember(memberReqDto);
 
         return ResponseEntity.ok(memberTokenCommandUseCase.generateToken(findOrCreateEmailMember));
     }
 
-    @PostMapping("/members/kakao/login")
+    @Override
+    @PostMapping("/kakao/login")
     @Operation(summary = "KAKAO OAuth2 로그인 API", description = "KAKAO OAuth2 로그인 API 입니다.")
     public ResponseEntity<MemberResDto.LoginTokenResponse> kakaoOAuth2Login
-            (@RequestBody MemberReqDto.KakaoOAuth2LoginRequest request) {
+            (@Valid @RequestBody MemberReqDto.KakaoOAuth2LoginRequest request) {
         // id_token 검증 후 멤버 데이터 추출
         MemberDataDto.KakaoMemberData kakaoMemberData = kakaoOidcService.verifyAndParseIdToken(request);
 
@@ -61,19 +55,21 @@ public class MemberCommandController implements MemberCommandApi {
         return ResponseEntity.ok(memberTokenCommandUseCase.generateToken(findOrCreateMember));
     }
 
-    @PatchMapping("/members/signup")
+    @Override
+    @PatchMapping("/signup")
     @Operation(summary = "회원가입 완료 API", description = "회원의 추가 정보(닉네임, MBTI, 성별, 생년월일, 프로필 이미지)를 입력하여 회원가입을 완료하는 API입니다.")
     public ResponseEntity<MemberResDto.MemberSignupResponse> signup(
             @RequestHeader(value = "Authorization", required = false) String authorization,
-            @RequestBody MemberReqDto.MemberSignupRequest request) {
-        return ResponseEntity.ok(memberCommandUseCase.memberKakaoSignup(authorization, request));
+            @Valid @RequestBody MemberReqDto.MemberSignupRequest request) {
+        return ResponseEntity.ok(memberCommandUseCase.memberSignup(authorization, request));
     }
 
-    @PostMapping("/members/term")
+    @Override
+    @PostMapping("/term")
     @Operation(summary = "약관 동의 API", description = "회원이 약관에 동의하는 API입니다.")
     public ResponseEntity<MemberResDto.TermAgreementResponse> termAgreement(
             @RequestHeader(value = "Authorization", required = false) String authorization,
-            @RequestBody MemberReqDto.TermAgreementRequest request) {
+            @Valid @RequestBody MemberReqDto.TermAgreementRequest request) {
         return ResponseEntity.ok(memberCommandUseCase.termAgreement(authorization, request));
     }
 

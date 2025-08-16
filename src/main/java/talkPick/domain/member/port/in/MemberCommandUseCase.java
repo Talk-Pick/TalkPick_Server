@@ -10,6 +10,6 @@ public interface MemberCommandUseCase {
     Member findOrCreateEmailMember(MemberReqDto.MemberEmailReqDto emailReqDto);
     Member updateMemberMbti(Long memberId, MBTI mbti);
     Member findOrCreateKakaoMember(MemberDataDto.KakaoMemberData kakaoMemberData);
-    MemberResDto.MemberSignupResponse memberKakaoSignup(String authorization, MemberReqDto.MemberSignupRequest request);
+    MemberResDto.MemberSignupResponse memberSignup(String authorization, MemberReqDto.MemberSignupRequest request);
     MemberResDto.TermAgreementResponse termAgreement(String authorization, MemberReqDto.TermAgreementRequest request);
 }

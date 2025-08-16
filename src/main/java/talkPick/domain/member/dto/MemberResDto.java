@@ -5,6 +5,7 @@ import talkPick.domain.member.domain.type.Gender;
 import talkPick.domain.member.domain.type.MBTI;
 import talkPick.domain.topic.domain.Category;
 import talkPick.domain.topic.domain.type.Keyword;
+import talkPick.global.model.TalkPickStatus;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +18,7 @@ public class MemberResDto {
         private String accessToken;
         private String refreshToken;
         private LocalDateTime accessTokenExpireAt;
+        private TalkPickStatus talkPickStatus;
     }
 
 
@@ -27,6 +29,7 @@ public class MemberResDto {
     public static class TermAgreementResponse {
         private Long memberId;
         private String message;
+        private TalkPickStatus talkPickStatus;
     }
 
     @Builder
@@ -46,6 +49,7 @@ public class MemberResDto {
         private Long memberId;
         private String nickname;
         private String profileImgUrl;
+        private MBTI mbti;
     }
 
     @Getter

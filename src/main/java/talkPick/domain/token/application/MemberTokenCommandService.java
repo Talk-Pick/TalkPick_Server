@@ -55,7 +55,7 @@ public class MemberTokenCommandService implements MemberTokenCommandUseCase {
                 LocalDateTime.ofEpochSecond(jwt.accessExpiredTime(), 0, ZoneOffset.UTC);
 
 
-        return KakaoConverter.toKakaoOAuth2LoginResponse(jwt.accessToken(), jwt.refreshToken(), accessExpireAt);
+        return KakaoConverter.toKakaoOAuth2LoginResponse(jwt.accessToken(), jwt.refreshToken(), accessExpireAt, member.getStatus());
     }
 
     /**

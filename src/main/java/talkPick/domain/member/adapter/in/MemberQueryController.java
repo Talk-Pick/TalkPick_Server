@@ -26,22 +26,20 @@ import talkPick.global.util.CookieUtil;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/members")
 public class MemberQueryController implements MemberQueryApi {
     private final MemberQueryUseCase memberQueryUseCase;
-    private final JwtProvider jwtProvider;
-    private final CookieUtil cookieUtil;
-    private final MemberQueryService memberQueryService;
 
-
-    @GetMapping("/members/me")
+    @Override
+    @GetMapping("/me")
     @Operation(summary = "마이페이지 프로필 조회 API", description = "회원의 프로필 정보와 통계를 조회하는 API입니다.")
     public ResponseEntity<MemberResDto.ProfileResponse> getProfile(
             @RequestHeader(value = "Authorization", required = false) String authorization) {
         return ResponseEntity.ok(memberQueryUseCase.getProfile(authorization));
     }
 
-    @GetMapping("/members/me/liked-topics")
+    @Override
+    @GetMapping("/liked-topics")
     @ResponseBody
     public Page<MemberResDto.MemberLikedTopicsResDto> getMemberLikedTopics(Pageable pageable) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -52,7 +50,8 @@ public class MemberQueryController implements MemberQueryApi {
 
 
     //멤버 캘린더 토픽 결과 조회
-    @GetMapping("/members/topic/Results")
+    @Override
+    @GetMapping("/topic-results")
     @ResponseBody
     public Page<MemberResDto.MemberTopicResultResDto> getMemberTopicResults(@RequestParam("date") LocalDate date, Pageable pageable) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
