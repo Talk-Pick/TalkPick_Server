@@ -10,7 +10,6 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "오늘의 Topic 테이블")
 public class TodayTopic {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, columnDefinition = "BIGINT COMMENT '기본 키'")

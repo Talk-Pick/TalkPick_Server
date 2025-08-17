@@ -13,7 +13,6 @@ import talkPick.global.model.TalkPickStatus;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "공지사항 이미지 테이블")
 public class NoticeImage extends BaseTime {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, columnDefinition = "BIGINT COMMENT '기본 키'")
