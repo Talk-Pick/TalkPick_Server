@@ -41,7 +41,6 @@ public class MemberCommandService implements MemberCommandUseCase {
     private final PasswordEncoder passwordEncoder;
 
     private static final String DEFAULT_PROFILE_IMG_URL = "https://example.com/images/default-profile.png";
-    private final FileDescriptorMetrics fileDescriptorMetrics;
 
 
     @Override

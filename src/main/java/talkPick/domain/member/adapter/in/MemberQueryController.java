@@ -1,27 +1,24 @@
 package talkPick.domain.member.adapter.in;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import talkPick.domain.member.dto.*;
-import talkPick.domain.member.application.MemberQueryService;
-import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
+import java.time.LocalDateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import talkPick.global.security.jwt.util.JwtProvider;
-import talkPick.global.util.CookieUtil;
+import talkPick.global.response.CursorPageResponse;
+import talkPick.global.response.ResultResponse;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,19 +30,20 @@ public class MemberQueryController implements MemberQueryApi {
     @Override
     @GetMapping("/me")
     @Operation(summary = "마이페이지 프로필 조회 API", description = "회원의 프로필 정보와 통계를 조회하는 API입니다.")
-    public ResponseEntity<MemberResDto.ProfileResponse> getProfile(
+    public ResponseEntity<ResultResponse<MemberResDto.ProfileResponse>> getProfile(
             @RequestHeader(value = "Authorization", required = false) String authorization) {
-        return ResponseEntity.ok(memberQueryUseCase.getProfile(authorization));
+        return ResponseEntity.ok(ResultResponse.success(memberQueryUseCase.getProfile(authorization)));
     }
 
+    // 멤버 좋아요 누른 토픽 조회
     @Override
     @GetMapping("/liked-topics")
     @ResponseBody
-    public Page<MemberResDto.MemberLikedTopicsResDto> getMemberLikedTopics(Pageable pageable) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long memberId = Long.parseLong(authentication.getName()); // JWT에서 추출된 사용자 ID
-        Page<MemberResDto.MemberLikedTopicsResDto> memberLikedTopics = memberQueryUseCase.getMemberLikedTopics(memberId, pageable);
-        return memberLikedTopics;
+    public ResponseEntity<ResultResponse<CursorPageResponse<MemberResDto.MemberLikedTopicResDto>>> getMemberLikedTopics(
+            @RequestHeader(value = "Authorization", required = false) String authorization,
+            @RequestParam(value = "cursor", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime cursor,
+            @RequestParam(value = "size", defaultValue = "6") @Parameter(description = "페이지 크기 (1 이상)", schema = @Schema(minimum = "1")) int size) {
+        return ResponseEntity.ok(ResultResponse.success(memberQueryUseCase.getMemberLikedTopics(authorization, cursor, size);))
     }
 
 

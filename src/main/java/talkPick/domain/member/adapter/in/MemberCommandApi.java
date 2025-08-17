@@ -6,26 +6,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import talkPick.domain.member.dto.MemberReqDto;
 import talkPick.domain.member.dto.MemberResDto;
+import talkPick.global.response.ResultResponse;
 
 @Tag(name = "유저 API", description = "유저 관련 API 입니다.")
 public interface MemberCommandApi {
-    ResponseEntity<MemberResDto.LoginTokenResponse> joinEmailMember
+    ResponseEntity<ResultResponse<MemberResDto.LoginTokenResponse>> joinEmailMember
             (@RequestBody MemberReqDto.MemberEmailReqDto memberReqDto);
-    ResponseEntity<MemberResDto.LoginTokenResponse> emailLogin
+    ResponseEntity<ResultResponse<MemberResDto.LoginTokenResponse>> emailLogin
             (@RequestBody MemberReqDto.MemberEmailReqDto memberReqDto);
-    ResponseEntity<MemberResDto.LoginTokenResponse> kakaoOAuth2Login
+    ResponseEntity<ResultResponse<MemberResDto.LoginTokenResponse>> kakaoOAuth2Login
             (@RequestBody MemberReqDto.KakaoOAuth2LoginRequest request);
-    ResponseEntity<MemberResDto.MemberSignupResponse> signup
+    ResponseEntity<ResultResponse<MemberResDto.MemberSignupResponse>> signup
             (@RequestHeader(value = "Authorization", required = false) String authorization,
              @RequestBody MemberReqDto.MemberSignupRequest request);
-    ResponseEntity<MemberResDto.TermAgreementResponse> termAgreement(
+    ResponseEntity<ResultResponse<MemberResDto.TermAgreementResponse>> termAgreement(
             @RequestHeader(value = "Authorization", required = false) String authorization,
             @RequestBody MemberReqDto.TermAgreementRequest request);
-    ResponseEntity<MemberResDto.ProfileUpdateResponse> updateProfile(
+    ResponseEntity<ResultResponse<MemberResDto.ProfileUpdateResponse>> updateProfile(
             @RequestHeader(value = "Authorization", required = false) String authorization,
             MemberReqDto.ProfileUpdateRequest request);
-    ResponseEntity<Void> logout(
+    ResponseEntity<ResultResponse<Void>> logout(
             @RequestHeader(value = "Authorization", required = false) String authorization);
-    ResponseEntity<Void> deleteMember(
+    ResponseEntity<ResultResponse<Void>> deleteMember(
             @RequestHeader(value = "Authorization", required = false) String authorization);
 }

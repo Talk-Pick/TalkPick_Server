@@ -3,15 +3,14 @@ package talkPick.domain.member.port.in;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import talkPick.domain.member.dto.*;
-import talkPick.domain.member.domain.Member;
+import talkPick.global.response.CursorPageResponse;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
 
 public interface MemberQueryUseCase {
-    Page<MemberResDto.MemberLikedTopicsResDto> getMemberLikedTopics(Long memberId, Pageable pageable);
-    Page<MemberResDto.MemberTopicResultResDto> getMemberTopicResultsByCreatedDate(Long memberId, LocalDate date, Pageable pageable);
+    CursorPageResponse<MemberResDto.MemberLikedTopicResDto> getMemberLikedTopics(String authorization, LocalDateTime cursor, int size);
+    Page<MemberResDto.MemberTopicResultResDto> getMemberTopicResultsByCreatedDate(String authorization, LocalDate date, Pageable pageable);
     MemberResDto.ProfileResponse getProfile(String authorization);
 
 }
