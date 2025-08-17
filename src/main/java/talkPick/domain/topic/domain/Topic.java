@@ -10,21 +10,37 @@ import talkPick.global.model.TalkPickStatus;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "Topic 테이블")
 public class Topic extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, columnDefinition = "BIGINT COMMENT '기본 키'")
     private Long id;
+
+    @Column(name = "title", nullable = false, length = 255, columnDefinition = "VARCHAR(255) COMMENT 'Topic 제목'")
     private String title;
+
+    @Column(name = "detail", nullable = false, length = 1000, columnDefinition = "VARCHAR(1000) COMMENT 'Topic 상세 내용'")
     private String detail;
+
+    @Column(name = "thumbnail", nullable = true, length = 500, columnDefinition = "VARCHAR(500) COMMENT '썸네일 이미지 URL'")
     private String thumbnail;
+
+    @Column(name = "icon", nullable = true, length = 255, columnDefinition = "VARCHAR(255) COMMENT '아이콘 URL'")
     private String icon;
+
+    @Column(name = "category_id", nullable = false, columnDefinition = "BIGINT COMMENT '카테고리 ID'")
     private Long categoryId;
+
     @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(20) COMMENT 'Topic 상태'")
     private TalkPickStatus status;
+
+    @Column(name = "admin_id", nullable = false, columnDefinition = "BIGINT COMMENT '어드민 ID'")
     private Long adminId;
 
     public static Topic create(String title, String detail, String thumbnail, String icon, Long adminId) {
-        //TODO category_id 넣어줘야 함.
+        // TODO category_id 넣어줘야 함.
         return Topic.builder()
                 .title(title)
                 .detail(detail)
