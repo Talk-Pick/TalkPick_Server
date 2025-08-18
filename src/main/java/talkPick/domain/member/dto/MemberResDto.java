@@ -8,6 +8,7 @@ import talkPick.domain.topic.domain.type.Keyword;
 import talkPick.global.model.TalkPickStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class MemberResDto {
     @Getter
@@ -78,9 +79,9 @@ public class MemberResDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public class MemberTopicResultResDto {
-        private Long randomId;
-        private String comment;
-        private LocalDateTime createdDate;
+        private String comment; // 한 줄 코멘트
+        private List<Keyword> topicKeyword; // 토픽 키워드
+        private LocalDateTime createdDate; // 대화 날짜
     }
 
     @Getter

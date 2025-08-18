@@ -25,6 +25,9 @@ public class MemberTopicHistory extends BaseTime {
     @JoinColumn(name = "topic_id")
     private Topic topic;
 
+    @OneToOne(mappedBy = "memberTopicHistory", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    private MemberTopicResult memberTopicResult;
+
     private long talkTime;
     private boolean checkLiked;
     private int sequence;

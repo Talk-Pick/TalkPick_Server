@@ -98,7 +98,7 @@ public class MemberConverter {
 
     public static MemberLoginHistory toLoginHistory(Member member) {
         return MemberLoginHistory.builder()
-                .memberId(member.getId())
+                .member(member)
                 .loginTime(LocalDateTime.now())
                 .build();
     }
