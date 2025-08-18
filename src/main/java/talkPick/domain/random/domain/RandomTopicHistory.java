@@ -11,17 +11,29 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "랜덤 대화 기록 테이블")
 public class RandomTopicHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, columnDefinition = "BIGINT COMMENT '기본 키'")
     private Long id;
+
+    @Column(name = "member_id", nullable = false, columnDefinition = "BIGINT COMMENT '회원 ID'")
     private Long memberId;
+
+    @Column(name = "random_id", nullable = false, columnDefinition = "BIGINT COMMENT '랜덤 ID'")
     private Long randomId;
+
+    @Column(name = "topic_id", nullable = true, columnDefinition = "BIGINT COMMENT 'Topic ID'")
     private Long topicId;
 
-    @Column(name = "`order`")
+    @Column(name = "`order`", nullable = false, columnDefinition = "INT COMMENT '랜덤 코스 순서'")
     private Integer order;
+
+    @Column(name = "start_at", nullable = false, columnDefinition = "DATETIME COMMENT '시작 시간'")
     private LocalDateTime startAt;
+
+    @Column(name = "end_at", nullable = true, columnDefinition = "DATETIME COMMENT '종료 시간'")
     private LocalDateTime endAt;
 
     public static RandomTopicHistory ofByCategory(final Long memberId, RandomReqDTO.SelectByCategory requestDTO) {

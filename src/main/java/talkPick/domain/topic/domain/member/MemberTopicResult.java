@@ -19,12 +19,10 @@ public class MemberTopicResult {
     @Column(length = 100)
     String comment;
 
-    @OneToOne
-    @JoinColumn(name = "member_topic_history_id")
+    @OneToOne(mappedBy = "memberTopicResult", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
     private MemberTopicHistory memberTopicHistory;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
     private Member member;
 
 
