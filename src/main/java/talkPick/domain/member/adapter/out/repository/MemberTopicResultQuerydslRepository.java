@@ -1,20 +1,9 @@
-package talkPick.domain.member.adapter.out.repository.querydsl;
+package talkPick.domain.member.adapter.out.repository;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
-import talkPick.domain.member.domain.Member;
-import talkPick.domain.member.dto.MemberResDto;
 import talkPick.domain.member.port.out.MemberTopicResultQueryRepositoryPort;
-import talkPick.domain.random.domain.QRandom;
-import talkPick.domain.random.domain.QRandomTopicHistory;
-import talkPick.domain.topic.domain.QTopic;
-import talkPick.domain.topic.domain.QTopicKeyword;
-import talkPick.domain.topic.domain.member.QMemberTopicHistory;
-
-import java.time.LocalDate;
-import java.util.List;
 
 
 @Repository

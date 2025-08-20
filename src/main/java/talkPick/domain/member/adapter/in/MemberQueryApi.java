@@ -4,16 +4,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import talkPick.domain.member.dto.*;
+import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.global.response.CursorPageResponse;
 import talkPick.global.response.ResultResponse;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @RequestMapping("/api/v1/members")

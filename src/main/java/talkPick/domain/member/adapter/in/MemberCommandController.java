@@ -5,12 +5,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import talkPick.domain.kakao.service.KakaoOidcService;
+import talkPick.domain.member.adapter.in.dto.MemberReqDto;
+import talkPick.domain.member.adapter.out.dto.MemberResDto;
+import talkPick.global.security.jwt.dto.JwtResDTO;
+import talkPick.external.kakao.application.KakaoOidcService;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.dto.*;
 import talkPick.domain.member.port.in.MemberCommandUseCase;
-import talkPick.domain.token.application.MemberTokenCommandUseCase;
-import talkPick.domain.member.converter.MemberConverter;
+import talkPick.global.security.jwt.port.in.JwtTokenCommandUseCase;
 
 import talkPick.global.response.ResultResponse;
 
@@ -24,28 +26,27 @@ import talkPick.global.response.ResultResponse;
 public class MemberCommandController implements MemberCommandApi {
     private final KakaoOidcService kakaoOidcService;
     private final MemberCommandUseCase memberCommandUseCase;
-    private final MemberTokenCommandUseCase memberTokenCommandUseCase;
+    private final JwtTokenCommandUseCase jwtTokenCommandUseCase;
 
     @Override
-    public ResponseEntity<ResultResponse<MemberResDto.LoginTokenResponse>> joinEmailMember(
-            @Valid @RequestBody MemberReqDto.MemberEmailReqDto memberReqDto
+    public ResponseEntity<ResultResponse<JwtResDTO.Login>> joinEmailMember(
+            @Valid @RequestBody MemberReqDto.MemberEmailReqest memberReqDto
            ) {
         Member findOrCreateEmailMember = memberCommandUseCase.findOrCreateEmailMember(memberReqDto);
 
-        return ResponseEntity.ok(ResultResponse.success(memberTokenCommandUseCase.generateToken(findOrCreateEmailMember)));
+        return ResponseEntity.ok(ResultResponse.success(jwtTokenCommandUseCase.generateToken(findOrCreateEmailMember)));
     }
 
     @Override
-    public ResponseEntity<ResultResponse<MemberResDto.LoginTokenResponse>> emailLogin(
-            @Valid @RequestBody MemberReqDto.MemberEmailReqDto memberReqDto
+    public ResponseEntity<ResultResponse<JwtResDTO.Login>> emailLogin(
+            @Valid @RequestBody MemberReqDto.MemberEmailReqest memberReqDto
            ) {
-        Member member = memberCommandUseCase.loginEmailMember(memberReqDto);
-
-        return ResponseEntity.ok(ResultResponse.success(memberTokenCommandUseCase.generateToken(member)));
+        return ResponseEntity.ok(ResultResponse.success(
+                jwtTokenCommandUseCase.generateToken(memberCommandUseCase.loginEmailMember(memberReqDto))));
     }
 
     @Override
-    public ResponseEntity<ResultResponse<MemberResDto.LoginTokenResponse>> kakaoOAuth2Login(
+    public ResponseEntity<ResultResponse<JwtResDTO.Login>> kakaoOAuth2Login(
             @Valid @RequestBody MemberReqDto.KakaoOAuth2LoginRequest request) {
         // id_token 검증 후 멤버 데이터 추출
         MemberDataDto.KakaoMemberData kakaoMemberData = kakaoOidcService.verifyAndParseIdToken(request);
@@ -53,7 +54,13 @@ public class MemberCommandController implements MemberCommandApi {
         // id_token 에서 추출한 데이터를 통해 멤버 조회 OR 생성
         Member findOrCreateMember = memberCommandUseCase.findOrCreateKakaoMember(kakaoMemberData);
 
-        return ResponseEntity.ok(ResultResponse.success(memberTokenCommandUseCase.generateToken(findOrCreateMember)));
+        return ResponseEntity.ok(ResultResponse.success(jwtTokenCommandUseCase.generateToken(findOrCreateMember)));
+    }
+
+    @Override
+    public ResponseEntity<ResultResponse<JwtResDTO.AccessToken>> refreshAccessToken(
+            @Valid @RequestBody MemberReqDto.RefreshAccessTokenRequest request) {
+        return ResponseEntity.ok(ResultResponse.success(jwtTokenCommandUseCase.refreshAccessToken(request)));
     }
 
     @Override

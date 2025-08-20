@@ -1,4 +1,4 @@
-package talkPick.domain.member.adapter.out.repository.querydsl;
+package talkPick.domain.member.adapter.out.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
@@ -6,7 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.member.domain.Member;
-import talkPick.domain.member.dto.MemberResDto;
+import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.domain.member.port.out.MemberLikedTopicsQueryRepositoryPort;
 import talkPick.domain.topic.domain.*;
 

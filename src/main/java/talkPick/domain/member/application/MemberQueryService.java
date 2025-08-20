@@ -1,11 +1,10 @@
 package talkPick.domain.member.application;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.domain.member.converter.MemberConverter;
-import talkPick.domain.member.dto.*;
 import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
@@ -16,7 +15,6 @@ import talkPick.global.exception.handler.MemberHandler;
 import talkPick.global.response.CursorPageResponse;
 import talkPick.global.security.jwt.util.JwtProvider;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

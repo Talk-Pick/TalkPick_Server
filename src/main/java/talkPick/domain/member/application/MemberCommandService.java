@@ -4,18 +4,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import talkPick.domain.member.adapter.out.repository.*;
+import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
+import talkPick.domain.member.adapter.out.repository.MemberTermJpaRepository;
 import talkPick.domain.member.converter.MemberConverter;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.domain.MemberLoginHistory;
 import talkPick.domain.member.domain.type.LoginType;
 import talkPick.domain.member.dto.MemberDataDto;
-import talkPick.domain.member.dto.MemberReqDto;
-import talkPick.domain.member.dto.MemberResDto;
+import talkPick.domain.member.adapter.in.dto.MemberReqDto;
+import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.domain.member.port.in.MemberCommandUseCase;
+import talkPick.domain.member.port.out.MemberLoginHistoryCommandRepositoryPort;
 import talkPick.domain.term.adapter.out.repository.TermJpaRepository;
 import talkPick.domain.term.domain.Term;
-import talkPick.domain.token.adapter.out.repository.MemberTokenJpaRepository;
+import talkPick.global.security.jwt.repository.RefreshTokenRepository;
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.handler.MemberHandler;
 import talkPick.global.exception.handler.TermHandler;
@@ -33,8 +35,8 @@ public class MemberCommandService implements MemberCommandUseCase {
     private final MemberJpaRepository memberJpaRepository;
     private final TermJpaRepository termJpaRepository;
     private final MemberTermJpaRepository memberTermJpaRepository;
-    private final MemberTokenJpaRepository memberTokenJpaRepository;
-    private final MemberLoginHistoryJpaRepository memberLoginHistoryJpaRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final MemberLoginHistoryCommandRepositoryPort memberLoginHistoryRepository;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
 
@@ -64,7 +66,7 @@ public class MemberCommandService implements MemberCommandUseCase {
      * 이메일 회원 신규 생성
      */
     @Override
-    public Member findOrCreateEmailMember(MemberReqDto.MemberEmailReqDto emailReqDto) {
+    public Member findOrCreateEmailMember(MemberReqDto.MemberEmailReqest emailReqDto) {
         validatePassword(emailReqDto.getPassword());
 
         if (memberJpaRepository.findByEmail(emailReqDto.getEmail()).isPresent()) {
@@ -72,6 +74,8 @@ public class MemberCommandService implements MemberCommandUseCase {
         }
 
         Member newMember = MemberConverter.toEmailMember(emailReqDto);
+
+        // 비밀번호 암호화
         newMember.updatePassword(passwordEncoder.encode(emailReqDto.getPassword()));
         return memberJpaRepository.save(newMember);
     }
@@ -80,18 +84,19 @@ public class MemberCommandService implements MemberCommandUseCase {
      * 이메일 로그인 처리 (비밀번호 검증 및 로그인 이력 기록)
      */
     @Override
-    public Member loginEmailMember(MemberReqDto.MemberEmailReqDto emailReqDto) {
+    public Member loginEmailMember(MemberReqDto.MemberEmailReqest emailReqDto) {
         validatePassword(emailReqDto.getPassword());
 
         Member member = memberJpaRepository.findByEmail(emailReqDto.getEmail())
                 .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
 
+        // 비밀번호 복호화 및 검증
         if (!passwordEncoder.matches(emailReqDto.getPassword(), member.getPassword())) {
             throw new MemberHandler(ErrorCode.INVALID_PASSWORD);
         }
 
         MemberLoginHistory loginHistory = MemberConverter.toLoginHistory(member);
-        memberLoginHistoryJpaRepository.save(loginHistory);
+        memberLoginHistoryRepository.save(loginHistory);
 
         return member;
     }
@@ -140,13 +145,13 @@ public class MemberCommandService implements MemberCommandUseCase {
 
         // 이메일 회원은 임시 토큰 삭제 처리
         if (findMember.getLoginType() == LoginType.EMAIL) {
-            memberTokenJpaRepository.deleteByMember(findMember);
+            refreshTokenRepository.deleteByMemberId(findMember.getId());
         }
 
         // 카카오 회원은 가입 완료 시 로그인 기록 저장
         if (findMember.getLoginType() == LoginType.KAKAO) {
             MemberLoginHistory loginHistory = MemberConverter.toLoginHistory(findMember);
-            memberLoginHistoryJpaRepository.save(loginHistory);
+            memberLoginHistoryRepository.save(loginHistory);
         }
 
         return MemberConverter.toMemberSignupResponse(findMember);
@@ -206,8 +211,8 @@ public class MemberCommandService implements MemberCommandUseCase {
         Member findMember = memberJpaRepository.findById(memberId)
                 .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
 
-        memberTokenJpaRepository.deleteByMember(findMember);
-        memberLoginHistoryJpaRepository.deleteByMember(findMember);
+        refreshTokenRepository.deleteByMemberId(findMember.getId());
+        memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
     }
 
     // 회원 탈퇴 처리 (상태 비활성화, 토큰 및 로그인 기록 삭제)
@@ -221,8 +226,8 @@ public class MemberCommandService implements MemberCommandUseCase {
         findMember.updateStatus(TalkPickStatus.DIS_ACTIVE);
         memberJpaRepository.save(findMember);
 
-        memberTokenJpaRepository.deleteByMember(findMember);
-        memberLoginHistoryJpaRepository.deleteByMember(findMember);
+        refreshTokenRepository.deleteByMemberId(findMember.getId());
+        memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
     }
 
     // 회원 가입 시 필수 정보 검증

@@ -5,10 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import talkPick.domain.member.dto.*;
+import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
-import org.springframework.data.domain.Page;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 import talkPick.global.response.CursorPageResponse;
 import talkPick.global.response.ResultResponse;

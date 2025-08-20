@@ -1,4 +1,4 @@
-package talkPick.domain.member.dto;
+package talkPick.domain.member.adapter.in.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -77,18 +77,10 @@ public class MemberReqDto {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    public class MemberEmailReqDto {
+    public class MemberEmailReqest {
         @NotNull(message = "이메일은 필수입니다.")
         private String email;
         @NotNull(message = "비밀번호는 필수입니다.")
         private String password;
-    }
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public class MemberMbtiUpdateRequestDto {
-        private MBTI mbti;
     }
 }

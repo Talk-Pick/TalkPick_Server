@@ -14,7 +14,7 @@ import java.time.Duration;
 
 @Component
 @RequiredArgsConstructor
-public class MemberQueryRepositoryAdaptor implements MemberQueryRepositoryPort {
+public class MemberQueryRepositoryAdapter implements MemberQueryRepositoryPort {
     private final MemberJpaRepository memberJpaRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private static final String KEY_PREFIX = "member:";
@@ -37,5 +37,15 @@ public class MemberQueryRepositoryAdaptor implements MemberQueryRepositoryPort {
     public Member findMemberById(final Long memberId) {
         return memberJpaRepository.findById(memberId)
                 .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
+    @Override
+    public java.util.Optional<Member> findByEmail(String email) {
+        return memberJpaRepository.findByEmail(email);
+    }
+
+    @Override
+    public java.util.Optional<Member> findByProviderId(String providerId) {
+        return memberJpaRepository.findByProviderId(providerId);
     }
 }

@@ -2,12 +2,12 @@ package talkPick.domain.member.port.in;
 
 import talkPick.domain.member.dto.MemberDataDto;
 import talkPick.domain.member.domain.Member;
-import talkPick.domain.member.dto.MemberReqDto;
-import talkPick.domain.member.dto.MemberResDto;
+import talkPick.domain.member.adapter.in.dto.MemberReqDto;
+import talkPick.domain.member.adapter.out.dto.MemberResDto;
 
 public interface MemberCommandUseCase {
-    Member findOrCreateEmailMember(MemberReqDto.MemberEmailReqDto emailReqDto);
-    Member loginEmailMember(MemberReqDto.MemberEmailReqDto emailReqDto);
+    Member findOrCreateEmailMember(MemberReqDto.MemberEmailReqest emailReqDto);
+    Member loginEmailMember(MemberReqDto.MemberEmailReqest emailReqDto);
     MemberResDto.ProfileUpdateResponse updateProfile(String authorization, MemberReqDto.ProfileUpdateRequest request);
     Member findOrCreateKakaoMember(MemberDataDto.KakaoMemberData kakaoMemberData);
     MemberResDto.MemberSignupResponse memberSignup(String authorization, MemberReqDto.MemberSignupRequest request);

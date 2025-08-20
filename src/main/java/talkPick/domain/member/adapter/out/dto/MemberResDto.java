@@ -1,4 +1,4 @@
-package talkPick.domain.member.dto;
+package talkPick.domain.member.adapter.out.dto;
 
 import lombok.*;
 import talkPick.domain.member.domain.type.Gender;
@@ -19,17 +19,6 @@ public class MemberResDto {
         private String accessToken;
         private String refreshToken;
         private LocalDateTime accessTokenExpireAt;
-        private TalkPickStatus talkPickStatus;
-    }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class SignupResponse {
-        private Long memberId;
-        private String email;
-        private String message;
         private TalkPickStatus talkPickStatus;
     }
 
