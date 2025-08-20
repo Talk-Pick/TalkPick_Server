@@ -178,7 +178,7 @@ public class MemberCommandService implements MemberCommandUseCase {
         for (Long termId : agreeTermIdList) {
             Term term = termJpaRepository.findById(termId)
                     .orElseThrow(() -> new TermHandler(ErrorCode.TERM_NOT_FOUND));
-            memberTermJpaRepository.findByMemberAndTerm(findMember, term)
+            memberTermJpaRepository.findByMemberIdAndTerm(findMember.getId(), term)
                     .ifPresentOrElse(
                             mt -> mt.updateIsAgree(true),
                             () -> memberTermJpaRepository.save(MemberConverter.toMemberTerm(findMember, term, true))
@@ -189,7 +189,7 @@ public class MemberCommandService implements MemberCommandUseCase {
         for (Long termId : disagreeTermIdList) {
             Term term = termJpaRepository.findById(termId)
                     .orElseThrow(() -> new TermHandler(ErrorCode.TERM_NOT_FOUND));
-            memberTermJpaRepository.findByMemberAndTerm(findMember, term)
+            memberTermJpaRepository.findByMemberIdAndTerm(findMember.getId(), term)
                     .ifPresentOrElse(
                             mt -> mt.updateIsAgree(false),
                             () -> memberTermJpaRepository.save(MemberConverter.toMemberTerm(findMember, term, false))

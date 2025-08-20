@@ -84,7 +84,7 @@ public class MemberConverter {
 
     public static MemberTerm toMemberTerm(Member member, Term term, Boolean isAgree) {
         return MemberTerm.builder()
-                .member(member)
+                .memberId(member.getId())
                 .term(term)
                 .isAgree(isAgree)
                 .build();
@@ -109,7 +109,7 @@ public class MemberConverter {
 
     public static MemberLoginHistory toLoginHistory(Member member) {
         return MemberLoginHistory.builder()
-                .member(member)
+                .memberId(member.getId())
                 .loginTime(LocalDateTime.now())
                 .build();
     }
