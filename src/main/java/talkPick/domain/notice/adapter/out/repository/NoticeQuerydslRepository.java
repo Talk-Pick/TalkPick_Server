@@ -9,7 +9,11 @@ import talkPick.domain.notice.adapter.in.dto.NoticeReqDTO;
 import talkPick.domain.notice.adapter.out.dto.NoticeResDTO;
 import talkPick.domain.notice.exception.NoticeNotFoundException;
 import talkPick.global.response.CursorPageResponse;
+
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+
 import static talkPick.domain.notice.domain.QNotice.notice;
 import static talkPick.domain.notice.domain.QNoticeImage.noticeImage;
 import static talkPick.global.exception.ErrorCode.NOTICE_NOT_FOUND;
@@ -48,7 +52,8 @@ public class NoticeQuerydslRepository {
             throw new NoticeNotFoundException(NOTICE_NOT_FOUND);
         }
 
-        List<String> imageUrls = findImageUrlsByNoticeId(noticeId);
+        List<String> imageUrls = Optional.ofNullable(findImageUrlsByNoticeId(noticeId))
+                .orElse(Collections.emptyList());
         result.addImageUrls(imageUrls);
 
         return result;
@@ -74,6 +79,7 @@ public class NoticeQuerydslRepository {
         }
 
         CursorPageResponse.Cursor nextCursor = null;
+
         if (!results.isEmpty()) {
             var last = results.getLast();
             nextCursor = new CursorPageResponse.Cursor(last.getCreatedAt(), last.getNoticeId());
