@@ -23,5 +23,5 @@ public interface NoticeQueryApi {
 
     @GetMapping("/{id}")
     @Operation(summary = "공지사항 상세 조회", description = "공지사항 상세 조회 API 입니다.")
-    NoticeResDTO.NoticeDetail getNoticeDetail(@PathVariable("id") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") Long noticeId);
+    NoticeResDTO.NoticeDetail getNoticeDetail(@PathVariable("id") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long noticeId);
 }
