@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
+/**
+ * 해당 코드 사용 안 함.
+ * **/
+@Deprecated
 @Entity
 @Getter
 @Builder

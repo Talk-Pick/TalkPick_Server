@@ -9,6 +9,10 @@ import talkPick.domain.search.adapter.out.dto.TopicSearchResDTO;
 import talkPick.global.security.annotation.MemberId;
 import java.util.List;
 
+/**
+ * 해당 코드 사용 안 함.
+ * **/
+@Deprecated
 @RequestMapping("/api/v1/search")
 @Tag(name = "톡픽 검색 API", description = "톡픽 검색 관련 API 입니다.")
 public interface TopicSearchApi {

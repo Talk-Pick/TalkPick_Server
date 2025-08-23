@@ -16,6 +16,7 @@ public class TopicStatQueryRepositoryAdapter implements TopicStatQueryRepository
 
     @Override
     public TopicStat findTopicStatByTopicId(final Long topicId) {
-        return topicStatJpaRepository.findByTopicId(topicId).orElseThrow(() -> new TopicStatNotFoundException(TOPIC_STAT_NOT_FOUND));
+        return topicStatJpaRepository.findByTopicId(topicId)
+                .orElseThrow(() -> new TopicStatNotFoundException(TOPIC_STAT_NOT_FOUND));
     }
 }

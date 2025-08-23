@@ -7,6 +7,7 @@ import talkPick.domain.today.adapter.out.dto.TodayTopicResDTO;
 import talkPick.domain.today.port.in.TodayTopicQueryUseCase;
 import java.util.List;
 
+@Deprecated
 @RestController
 @RequiredArgsConstructor
 public class TodayTopicQueryController implements TodayTopicQueryApi {

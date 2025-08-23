@@ -3,6 +3,7 @@ package talkPick.domain.topic.adapter.out;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Component;
 import talkPick.domain.topic.dto.TopicCacheDTO;
 import talkPick.domain.topic.domain.Topic;
@@ -22,12 +23,14 @@ public class TopicQueryRepositoryAdapter implements TopicQueryRepositoryPort {
 
     @Override
     public Topic findTopicById(final Long topicId) {
-        return topicJpaRepository.findById(topicId).orElseThrow(() -> new TopicNotFoundException(TOPIC_NOT_FOUND));
+        return topicJpaRepository.findById(topicId)
+                .orElseThrow(() -> new TopicNotFoundException(TOPIC_NOT_FOUND));
     }
 
     @Override
     public Slice<TopicResDTO.Categories> findCategoriesWithPageable(Pageable pageable) {
-        return topicQuerydslRepository.findCategoriesWithPageable(pageable);
+        return Optional.ofNullable(topicQuerydslRepository.findCategoriesWithPageable(pageable))
+                .orElse(new SliceImpl<>(Collections.emptyList(), pageable, false));
     }
 
     @Override
@@ -38,6 +41,7 @@ public class TopicQueryRepositoryAdapter implements TopicQueryRepositoryPort {
 
     @Override
     public List<TopicCacheDTO> findAllTopicCache() {
-        return topicQuerydslRepository.findAllTopicData();
+        return Optional.ofNullable(topicQuerydslRepository.findAllTopicData())
+                .orElse(Collections.emptyList());
     }
 }

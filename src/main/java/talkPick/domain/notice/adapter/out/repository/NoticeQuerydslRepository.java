@@ -7,32 +7,23 @@ import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.notice.adapter.in.dto.NoticeReqDTO;
 import talkPick.domain.notice.adapter.out.dto.NoticeResDTO;
-import talkPick.domain.notice.exception.NoticeNotFoundException;
 import talkPick.global.response.CursorPageResponse;
 import java.util.List;
 import static talkPick.domain.notice.domain.QNotice.notice;
 import static talkPick.domain.notice.domain.QNoticeImage.noticeImage;
-import static talkPick.global.exception.ErrorCode.NOTICE_NOT_FOUND;
 
 @Repository
 public class NoticeQuerydslRepository {
+
     private final JPAQueryFactory queryFactory;
+
     public NoticeQuerydslRepository(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
     public NoticeResDTO.NoticeDetail findNoticeDetailById(Long noticeId) {
-        //TODO 조회 수 업데이트 구현해야 함.
-//        long updated = queryFactory.update(notice)
-//                .set(notice.readCount, notice.readCount.add(1))
-//                .where(notice.id.eq(noticeId))
-//                .execute();
-//
-//        if (updated == 0) {
-//            throw new NoticeNotFoundException(NOTICE_NOT_FOUND);
-//        }
-
-        var result =  queryFactory.select(Projections.constructor(NoticeResDTO.NoticeDetail.class,
+        return queryFactory.select(Projections.constructor(
+                        NoticeResDTO.NoticeDetail.class,
                         notice.id,
                         notice.title,
                         notice.content,
@@ -43,19 +34,18 @@ public class NoticeQuerydslRepository {
                 .from(notice)
                 .where(notice.id.eq(noticeId))
                 .fetchOne();
-
-        if(result == null) {
-            throw new NoticeNotFoundException(NOTICE_NOT_FOUND);
-        }
-
-        List<String> imageUrls = findImageUrlsByNoticeId(noticeId);
-        result.addImageUrls(imageUrls);
-
-        return result;
     }
 
-    public CursorPageResponse<NoticeResDTO.NoticeSummary> findNoticesWithCursor(NoticeReqDTO.Cursor cursor) {
-        var results = queryFactory.select(Projections.constructor(NoticeResDTO.NoticeSummary.class,
+    public List<String> findImageUrlsByNoticeId(Long noticeId) {
+        return queryFactory.select(noticeImage.imageUrl)
+                .from(noticeImage)
+                .where(noticeImage.noticeId.eq(noticeId))
+                .fetch();
+    }
+
+    public CursorPageResponse<NoticeResDTO.NoticeSummary> findNoticesWithCursorRaw(NoticeReqDTO.Cursor cursor) {
+        var results = queryFactory.select(Projections.constructor(
+                        NoticeResDTO.NoticeSummary.class,
                         notice.id,
                         notice.title,
                         notice.content,
@@ -84,13 +74,6 @@ public class NoticeQuerydslRepository {
                 .hasNext(hasNext)
                 .nextCursor(nextCursor)
                 .build();
-    }
-
-    private List<String> findImageUrlsByNoticeId(Long noticeId) {
-        return queryFactory.select(noticeImage.imageUrl)
-                .from(noticeImage)
-                .where(noticeImage.noticeId.eq(noticeId))
-                .fetch();
     }
 
     private BooleanBuilder buildCursorPredicate(NoticeReqDTO.Cursor cursor) {

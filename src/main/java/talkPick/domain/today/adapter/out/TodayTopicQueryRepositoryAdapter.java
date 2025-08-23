@@ -8,6 +8,7 @@ import talkPick.domain.today.adapter.out.repository.TodayTopicQuerydslRepository
 import talkPick.domain.today.port.out.TodayTopicQueryRepositoryPort;
 import java.util.List;
 
+@Deprecated
 @Component
 @RequiredArgsConstructor
 public class TodayTopicQueryRepositoryAdapter implements TodayTopicQueryRepositoryPort {
