@@ -19,8 +19,8 @@ import talkPick.domain.term.adapter.out.repository.TermJpaRepository;
 import talkPick.domain.term.domain.Term;
 import talkPick.global.security.jwt.repository.RefreshTokenRepository;
 import talkPick.global.exception.ErrorCode;
-import talkPick.global.exception.handler.MemberHandler;
-import talkPick.global.exception.handler.TermHandler;
+import talkPick.global.exception.handler.MemberExceptionHandler;
+import talkPick.global.exception.handler.TermExceptionHandler;
 import talkPick.global.model.TalkPickStatus;
 import talkPick.global.security.jwt.util.JwtProvider;
 
@@ -49,7 +49,7 @@ public class MemberCommandService implements MemberCommandUseCase {
 
         // 회원 조회
         Member findMember = memberJpaRepository.findById(memberId)
-                .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
 
         // 요청된 필드별 수정 처리
         if (request.getNickname() != null) findMember.updateNickname(request.getNickname());
@@ -70,7 +70,7 @@ public class MemberCommandService implements MemberCommandUseCase {
         validatePassword(emailReqDto.getPassword());
 
         if (memberJpaRepository.findByEmail(emailReqDto.getEmail()).isPresent()) {
-            throw new MemberHandler(ErrorCode.MEMBER_EMAIL_ALREADY_EXISTS);
+            throw new MemberExceptionHandler(ErrorCode.MEMBER_EMAIL_ALREADY_EXISTS);
         }
 
         Member newMember = MemberConverter.toEmailMember(emailReqDto);
@@ -88,11 +88,11 @@ public class MemberCommandService implements MemberCommandUseCase {
         validatePassword(emailReqDto.getPassword());
 
         Member member = memberJpaRepository.findByEmail(emailReqDto.getEmail())
-                .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
 
         // 비밀번호 복호화 및 검증
         if (!passwordEncoder.matches(emailReqDto.getPassword(), member.getPassword())) {
-            throw new MemberHandler(ErrorCode.INVALID_PASSWORD);
+            throw new MemberExceptionHandler(ErrorCode.INVALID_PASSWORD);
         }
 
         MemberLoginHistory loginHistory = MemberConverter.toLoginHistory(member);
@@ -120,10 +120,10 @@ public class MemberCommandService implements MemberCommandUseCase {
         Long memberId = jwtProvider.getMemberId(authorization);
 
         Member findMember = memberJpaRepository.findById(memberId)
-                .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
 
         if (!validateAdditionalInfo(request)) {
-            throw new MemberHandler(ErrorCode.INVALID_MEMBER_INFO);
+            throw new MemberExceptionHandler(ErrorCode.INVALID_MEMBER_INFO);
         }
 
         // 추가 정보 입력
@@ -165,19 +165,19 @@ public class MemberCommandService implements MemberCommandUseCase {
         Long memberId = jwtProvider.getMemberId(authorization);
 
         Member findMember = memberJpaRepository.findById(memberId)
-                .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
 
         List<Long> agreeTermIdList = request.getAgreeTermIdList();
         List<Long> disagreeTermIdList = request.getDisagreeTermIdList();
 
         if (!validateRequiredTerms(agreeTermIdList)) {
-            throw new TermHandler(ErrorCode.REQUIRED_TERM_NOT_AGREED);
+            throw new TermExceptionHandler(ErrorCode.REQUIRED_TERM_NOT_AGREED);
         }
 
         // 동의한 약관 저장 및 업데이트
         for (Long termId : agreeTermIdList) {
             Term term = termJpaRepository.findById(termId)
-                    .orElseThrow(() -> new TermHandler(ErrorCode.TERM_NOT_FOUND));
+                    .orElseThrow(() -> new TermExceptionHandler(ErrorCode.TERM_NOT_FOUND));
             memberTermJpaRepository.findByMemberIdAndTerm(findMember.getId(), term)
                     .ifPresentOrElse(
                             mt -> mt.updateIsAgree(true),
@@ -188,7 +188,7 @@ public class MemberCommandService implements MemberCommandUseCase {
         // 미동의한 약관 저장 및 업데이트
         for (Long termId : disagreeTermIdList) {
             Term term = termJpaRepository.findById(termId)
-                    .orElseThrow(() -> new TermHandler(ErrorCode.TERM_NOT_FOUND));
+                    .orElseThrow(() -> new TermExceptionHandler(ErrorCode.TERM_NOT_FOUND));
             memberTermJpaRepository.findByMemberIdAndTerm(findMember.getId(), term)
                     .ifPresentOrElse(
                             mt -> mt.updateIsAgree(false),
@@ -209,7 +209,7 @@ public class MemberCommandService implements MemberCommandUseCase {
         Long memberId = jwtProvider.getMemberId(authorization);
 
         Member findMember = memberJpaRepository.findById(memberId)
-                .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
 
         refreshTokenRepository.deleteByMemberId(findMember.getId());
         memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
@@ -221,7 +221,7 @@ public class MemberCommandService implements MemberCommandUseCase {
         Long memberId = jwtProvider.getMemberId(authorization);
 
         Member findMember = memberJpaRepository.findById(memberId)
-                .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
 
         findMember.updateStatus(TalkPickStatus.DIS_ACTIVE);
         memberJpaRepository.save(findMember);
@@ -255,12 +255,12 @@ public class MemberCommandService implements MemberCommandUseCase {
     // 비밀번호 유효성 검증 (영문 대소문자, 숫자, 특수문자 포함 8~20자)
     private void validatePassword(String password) {
         if (password == null || password.trim().isEmpty()) {
-            throw new MemberHandler(ErrorCode.PASSWORD_REQUIRED);
+            throw new MemberExceptionHandler(ErrorCode.PASSWORD_REQUIRED);
         }
 
         String passwordPattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,20}$";
         if (!password.matches(passwordPattern)) {
-            throw new MemberHandler(ErrorCode.INVALID_PASSWORD_FORMAT);
+            throw new MemberExceptionHandler(ErrorCode.INVALID_PASSWORD_FORMAT);
         }
     }
 }

@@ -8,7 +8,7 @@ import talkPick.domain.admin.domain.type.Role;
 import talkPick.domain.member.adapter.in.dto.MemberReqDto;
 import talkPick.domain.member.domain.Member;
 import talkPick.global.exception.ErrorCode;
-import talkPick.global.exception.handler.JwtHandler;
+import talkPick.global.exception.handler.JwtExceptionHandler;
 import talkPick.global.security.jwt.RefreshToken;
 import talkPick.global.security.jwt.dto.JwtResDTO;
 import talkPick.global.security.jwt.port.in.JwtTokenCommandUseCase;
@@ -53,13 +53,13 @@ public class JwtTokenCommandCommandService implements JwtTokenCommandUseCase {
 
         // 리프레시 토큰이 없으면 예외 발생 (유효하지 않은 토큰)
         if (refresh == null) {
-            throw new JwtHandler(ErrorCode.INVALID_REFRESH_TOKEN);
+            throw new JwtExceptionHandler(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         // 리프레시 토큰이 만료됐으면 DB에서 삭제하고 예외 발생
         if (refresh.getExpiredAt().isBefore(LocalDateTime.now(ZoneOffset.UTC))) {
             refreshTokenRepository.deleteByMemberId(refresh.getMemberId());
-            throw new JwtHandler(ErrorCode.EXPIRED_REFRESH_TOKEN);
+            throw new JwtExceptionHandler(ErrorCode.EXPIRED_REFRESH_TOKEN);
         }
 
         // 유효한 리프레시 토큰이면 해당 회원 ID와 역할을 기반으로 새 액세스 토큰 생성
