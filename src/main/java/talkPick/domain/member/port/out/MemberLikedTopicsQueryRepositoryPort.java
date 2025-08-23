@@ -1,9 +1,11 @@
 package talkPick.domain.member.port.out;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import talkPick.domain.member.adapter.in.dto.MemberLikedTopicsResDto;
+import talkPick.domain.member.domain.Member;
+import talkPick.domain.member.adapter.out.dto.MemberResDto;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public interface MemberLikedTopicsQueryRepositoryPort {
-    public Page<MemberLikedTopicsResDto> findMemberLikedTopics(Long memberId, Pageable pageable);
+    List<MemberResDto.MemberLikedTopicResDto> findMemberLikedTopics(Member member, LocalDateTime cursor, int size);
 }

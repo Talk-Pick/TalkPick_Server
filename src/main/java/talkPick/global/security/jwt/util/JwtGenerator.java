@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import talkPick.global.exception.ErrorCode;
+import talkPick.global.exception.handler.JwtHandler;
 import talkPick.global.security.exception.UnauthorizedException;
 import talkPick.global.security.jwt.JwtProperties;
 import talkPick.global.security.jwt.dto.JwtResDTO;
@@ -22,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtGenerator {
     private final JwtProperties jwtProperties;
+    private Key key;
 
     public JwtResDTO.AccessToken generateAccessToken(final long memberId, final String role) {
         final var now = LocalDateTime.now();
@@ -77,5 +79,19 @@ public class JwtGenerator {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build();
+    }
+
+    /**
+     * 만료 시간 추출
+     */
+    public LocalDateTime getExpiredAt(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder().setSigningKey(key).build()
+                    .parseClaimsJws(token).getBody();
+            Date expiration = claims.getExpiration();
+            return LocalDateTime.ofInstant(expiration.toInstant(), ZoneId.systemDefault());
+        } catch (Exception e) {
+            throw new JwtHandler(ErrorCode.INVALID_JWT_TOKEN);
+        }
     }
 }

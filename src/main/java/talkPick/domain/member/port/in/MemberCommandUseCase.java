@@ -1,11 +1,17 @@
 package talkPick.domain.member.port.in;
 
-import talkPick.domain.member.adapter.in.dto.MemberEmailReqDto;
+import talkPick.domain.member.dto.MemberDataDto;
 import talkPick.domain.member.domain.Member;
-import talkPick.domain.member.domain.type.MBTI;
+import talkPick.domain.member.adapter.in.dto.MemberReqDto;
+import talkPick.domain.member.adapter.out.dto.MemberResDto;
 
 public interface MemberCommandUseCase {
-    void setEmailMember(MemberEmailReqDto memberReqDto);
-    Member setKakaoMember(Member member);
-    Member updateMemberMbti(Long memberId, MBTI mbti);
+    Member findOrCreateEmailMember(MemberReqDto.MemberEmailReqest emailReqDto);
+    Member loginEmailMember(MemberReqDto.MemberEmailReqest emailReqDto);
+    MemberResDto.ProfileUpdateResponse updateProfile(String authorization, MemberReqDto.ProfileUpdateRequest request);
+    Member findOrCreateKakaoMember(MemberDataDto.KakaoMemberData kakaoMemberData);
+    MemberResDto.MemberSignupResponse memberSignup(String authorization, MemberReqDto.MemberSignupRequest request);
+    MemberResDto.TermAgreementResponse termAgreement(String authorization, MemberReqDto.TermAgreementRequest request);
+    void logout(String authorization);
+    void delete(String authorization);
 }

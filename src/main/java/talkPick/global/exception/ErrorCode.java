@@ -7,9 +7,6 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
-    // Member
-    MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 회원입니다."),
-
     // Topic
     TOPIC_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 토픽입니다."),
     CATEGORY_NOT_FOUND(HttpStatus.BAD_REQUEST,"찾을 수 없는 카테고리입니다."),
@@ -63,7 +60,31 @@ public enum ErrorCode {
     URL_HEALTH_CHECK_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "URL 연결 실패 에러입니다."),
 
     // Role
-    ROLE_NOT_FOUND(HttpStatus.BAD_REQUEST, "Role이 존재하지 않습니다.");
+    ROLE_NOT_FOUND(HttpStatus.BAD_REQUEST, "Role이 존재하지 않습니다."),
+
+    // JWT
+    INVALID_JWT_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 JWT 토큰입니다."),
+    EXPIRED_JWT_TOKEN(HttpStatus.BAD_REQUEST, "만료된 JWT 토큰입니다."),
+    INVALID_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 리프레시 토큰입니다. 재로그인이 필요합니다."),
+    EXPIRED_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "만료된 리프레시 토큰입니다. 재로그인이 필요합니다."),
+
+    // Member
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
+    MEMBER_EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 가입된 이메일입니다."),
+    INVALID_MEMBER_INFO(HttpStatus.BAD_REQUEST, "회원 필수 정보가 누락되었습니다."),
+    PASSWORD_REQUIRED(HttpStatus.BAD_REQUEST, "비밀번호는 필수입니다."),
+    INVALID_PASSWORD_FORMAT(HttpStatus.BAD_REQUEST, "비밀번호는 8~20자이며 대문자, 소문자, 숫자, 특수문자를 모두 포함해야 합니다."),
+    INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
+
+    // Term
+    TERM_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 약관입니다."),
+    REQUIRED_TERM_NOT_AGREED(HttpStatus.BAD_REQUEST, "필수 약관에 동의하지 않았습니다."),
+
+    // Kakao
+    INVALID_ID_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 ID Token 입니다."),
+    ERROR_ON_VERIFYING(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 토큰 검증 도중 에러 발생"),
+
+    ;
 
     private final HttpStatus status;
     private final String message;
