@@ -4,6 +4,7 @@ import talkPick.domain.today.adapter.in.dto.TodayTopicReqDTO;
 import talkPick.domain.today.adapter.out.dto.TodayTopicResDTO;
 import java.util.List;
 
+@Deprecated
 public interface TodayTopicQueryRepositoryPort {
 //    List<TodayTopicResDTO.TopicDetail> findTodayTopicDetails(TodayTopicReqDTO.TodayTopics requestDTO);
 }
