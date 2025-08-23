@@ -6,6 +6,10 @@ import talkPick.domain.search.adapter.out.dto.TopicSearchResDTO;
 import talkPick.domain.search.port.in.TopicSearchQueryUseCase;
 import java.util.List;
 
+/**
+ * 해당 코드 사용 안 함.
+ * **/
+@Deprecated
 @RestController
 @RequiredArgsConstructor
 public class TopicSearchController implements TopicSearchApi {

@@ -1,5 +1,9 @@
 package talkPick.domain.search.adapter.out.dto;
 
+/**
+ * 해당 코드 사용 안 함.
+ * **/
+@Deprecated
 public class SearchResDTO {
     public class Topic {
         private Long topicId;
