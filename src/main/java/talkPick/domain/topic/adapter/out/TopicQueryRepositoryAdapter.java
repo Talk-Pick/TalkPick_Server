@@ -11,7 +11,8 @@ import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import talkPick.domain.topic.adapter.out.repository.TopicJpaRepository;
 import talkPick.domain.topic.adapter.out.repository.TopicQuerydslRepository;
-import talkPick.domain.topic.exception.TopicNotFoundException;
+import talkPick.global.exception.handler.TopicExceptionHandler;
+
 import java.util.*;
 import static talkPick.global.exception.ErrorCode.*;
 
@@ -24,7 +25,7 @@ public class TopicQueryRepositoryAdapter implements TopicQueryRepositoryPort {
     @Override
     public Topic findTopicById(final Long topicId) {
         return topicJpaRepository.findById(topicId)
-                .orElseThrow(() -> new TopicNotFoundException(TOPIC_NOT_FOUND));
+                .orElseThrow(() -> new TopicExceptionHandler(TOPIC_NOT_FOUND));
     }
 
     @Override
@@ -36,7 +37,7 @@ public class TopicQueryRepositoryAdapter implements TopicQueryRepositoryPort {
     @Override
     public TopicResDTO.TopicDetail findTopicDetail(Long topicId) {
         return Optional.ofNullable(topicQuerydslRepository.findTopicDetailById(topicId))
-                .orElseThrow(() -> new TopicNotFoundException(TOPIC_NOT_FOUND));
+                .orElseThrow(() -> new TopicExceptionHandler(TOPIC_NOT_FOUND));
     }
 
     @Override
