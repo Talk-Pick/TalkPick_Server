@@ -11,13 +11,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import talkPick.global.exception.ErrorCode;
+import talkPick.global.exception.handler.SecurityExceptionHandler;
 import talkPick.global.security.constants.AuthConstants;
-import talkPick.global.security.exception.UnauthorizedException;
 import talkPick.global.security.jwt.util.JwtProvider;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import static talkPick.global.exception.ErrorCode.UNAUTHORIZED;
 import static talkPick.global.security.model.WhiteList.PATHS;
 
 @Slf4j
@@ -46,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(accessToken) && accessToken.startsWith(AuthConstants.BEARER)) {
             return accessToken.substring(AuthConstants.BEARER.length());
         }
-        throw new UnauthorizedException(ErrorCode.UNAUTHORIZED);
+        throw new SecurityExceptionHandler(UNAUTHORIZED);
     }
 
     private void doAuthentication(final String token, final Long memberId, final String role) {

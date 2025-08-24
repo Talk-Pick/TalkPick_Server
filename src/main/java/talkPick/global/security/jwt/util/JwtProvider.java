@@ -7,11 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.handler.JwtExceptionHandler;
-import talkPick.global.security.exception.RoleNotFoundException;
+import talkPick.global.exception.handler.SecurityExceptionHandler;
 import talkPick.global.security.jwt.dto.JwtResDTO;
-
 import java.security.Key;
 import java.util.List;
+
+import static talkPick.global.exception.ErrorCode.ROLE_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Component
@@ -41,7 +42,7 @@ public class JwtProvider {
         List<String> roles = jwtGenerator.parseToken(token).getBody().get("roles", List.class);
 
         if (roles == null || roles.isEmpty()) {
-            throw new RoleNotFoundException(ErrorCode.ROLE_NOT_FOUND);
+            throw new SecurityExceptionHandler(ROLE_NOT_FOUND);
         }
 
         return roles.getFirst();
