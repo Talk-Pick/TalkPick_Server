@@ -1,4 +1,8 @@
 package talkPick.global.exception.handler;
 
-public class TodayExceptionHandler {
+import talkPick.global.exception.ErrorCode;
+import talkPick.global.exception.TalkPickException;
+
+public class TodayExceptionHandler extends TalkPickException {
+    public TodayExceptionHandler(ErrorCode errorCode) {super(errorCode);}
 }
