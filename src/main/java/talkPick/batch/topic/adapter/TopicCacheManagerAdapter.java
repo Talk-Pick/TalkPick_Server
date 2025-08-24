@@ -11,7 +11,7 @@ import talkPick.domain.topic.dto.TopicCacheDTO;
 import talkPick.batch.topic.port.TopicCacheManager;
 import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
 import talkPick.external.llm.port.LLMClientPort;
-import talkPick.batch.topic.exception.JVMCacheException;
+import talkPick.global.exception.handler.JVMCacheExceptionHandler;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -59,7 +59,7 @@ public class TopicCacheManagerAdapter implements TopicCacheManager {
 //            llmClientPort.send(newData);
         } catch (Exception e) {
             log.error("[TopicCache] LLM 서버와의 통신 중 오류 발생: {}", e.getMessage());
-            throw new JVMCacheException(JVM_CACHE_REFRESH_FAILED, e.getMessage());
+            throw new JVMCacheExceptionHandler(JVM_CACHE_REFRESH_FAILED, e.getMessage());
         }
     }
 
