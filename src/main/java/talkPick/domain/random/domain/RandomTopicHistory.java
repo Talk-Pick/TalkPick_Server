@@ -3,7 +3,6 @@ package talkPick.domain.random.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
-
 import java.time.LocalDateTime;
 
 @Getter
@@ -36,25 +35,18 @@ public class RandomTopicHistory {
     @Column(name = "end_at", nullable = true, columnDefinition = "DATETIME COMMENT '종료 시간'")
     private LocalDateTime endAt;
 
-    public static RandomTopicHistory ofByCategory(final Long memberId, RandomReqDTO.SelectByCategory requestDTO) {
+    public static RandomTopicHistory of(final Long memberId, final Long randomId, RandomReqDTO.Record requestDTO) {
         return RandomTopicHistory.builder()
                 .memberId(memberId)
-                .randomId(requestDTO.randomId())
-                .topicId(null)
-                .order(0)
-                .startAt(LocalDateTime.now())
-                .endAt(null)
-                .build();
-    }
-
-    public static RandomTopicHistory ofByTopic(final Long memberId, RandomReqDTO.SelectByTopic requestDTO) {
-        return RandomTopicHistory.builder()
-                .memberId(memberId)
-                .randomId(requestDTO.randomId())
+                .randomId(randomId)
                 .topicId(requestDTO.topicId())
                 .order(requestDTO.order())
                 .startAt(LocalDateTime.now())
                 .endAt(null)
                 .build();
+    }
+
+    public void next() {
+        this.endAt = LocalDateTime.now();
     }
 }

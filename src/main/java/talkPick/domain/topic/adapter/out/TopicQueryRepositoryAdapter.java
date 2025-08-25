@@ -1,10 +1,8 @@
 package talkPick.domain.topic.adapter.out;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Component;
+import talkPick.domain.topic.domain.type.CategoryGroup;
 import talkPick.domain.topic.dto.TopicCacheDTO;
 import talkPick.domain.topic.domain.Topic;
 import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
@@ -12,7 +10,6 @@ import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import talkPick.domain.topic.adapter.out.repository.TopicJpaRepository;
 import talkPick.domain.topic.adapter.out.repository.TopicQuerydslRepository;
 import talkPick.global.exception.handler.TopicExceptionHandler;
-
 import java.util.*;
 import static talkPick.global.exception.ErrorCode.*;
 
@@ -29,9 +26,9 @@ public class TopicQueryRepositoryAdapter implements TopicQueryRepositoryPort {
     }
 
     @Override
-    public Slice<TopicResDTO.Categories> findCategoriesWithPageable(Pageable pageable) {
-        return Optional.ofNullable(topicQuerydslRepository.findCategoriesWithPageable(pageable))
-                .orElse(new SliceImpl<>(Collections.emptyList(), pageable, false));
+    public List<TopicResDTO.Categories> findCategoriesByCategoryGroup(CategoryGroup categoryGroup) {
+        return Optional.ofNullable(topicQuerydslRepository.findCategoriesByCategoryGroup(categoryGroup))
+                .orElse(Collections.emptyList());
     }
 
     @Override

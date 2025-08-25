@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-
 @RequiredArgsConstructor
 public class TodayTopicCommandRepositoryAdapter implements TodayTopicCommandRepositoryPort {
     private final TodayTopicJpaRepository topicJpaRepository;
