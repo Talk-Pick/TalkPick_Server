@@ -9,5 +9,18 @@ import talkPick.domain.random.port.in.RandomCommandUseCase;
 public class RandomCommandController implements RandomCommandApi {
     private final RandomCommandUseCase randomCommandUseCase;
 
+    @Override
+    public void start(Long memberId) {
+        randomCommandUseCase.start(memberId);
+    }
 
+    @Override
+    public void quit(Long memberId, Long randomId) {
+        randomCommandUseCase.quit(memberId, randomId);
+    }
+
+    @Override
+    public void end(Long memberId, Long randomId) {
+        return randomCommandUseCase.end(memberId, randomId);
+    }
 }
