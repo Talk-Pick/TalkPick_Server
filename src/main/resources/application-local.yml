@@ -1,6 +1,7 @@
 jwt:
   secret: ${JWT_SECRET}
   accessTokenExpireTime: ${JWT_ACCESS_EXPIRE_TIME}
+  refreshTokenExpireTime: ${JWT_REFRESH_EXPIRE_TIME}
 
 server:
   port: ${SERVER_PORT}
@@ -29,7 +30,7 @@ spring:
         format_sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
   servlet:
     multipart:
       max-file-size: ${MAX_FILE_SIZE}
@@ -37,14 +38,13 @@ spring:
   messages:
     basename: messages,errors
 
-logging.level:
-  org.hibernate.SQL: debug
-  org.hibernate.orm.jdbc.bind: trace
-  org.springframework.web.cors: debug
-  org.apache.coyote.http11: debug
-  logging:
-    level:
-      root: debug
+logging:
+  level:
+    root: info
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
+    org.springframework.web.cors: debug
+#    org.apache.coyote.http11: trace
 
 management:
   endpoint:
@@ -53,7 +53,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "prometheus"
+        include: health, prometheus
 
 kakao:
   client-id: ${KAKAO_CLIENT_ID}
@@ -71,3 +71,6 @@ resilience4j:
         slidingWindowSize: 10
         failureRateThreshold: 50
         waitDurationInOpenState: 10s
+
+healthcheck:
+  url: ${HEALTH_CHECK_URL}

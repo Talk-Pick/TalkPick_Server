@@ -1,44 +1,17 @@
 package talkPick.domain.random.adapter.out.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import talkPick.domain.topic.dto.TopicCacheDTO;
-
-import java.time.LocalDateTime;
+import talkPick.domain.topic.domain.type.Keyword;
 import java.util.List;
 
 public class RandomResDTO {
-    public record Categories (
-            Long categoryId,
-            String categoryGroup,
-            String category,
-            String imageUrl
-    ) {}
-
-    public record RandomTopic (
-            Integer order,
-            Long topicId,
-            String categoryGroup,
-            String category,
-            String imageUrl,
-            String keyword,
-            String thumbnail,
-            String icon
-    ) {
-        public static RandomTopic of(final Integer orderId, TopicCacheDTO dto) {
-            return new RandomTopic(
-                    orderId,
-                    dto.getId(),
-                    dto.getCategoryGroup(),
-                    dto.getCategoryTitle(),
-                    dto.getCategoryImageUrl(),
-                    dto.getKeyword(),
-                    dto.getThumbnail(),
-                    dto.getIcon()
-            );
-        }
+    @Getter
+    @AllArgsConstructor
+    public static class RandomTopic {
+        private Integer order;
+        private List<RandomTopicDetail> randomTopicDetails;
     }
 
     @Getter
@@ -48,41 +21,20 @@ public class RandomResDTO {
         private Long topicId;
         private String title;
         private String detail;
-        private String thumbnail;
-        private String icon;
+        private String categoryGroup;
         private String category;
-        private List<String> topicImages;
+        private Keyword keyword;
 
-        public void addTopicImage(List<String> topicImages) {
-            this.topicImages = topicImages;
+        public String getKeywordName() {
+            return keyword != null ? keyword.name() : null;
         }
-    }
 
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Result {
-        private Long randomId;
-        private List<ResultDetail> details;
-
-        public static Result of(final Long randomId, final List<ResultDetail> details) {
-            return Result.builder()
-                    .randomId(randomId)
-                    .details(details)
-                    .build();
+        public String getKeywordImageUrl() {
+            return keyword != null ? keyword.getImageUrl() : null;
         }
-    }
 
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ResultDetail {
-        private Long topicId;
-        private String title;
-        private String category;
-        private String keyword;
-        private LocalDateTime startAt;
-        private LocalDateTime endAt;
+        public String getKeywordIconUrl() {
+            return keyword != null ? keyword.getIconUrl() : null;
+        }
     }
 }

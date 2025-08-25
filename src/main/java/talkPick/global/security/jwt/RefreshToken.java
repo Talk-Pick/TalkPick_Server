@@ -17,14 +17,14 @@ import java.time.LocalDateTime;
 public class RefreshToken {
     @Id
     private String token;
-    private Long userId;
+    private Long memberId;
     private String role;
     private LocalDateTime expiredAt;
 
-    public static RefreshToken of(final String token, final Long userId, final String role, LocalDateTime expiredAt) {
+    public static RefreshToken of(final String token, final Long memberId, final String role, LocalDateTime expiredAt) {
         return RefreshToken.builder()
                 .token(token)
-                .userId(userId)
+                .memberId(memberId)
                 .role(role)
                 .expiredAt(expiredAt)
                 .build();

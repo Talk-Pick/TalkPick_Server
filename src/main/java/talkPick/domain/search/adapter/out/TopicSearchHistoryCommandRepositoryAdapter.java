@@ -11,6 +11,10 @@ import talkPick.domain.search.adapter.out.repository.TopicSearchHistoryJpaReposi
 import talkPick.domain.search.domain.TopicSearchHistory;
 import talkPick.domain.search.port.out.TopicSearchHistoryCommandRepositoryPort;
 
+/**
+ * 해당 코드 사용 안 함.
+ * **/
+@Deprecated
 @Slf4j
 @Component
 @RequiredArgsConstructor

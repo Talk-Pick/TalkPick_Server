@@ -10,15 +10,10 @@ import talkPick.domain.random.port.out.RandomTopicHistoryCommandRepositoryPort;
 @Component
 @RequiredArgsConstructor
 public class RandomTopicHistoryCommandRepositoryAdapter implements RandomTopicHistoryCommandRepositoryPort {
-    private final RandomTopicHistoryJpaRepository selectedRandomTopicJpaRepository;
+    private final RandomTopicHistoryJpaRepository randomTopicHistoryJpaRepository;
 
     @Override
-    public RandomTopicHistory saveByCategory(Long memberId, RandomReqDTO.SelectCategory requestDTO) {
-        return selectedRandomTopicJpaRepository.save(RandomTopicHistory.ofByCategory(memberId, requestDTO));
-    }
-
-    @Override
-    public RandomTopicHistory saveByTopic(Long memberId, RandomReqDTO.SelectTopic selectTopic) {
-        return selectedRandomTopicJpaRepository.save(RandomTopicHistory.ofByTopic(memberId, selectTopic));
+    public void record(Long memberId, Long randomId, RandomReqDTO.Record requestDTO) {
+        randomTopicHistoryJpaRepository.save(RandomTopicHistory.of(memberId, randomId, requestDTO));
     }
 }

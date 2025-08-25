@@ -1,17 +1,20 @@
 package talkPick.domain.random.adapter.in.dto;
 
 public class RandomReqDTO {
-    public record SelectCategory(
-            Long randomId
+    public record Next(
+            Integer order
     ) {}
 
-    public record SelectTopic(
-            Long randomId,
+    public record Record(
             Long topicId,
             Integer order
     ) {}
 
-    public record Result (
+    public record Rate(
+            Integer rating
+    ) {}
+
+    public record Comment(
             String oneLine
     ) {}
 }

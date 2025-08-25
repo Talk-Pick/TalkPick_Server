@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 import talkPick.domain.search.adapter.out.dto.TopicSearchResDTO;
 import talkPick.domain.search.port.in.TopicSearchQueryUseCase;
 import talkPick.domain.search.port.out.TopicSearchHistoryCommandRepositoryPort;
@@ -15,6 +14,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+/**
+ * 해당 코드 사용 안 함.
+ * **/
+@Deprecated
 @Slf4j
 @Service
 @Transactional(readOnly = true)
@@ -43,13 +46,12 @@ public class TopicSearchQueryService implements TopicSearchQueryUseCase {
     @Override
     public List<TopicSearchResDTO.Topic> search(Long memberId, String word) {
         //TODO 테스트할 때 할 일 : 트랜잭션/스레드 다른지 확인
-        String threadName = Thread.currentThread().getName();
-        boolean isActive = TransactionSynchronizationManager.isActualTransactionActive();
-        Object txResource = TransactionSynchronizationManager.getResource("javax.persistence.EntityManager");
-        log.info("[Search] thread = {}, tx active = {}, tx resource = {}", threadName, isActive, txResource);
-
+//        String threadName = Thread.currentThread().getName();
+//        boolean isActive = TransactionSynchronizationManager.isActualTransactionActive();
+//        Object txResource = TransactionSynchronizationManager.getResource("javax.persistence.EntityManager");
+//        log.info("[Search] thread = {}, tx active = {}, tx resource = {}", threadName, isActive, txResource);
         var cachedTopics = topicCacheManager.getAll();
-        var normalizedWord = word.toLowerCase();
+        var normalizedWord = word == null ? "" : word.trim().toLowerCase();
 
         var result = cachedTopics.stream()
                 .filter(topic -> containsWord(topic, normalizedWord))
@@ -71,11 +73,8 @@ public class TopicSearchQueryService implements TopicSearchQueryUseCase {
     private boolean containsWord(TopicCacheDTO topic, String word) {
         return Stream.of(
                         topic.getTitle(),
-                        topic.getDetail(),
-                        topic.getKeyword(),
-                        topic.getCategoryGroup(),
                         topic.getCategoryTitle(),
-                        topic.getCategoryDescription()
+                        topic.getKeyword()
                 )
                 .filter(Objects::nonNull)
                 .map(String::toLowerCase)

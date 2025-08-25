@@ -1,6 +1,5 @@
 package talkPick.global.security.exception;
 
-
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.TalkPickException;
 

@@ -11,7 +11,7 @@ import talkPick.global.model.TalkPickStatus;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
-        name = "topic_like_history",
+        name = "Topic 좋아요 기록 테이블",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"memberId", "topicId"})
         }
@@ -19,17 +19,24 @@ import talkPick.global.model.TalkPickStatus;
 public class TopicLikeHistory extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, columnDefinition = "BIGINT COMMENT '기본 키'")
     private Long id;
+
+    @Column(name = "member_id", nullable = false, columnDefinition = "BIGINT COMMENT '회원 ID'")
     private Long memberId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(20) COMMENT '좋아요 상태'")
     private TalkPickStatus status;
+
+    @Column(name = "topic_id", nullable = false, columnDefinition = "BIGINT COMMENT 'Topic ID'")
     private Long topicId;
 
     public static TopicLikeHistory of(Long memberId, Long topicId) {
-        TopicLikeHistory topicLikeHistory = TopicLikeHistory.builder()
+        return TopicLikeHistory.builder()
                 .status(TalkPickStatus.ACTIVE)
                 .memberId(memberId)
                 .topicId(topicId)
                 .build();
-        return topicLikeHistory;
     }
 }

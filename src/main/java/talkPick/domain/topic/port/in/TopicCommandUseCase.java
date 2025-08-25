@@ -1,7 +1,7 @@
 package talkPick.domain.topic.port.in;
 
-import talkPick.global.security.annotation.UserId;
+import talkPick.global.security.annotation.MemberId;
 
 public interface TopicCommandUseCase {
-    void addLike(@UserId Long memberId, Long topicId);
+    void addLike(@MemberId Long memberId, Long topicId);
 }

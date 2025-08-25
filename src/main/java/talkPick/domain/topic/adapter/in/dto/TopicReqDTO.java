@@ -1,7 +1,6 @@
 package talkPick.domain.topic.adapter.in.dto;
 
 import talkPick.domain.topic.domain.type.Keyword;
-import java.util.List;
 
 public class TopicReqDTO {
     public record Create(
@@ -12,8 +11,4 @@ public class TopicReqDTO {
             String category,
             Keyword keyword
     ){}
-
-    public record TodayTopics(
-            List<Long> topicIds
-    ) {}
 }

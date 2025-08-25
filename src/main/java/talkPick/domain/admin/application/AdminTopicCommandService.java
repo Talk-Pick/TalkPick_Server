@@ -30,8 +30,6 @@ public class AdminTopicCommandService implements AdminTopicCommandUseCase {
                 Topic.create( // topic 생성
                         create.title(),
                         create.detail(),
-                        create.thumbnail(),
-                        create.icon(),
                         adminId
                 )
         );
@@ -44,7 +42,7 @@ public class AdminTopicCommandService implements AdminTopicCommandUseCase {
 
         // 해당 topic 찾아 업데이트
         Topic topic = getValidTopic(topicId);
-        topic.update(updateTopic.title(), updateTopic.detail(), updateTopic.thumbnail(), updateTopic.icon());
+        topic.update(updateTopic.title(), updateTopic.detail());
 
         Topic updated = adminTopicCommandRepositoryPort.save(topic);
         return topicReqMapper.toTopicResponse(updated);

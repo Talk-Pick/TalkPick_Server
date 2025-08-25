@@ -4,6 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 해당 코드 사용 안 함.
+ * **/
+@Deprecated
 public class TopicSearchResDTO {
     @Getter
     @NoArgsConstructor

@@ -8,10 +8,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import talkPick.domain.topic.application.TopicCommandService;
 import talkPick.domain.topic.domain.TopicStat;
-import talkPick.domain.topic.exception.TopicNotFoundException;
 import talkPick.domain.topic.port.out.TopicLikeHistoryCommandRepositoryPort;
 import talkPick.domain.topic.port.out.TopicStatQueryRepositoryPort;
 import talkPick.global.exception.ErrorCode;
+import talkPick.global.exception.handler.TopicExceptionHandler;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -50,9 +50,9 @@ class TopicCommandServiceTest {
         Long memberId = 1L;
         Long topicId = 100L;
 
-        given(topicStatQueryRepositoryPort.findTopicStatByTopicId(topicId)).willThrow(new TopicNotFoundException(ErrorCode.TOPIC_NOT_FOUND));
+        given(topicStatQueryRepositoryPort.findTopicStatByTopicId(topicId)).willThrow(new TopicExceptionHandler(ErrorCode.TOPIC_NOT_FOUND));
 
         // when && then
-        assertThrows(TopicNotFoundException.class, () -> topicCommandService.addLike(memberId, topicId));
+        assertThrows(TopicExceptionHandler.class, () -> topicCommandService.addLike(memberId, topicId));
     }
 }
