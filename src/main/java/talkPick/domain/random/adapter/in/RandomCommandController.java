@@ -16,6 +16,11 @@ public class RandomCommandController implements RandomCommandApi {
     }
 
     @Override
+    public void next(Long memberId, Long randomId, RandomReqDTO.Next requestDTO) {
+        randomCommandUseCase.next(memberId, randomId, requestDTO);
+    }
+
+    @Override
     public void quit(Long memberId, Long randomId) {
         randomCommandUseCase.quit(memberId, randomId);
     }
@@ -23,6 +28,11 @@ public class RandomCommandController implements RandomCommandApi {
     @Override
     public void end(Long memberId, Long randomId) {
         randomCommandUseCase.end(memberId, randomId);
+    }
+
+    @Override
+    public void record(Long memberId, Long randomId, RandomReqDTO.Record requestDTO) {
+        randomCommandUseCase.record(memberId, randomId, requestDTO);
     }
 
     @Override

@@ -31,6 +31,11 @@ public class RandomCommandService implements RandomCommandUseCase {
     }
 
     @Override
+    public void next(Long memberId, Long randomId, RandomReqDTO.Next requestDTO) {
+        randomTopicHistoryQueryRepositoryPort.getRandomTopicHistoryByMemberIdAndRandomIdAndOrder(memberId, randomId, requestDTO).next();
+    }
+
+    @Override
     public void quit(Long memberId, Long randomId) {
         randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, randomId).quit();
     }
@@ -38,6 +43,11 @@ public class RandomCommandService implements RandomCommandUseCase {
     @Override
     public void end(Long memberId, Long randomId) {
         randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, randomId).end();
+    }
+
+    @Override
+    public void record(Long memberId, Long randomId, RandomReqDTO.Record requestDTO) {
+        randomTopicCommandRepositoryPort.record(memberId, randomId, requestDTO);
     }
 
     @Override
@@ -50,27 +60,27 @@ public class RandomCommandService implements RandomCommandUseCase {
         randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, randomId).comment(requestDTO);
     }
 
-    /**
-     * LLM_SERVER로 전달
-     * Redis Cache -> 사용자 정보
-     *  DB -> 사용자 정보 이전 데이터 List
-     *  JVM Cache -> 모든 Topic 데이터
-     **/
-    @Override
-    public List<RandomResDTO.RandomTopic> selectByCategories(Long memberId, RandomReqDTO.SelectByCategory requestDTO) {
-        randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, requestDTO.randomId()).start();
-        randomTopicCommandRepositoryPort.saveByCategory(memberId, requestDTO);
+//    /**
+//     * LLM_SERVER로 전달
+//     * Redis Cache -> 사용자 정보
+//     *  DB -> 사용자 정보 이전 데이터 List
+//     *  JVM Cache -> 모든 Topic 데이터
+//     **/
+//    @Override
+//    public List<RandomResDTO.RandomTopic> selectByCategories(Long memberId, RandomReqDTO.SelectByCategory requestDTO) {
+//        randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, requestDTO.randomId()).start();
+//        randomTopicCommandRepositoryPort.saveByCategory(memberId, requestDTO);
+//
+//        // TODO 추후 LLM 서버 적용 시, 사용할 예정
+////        return sendToLLM(requestDTO.randomId(), memberId);
+//        return topicCacheManager.getRandomTopics(0);
+//    }
 
-        // TODO 추후 LLM 서버 적용 시, 사용할 예정
-//        return sendToLLM(requestDTO.randomId(), memberId);
-        return topicCacheManager.getRandomTopics(0);
-    }
-
-    @Override
-    public List<RandomResDTO.RandomTopic> selectByTopics(Long memberId, RandomReqDTO.SelectByTopic requestDTO) {
-        randomTopicCommandRepositoryPort.saveByTopic(memberId, requestDTO);
-        return topicCacheManager.getRandomTopics(requestDTO.order());
-    }
+//    @Override
+//    public List<RandomResDTO.RandomTopic> selectByTopics(Long memberId, RandomReqDTO.SelectByTopic requestDTO) {
+//        randomTopicCommandRepositoryPort.save(memberId, requestDTO);
+//        return topicCacheManager.getRandomTopics(requestDTO.order());
+//    }
 
     private List<RandomResDTO.RandomTopic> sendToLLM(Long requestDTO, Long memberId) {
         var randomTopicHistoryData = randomTopicHistoryQueryRepositoryPort.getRandomTopicHistoriesByRandomId(requestDTO);
