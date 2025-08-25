@@ -51,14 +51,14 @@ public class SpringDocOpenApiConfig {
                 .build();
     }
 
-    @Bean
-    public GroupedOpenApi searchOpenApi() {
-        return GroupedOpenApi.builder()
-                .group("톡픽 검색 API")
-                .displayName("톡픽 검색 API")
-                .pathsToMatch("/api/v1/search/**")
-                .build();
-    }
+//    @Bean
+//    public GroupedOpenApi searchOpenApi() {
+//        return GroupedOpenApi.builder()
+//                .group("톡픽 검색 API")
+//                .displayName("톡픽 검색 API")
+//                .pathsToMatch("/api/v1/search/**")
+//                .build();
+//    }
 
     @Bean
     public GroupedOpenApi randomOpenApi() {
@@ -81,8 +81,8 @@ public class SpringDocOpenApiConfig {
     @Bean
     public GroupedOpenApi signupOpenApi() {
         return GroupedOpenApi.builder()
-                .group("유저 API")
-                .displayName("유저 API")
+                .group("사용자 API")
+                .displayName("사용자 API")
                 .pathsToMatch("/api/v1/members/**")
                 .build();
     }
