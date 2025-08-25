@@ -57,6 +57,8 @@ public class RandomQuerydslRepository {
                 .leftJoin(category).on(topic.categoryId.eq(category.id))
                 .leftJoin(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
                 .where(builder)
+                .orderBy(com.querydsl.core.types.dsl.Expressions.numberTemplate(Double.class, "rand()").asc())
+                .limit(4)
                 .fetch();
     }
 }

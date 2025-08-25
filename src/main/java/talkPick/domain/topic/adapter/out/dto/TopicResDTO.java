@@ -24,18 +24,28 @@ public class TopicResDTO {
             int selectCount,
             String category,
             CategoryGroup categoryGroup,
-            Keyword keyword
+            String keywordName,
+            String keywordImageUrl,
+            String keywordIconUrl
     ) {
-        public String keywordName() {
-            return keyword != null ? keyword.name() : null;
-        }
-
-        public String keywordImageUrl() {
-            return keyword != null ? keyword.getImageUrl() : null;
-        }
-
-        public String keywordIconUrl() {
-            return keyword != null ? keyword.getIconUrl() : null;
+        public TopicDetail(Long topicId,
+                           String title,
+                           long averageTalkTime,
+                           int selectCount,
+                           String category,
+                           CategoryGroup categoryGroup,
+                           Keyword keyword) {
+            this(
+                    topicId,
+                    title,
+                    averageTalkTime,
+                    selectCount,
+                    category,
+                    categoryGroup,
+                    keyword != null ? keyword.name() : null,
+                    keyword != null ? keyword.getImageUrl() : null,
+                    keyword != null ? keyword.getIconUrl() : null
+            );
         }
     }
 }
