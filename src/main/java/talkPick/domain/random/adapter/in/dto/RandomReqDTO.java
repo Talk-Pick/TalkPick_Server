@@ -11,7 +11,11 @@ public class RandomReqDTO {
             Integer order
     ) {}
 
-    public record Result (
+    public record Rate(
+            Integer rating
+    ) {}
+
+    public record Comment(
             String oneLine
     ) {}
 }

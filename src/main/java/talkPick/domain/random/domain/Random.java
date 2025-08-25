@@ -52,7 +52,11 @@ public class Random extends BaseTime {
         this.type = RandomType.COMPLETED;
     }
 
-    public void saveResult(RandomReqDTO.Result requestDTO) {
+    public void rate(RandomReqDTO.Rate requestDTO) {
+        this.rating = requestDTO.rating();
+    }
+
+    public void comment(RandomReqDTO.Comment requestDTO) {
         this.oneLine = requestDTO.oneLine();
     }
 }

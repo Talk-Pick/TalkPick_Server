@@ -6,7 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
 import talkPick.global.security.annotation.MemberId;
 
 @Validated
@@ -19,9 +21,17 @@ public interface RandomCommandApi {
 
     @PostMapping("/{id}/quit")
     @Operation(summary = "랜덤 대화 주제 코스 그만하기 API", description = "랜덤 대화 주제 코스 그만하기 API 입니다. 랜덤 대화 주제 코스를 중간에 그만둘 때, 해당 API를 한 번 요청해 주세요.")
-    void quit(@MemberId @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") Long memberId, @PathVariable("id") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") Long randomId);
+    void quit(@MemberId @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long memberId, @PathVariable("id") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long randomId);
 
     @PostMapping("/{id}/end")
     @Operation(summary = "랜덤 대화 주제 코스 종료 API", description = "랜덤 대화 주제 코스 종료 API 입니다. 랜덤 대화 주제 코스를 종료할 때, 해당 API를 한 번 요청해 주세요.")
-    void end(@MemberId @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") Long memberId, @PathVariable("id") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") Long randomId);
+    void end(@MemberId @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long memberId, @PathVariable("id") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long randomId);
+
+    @PostMapping("/{id}/rate")
+    @Operation(summary = "랜덤 대화 주제 코스 평점 저장 API", description = "랜덤 대화 주제 코스 평점 저장 API 입니다.")
+    void rate(@MemberId @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long memberId, @PathVariable("id") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long randomId, @RequestBody RandomReqDTO.Rate requestDTO);
+
+    @PostMapping("/{id}/comment")
+    @Operation(summary = "랜덤 대화 주제 코스 한 줄 평 저장 API", description = "랜덤 대화 주제 코스 한 줄 평 저장 API 입니다.")
+    void comment(@MemberId @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long memberId, @PathVariable("id") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long randomId, @RequestBody RandomReqDTO.Comment requestDTO);
 }

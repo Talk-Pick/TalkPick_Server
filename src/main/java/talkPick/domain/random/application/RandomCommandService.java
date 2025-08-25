@@ -40,6 +40,16 @@ public class RandomCommandService implements RandomCommandUseCase {
         randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, randomId).end();
     }
 
+    @Override
+    public void rate(Long memberId, Long randomId, RandomReqDTO.Rate requestDTO) {
+        randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, randomId).rate(requestDTO);
+    }
+
+    @Override
+    public void comment(Long memberId, Long randomId, RandomReqDTO.Comment requestDTO) {
+        randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, randomId).comment(requestDTO);
+    }
+
     /**
      * LLM_SERVER로 전달
      * Redis Cache -> 사용자 정보
@@ -60,11 +70,6 @@ public class RandomCommandService implements RandomCommandUseCase {
     public List<RandomResDTO.RandomTopic> selectByTopics(Long memberId, RandomReqDTO.SelectByTopic requestDTO) {
         randomTopicCommandRepositoryPort.saveByTopic(memberId, requestDTO);
         return topicCacheManager.getRandomTopics(requestDTO.order());
-    }
-
-    @Override
-    public void saveResult(Long memberId, Long randomId, RandomReqDTO.Result requestDTO) {
-        randomQueryRepositoryPort.findRandomByMemberIdAndId(memberId, randomId).saveResult(requestDTO);
     }
 
     private List<RandomResDTO.RandomTopic> sendToLLM(Long requestDTO, Long memberId) {
