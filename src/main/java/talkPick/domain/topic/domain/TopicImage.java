@@ -10,7 +10,7 @@ import talkPick.global.model.TalkPickStatus;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "Topic 이미지 테이블")
+@Table(name = "topic_image")
 public class TopicImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

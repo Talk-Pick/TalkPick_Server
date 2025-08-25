@@ -10,7 +10,7 @@ import talkPick.global.model.TalkPickStatus;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "공지사항 테이블")
+@Table(name = "notice")
 public class Notice extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

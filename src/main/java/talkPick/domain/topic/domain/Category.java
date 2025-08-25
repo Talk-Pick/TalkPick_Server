@@ -9,7 +9,7 @@ import talkPick.domain.topic.domain.type.CategoryGroup;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "카테고리 테이블")
+@Table(name = "category")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

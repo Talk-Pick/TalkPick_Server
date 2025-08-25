@@ -12,7 +12,7 @@ import talkPick.global.model.BaseTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "회원 Topic 기록 테이블")
+@Table(name = "member_topic_history")
 public class MemberTopicHistory extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

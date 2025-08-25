@@ -11,7 +11,7 @@ import talkPick.global.model.BaseTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "랜덤 대화 테이블")
+@Table(name = "random")
 public class Random extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

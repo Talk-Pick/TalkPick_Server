@@ -11,7 +11,7 @@ import talkPick.global.model.TalkPickStatus;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "공지사항 이미지 테이블")
+@Table(name = "notice_image")
 public class NoticeImage extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
