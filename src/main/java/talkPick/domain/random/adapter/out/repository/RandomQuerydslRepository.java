@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.global.model.TalkPickStatus;
 import java.util.List;
+
+import static talkPick.domain.random.domain.QRandomTopicHistory.randomTopicHistory;
 import static talkPick.domain.topic.domain.QCategory.category;
 import static talkPick.domain.topic.domain.QTopic.topic;
 import static talkPick.domain.topic.domain.QTopicImage.topicImage;
@@ -30,21 +32,30 @@ public class RandomQuerydslRepository {
                 .fetch();
     }
 
-    public RandomResDTO.RandomTopicDetail findRandomTopicDetail(Long topicId) {
-        return queryFactory.select(Projections.constructor(RandomResDTO.RandomTopicDetail.class,
+    public List<RandomResDTO.RandomTopic> findRandomTopicsExcludingHistory(Long memberId, Long randomId, int limit) {
+        List<Long> alreadyUsedTopicIds = queryFactory
+                .select(randomTopicHistory.topicId)
+                .from(randomTopicHistory)
+                .where(randomTopicHistory.memberId.eq(memberId)
+                        .and(randomTopicHistory.randomId.eq(randomId)))
+                .fetch();
+
+        return queryFactory.select(Projections.constructor(RandomResDTO.RandomTopic.class,
                         topic.id,
-                        topic.title,
-                        topic.detail,
-                        topic.thumbnail,
-                        topic.icon,
+                        category.categoryGroup.stringValue(),
                         category.title,
+                        category.imageUrl,
                         topicKeyword.keyword
                 ))
                 .from(topic)
                 .leftJoin(category).on(topic.categoryId.eq(category.id))
                 .leftJoin(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
-                .where(topic.id.eq(topicId))
-                .fetchOne();
+                .where(
+                        topic.status.eq(TalkPickStatus.ACTIVE),
+                        alreadyUsedTopicIds.isEmpty() ? null : topic.id.notIn(alreadyUsedTopicIds)
+                )
+                .limit(limit)
+                .fetch();
     }
 
     public List<String> findRandomTopicImages(Long topicId) {

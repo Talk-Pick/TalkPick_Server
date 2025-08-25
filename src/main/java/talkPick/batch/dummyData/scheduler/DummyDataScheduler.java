@@ -107,7 +107,7 @@ public class DummyDataScheduler {
     }
 
     private Topic saveTopic(int i, Category randomCategory) {
-        Topic topic = Topic.of("토픽 더미 Title " + (i +1), "토픽 더미 Detail " + (i +1),"Thumbnail ", "icon", randomCategory.getId(), 333L);
+        Topic topic = Topic.of("토픽 더미 Title " + (i +1), "토픽 더미 Detail " + (i +1), randomCategory.getId(), 333L);
         topicJpaRepository.save(topic);
         return topic;
     }

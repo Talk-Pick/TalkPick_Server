@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import talkPick.global.model.TalkPickStatus;
 
+@Deprecated
 @Getter
 @Entity
 @Builder

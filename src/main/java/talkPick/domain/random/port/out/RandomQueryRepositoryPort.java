@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface RandomQueryRepositoryPort {
     List<RandomResDTO.Categories> findCategories();
-    RandomResDTO.RandomTopicDetail findRandomTopicDetail(Long topicId);
-    List<String> findRandomTopicImages(Long topicId);
     Random findRandomByMemberIdAndId(Long memberId, Long randomId);
+    List<RandomResDTO.RandomTopic> findRandomTopicsByMemberIdAndRandomIdAndOrder(Long memberId, Long randomId, Integer order);
+    List<String> findRandomTopicImages(Long topicId);
 }

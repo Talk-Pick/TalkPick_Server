@@ -8,10 +8,7 @@ import talkPick.domain.random.adapter.out.repository.RandomQuerydslRepository;
 import talkPick.domain.random.domain.Random;
 import talkPick.domain.random.port.out.RandomQueryRepositoryPort;
 import talkPick.global.exception.handler.RandomExceptionHandler;
-
 import java.util.List;
-import java.util.Optional;
-
 import static talkPick.global.exception.ErrorCode.RANDOM_NOT_FOUND;
 
 @Component
@@ -26,9 +23,11 @@ public class RandomQueryRepositoryAdapter implements RandomQueryRepositoryPort {
     }
 
     @Override
-    public RandomResDTO.RandomTopicDetail findRandomTopicDetail(Long topicId) {
-        return Optional.ofNullable(randomQuerydslRepository.findRandomTopicDetail(topicId))
-                .orElseThrow(() -> new RandomExceptionHandler(RANDOM_NOT_FOUND));
+    public List<RandomResDTO.RandomTopic> findRandomTopicsByMemberIdAndRandomIdAndOrder(Long memberId, Long randomId, Integer order) {
+        var topics = randomQuerydslRepository.findRandomTopicsExcludingHistory(memberId, randomId, 4);
+
+        topics.forEach(t -> t.addOrder(order));
+        return topics;
     }
 
     @Override

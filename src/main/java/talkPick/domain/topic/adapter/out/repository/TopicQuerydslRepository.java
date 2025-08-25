@@ -3,7 +3,6 @@ package talkPick.domain.topic.adapter.out.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import talkPick.domain.topic.domain.type.CategoryGroup;
@@ -60,8 +59,6 @@ public class TopicQuerydslRepository {
                         topic.title,
                         topic.detail,
                         topicKeyword.keyword.stringValue(),
-                        topic.thumbnail,
-                        topic.icon,
                         category.categoryGroup.stringValue(),
                         category.title,
                         category.description,

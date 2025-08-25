@@ -20,9 +20,7 @@ public class RandomQueryService implements RandomQueryUseCase {
     }
 
     @Override
-    public RandomResDTO.RandomTopicDetail getRandomTopicDetail(Long topicId) {
-        RandomResDTO.RandomTopicDetail result = randomQueryRepositoryPort.findRandomTopicDetail(topicId);
-        result.addTopicImage(randomQueryRepositoryPort.findRandomTopicImages(topicId));
-        return result;
+    public List<RandomResDTO.RandomTopic> getRandomTopics(Long memberId, Long randomId, Integer order) {
+        return randomQueryRepositoryPort.findRandomTopicsByMemberIdAndRandomIdAndOrder(memberId, randomId, order);
     }
 }

@@ -12,12 +12,11 @@ import talkPick.batch.topic.port.TopicCacheManager;
 import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
 import talkPick.external.llm.port.LLMClientPort;
 import talkPick.global.exception.handler.JVMCacheExceptionHandler;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 import static talkPick.global.exception.ErrorCode.JVM_CACHE_REFRESH_FAILED;
 
+@Deprecated
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -65,15 +64,16 @@ public class TopicCacheManagerAdapter implements TopicCacheManager {
 
     @Override
     public List<RandomResDTO.RandomTopic> getRandomTopics(final Integer orderId) {
-        List<TopicCacheDTO> topicCacheDTOS = cacheRef.get();
-        Collections.shuffle(topicCacheDTOS);
-        return topicCacheDTOS.stream()
-                .limit(4)
-                .map(dto -> toRandomTopic(orderId, dto))
-                .collect(Collectors.toList());
+//        List<TopicCacheDTO> topicCacheDTOS = cacheRef.get();
+//        Collections.shuffle(topicCacheDTOS);
+//        return topicCacheDTOS.stream()
+//                .limit(4)
+//                .map(dto -> toRandomTopic(orderId, dto))
+//                .collect(Collectors.toList());
+        return null;
     }
 
-    private RandomResDTO.RandomTopic toRandomTopic(final Integer order, TopicCacheDTO dto) {
-        return RandomResDTO.RandomTopic.of(order, dto);
-    }
+//    private RandomResDTO.RandomTopic toRandomTopic(final Integer order, TopicCacheDTO dto) {
+//        return RandomResDTO.RandomTopic.of(order, dto);
+//    }
 }
