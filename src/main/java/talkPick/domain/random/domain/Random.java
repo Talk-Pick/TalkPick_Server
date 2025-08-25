@@ -1,6 +1,5 @@
 package talkPick.domain.random.domain;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
@@ -29,11 +28,15 @@ public class Random extends BaseTime {
     @Column(name = "one_line", nullable = true, length = 255, columnDefinition = "VARCHAR(255) COMMENT '한 줄 평'")
     private String oneLine;
 
+    @Column(name = "rating", nullable = true, columnDefinition = "INT COMMENT '평점'")
+    private Integer rating;
+
     public static Random from(final Long memberId) {
         return Random.builder()
                 .memberId(memberId)
                 .type(RandomType.NOT_STARTED)
                 .oneLine(null)
+                .rating(null)
                 .build();
     }
 
