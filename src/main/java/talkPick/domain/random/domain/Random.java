@@ -11,7 +11,7 @@ import talkPick.global.model.BaseTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "랜덤 대화 테이블")
+@Table(name = "random")
 public class Random extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,14 +34,10 @@ public class Random extends BaseTime {
     public static Random from(final Long memberId) {
         return Random.builder()
                 .memberId(memberId)
-                .type(RandomType.NOT_STARTED)
+                .type(RandomType.START)
                 .oneLine(null)
                 .rating(null)
                 .build();
-    }
-
-    public void start() {
-        this.type = RandomType.IN_PROGRESS;
     }
 
     public void quit() {

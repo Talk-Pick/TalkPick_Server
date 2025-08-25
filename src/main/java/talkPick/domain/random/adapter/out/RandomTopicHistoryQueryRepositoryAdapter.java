@@ -18,6 +18,6 @@ public class RandomTopicHistoryQueryRepositoryAdapter implements RandomTopicHist
 
     @Override
     public RandomTopicHistory getRandomTopicHistoryByMemberIdAndRandomIdAndOrder(Long memberId, Long randomId, RandomReqDTO.Next requestDTO) {
-        return randomTopicHistoryJpaRepository.findByRandomIdAndMemberIdAndOrder(memberId, randomId, requestDTO.order()).orElseThrow(() -> new RandomExceptionHandler(RANDOM_TOPIC_HISTORY_NOT_FOUND));
+        return randomTopicHistoryJpaRepository.findByMemberIdAndRandomIdAndOrder(memberId, randomId, requestDTO.order()).orElseThrow(() -> new RandomExceptionHandler(RANDOM_TOPIC_HISTORY_NOT_FOUND));
     }
 }

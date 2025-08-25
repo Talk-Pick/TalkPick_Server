@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "Topic 통계 테이블")
+@Table(name = "topic_stat")
 public class TopicStat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "랜덤 대화 기록 테이블")
+@Table(name = "random_topic_history")
 public class RandomTopicHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

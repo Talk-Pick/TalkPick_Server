@@ -3,5 +3,5 @@ package talkPick.global.healthCheck.api;
 import org.springframework.boot.actuate.health.Health;
 
 public interface HealthIndicator {
-    public Health health();
+    Health health();
 }

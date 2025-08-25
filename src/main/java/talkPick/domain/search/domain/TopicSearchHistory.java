@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "검색 기록 테이블")
+@Table(name = "topic_search_history")
 public class TopicSearchHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

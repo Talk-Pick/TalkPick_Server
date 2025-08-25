@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "오늘의 Topic 테이블")
+@Table(name = "today_topic")
 public class TodayTopic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

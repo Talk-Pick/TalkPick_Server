@@ -11,7 +11,7 @@ import talkPick.global.model.TalkPickStatus;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
-        name = "Topic 좋아요 기록 테이블",
+        name = "topic_like_history",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = {"memberId", "topicId"})
         }

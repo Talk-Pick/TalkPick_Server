@@ -6,5 +6,5 @@ import talkPick.domain.random.domain.RandomTopicHistory;
 import java.util.Optional;
 
 public interface RandomTopicHistoryJpaRepository extends JpaRepository<RandomTopicHistory, Long> {
-    Optional<RandomTopicHistory> findByRandomIdAndMemberIdAndOrder(Long randomId, Long memberId, Integer order);
+    Optional<RandomTopicHistory> findByMemberIdAndRandomIdAndOrder(Long memberId, Long randomId, Integer order);
 }
