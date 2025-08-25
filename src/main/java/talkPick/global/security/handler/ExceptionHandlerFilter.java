@@ -15,7 +15,6 @@ import talkPick.global.security.constants.AuthConstants;
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.response.ErrorResponse;
 import talkPick.global.security.exception.UnauthorizedException;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 

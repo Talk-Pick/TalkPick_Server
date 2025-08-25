@@ -6,12 +6,13 @@ import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import talkPick.global.exception.ErrorCode;
-import talkPick.global.exception.handler.JwtHandler;
-import talkPick.global.security.exception.RoleNotFoundException;
+import talkPick.global.exception.handler.JwtExceptionHandler;
+import talkPick.global.exception.handler.SecurityExceptionHandler;
 import talkPick.global.security.jwt.dto.JwtResDTO;
-
 import java.security.Key;
 import java.util.List;
+
+import static talkPick.global.exception.ErrorCode.ROLE_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Component
@@ -41,7 +42,7 @@ public class JwtProvider {
         List<String> roles = jwtGenerator.parseToken(token).getBody().get("roles", List.class);
 
         if (roles == null || roles.isEmpty()) {
-            throw new RoleNotFoundException(ErrorCode.ROLE_NOT_FOUND);
+            throw new SecurityExceptionHandler(ROLE_NOT_FOUND);
         }
 
         return roles.getFirst();
@@ -55,9 +56,9 @@ public class JwtProvider {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException e) {
-            throw new JwtHandler(ErrorCode.EXPIRED_JWT_TOKEN);
+            throw new JwtExceptionHandler(ErrorCode.EXPIRED_JWT_TOKEN);
         } catch (Exception e) {
-            throw new JwtHandler(ErrorCode.INVALID_JWT_TOKEN);
+            throw new JwtExceptionHandler(ErrorCode.INVALID_JWT_TOKEN);
         }
     }
 
@@ -75,7 +76,7 @@ public class JwtProvider {
         // 1. Bearer 헤더에서 실제 토큰 값 추출
         String token = resolveToken(bearerHeader);
         if (token == null) {
-            throw new JwtHandler(ErrorCode.UNAUTHORIZED);   // 토큰이 없으면 인증 실패로 처리
+            throw new JwtExceptionHandler(ErrorCode.UNAUTHORIZED);   // 토큰이 없으면 인증 실패로 처리
         }
 
         // 2. 토큰 유효성 검증
@@ -88,7 +89,7 @@ public class JwtProvider {
                     .parseClaimsJws(token).getBody();
             return Long.valueOf(claims.getSubject());
         } catch (Exception e) {
-            throw new JwtHandler(ErrorCode.INVALID_JWT_TOKEN);
+            throw new JwtExceptionHandler(ErrorCode.INVALID_JWT_TOKEN);
         }
     }
 }

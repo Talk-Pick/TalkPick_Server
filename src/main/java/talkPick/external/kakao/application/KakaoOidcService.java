@@ -13,7 +13,7 @@ import talkPick.domain.member.dto.MemberDataDto;
 import talkPick.domain.member.adapter.in.dto.MemberReqDto;
 import talkPick.external.kakao.port.in.KakaoOidcUsecase;
 import talkPick.global.exception.ErrorCode;
-import talkPick.global.exception.handler.KakaoHandler;
+import talkPick.global.exception.handler.KakaoExceptionHandler;
 
 import java.math.BigInteger;
 import java.net.URL;
@@ -39,7 +39,7 @@ public class KakaoOidcService implements KakaoOidcUsecase {
         try {
             // JWT 디코드 (헤더 추출)
             String[] parts = request.getIdToken().split("\\.");
-            if (parts.length != 3) throw new KakaoHandler(ErrorCode.INVALID_JWT_TOKEN);
+            if (parts.length != 3) throw new KakaoExceptionHandler(ErrorCode.INVALID_JWT_TOKEN);
 
             // 헤더 에서 kid(키 아이디) 추출
             String headerJson = new String(Base64.getUrlDecoder().decode(parts[0]));
@@ -58,7 +58,7 @@ public class KakaoOidcService implements KakaoOidcUsecase {
                 }
             }
 
-            if (matchedKey == null) throw new KakaoHandler(ErrorCode.INVALID_JWT_TOKEN);
+            if (matchedKey == null) throw new KakaoExceptionHandler(ErrorCode.INVALID_JWT_TOKEN);
 
             // 공개키 추출 (n, e -> RSA public Key)
             String n = matchedKey.get("n").asText();
@@ -80,7 +80,7 @@ public class KakaoOidcService implements KakaoOidcUsecase {
             return MemberConverter.toKakaoMemberData(claims);
         } catch (Exception e) {
             log.error("KakaoOidcService Error Occurred: {}", e.getMessage());
-            throw new KakaoHandler(ErrorCode.ERROR_ON_VERIFYING);
+            throw new KakaoExceptionHandler(ErrorCode.ERROR_ON_VERIFYING);
         }
     }
 }

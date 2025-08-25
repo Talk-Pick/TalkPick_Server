@@ -11,7 +11,7 @@ import talkPick.domain.member.port.in.MemberQueryUseCase;
 import talkPick.domain.member.port.out.MemberLikedTopicsQueryRepositoryPort;
 import talkPick.domain.member.port.out.MemberTopicResultQueryRepositoryPort;
 import talkPick.global.exception.ErrorCode;
-import talkPick.global.exception.handler.MemberHandler;
+import talkPick.global.exception.handler.MemberExceptionHandler;
 import talkPick.global.response.CursorPageResponse;
 import talkPick.global.security.jwt.util.JwtProvider;
 
@@ -35,7 +35,7 @@ public class MemberQueryService implements MemberQueryUseCase {
 
         // 회원 존재 여부 검증 및 조회
         Member findMember = memberJpaRepository.findById(memberId)
-                .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
 
         // 조회된 회원 정보를 DTO로 변환 후 반환
         return MemberConverter.toProfileResponse(findMember);
@@ -49,7 +49,7 @@ public class MemberQueryService implements MemberQueryUseCase {
         Long memberId = jwtProvider.getMemberId(authorization);
 
         Member findMember = memberJpaRepository.findById(memberId)
-                .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
 
         // size + 1개 조회하여 다음 페이지 존재 여부 판단
         List<MemberResDto.MemberLikedTopicResDto> memberLikedTopics = memberLikedTopicsQueryRepositoryPort.findMemberLikedTopics(findMember, cursor, size + 1);

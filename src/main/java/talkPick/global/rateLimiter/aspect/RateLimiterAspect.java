@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import talkPick.global.exception.ErrorCode;
-import talkPick.global.rateLimiter.exception.RateLimitExceededException;
+import talkPick.global.exception.handler.RateLimitExceededExceptionHandler;
 import talkPick.global.rateLimiter.port.RateLimiterManager;
 
 @Aspect
@@ -25,7 +25,7 @@ public class RateLimiterAspect {
         if (rateLimiterManager.tryConsume(getIpAddress(request), getUri(request))) {
             return joinPoint.proceed();
         } else {
-            throw new RateLimitExceededException(ErrorCode.RATE_LIMIT_EXCEEDED);
+            throw new RateLimitExceededExceptionHandler(ErrorCode.RATE_LIMIT_EXCEEDED);
         }
     }
 

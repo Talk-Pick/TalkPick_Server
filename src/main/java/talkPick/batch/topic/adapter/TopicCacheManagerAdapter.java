@@ -10,16 +10,12 @@ import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.topic.dto.TopicCacheDTO;
 import talkPick.batch.topic.port.TopicCacheManager;
 import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
-import talkPick.external.llm.exception.LLMException;
 import talkPick.external.llm.port.LLMClientPort;
-import talkPick.batch.topic.exception.JVMCacheException;
-
+import talkPick.global.exception.handler.JVMCacheExceptionHandler;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-
 import static talkPick.global.exception.ErrorCode.JVM_CACHE_REFRESH_FAILED;
 
 @Slf4j
@@ -61,11 +57,9 @@ public class TopicCacheManagerAdapter implements TopicCacheManager {
             log.info("[TopicCache] 캐시 갱신 완료 - 항목 수: {}개 | 사용 메모리: {}MB | 여유 메모리: {}MB | 최대 메모리: {}MB", newData.size(), usedMB, freeMB, maxMB);
             // TODO 추후 LLM 서버 적용 시, 사용할 예정
 //            llmClientPort.send(newData);
-        } catch (LLMException e) {
-            log.error("[TopicCache] LLM 서버와의 통신 중 오류 발생: {}", e.getMessage());
-            throw new JVMCacheException(JVM_CACHE_REFRESH_FAILED, e.getMessage());
         } catch (Exception e) {
-            throw new JVMCacheException(JVM_CACHE_REFRESH_FAILED, e.getMessage());
+            log.error("[TopicCache] LLM 서버와의 통신 중 오류 발생: {}", e.getMessage());
+            throw new JVMCacheExceptionHandler(JVM_CACHE_REFRESH_FAILED, e.getMessage());
         }
     }
 
