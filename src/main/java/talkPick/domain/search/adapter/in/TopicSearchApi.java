@@ -14,17 +14,17 @@ import java.util.List;
  * **/
 @Deprecated
 @RequestMapping("/api/v1/search")
-@Tag(name = "톡픽 검색 API", description = "톡픽 검색 관련 API 입니다.")
+@Tag(name = "톡픽 검색 API", description = "톡픽 검색 관련 API 입니다. 검색 기능을 제외했기 때문에, 해당 API는 사용하지 않습니다.")
 public interface TopicSearchApi {
     @GetMapping("/topics")
-    @Operation(summary = "토픽 필터 조회 API", description = "토픽 필터 조회 API 입니다.")
+    @Operation(summary = "토픽 필터 조회 API", description = "토픽 필터 조회 API 입니다. 검색 기능을 제외했기 때문에, 해당 API는 사용하지 않습니다.")
     List<TopicSearchResDTO.Topic> getTopics(@RequestParam(required = false) String category);
 
     @GetMapping("")
-    @Operation(summary = "토픽 검색 API", description = "토픽 검색 API API 입니다.")
+    @Operation(summary = "토픽 검색 API", description = "토픽 검색 API API 입니다. 검색 기능을 제외했기 때문에, 해당 API는 사용하지 않습니다.")
     List<TopicSearchResDTO.Topic> search(@MemberId Long memberId, @RequestParam(required = false) String word);
 
     @GetMapping("/recommendations")
-    @Operation(summary = "추천 검색어 API", description = "추천 검색어 API API 입니다.")
+    @Operation(summary = "추천 검색어 API", description = "추천 검색어 API API 입니다. 검색 기능을 제외했기 때문에, 해당 API는 사용하지 않습니다.")
     List<TopicSearchResDTO.Recommendation> recommend();
 }
