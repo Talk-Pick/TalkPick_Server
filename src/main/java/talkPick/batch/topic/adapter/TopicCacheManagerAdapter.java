@@ -25,7 +25,7 @@ public class TopicCacheManagerAdapter implements TopicCacheManager {
     private final TopicQueryRepositoryPort topicQueryRepositoryPort;
     private final AtomicReference<List<TopicCacheDTO>> cacheRef = new AtomicReference<>(List.of());
 
-    @PostConstruct
+//    @PostConstruct
     public void load() {
         refresh();
     }

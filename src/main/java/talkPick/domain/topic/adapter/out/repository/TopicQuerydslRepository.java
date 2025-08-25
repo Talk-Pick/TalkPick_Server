@@ -21,8 +21,7 @@ public class TopicQuerydslRepository {
     }
 
     public List<TopicResDTO.Categories> findCategoriesByCategoryGroup(CategoryGroup categoryGroup) {
-        return queryFactory
-                .select(Projections.constructor(TopicResDTO.Categories.class,
+        return queryFactory.select(Projections.constructor(TopicResDTO.Categories.class,
                         category.id,
                         category.title,
                         category.description,
@@ -38,7 +37,6 @@ public class TopicQuerydslRepository {
         return queryFactory.select(Projections.constructor(TopicResDTO.TopicDetail.class,
                         topic.id,
                         topic.title,
-                        topic.thumbnail,
                         topicStat.averageTalkTime,
                         topicStat.selectCount,
                         category.title,

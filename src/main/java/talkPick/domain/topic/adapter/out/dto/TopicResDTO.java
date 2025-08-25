@@ -8,6 +8,7 @@ public class TopicResDTO {
             Long id,
             String title
     ){}
+
     public record Categories(
             Long categoryId,
             String title,
@@ -15,14 +16,26 @@ public class TopicResDTO {
             String imageUrl,
             CategoryGroup categoryGroup
     ) {}
+
     public record TopicDetail(
             Long topicId,
             String title,
-            String thumbnail,
             long averageTalkTime,
             int selectCount,
             String category,
             CategoryGroup categoryGroup,
             Keyword keyword
-    ) {}
+    ) {
+        public String keywordName() {
+            return keyword != null ? keyword.name() : null;
+        }
+
+        public String keywordImageUrl() {
+            return keyword != null ? keyword.getImageUrl() : null;
+        }
+
+        public String keywordIconUrl() {
+            return keyword != null ? keyword.getIconUrl() : null;
+        }
+    }
 }
