@@ -34,14 +34,10 @@ public class Random extends BaseTime {
     public static Random from(final Long memberId) {
         return Random.builder()
                 .memberId(memberId)
-                .type(RandomType.NOT_STARTED)
+                .type(RandomType.START)
                 .oneLine(null)
                 .rating(null)
                 .build();
-    }
-
-    public void start() {
-        this.type = RandomType.IN_PROGRESS;
     }
 
     public void quit() {
