@@ -33,14 +33,14 @@ public class SpringDocOpenApiConfig {
                 .security(Arrays.asList(securityRequirement));
     }
 
-    @Bean
-    public GroupedOpenApi healthCheckOpenApi() {
-        return GroupedOpenApi.builder()
-                .group("HealthCheck API")
-                .displayName("HealthCheck API")
-                .pathsToMatch("/actuator/health/**")
-                .build();
-    }
+//    @Bean
+//    public GroupedOpenApi healthCheckOpenApi() {
+//        return GroupedOpenApi.builder()
+//                .group("HealthCheck API")
+//                .displayName("HealthCheck API")
+//                .pathsToMatch("/actuator/health/**")
+//                .build();
+//    }
 
     @Bean
     public GroupedOpenApi topicOpenApi() {
