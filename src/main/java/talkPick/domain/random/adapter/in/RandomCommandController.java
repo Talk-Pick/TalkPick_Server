@@ -2,44 +2,12 @@ package talkPick.domain.random.adapter.in;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
-import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
-import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.port.in.RandomCommandUseCase;
-import talkPick.global.security.annotation.MemberId;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class RandomCommandController implements RandomCommandApi {
     private final RandomCommandUseCase randomCommandUseCase;
 
-    @Override
-    public void start(@MemberId final Long memberId) {
-        randomCommandUseCase.start(memberId);
-    }
 
-    @Override
-    public List<RandomResDTO.RandomTopic> selectByCategories(Long memberId, RandomReqDTO.SelectByCategory requestDTO) {
-        return randomCommandUseCase.selectByCategories(memberId, requestDTO);
-    }
-
-    @Override
-    public List<RandomResDTO.RandomTopic> selectByTopics(Long memberId, RandomReqDTO.SelectByTopic requestDTO) {
-        return randomCommandUseCase.selectByTopics(memberId, requestDTO);
-    }
-
-    @Override
-    public void quit(@MemberId Long memberId, Long randomId) {
-        randomCommandUseCase.quit(memberId, randomId);
-    }
-
-    @Override
-    public RandomResDTO.Result end(Long memberId, Long randomId) {
-        return randomCommandUseCase.end(memberId, randomId);
-    }
-
-    @Override
-    public void saveResult(Long memberId, Long randomId, RandomReqDTO.Result requestDTO) {
-        randomCommandUseCase.saveResult(memberId, randomId, requestDTO);
-    }
 }
