@@ -10,7 +10,6 @@ import talkPick.domain.member.port.in.MemberQueryUseCase;
 
 import java.time.LocalDateTime;
 import talkPick.global.response.CursorPageResponse;
-import talkPick.global.response.ResultResponse;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,17 +18,17 @@ public class MemberQueryController implements MemberQueryApi {
     private final MemberQueryUseCase memberQueryUseCase;
 
     @Override
-    public ResponseEntity<ResultResponse<MemberResDto.ProfileResponse>> getProfile(
+    public MemberResDto.ProfileResponse getProfile(
             @RequestHeader(value = "Authorization", required = false) String authorization) {
-        return ResponseEntity.ok(ResultResponse.success(memberQueryUseCase.getProfile(authorization)));
+        return memberQueryUseCase.getProfile(authorization);
     }
 
     @Override
-    public ResponseEntity<ResultResponse<CursorPageResponse<MemberResDto.MemberLikedTopicResDto>>> getMemberLikedTopics(
+    public CursorPageResponse<MemberResDto.MemberLikedTopicResDto> getMemberLikedTopics(
             @RequestHeader(value = "Authorization", required = false) String authorization,
             @RequestParam(value = "cursor", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime cursor,
             @RequestParam(value = "size", defaultValue = "6") int size) {
-        return ResponseEntity.ok(ResultResponse.success(memberQueryUseCase.getMemberLikedTopics(authorization, cursor, size)));
+        return memberQueryUseCase.getMemberLikedTopics(authorization, cursor, size);
     }
 
 

@@ -1,5 +1,6 @@
 package talkPick.global.security.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,7 +12,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import talkPick.global.exception.TalkPickException;
 import talkPick.global.exception.handler.SecurityExceptionHandler;
+import talkPick.global.response.ApiResponse;
 import talkPick.global.security.constants.AuthConstants;
 import talkPick.global.security.jwt.util.JwtProvider;
 import java.io.IOException;
@@ -34,11 +37,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        final var accessToken = getAccessToken(request);
-        final var memberId = jwtProvider.getMemberIdFromToken(accessToken);
-        final var role = jwtProvider.getRoleFromToken(accessToken);
-        doAuthentication(accessToken, memberId, role);
-        filterChain.doFilter(request, response);
+
+        try {
+            final var accessToken = getAccessToken(request);
+            final var memberId = jwtProvider.getMemberIdFromToken(accessToken);
+            final var role = jwtProvider.getRoleFromToken(accessToken);
+            doAuthentication(accessToken, memberId, role);
+
+            filterChain.doFilter(request, response);
+        } catch (TalkPickException e) {
+            response.setContentType("application/json; charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(e.getErrorCode().getStatus().value());
+
+            response.getWriter().write(new ObjectMapper().writeValueAsString(ApiResponse.ofErrorCode(e.getErrorCode())));
+        }
     }
 
     private String getAccessToken(final HttpServletRequest request) {

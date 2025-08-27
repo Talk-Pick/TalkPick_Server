@@ -1,5 +1,6 @@
 package talkPick.global.response;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -11,44 +12,43 @@ import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.TalkPickException;
 
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
-
-    // 해당 Advice 적용 범위
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         return true;
     }
 
-    // 응답 변환 매서드
     @Override
-    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
-                                  Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request,
-                                  ServerHttpResponse response) {
+    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
 
-        // Swagger API 요청은 변환 X
+        // Swagger API 요청은 변환하지 않음
         String requestPath = request.getURI().getPath();
         if (requestPath.startsWith("/v3/api-docs") || requestPath.startsWith("/swagger-ui")) {
             return body;
         }
 
-        // 응답이 byte[]인 경우 변환 X
+        // byte[]는 변환하지 않음
         if (body instanceof byte[]) {
             return body;
         }
 
-        // 반환이 void이면 data 없이 응답
+        // 반환 타입이 void면 data 없이 success
         if (Void.TYPE.equals(returnType.getParameterType())) {
-            return new ResultResponse<>("success", "처리가 완료되었습니다.", null);
+            return ApiResponse.success(null);
         }
 
-        // 반환이 String인 경우 예외 발생
+        // 반환이 String이면 예외
         if (body instanceof String) {
             throw new TalkPickException(ErrorCode.NOT_ALLOW_STRING);
         }
 
-        if(body instanceof ResultResponse){
+        // 이미 ApiResponse인 경우 그대로 반환 → 중요!
+        if (body instanceof ApiResponse) {
             return body;
         }
-        return ResultResponse.success(body);
+
+        // 일반 객체는 성공 응답으로 감싸기
+        return ApiResponse.success(body);
     }
 }

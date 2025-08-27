@@ -110,6 +110,9 @@ dependencies {
 
     // Resilience4j
     implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.1.0'
+
+    // Jackson
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }
 
 test {
