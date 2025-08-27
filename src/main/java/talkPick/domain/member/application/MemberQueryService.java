@@ -1,6 +1,7 @@
 package talkPick.domain.member.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
@@ -15,6 +16,7 @@ import talkPick.global.exception.handler.MemberExceptionHandler;
 import talkPick.global.response.CursorPageResponse;
 import talkPick.global.security.jwt.util.JwtProvider;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -76,13 +78,13 @@ public class MemberQueryService implements MemberQueryUseCase {
     /**
      * 특정 일자 기준 회원 토픽 캘린더 결과 조회
      */
-//    @Override
-//    public Page<MemberResDto.MemberTopicResultResDto> getMemberTopicResultsByCreatedDate(String authorization, LocalDate date) {
-//        Long memberId = jwtProvider.getMemberId(authorization);
-//
-//        Member findMember = memberJpaRepository.findById(memberId)
-//                .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
-//
-//        return memberTopicResultQueryRepositoryPort.findMemberTopicResults(findMember, date);
-//    }
+    @Override
+    public CursorPageResponse<MemberResDto.MemberTopicResultResDto> getMemberTopicResultsByCreatedDate(String authorization, LocalDate date) {
+        Long memberId = jwtProvider.getMemberId(authorization);
+
+        Member findMember = memberJpaRepository.findById(memberId)
+                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+
+        return memberTopicResultQueryRepositoryPort.findMemberTopicResults(findMember, date);
+    }
 }
