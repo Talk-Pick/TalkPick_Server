@@ -83,4 +83,15 @@ public class MemberReqDto {
         @NotNull(message = "비밀번호는 필수입니다.")
         private String password;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class TopicResultCommentChangeRequest {
+        @NotNull(message = "히스토리 ID는 필수입니다.")
+        private Long memberTopicHistoryId;
+        @Size(max = 100, message = "코멘트는 최대 100자입니다.")
+        private String comment;
+    }
 }

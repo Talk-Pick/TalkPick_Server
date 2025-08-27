@@ -67,6 +67,7 @@ public interface MemberCommandApi {
     @PatchMapping("/topic-results")
     @Operation(summary = "캘린더 조회 토픽 코멘트 수정 API", description = "캘린더 조회 토픽의 코멘트를 수정하는 API입니다.")
     ResponseEntity<ResultResponse<Void>> changeComment(
-            @RequestHeader(value = "Authorization", required = false) String authorization
+            @RequestHeader(value = "Authorization", required = false) String authorization,
+            @Valid @RequestBody MemberReqDto.TopicResultCommentChangeRequest request
     );
 }
