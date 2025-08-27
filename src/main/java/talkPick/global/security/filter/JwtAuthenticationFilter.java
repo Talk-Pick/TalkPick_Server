@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import talkPick.global.exception.TalkPickException;
@@ -24,9 +25,11 @@ import static talkPick.global.exception.ErrorCode.UNAUTHORIZED;
 import static talkPick.global.security.model.WhiteList.PATHS;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
+    private final ObjectMapper objectMapper;
 
     private static final List<AntPathRequestMatcher> whiteMatchers =
             Arrays.stream(PATHS).map(AntPathRequestMatcher::new).toList();
@@ -50,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.setCharacterEncoding("UTF-8");
             response.setStatus(e.getErrorCode().getStatus().value());
 
-            response.getWriter().write(new ObjectMapper().writeValueAsString(ApiResponse.ofErrorCode(e.getErrorCode())));
+            response.getWriter().write(objectMapper.writeValueAsString(ApiResponse.ofErrorCode(e.getErrorCode())));
         }
     }
 
