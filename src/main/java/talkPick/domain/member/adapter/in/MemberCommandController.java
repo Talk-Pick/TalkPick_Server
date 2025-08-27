@@ -98,6 +98,10 @@ public class MemberCommandController implements MemberCommandApi {
         return ResponseEntity.ok(ResultResponse.success(null));
     }
 
+    @Override
+    public ResponseEntity<ResultResponse<Void>> changeComment(String authorization) {
+        return null;
+    }
 
 
 }
