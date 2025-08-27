@@ -22,8 +22,12 @@ public class MemberTopicResult {
     @OneToOne(mappedBy = "memberTopicResult", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
     private MemberTopicHistory memberTopicHistory;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
+    @Column(
+            name = "member_id",
+            nullable = false,
+            columnDefinition = "BIGINT COMMENT '회원 PK (Foreign Key)'"
+    )
+    private Long memberId;
 
 
 }

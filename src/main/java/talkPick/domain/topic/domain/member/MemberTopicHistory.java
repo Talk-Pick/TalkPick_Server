@@ -31,7 +31,6 @@ public class MemberTopicHistory extends BaseTime {
     @JoinColumn(name = "member_topic_result_id")
     private MemberTopicResult memberTopicResult;
 
-
     @Column(name = "talk_time", nullable = false, columnDefinition = "BIGINT COMMENT '토크 시간(ms)'")
     private long talkTime;
 
