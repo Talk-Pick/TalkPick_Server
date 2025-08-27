@@ -37,9 +37,12 @@ public class MemberQueryController implements MemberQueryApi {
     @Override
     public ResponseEntity<ResultResponse<CursorPageResponse<MemberResDto.MemberTopicResultResDto>>> getMemberTopicResults(
             @RequestHeader(value = "Authorization", required = false) String authorization,
-            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(value = "cursor", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime cursor,
+            @RequestParam(value = "size", defaultValue = "6") int size
             ) {
-        memberQueryUseCase.getMemberTopicResultsByCreatedDate(authorization, date);
-        return null;
+        CursorPageResponse<MemberResDto.MemberTopicResultResDto> result =
+                memberQueryUseCase.getMemberTopicResultsByCreatedDate(authorization, date, cursor, size);
+        return ResponseEntity.ok(ResultResponse.success(result));
     }
 }

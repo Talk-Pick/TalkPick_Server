@@ -85,7 +85,7 @@ public class MemberConverter {
     public static MemberTerm toMemberTerm(Member member, Term term, Boolean isAgree) {
         return MemberTerm.builder()
                 .memberId(member.getId())
-                .term(term)
+                .termId(term.getId())
                 .isAgree(isAgree)
                 .build();
     }

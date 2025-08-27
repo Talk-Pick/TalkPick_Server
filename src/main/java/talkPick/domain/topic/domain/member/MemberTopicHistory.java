@@ -30,7 +30,6 @@ public class MemberTopicHistory extends BaseTime {
     private Long topicId;
 
     @Column(name = "member_topic_result_id",
-            nullable = false,
             columnDefinition = "BIGINT COMMENT 'MemberTopicResult ID'")
     private Long member_topic_result_id;
 

@@ -67,7 +67,8 @@ public class MemberResDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public class MemberTopicResultResDto {
+    public static class MemberTopicResultResDto {
+        private Long id; // 히스토리 ID (MemberTopicHistory)
         private String comment; // 한 줄 코멘트
         private List<Keyword> topicKeyword; // 토픽 키워드
         private LocalDateTime createdDate; // 대화 날짜

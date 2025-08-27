@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 public interface MemberQueryUseCase {
     CursorPageResponse<MemberResDto.MemberLikedTopicResDto> getMemberLikedTopics(String authorization, LocalDateTime cursor, int size);
-    CursorPageResponse<MemberResDto.MemberTopicResultResDto> getMemberTopicResultsByCreatedDate(String authorization, LocalDate date);
+    CursorPageResponse<MemberResDto.MemberTopicResultResDto> getMemberTopicResultsByCreatedDate(String authorization, LocalDate date, LocalDateTime cursor, int size);
     MemberResDto.ProfileResponse getProfile(String authorization);
 
 }
