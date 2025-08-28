@@ -27,7 +27,7 @@ public class MemberCommandController implements MemberCommandApi {
 
     @Override
     public JwtResDTO.Login joinEmailMember(
-            @Valid @RequestBody MemberReqDto.MemberEmailReqest memberReqDto
+            @Valid @RequestBody MemberReqDto.MemberEmailRequest memberReqDto
     ) {
         Member member = memberCommandUseCase.findOrCreateEmailMember(memberReqDto);
         return jwtTokenCommandUseCase.generateToken(member);
@@ -35,7 +35,7 @@ public class MemberCommandController implements MemberCommandApi {
 
     @Override
     public JwtResDTO.Login emailLogin(
-            @Valid @RequestBody MemberReqDto.MemberEmailReqest memberReqDto
+            @Valid @RequestBody MemberReqDto.MemberEmailRequest memberReqDto
     ) {
         Member member = memberCommandUseCase.loginEmailMember(memberReqDto);
         return jwtTokenCommandUseCase.generateToken(member);

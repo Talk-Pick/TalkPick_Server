@@ -8,6 +8,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.global.response.CursorPageResponse;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @RequestMapping("/api/v1/members")
