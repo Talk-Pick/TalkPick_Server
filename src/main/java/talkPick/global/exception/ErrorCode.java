@@ -83,7 +83,7 @@ public enum ErrorCode {
     // Kakao
     INVALID_ID_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 ID Token 입니다."),
     ERROR_ON_VERIFYING(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 토큰 검증 도중 에러 발생"),
-
+    
     ;
 
     private final HttpStatus status;
