@@ -14,4 +14,5 @@ public interface MemberCommandUseCase {
     MemberResDto.TermAgreementResponse termAgreement(String authorization, MemberReqDto.TermAgreementRequest request);
     void logout(String authorization);
     void delete(String authorization);
+    void TopicResultCommentChange(String authorization, MemberReqDto.TopicResultCommentChangeRequest request);
 }

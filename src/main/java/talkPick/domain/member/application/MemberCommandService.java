@@ -23,6 +23,8 @@ import talkPick.global.exception.handler.MemberExceptionHandler;
 import talkPick.global.exception.handler.TermExceptionHandler;
 import talkPick.global.model.TalkPickStatus;
 import talkPick.global.security.jwt.util.JwtProvider;
+import talkPick.domain.member.adapter.out.repository.MemberTopicResultJpaRepository;
+import talkPick.domain.topic.domain.member.MemberTopicResult;
 
 import java.util.List;
 
@@ -39,6 +41,7 @@ public class MemberCommandService implements MemberCommandUseCase {
     private final MemberLoginHistoryCommandRepositoryPort memberLoginHistoryRepository;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
+    private final MemberTopicResultJpaRepository memberTopicResultJpaRepository;
 
     /**
      * 회원 프로필 수정
@@ -228,6 +231,29 @@ public class MemberCommandService implements MemberCommandUseCase {
 
         refreshTokenRepository.deleteByMemberId(findMember.getId());
         memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
+    }
+
+    // 토픽 캘린더 조회 코멘트 수정
+    @Override
+    public void TopicResultCommentChange(String authorization, MemberReqDto.TopicResultCommentChangeRequest request) {
+        Long memberId = jwtProvider.getMemberId(authorization);
+
+        // 회원 조회
+        Member findMember = memberJpaRepository.findById(memberId)
+                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+
+        // MemberTopicResult 조회 (member_topic_history_id로 조회)
+        MemberTopicResult findMemberTopicResult = memberTopicResultJpaRepository.findByMemberTopicHistoryId(request.getMemberTopicHistoryId())
+                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+
+        // 본인의 토픽 결과인지 검증
+        if (!findMemberTopicResult.getMemberId().equals(findMember.getId())) {
+            throw new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND);
+        }
+
+        // 코멘트 업데이트
+        findMemberTopicResult.updateComment(request.getComment());
+        memberTopicResultJpaRepository.save(findMemberTopicResult);
     }
 
     // 회원 가입 시 필수 정보 검증

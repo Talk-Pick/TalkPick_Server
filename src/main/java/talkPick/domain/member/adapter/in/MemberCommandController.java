@@ -102,7 +102,8 @@ public class MemberCommandController implements MemberCommandApi {
     public ResponseEntity<ResultResponse<Void>> changeComment(
             @RequestHeader(value = "Authorization", required = false) String authorization,
             @Valid @RequestBody MemberReqDto.TopicResultCommentChangeRequest request) {
-        return null;
+        memberCommandUseCase.TopicResultCommentChange(authorization, request);
+        return ResponseEntity.ok(ResultResponse.success(null));
     }
 
 
