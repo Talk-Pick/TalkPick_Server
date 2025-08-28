@@ -14,27 +14,15 @@ import talkPick.global.model.TalkPickStatus;
 import java.time.LocalDateTime;
 
 public class MemberConverter {
+    private static final String DEFAULT_PROFILE_IMG_URL = "https://example.com/images/default-profile.png";
+    private static final String DEFAULT_NICKNAME = "토픽";
+
     public static MemberDataDto.KakaoMemberData toKakaoMemberData(io.jsonwebtoken.Claims claims) {
         return MemberDataDto.KakaoMemberData.builder()
                 .sub(claims.getSubject())
                 .email(claims.get("email", String.class))
                 .build();
     }
-
-    public static MemberResDto.LoginTokenResponse toKakaoOAuth2LoginResponse(
-            String accessToken,
-            String refreshToken,
-            java.time.LocalDateTime accessTokenExpireAt,
-            TalkPickStatus talkPickStatus) {
-        return MemberResDto.LoginTokenResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .accessTokenExpireAt(accessTokenExpireAt)
-                .talkPickStatus(talkPickStatus)
-                .build();
-    }
-    private static final String DEFAULT_PROFILE_IMG_URL = "https://example.com/images/default-profile.png";
-    private static final String DEFAULT_NICKNAME = "토픽";
 
     public static Member toKakaoMember(MemberDataDto.KakaoMemberData kakaoMemberData) {
         return Member.builder()
@@ -60,7 +48,7 @@ public class MemberConverter {
                 .build();
     }
 
-    public static Member toEmailMember(MemberReqDto.MemberEmailReqest emailReqDto){
+    public static Member toEmailMember(MemberReqDto.MemberEmailRequest emailReqDto){
         return Member.builder()
                 .email(emailReqDto.getEmail())
                 .password(emailReqDto.getPassword())

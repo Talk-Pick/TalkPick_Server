@@ -30,7 +30,7 @@ public class MemberCommandController implements MemberCommandApi {
 
     @Override
     public ResponseEntity<ResultResponse<JwtResDTO.Login>> joinEmailMember(
-            @Valid @RequestBody MemberReqDto.MemberEmailReqest memberReqDto
+            @Valid @RequestBody MemberReqDto.MemberEmailRequest memberReqDto
            ) {
         Member findOrCreateEmailMember = memberCommandUseCase.findOrCreateEmailMember(memberReqDto);
 
@@ -39,7 +39,7 @@ public class MemberCommandController implements MemberCommandApi {
 
     @Override
     public ResponseEntity<ResultResponse<JwtResDTO.Login>> emailLogin(
-            @Valid @RequestBody MemberReqDto.MemberEmailReqest memberReqDto
+            @Valid @RequestBody MemberReqDto.MemberEmailRequest memberReqDto
            ) {
         return ResponseEntity.ok(ResultResponse.success(
                 jwtTokenCommandUseCase.generateToken(memberCommandUseCase.loginEmailMember(memberReqDto))));
@@ -80,7 +80,7 @@ public class MemberCommandController implements MemberCommandApi {
     @Override
     public ResponseEntity<ResultResponse<MemberResDto.ProfileUpdateResponse>> updateProfile(
             @RequestHeader(value = "Authorization", required = false) String authorization,
-            MemberReqDto.ProfileUpdateRequest request) {
+            @RequestBody MemberReqDto.ProfileUpdateRequest request) {
         return ResponseEntity.ok(ResultResponse.success(memberCommandUseCase.updateProfile(authorization, request)));
     }
 
@@ -95,6 +95,14 @@ public class MemberCommandController implements MemberCommandApi {
     public ResponseEntity<ResultResponse<Void>> deleteMember(
             @RequestHeader(value = "Authorization", required = false) String authorization) {
         memberCommandUseCase.delete(authorization);
+        return ResponseEntity.ok(ResultResponse.success(null));
+    }
+
+    @Override
+    public ResponseEntity<ResultResponse<Void>> changeComment(
+            @RequestHeader(value = "Authorization", required = false) String authorization,
+            @Valid @RequestBody MemberReqDto.TopicResultCommentChangeRequest request) {
+        memberCommandUseCase.TopicResultCommentChange(authorization, request);
         return ResponseEntity.ok(ResultResponse.success(null));
     }
 

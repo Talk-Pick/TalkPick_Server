@@ -30,7 +30,7 @@ public interface MemberQueryApi {
     ResponseEntity<ResultResponse<CursorPageResponse<MemberResDto.MemberTopicResultResDto>>> getMemberTopicResults(
             @RequestHeader(value = "Authorization", required = false) String authorization,
             @Parameter(description = "조회할 날짜 (yyyy-MM-dd)") @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam(value = "cursor", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime cursor,
+            @RequestParam(value = "cursor", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime cursor,
             @RequestParam(value = "size", defaultValue = "6") @Parameter(description = "페이지 크기 (1 이상)", schema = @Schema(minimum = "1")) int size
             );
 

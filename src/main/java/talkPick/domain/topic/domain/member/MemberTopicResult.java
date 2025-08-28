@@ -21,7 +21,7 @@ public class MemberTopicResult {
     @Column(name = "member_topic_history_id",
             nullable = false,
             columnDefinition = "BIGINT COMMENT 'MemberTopicHistory ID'")
-    private Long member_topic_history_id;
+    private Long memberTopicHistoryId;
 
     @Column(
             name = "member_id",
@@ -30,5 +30,17 @@ public class MemberTopicResult {
     )
     private Long memberId;
 
+    /**
+     * 코멘트 업데이트
+     */
+    public void updateComment(String comment) {
+        this.comment = comment;
+    }
 
+    /**
+     * member_topic_history_id getter
+     */
+    public Long getMemberTopicHistoryId() {
+        return memberTopicHistoryId;
+    }
 }

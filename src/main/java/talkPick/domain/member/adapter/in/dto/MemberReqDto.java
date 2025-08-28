@@ -51,14 +51,10 @@ public class MemberReqDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ProfileUpdateRequest {
-        @NotNull(message = "닉네임은 필수입니다.")
         @Size(max = 25, message = "닉네임은 최대 25자입니다.")
         private String nickname;
-        @NotNull(message = "성별은 필수입니다.")
         private Gender gender;
-        @NotNull(message = "생년월일은 필수입니다.")
         private LocalDate birth;
-        @NotNull(message = "MBTI는 필수입니다.")
         private MBTI mbti;
     }
 
@@ -77,10 +73,21 @@ public class MemberReqDto {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    public class MemberEmailReqest {
+    public static class MemberEmailRequest {
         @NotNull(message = "이메일은 필수입니다.")
         private String email;
         @NotNull(message = "비밀번호는 필수입니다.")
         private String password;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class TopicResultCommentChangeRequest {
+        @NotNull(message = "히스토리 ID는 필수입니다.")
+        private Long memberTopicHistoryId;
+        @Size(max = 100, message = "코멘트는 최대 100자입니다.")
+        private String comment;
     }
 }

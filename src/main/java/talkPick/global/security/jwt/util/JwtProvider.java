@@ -9,7 +9,6 @@ import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.handler.JwtExceptionHandler;
 import talkPick.global.exception.handler.SecurityExceptionHandler;
 import talkPick.global.security.jwt.dto.JwtResDTO;
-import java.security.Key;
 import java.util.List;
 
 import static talkPick.global.exception.ErrorCode.ROLE_NOT_FOUND;
@@ -19,7 +18,6 @@ import static talkPick.global.exception.ErrorCode.ROLE_NOT_FOUND;
 public class JwtProvider {
     private final JwtGenerator jwtGenerator;
     private final RefreshTokenGenerator refreshTokenGenerator;
-    private Key key;
 
 
     public JwtResDTO.Login createJwt(final Long memberId, final String role) {
@@ -53,7 +51,7 @@ public class JwtProvider {
      */
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            Jwts.parserBuilder().setSigningKey(jwtGenerator.getSigningKey()).build().parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException e) {
             throw new JwtExceptionHandler(ErrorCode.EXPIRED_JWT_TOKEN);
@@ -85,7 +83,7 @@ public class JwtProvider {
         // 3. JWT에서 사용자 ID 추출
         try {
             // 추출
-            Claims claims = Jwts.parserBuilder().setSigningKey(key).build()
+            Claims claims = Jwts.parserBuilder().setSigningKey(jwtGenerator.getSigningKey()).build()
                     .parseClaimsJws(token).getBody();
             return Long.valueOf(claims.getSubject());
         } catch (Exception e) {
