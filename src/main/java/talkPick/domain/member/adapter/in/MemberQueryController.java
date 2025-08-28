@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import talkPick.global.response.CursorPageResponse;
 
@@ -32,12 +33,13 @@ public class MemberQueryController implements MemberQueryApi {
     }
 
 
-//    @Override
-//    public ResponseEntity<ResultResponse<CursorPageResponse<MemberResDto.MemberTopicResultResDto>>> getMemberTopicResults(
-//            @RequestHeader(value = "Authorization", required = false) String authorization,
-//            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
-//            ) {
-//        memberQueryUseCase.getMemberTopicResultsByCreatedDate(authorization, date);
-//        return null;
-//    }
+    @Override
+    public CursorPageResponse<MemberResDto.MemberTopicResultResDto> getMemberTopicResults(
+            @RequestHeader(value = "Authorization", required = false) String authorization,
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(value = "cursor", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime cursor,
+            @RequestParam(value = "size", defaultValue = "6") int size
+            ) {
+        return memberQueryUseCase.getMemberTopicResultsByCreatedDate(authorization, date, cursor, size);
+    }
 }

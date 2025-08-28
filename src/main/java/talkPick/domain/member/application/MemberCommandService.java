@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
 import talkPick.domain.member.adapter.out.repository.MemberTermJpaRepository;
+import talkPick.domain.member.adapter.out.repository.MemberTopicResultJpaRepository;
 import talkPick.domain.member.converter.MemberConverter;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.domain.MemberLoginHistory;
@@ -17,6 +18,7 @@ import talkPick.domain.member.port.in.MemberCommandUseCase;
 import talkPick.domain.member.port.out.MemberLoginHistoryCommandRepositoryPort;
 import talkPick.domain.term.adapter.out.repository.TermJpaRepository;
 import talkPick.domain.term.domain.Term;
+import talkPick.domain.topic.domain.member.MemberTopicResult;
 import talkPick.global.security.jwt.repository.RefreshTokenRepository;
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.handler.MemberExceptionHandler;
@@ -39,6 +41,7 @@ public class MemberCommandService implements MemberCommandUseCase {
     private final MemberLoginHistoryCommandRepositoryPort memberLoginHistoryRepository;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
+    private final MemberTopicResultJpaRepository memberTopicResultJpaRepository;
 
     /**
      * 회원 프로필 수정
@@ -50,7 +53,7 @@ public class MemberCommandService implements MemberCommandUseCase {
         // 회원 조회
         Member findMember = memberJpaRepository.findById(memberId)
                 .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
-
+        System.out.println("회원 이름 :" + request.getNickname());
         // 요청된 필드별 수정 처리
         if (request.getNickname() != null) findMember.updateNickname(request.getNickname());
         if (request.getGender() != null) findMember.updateGender(request.getGender());
@@ -66,7 +69,7 @@ public class MemberCommandService implements MemberCommandUseCase {
      * 이메일 회원 신규 생성
      */
     @Override
-    public Member findOrCreateEmailMember(MemberReqDto.MemberEmailReqest emailReqDto) {
+    public Member findOrCreateEmailMember(MemberReqDto.MemberEmailRequest emailReqDto) {
         validatePassword(emailReqDto.getPassword());
 
         if (memberJpaRepository.findByEmail(emailReqDto.getEmail()).isPresent()) {
@@ -84,7 +87,7 @@ public class MemberCommandService implements MemberCommandUseCase {
      * 이메일 로그인 처리 (비밀번호 검증 및 로그인 이력 기록)
      */
     @Override
-    public Member loginEmailMember(MemberReqDto.MemberEmailReqest emailReqDto) {
+    public Member loginEmailMember(MemberReqDto.MemberEmailRequest emailReqDto) {
         validatePassword(emailReqDto.getPassword());
 
         Member member = memberJpaRepository.findByEmail(emailReqDto.getEmail())
@@ -178,7 +181,7 @@ public class MemberCommandService implements MemberCommandUseCase {
         for (Long termId : agreeTermIdList) {
             Term term = termJpaRepository.findById(termId)
                     .orElseThrow(() -> new TermExceptionHandler(ErrorCode.TERM_NOT_FOUND));
-            memberTermJpaRepository.findByMemberIdAndTerm(findMember.getId(), term)
+            memberTermJpaRepository.findByMemberIdAndTermId(findMember.getId(), term.getId())
                     .ifPresentOrElse(
                             mt -> mt.updateIsAgree(true),
                             () -> memberTermJpaRepository.save(MemberConverter.toMemberTerm(findMember, term, true))
@@ -189,7 +192,7 @@ public class MemberCommandService implements MemberCommandUseCase {
         for (Long termId : disagreeTermIdList) {
             Term term = termJpaRepository.findById(termId)
                     .orElseThrow(() -> new TermExceptionHandler(ErrorCode.TERM_NOT_FOUND));
-            memberTermJpaRepository.findByMemberIdAndTerm(findMember.getId(), term)
+            memberTermJpaRepository.findByMemberIdAndTermId(findMember.getId(), term.getId())
                     .ifPresentOrElse(
                             mt -> mt.updateIsAgree(false),
                             () -> memberTermJpaRepository.save(MemberConverter.toMemberTerm(findMember, term, false))
@@ -228,6 +231,29 @@ public class MemberCommandService implements MemberCommandUseCase {
 
         refreshTokenRepository.deleteByMemberId(findMember.getId());
         memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
+    }
+
+    // 토픽 캘린더 조회 코멘트 수정
+    @Override
+    public void TopicResultCommentChange(String authorization, MemberReqDto.TopicResultCommentChangeRequest request) {
+        Long memberId = jwtProvider.getMemberId(authorization);
+
+        // 회원 조회
+        Member findMember = memberJpaRepository.findById(memberId)
+                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+
+        // MemberTopicResult 조회 (member_topic_history_id로 조회)
+        MemberTopicResult findMemberTopicResult = memberTopicResultJpaRepository.findByMemberTopicHistoryId(request.getMemberTopicHistoryId())
+                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+
+        // 본인의 토픽 결과인지 검증
+        if (!findMemberTopicResult.getMemberId().equals(findMember.getId())) {
+            throw new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND);
+        }
+
+        // 코멘트 업데이트
+        findMemberTopicResult.updateComment(request.getComment());
+        memberTopicResultJpaRepository.save(findMemberTopicResult);
     }
 
     // 회원 가입 시 필수 정보 검증

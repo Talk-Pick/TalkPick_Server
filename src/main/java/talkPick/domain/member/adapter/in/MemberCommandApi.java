@@ -17,13 +17,13 @@ public interface MemberCommandApi {
     @Operation(summary = "이메일 회원가입", description = "이메일, 비밀번호 등으로 회원가입을 처리합니다. 회원가입 후 약관 동의와 추가 정보 입력이 필요합니다.")
     JwtResDTO.Login joinEmailMember(
             @Parameter(description = "회원가입 요청 DTO", required = true)
-            @Valid @RequestBody MemberReqDto.MemberEmailReqest memberReqDto);
+            @Valid @RequestBody MemberReqDto.MemberEmailRequest memberReqDto);
 
     @PostMapping("/email/login")
     @Operation(summary = "이메일 로그인", description = "이메일, 비밀번호로 로그인을 처리합니다.")
     JwtResDTO.Login emailLogin(
             @Parameter(description = "로그인 요청 DTO", required = true)
-            @Valid @RequestBody MemberReqDto.MemberEmailReqest memberReqDto);
+            @Valid @RequestBody MemberReqDto.MemberEmailRequest memberReqDto);
 
     @PostMapping("/kakao/login")
     @Operation(summary = "KAKAO OAuth2 로그인 API", description = "KAKAO OAuth2 로그인 API 입니다.")
@@ -51,7 +51,7 @@ public interface MemberCommandApi {
     @Operation(summary = "프로필 수정 API", description = "회원의 프로필 정보(닉네임, 성별, 생년월일, MBTI)를 수정하는 API입니다.")
     MemberResDto.ProfileUpdateResponse updateProfile(
             @RequestHeader(value = "Authorization", required = false) String authorization,
-            @Valid MemberReqDto.ProfileUpdateRequest request);
+            @RequestBody @Valid MemberReqDto.ProfileUpdateRequest request);
 
     @DeleteMapping("/logout")
     @Operation(summary = "로그아웃 API", description = "로그아웃 API입니다.")
@@ -62,4 +62,11 @@ public interface MemberCommandApi {
     @Operation(summary = "계정 탈퇴 API", description = "계정 탈퇴 API입니다.")
     void deleteMember(
             @RequestHeader(value = "Authorization", required = false) String authorization);
+
+    @PatchMapping("/topic-results")
+    @Operation(summary = "캘린더 조회 토픽 코멘트 수정 API", description = "캘린더 조회 토픽의 코멘트를 수정하는 API입니다.")
+    void changeComment(
+            @RequestHeader(value = "Authorization", required = false) String authorization,
+            @Valid @RequestBody MemberReqDto.TopicResultCommentChangeRequest request
+    );
 }

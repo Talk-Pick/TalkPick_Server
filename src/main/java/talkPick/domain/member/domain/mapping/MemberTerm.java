@@ -5,7 +5,6 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import talkPick.domain.term.domain.Term;
 import talkPick.global.model.BaseTime;
 
 
@@ -33,12 +32,12 @@ public class MemberTerm extends BaseTime {
     )
     private Long memberId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
+    @Column(
             name = "term_id",
+            nullable = false,
             columnDefinition = "BIGINT COMMENT '약관 PK (Foreign Key)'"
     )
-    private Term term;
+    private Long termId;
 
     @Column(
             nullable = false,

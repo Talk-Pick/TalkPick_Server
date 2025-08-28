@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface MemberTermJpaRepository extends JpaRepository<MemberTerm, Long> {
     // 특정 약관 및 유저의 동의 상태 조회
-    Optional<MemberTerm> findByMemberIdAndTerm(Long memberId, Term term);
+    Optional<MemberTerm> findByMemberIdAndTermId(Long memberId, Long termId);
 }

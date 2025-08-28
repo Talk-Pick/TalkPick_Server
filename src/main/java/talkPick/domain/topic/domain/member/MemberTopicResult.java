@@ -3,7 +3,6 @@ package talkPick.domain.topic.domain.member;
 
 import jakarta.persistence.*;
 import lombok.*;
-import talkPick.domain.member.domain.Member;
 
 @Getter
 @Setter
@@ -19,11 +18,29 @@ public class MemberTopicResult {
     @Column(length = 100)
     String comment;
 
-    @OneToOne(mappedBy = "memberTopicResult", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
-    private MemberTopicHistory memberTopicHistory;
+    @Column(name = "member_topic_history_id",
+            nullable = false,
+            columnDefinition = "BIGINT COMMENT 'MemberTopicHistory ID'")
+    private Long memberTopicHistoryId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
+    @Column(
+            name = "member_id",
+            nullable = false,
+            columnDefinition = "BIGINT COMMENT '회원 PK (Foreign Key)'"
+    )
+    private Long memberId;
 
+    /**
+     * 코멘트 업데이트
+     */
+    public void updateComment(String comment) {
+        this.comment = comment;
+    }
 
+    /**
+     * member_topic_history_id getter
+     */
+    public Long getMemberTopicHistoryId() {
+        return memberTopicHistoryId;
+    }
 }
