@@ -17,6 +17,7 @@ public final class WhiteList {
             "/api/v1/members/liked-topics",
             "/api/v1/members/topic-results",
             "api/v1/members/token/refresh",
+            "/api/v1/inquiry",
             "/swagger-ui/**",
             "/swagger-ui.html/**",
             "/swagger-resources/**",

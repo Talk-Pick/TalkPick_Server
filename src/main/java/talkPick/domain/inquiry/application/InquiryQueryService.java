@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.inquiry.adapter.out.dto.InquiryResDto;
 import talkPick.domain.inquiry.port.in.InquiryQueryUseCase;
 import talkPick.domain.inquiry.port.out.InquiryQueryRepositoryPort;
-import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
+import talkPick.domain.member.port.out.MemberQueryRepositoryPort;
 import talkPick.domain.member.domain.Member;
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.handler.MemberExceptionHandler;
@@ -20,7 +20,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class InquiryQueryService implements InquiryQueryUseCase {
-    private final MemberJpaRepository memberJpaRepository;
+    private final MemberQueryRepositoryPort memberQueryRepositoryPort;
     private final InquiryQueryRepositoryPort inquiryQueryRepositoryPort;
     private final JwtProvider jwtProvider;
 
@@ -28,8 +28,7 @@ public class InquiryQueryService implements InquiryQueryUseCase {
     public CursorPageResponse<InquiryResDto.InquiryListItemResDto> getMyInquiries(String authorization, LocalDateTime cursor, int size) {
         Long memberId = jwtProvider.getMemberId(authorization);
 
-        Member findMember = memberJpaRepository.findById(memberId)
-                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+        Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
         // size + 1개 조회하여 다음 페이지 존재 여부 판단
         List<InquiryResDto.InquiryListItemResDto> items = inquiryQueryRepositoryPort.findMyInquiries(findMember, cursor, size + 1);
 

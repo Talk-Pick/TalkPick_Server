@@ -86,4 +86,13 @@ public class SpringDocOpenApiConfig {
                 .pathsToMatch("/api/v1/members/**")
                 .build();
     }
+
+    @Bean
+    public GroupedOpenApi inquiryOpenApi() {
+        return GroupedOpenApi.builder()
+                .group("문의 API")
+                .displayName("문의 API")
+                .pathsToMatch("/api/v1/inquiry/**")
+                .build();
+    }
 }

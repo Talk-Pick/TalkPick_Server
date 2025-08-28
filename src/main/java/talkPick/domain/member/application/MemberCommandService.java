@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.member.port.out.MemberCommandRepositoryPort;
-import talkPick.domain.member.adapter.out.repository.MemberTermJpaRepository;
+import talkPick.domain.member.port.out.MemberTermCommandRepositoryPort;
 import talkPick.domain.member.adapter.out.repository.MemberTopicResultJpaRepository;
 import talkPick.domain.member.converter.MemberConverter;
 import talkPick.domain.member.domain.Member;
@@ -16,7 +16,8 @@ import talkPick.domain.member.adapter.in.dto.MemberReqDto;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.domain.member.port.in.MemberCommandUseCase;
 import talkPick.domain.member.port.out.MemberLoginHistoryCommandRepositoryPort;
-import talkPick.domain.term.adapter.out.repository.TermJpaRepository;
+import talkPick.domain.member.port.out.MemberQueryRepositoryPort;
+import talkPick.domain.term.port.out.TermQueryRepositoryPort;
 import talkPick.domain.term.domain.Term;
 import talkPick.domain.topic.domain.member.MemberTopicResult;
 import talkPick.global.security.jwt.repository.RefreshTokenRepository;
@@ -35,10 +36,11 @@ public class MemberCommandService implements MemberCommandUseCase {
     private static final String DEFAULT_PROFILE_IMG_URL = "https://example.com/images/default-profile.png";
 
     private final MemberCommandRepositoryPort memberCommandRepositoryPort;
-    private final TermJpaRepository termJpaRepository;
-    private final MemberTermJpaRepository memberTermJpaRepository;
+    private final TermQueryRepositoryPort termQueryRepositoryPort;
+    private final MemberTermCommandRepositoryPort memberTermJpaRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final MemberLoginHistoryCommandRepositoryPort memberLoginHistoryRepository;
+    private final MemberQueryRepositoryPort memberQueryRepositoryPort;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
     private final MemberTopicResultJpaRepository memberTopicResultJpaRepository;
@@ -179,7 +181,7 @@ public class MemberCommandService implements MemberCommandUseCase {
 
         // 동의한 약관 저장 및 업데이트
         for (Long termId : agreeTermIdList) {
-            Term term = termJpaRepository.findById(termId)
+            Term term = termQueryRepositoryPort.findById(termId)
                     .orElseThrow(() -> new TermExceptionHandler(ErrorCode.TERM_NOT_FOUND));
             memberTermJpaRepository.findByMemberIdAndTermId(findMember.getId(), term.getId())
                     .ifPresentOrElse(
@@ -190,7 +192,7 @@ public class MemberCommandService implements MemberCommandUseCase {
 
         // 미동의한 약관 저장 및 업데이트
         for (Long termId : disagreeTermIdList) {
-            Term term = termJpaRepository.findById(termId)
+            Term term = termQueryRepositoryPort.findById(termId)
                     .orElseThrow(() -> new TermExceptionHandler(ErrorCode.TERM_NOT_FOUND));
             memberTermJpaRepository.findByMemberIdAndTermId(findMember.getId(), term.getId())
                     .ifPresentOrElse(
@@ -211,8 +213,7 @@ public class MemberCommandService implements MemberCommandUseCase {
     public void logout(String authorization) {
         Long memberId = jwtProvider.getMemberId(authorization);
 
-        Member findMember = memberJpaRepository.findById(memberId)
-                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+        Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
         refreshTokenRepository.deleteByMemberId(findMember.getId());
         memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
@@ -223,11 +224,10 @@ public class MemberCommandService implements MemberCommandUseCase {
     public void delete(String authorization) {
         Long memberId = jwtProvider.getMemberId(authorization);
 
-        Member findMember = memberJpaRepository.findById(memberId)
-                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+        Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
         findMember.updateStatus(TalkPickStatus.DIS_ACTIVE);
-        memberJpaRepository.save(findMember);
+        memberCommandRepositoryPort.save(findMember);
 
         refreshTokenRepository.deleteByMemberId(findMember.getId());
         memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
@@ -239,8 +239,7 @@ public class MemberCommandService implements MemberCommandUseCase {
         Long memberId = jwtProvider.getMemberId(authorization);
 
         // 회원 조회
-        Member findMember = memberJpaRepository.findById(memberId)
-                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+        Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
         // MemberTopicResult 조회 (member_topic_history_id로 조회)
         MemberTopicResult findMemberTopicResult = memberTopicResultJpaRepository.findByMemberTopicHistoryId(request.getMemberTopicHistoryId())
@@ -268,7 +267,7 @@ public class MemberCommandService implements MemberCommandUseCase {
     private boolean validateRequiredTerms(List<Long> agreeTermIdList) {
         if (agreeTermIdList == null) return false;
 
-        List<Term> requiredTerms = termJpaRepository.findByIsRequiredTrue();
+        List<Term> requiredTerms = termQueryRepositoryPort.findByIsRequiredTrue();
 
         for (Term term : requiredTerms) {
             if (!agreeTermIdList.contains(term.getId())) {

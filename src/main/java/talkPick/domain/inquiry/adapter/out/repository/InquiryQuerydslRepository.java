@@ -15,14 +15,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public class InquiryQuerydslRepository implements InquiryQueryRepositoryPort {
+public class InquiryQuerydslRepository {
     private final JPAQueryFactory queryFactory;
 
     public InquiryQuerydslRepository(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    @Override
     public List<InquiryResDto.InquiryListItemResDto> findMyInquiries(Member member, LocalDateTime cursor, int size) {
         QInquiry iq = QInquiry.inquiry;
 

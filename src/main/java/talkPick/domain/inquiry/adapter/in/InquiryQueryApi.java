@@ -15,7 +15,7 @@ import talkPick.global.response.CursorPageResponse;
 import java.time.LocalDateTime;
 
 @RequestMapping("/api/v1/inquiry")
-@Tag(name = "문의 조회 API", description = "회원이 등록한 문의 목록 조회 API")
+@Tag(name = "문의 API", description = "문의 관련 API입니다.")
 public interface InquiryQueryApi {
     @GetMapping
     @Operation(summary = "내 문의 목록 조회 API", description = "회원이 등록한 문의들을 커서 페이징으로 조회합니다.")
