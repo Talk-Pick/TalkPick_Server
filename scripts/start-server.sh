@@ -12,7 +12,7 @@ echo "🔐 ECR 로그인"
 aws ecr get-login-password --region ap-northeast-2 \
   | docker login --username AWS --password-stdin 718513646976.dkr.ecr.ap-northeast-2.amazonaws.com
 
-echo "⏸️ 실행중인 컨테이너 중지"
+echo "⏸️ 실행 중인 컨테이너 중지"
 docker compose down || true
 
 echo "▶️ 컨테이너 실행"
