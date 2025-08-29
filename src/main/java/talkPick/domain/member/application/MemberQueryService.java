@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.domain.member.converter.MemberConverter;
-import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
+import talkPick.domain.member.port.out.MemberQueryRepositoryPort;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
 import talkPick.domain.member.port.out.MemberLikedTopicsQueryRepositoryPort;
@@ -24,7 +24,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberQueryService implements MemberQueryUseCase {
-    private final MemberJpaRepository memberJpaRepository;
+    private final MemberQueryRepositoryPort memberQueryRepositoryPort;
     private final MemberLikedTopicsQueryRepositoryPort memberLikedTopicsQueryRepositoryPort;
     private final MemberTopicResultQueryRepositoryPort memberTopicResultQueryRepositoryPort;
     private final JwtProvider jwtProvider;
@@ -36,8 +36,7 @@ public class MemberQueryService implements MemberQueryUseCase {
         Long memberId = jwtProvider.getMemberId(authorization);
 
         // 회원 존재 여부 검증 및 조회
-        Member findMember = memberJpaRepository.findById(memberId)
-                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+        Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
         // 조회된 회원 정보를 DTO로 변환 후 반환
         return MemberConverter.toProfileResponse(findMember);
@@ -50,8 +49,7 @@ public class MemberQueryService implements MemberQueryUseCase {
     public CursorPageResponse<MemberResDto.MemberLikedTopicResDto> getMemberLikedTopics(String authorization, LocalDateTime cursor, int size) {
         Long memberId = jwtProvider.getMemberId(authorization);
 
-        Member findMember = memberJpaRepository.findById(memberId)
-                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+        Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
         // size + 1개 조회하여 다음 페이지 존재 여부 판단
         List<MemberResDto.MemberLikedTopicResDto> memberLikedTopics = memberLikedTopicsQueryRepositoryPort.findMemberLikedTopics(findMember, cursor, size + 1);
@@ -82,8 +80,7 @@ public class MemberQueryService implements MemberQueryUseCase {
     public CursorPageResponse<MemberResDto.MemberTopicResultResDto> getMemberTopicResultsByCreatedDate(String authorization, LocalDate date, LocalDateTime cursor, int size) {
         Long memberId = jwtProvider.getMemberId(authorization);
 
-        Member findMember = memberJpaRepository.findById(memberId)
-                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+        Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
         // size + 1개 조회하여 다음 페이지 존재 여부 판단
         List<MemberResDto.MemberTopicResultResDto> items = memberTopicResultQueryRepositoryPort.findMemberTopicResults(findMember, date, cursor, size + 1);
