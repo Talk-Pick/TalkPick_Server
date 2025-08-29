@@ -3,9 +3,7 @@ package talkPick.domain.member.adapter.out;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import talkPick.domain.member.adapter.out.repository.MemberTermJpaRepository;
-import talkPick.domain.member.domain.Member;
-import talkPick.domain.term.domain.Term;
-import talkPick.domain.member.domain.MemberTerm;
+import talkPick.domain.member.domain.mapping.MemberTerm;
 import talkPick.domain.member.port.out.MemberTermCommandRepositoryPort;
 
 import java.util.Optional;
