@@ -29,7 +29,7 @@ public class CustomUserDetails implements UserDetails {
 
     public CustomUserDetails(Member member) {
         this.id = member.getId();
-        this.name = member.getName();
+        this.name = member.getNickname();
         this.password = member.getPassword();
         this.role = member.getMemberRole();
     }

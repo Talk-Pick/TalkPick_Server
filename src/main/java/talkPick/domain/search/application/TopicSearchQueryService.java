@@ -14,6 +14,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+/**
+ * 해당 코드 사용 안 함.
+ * **/
+@Deprecated
 @Slf4j
 @Service
 @Transactional(readOnly = true)

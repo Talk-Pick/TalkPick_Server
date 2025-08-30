@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import talkPick.global.healthCheck.exception.HealthCheckException;
+import talkPick.global.exception.handler.HealthCheckExceptionHandler;
 import static talkPick.global.exception.ErrorCode.DB_HEALTH_CHECK_FAILED;
 
 @Slf4j
@@ -21,7 +21,7 @@ public class DBHealthIndicator implements HealthIndicator {
             return Health.up().build();
         } catch (Exception e) {
             log.error("[Health Check Error]", e);
-            throw new HealthCheckException(DB_HEALTH_CHECK_FAILED);
+            throw new HealthCheckExceptionHandler(DB_HEALTH_CHECK_FAILED);
         }
     }
 }

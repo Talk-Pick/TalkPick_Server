@@ -8,6 +8,7 @@ public class TopicResDTO {
             Long id,
             String title
     ){}
+
     public record Categories(
             Long categoryId,
             String title,
@@ -15,14 +16,36 @@ public class TopicResDTO {
             String imageUrl,
             CategoryGroup categoryGroup
     ) {}
+
     public record TopicDetail(
             Long topicId,
             String title,
-            String thumbnail,
             long averageTalkTime,
             int selectCount,
             String category,
             CategoryGroup categoryGroup,
-            Keyword keyword
-    ) {}
+            String keywordName,
+            String keywordImageUrl,
+            String keywordIconUrl
+    ) {
+        public TopicDetail(Long topicId,
+                           String title,
+                           long averageTalkTime,
+                           int selectCount,
+                           String category,
+                           CategoryGroup categoryGroup,
+                           Keyword keyword) {
+            this(
+                    topicId,
+                    title,
+                    averageTalkTime,
+                    selectCount,
+                    category,
+                    categoryGroup,
+                    keyword != null ? keyword.name() : null,
+                    keyword != null ? keyword.getImageUrl() : null,
+                    keyword != null ? keyword.getIconUrl() : null
+            );
+        }
+    }
 }

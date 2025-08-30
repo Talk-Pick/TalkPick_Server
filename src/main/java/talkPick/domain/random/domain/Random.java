@@ -1,10 +1,6 @@
 package talkPick.domain.random.domain;
 
-import jakarta.annotation.Nullable;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
 import talkPick.domain.random.domain.type.RandomType;
@@ -15,25 +11,33 @@ import talkPick.global.model.BaseTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "random")
 public class Random extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, columnDefinition = "BIGINT COMMENT '기본 키'")
     private Long id;
+
+    @Column(name = "member_id", nullable = false, columnDefinition = "BIGINT COMMENT '회원 ID'")
     private Long memberId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false, columnDefinition = "VARCHAR(20) COMMENT '랜덤 진행 상태'")
     private RandomType type;
-    @Nullable
+
+    @Column(name = "one_line", nullable = true, length = 255, columnDefinition = "VARCHAR(255) COMMENT '한 줄 평'")
     private String oneLine;
+
+    @Column(name = "rating", nullable = true, columnDefinition = "INT COMMENT '평점'")
+    private Integer rating;
 
     public static Random from(final Long memberId) {
         return Random.builder()
                 .memberId(memberId)
-                .type(RandomType.NOT_STARTED)
+                .type(RandomType.START)
                 .oneLine(null)
+                .rating(null)
                 .build();
-    }
-
-    public void start() {
-        this.type = RandomType.IN_PROGRESS;
     }
 
     public void quit() {
@@ -44,7 +48,11 @@ public class Random extends BaseTime {
         this.type = RandomType.COMPLETED;
     }
 
-    public void saveResult(RandomReqDTO.Result requestDTO) {
+    public void rate(RandomReqDTO.Rate requestDTO) {
+        this.rating = requestDTO.rating();
+    }
+
+    public void comment(RandomReqDTO.Comment requestDTO) {
         this.oneLine = requestDTO.oneLine();
     }
 }

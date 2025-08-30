@@ -3,8 +3,6 @@ package talkPick.domain.member.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import talkPick.domain.admin.domain.type.Role;
-import talkPick.domain.member.adapter.in.dto.KakaoUserInfo;
-import talkPick.domain.member.adapter.in.dto.MemberEmailReqDto;
 import talkPick.domain.member.domain.type.Gender;
 import talkPick.domain.member.domain.type.LoginType;
 import talkPick.domain.member.domain.type.MBTI;
@@ -12,9 +10,6 @@ import talkPick.global.model.BaseTime;
 import talkPick.global.model.TalkPickStatus;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
 
 @Getter
 @Setter
@@ -25,96 +20,108 @@ import java.util.Map;
 public class Member extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(
+            name = "member_id",
+            columnDefinition = "BIGINT COMMENT '회원 고유 PK'"
+    )
     private Long id;
-    private String kakaoId;
+
+    @Column(
+            length = 100,
+            nullable = false,
+            columnDefinition = "VARCHAR(100) COMMENT '이메일(로그인 아이디)'"
+    )
     private String email;
-    private Role memberRole;
+
+    @Column(
+            length = 100,
+            columnDefinition = "VARCHAR(100) COMMENT '비밀번호(암호화 저장)'"
+    )
     private String password;
-    private String name;
-    private LocalDate birth;
+
     @Enumerated(EnumType.STRING)
+    @Column(
+            length = 6,
+            nullable = false,
+            columnDefinition = "VARCHAR(6) COMMENT '회원 역할 (권한: ADMIN/USER 등)'"
+    )
+    private Role memberRole;
+
+    @Column(
+            length = 25,
+            nullable = false,
+            columnDefinition = "VARCHAR(25) COMMENT '닉네임'"
+    )
+    private String nickname;
+
+    @Column(
+            columnDefinition = "DATE COMMENT '생년월일'"
+    )
+    private LocalDate birth;
+
+    @Enumerated(EnumType.STRING)
+    @Column(
+            columnDefinition = "VARCHAR(10) COMMENT '성별(남/여 등)'"
+    )
     private Gender gender;
 
     @Enumerated(EnumType.STRING)
+    @Column(
+            length = 6,
+            nullable = false,
+            columnDefinition = "VARCHAR(6) COMMENT '로그인 타입(EMAIL, OAUTH 등)'"
+    )
     private LoginType loginType;
 
     @Enumerated(EnumType.STRING)
+    @Column(
+            length = 10,
+            nullable = false,
+            columnDefinition = "VARCHAR(10) COMMENT '회원 상태(활성, 휴면, 탈퇴 등)'"
+    )
     private TalkPickStatus status;
 
     @Enumerated(EnumType.STRING)
+    @Column(
+            columnDefinition = "VARCHAR(5) COMMENT 'MBTI 유형'"
+    )
     private MBTI mbti;
 
+    @Column(
+            length = 255,
+            nullable = false,
+            columnDefinition = "VARCHAR(255) COMMENT '프로필 이미지 URL'"
+    )
     private String profileImageUrl;
 
+    @Column(
+            length = 255,
+            columnDefinition = "VARCHAR(255) COMMENT 'OAuth Provider 식별값(구글, 카카오 등 연결용)'"
+    )
+    private String providerId;
 
-    public Member(MemberEmailReqDto memberResDto) {
-        this.email = memberResDto.getEmail();
-        this.name = memberResDto.getName();
-        this.password = memberResDto.getPassword();
-        this.birth = memberResDto.getBirth();
-        this.gender = memberResDto.getGender();
-        this.mbti = memberResDto.getMbti();
-        this.kakaoId = null;
-        this.loginType = LoginType.EMAIL;
-        this.status = null;
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public Member(KakaoUserInfo kakaoUserInfo, MBTI mbti) {
-        Map<String, Object> kakaoAccount = (kakaoUserInfo.getKakao_account() != null) 
-                ? kakaoUserInfo.getKakao_account() : new HashMap<>();
-        Map<String, Object> properties = (kakaoUserInfo.getProperties() != null) 
-                ? kakaoUserInfo.getProperties() : new HashMap<>();
-
-        Object emailObj = kakaoAccount.get("email");
-        this.email = (emailObj != null) ? String.valueOf(emailObj) : null;
-
-        Object nicknameObj = kakaoAccount.get("nickname");
-        if (nicknameObj == null) {
-            nicknameObj = properties.get("nickname");
-        }
-        this.name = (nicknameObj != null) ? String.valueOf(nicknameObj) : null;
-        this.password = null;
-
-        String birthStr = String.valueOf(kakaoAccount.get("birthday"));
-        if (birthStr != null && !birthStr.equals("null")) {
-            try {
-                this.birth = LocalDate.parse(birthStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            } catch (Exception e) {
-
-                try {
-
-                    String[] parts = birthStr.split("/");
-                    if (parts.length == 2) {
-
-                        String fullDate = LocalDate.now().getYear() + "-" + parts[0] + "-" + parts[1];
-                        this.birth = LocalDate.parse(fullDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                    } else {
-                        this.birth = null;
-                    }
-                } catch (Exception ex) {
-                    this.birth = null;
-                }
-            }
-        } else {
-            this.birth = null;
-        }
-
-
-        String genderStr = String.valueOf(kakaoAccount.get("gender"));
-        if (genderStr != null && !genderStr.equals("null")) {
-            if (genderStr.toUpperCase().equals("MALE")) {
-                this.gender = Gender.MALE;
-            } else if (genderStr.toUpperCase().equals("FEMALE")) {
-                this.gender = Gender.FEMALE;
-            } else {
-                this.gender = null;
-            }
-        } else {
-            this.gender = null;
-        }
-        this.mbti = mbti;
-        this.kakaoId = kakaoUserInfo.getId();
-        this.loginType = LoginType.KAKAO;
-        this.status = null;
+    public void updateBirth(LocalDate birth) {
+        this.birth = birth;
     }
+
+    public void updateGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public void updateProfileImgUrl(String profileImgUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
+    public void updateMbti(MBTI mbti) {this.mbti = mbti;}
+
+    public void updateStatus(TalkPickStatus talkPickStatus) {this.status = talkPickStatus;}
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+
 }

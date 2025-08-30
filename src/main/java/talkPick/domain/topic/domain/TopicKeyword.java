@@ -10,14 +10,18 @@ import talkPick.global.model.BaseTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "topic_keyword")
 public class TopicKeyword extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, columnDefinition = "BIGINT COMMENT '기본 키'")
     private Long id;
+
+    @Column(name = "topic_id", nullable = false, columnDefinition = "BIGINT COMMENT 'Topic ID'")
     private Long topicId;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 50, nullable = false)
+    @Column(name = "keyword", nullable = false, length = 50, columnDefinition = "VARCHAR(50) COMMENT '키워드'")
     private Keyword keyword;
 
     public static TopicKeyword of(Long topicId, Keyword keyword) {

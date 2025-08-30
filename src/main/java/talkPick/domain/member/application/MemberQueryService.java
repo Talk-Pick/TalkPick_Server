@@ -1,104 +1,106 @@
 package talkPick.domain.member.application;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import talkPick.domain.member.adapter.in.dto.MemberDetailResDto;
-import talkPick.domain.member.adapter.in.dto.MemberLikedTopicsResDto;
-import talkPick.domain.member.adapter.in.dto.MemberTopicResultResDto;
-import talkPick.domain.member.adapter.out.dto.MemberEmailResDTO;
-import talkPick.domain.member.adapter.out.dto.MemberKakaoResDTO;
-import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
+import talkPick.domain.member.adapter.out.dto.MemberResDto;
+import talkPick.domain.member.converter.MemberConverter;
+import talkPick.domain.member.port.out.MemberQueryRepositoryPort;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
 import talkPick.domain.member.port.out.MemberLikedTopicsQueryRepositoryPort;
 import talkPick.domain.member.port.out.MemberTopicResultQueryRepositoryPort;
-
+import talkPick.global.exception.ErrorCode;
+import talkPick.global.exception.handler.MemberExceptionHandler;
+import talkPick.global.response.CursorPageResponse;
+import talkPick.global.security.jwt.util.JwtProvider;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberQueryService implements MemberQueryUseCase {
-    private final MemberJpaRepository memberJpaRepository;
+    private final MemberQueryRepositoryPort memberQueryRepositoryPort;
     private final MemberLikedTopicsQueryRepositoryPort memberLikedTopicsQueryRepositoryPort;
     private final MemberTopicResultQueryRepositoryPort memberTopicResultQueryRepositoryPort;
+    private final JwtProvider jwtProvider;
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
+    // 회원 프로필 조회 로직
     @Override
-    public List<MemberEmailResDTO> getEmailMembers() {
-        List<Member> all = memberJpaRepository.findAll();
-        List<MemberEmailResDTO> memberResDtoList = all.stream()
-                .filter(m -> m.getKakaoId() == null)
-                .map(m -> new MemberEmailResDTO(m))
-                .collect(Collectors.toList());
-        return memberResDtoList;
+    public MemberResDto.ProfileResponse getProfile(String authorization) {
+        // JWT 토큰에서 회원 ID 추출
+        Long memberId = jwtProvider.getMemberId(authorization);
+
+        // 회원 존재 여부 검증 및 조회
+        Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
+
+        // 조회된 회원 정보를 DTO로 변환 후 반환
+        return MemberConverter.toProfileResponse(findMember);
     }
 
+    /**
+     * 커서 기반 회원이 좋아요한 토픽 목록 조회
+     */
     @Override
-    public List<MemberKakaoResDTO> getkakaoMembers() {
-        List<Member> all = memberJpaRepository.findAll();
-        List<MemberKakaoResDTO> memberResDtoList = all.stream()
-                .filter(m -> m.getKakaoId() != null)
-                .map(m -> new MemberKakaoResDTO(m))
-                .collect(Collectors.toList());
-        return memberResDtoList;
-    }
+    public CursorPageResponse<MemberResDto.MemberLikedTopicResDto> getMemberLikedTopics(String authorization, LocalDateTime cursor, int size) {
+        Long memberId = jwtProvider.getMemberId(authorization);
 
-    @Override
-    public MemberDetailResDto getMemberInfo(Long memberId) {
-        Member member = memberJpaRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("Member not found with topicId: " + memberId));
-        return MemberDetailResDto.fromEntity(member);
-    }
+        Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
-    @Override
-    public Optional<Member> findByKakaoId(String kakaoId) {
-        if (kakaoId == null || kakaoId.trim().isEmpty()) {
-            throw new IllegalArgumentException("카카오 ID는 비어있을 수 없습니다.");
+        // size + 1개 조회하여 다음 페이지 존재 여부 판단
+        List<MemberResDto.MemberLikedTopicResDto> memberLikedTopics = memberLikedTopicsQueryRepositoryPort.findMemberLikedTopics(findMember, cursor, size + 1);
+
+        // 다음 페이지 존재 시 마지막 데이터 제거
+        boolean hasNext = memberLikedTopics.size() > size;
+        if (hasNext) memberLikedTopics.remove(memberLikedTopics.size() - 1);
+
+        // 다음 페이지 조회용 커서 생성
+        CursorPageResponse.Cursor nextCursor = null;
+        if (hasNext && !memberLikedTopics.isEmpty()) {
+            MemberResDto.MemberLikedTopicResDto last = memberLikedTopics.get(memberLikedTopics.size() - 1);
+            nextCursor = new CursorPageResponse.Cursor(last.getCreatedDate(), last.getId());
         }
 
-        return memberJpaRepository.findByKakaoId((kakaoId));
+        // 커서 기반 페이징 응답 반환
+        return CursorPageResponse.<MemberResDto.MemberLikedTopicResDto>builder()
+                .items(memberLikedTopics)
+                .hasNext(hasNext)
+                .nextCursor(nextCursor)
+                .build();
     }
 
+    /**
+     * 특정 일자 기준 회원 토픽 캘린더 결과 조회
+     */
     @Override
-    public Optional<Member> findById(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("회원 ID는 null일 수 없습니다.");
+    public CursorPageResponse<MemberResDto.MemberTopicResultResDto> getMemberTopicResultsByCreatedDate(String authorization, LocalDate date, LocalDateTime cursor, int size) {
+        Long memberId = jwtProvider.getMemberId(authorization);
+
+        Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
+
+        // size + 1개 조회하여 다음 페이지 존재 여부 판단
+        List<MemberResDto.MemberTopicResultResDto> items = memberTopicResultQueryRepositoryPort.findMemberTopicResults(findMember, date, cursor, size + 1);
+
+        // 다음 페이지 존재 시 마지막 데이터 제거
+        boolean hasNext = items.size() > size;
+        if (hasNext) items.remove(items.size() - 1);
+
+        // 다음 페이지 조회용 커서 생성
+        CursorPageResponse.Cursor nextCursor = null;
+        if (hasNext && !items.isEmpty()) {
+            MemberResDto.MemberTopicResultResDto last = items.get(items.size() - 1);
+            nextCursor = new CursorPageResponse.Cursor(last.getCreatedDate(), last.getId());
         }
 
-        return memberJpaRepository.findById(id);
+        // 커서 기반 페이징 응답 반환
+        return CursorPageResponse.<MemberResDto.MemberTopicResultResDto>builder()
+                .items(items)
+                .hasNext(hasNext)
+                .nextCursor(nextCursor)
+                .build();
     }
-
-    @Override
-    public Optional<Member> findByEmail(String email) {
-        if (email == null || email.trim().isEmpty()) {
-            throw new IllegalArgumentException("이메일은 비어있을 수 없습니다.");
-        }
-
-        return memberJpaRepository.findByEmail(email);
-    }
-
-    @Override
-    public Page<MemberLikedTopicsResDto> getMemberLikedTopics(Long memberId, Pageable pageable) {
-        return memberLikedTopicsQueryRepositoryPort.findMemberLikedTopics(memberId, pageable);
-    }
-
-    @Override
-    public Page<MemberTopicResultResDto> getMemberTopicResultsByCreatedDate(Long memberId, LocalDate date, Pageable pageable) {
-        return memberTopicResultQueryRepositoryPort.findMemberTopicResults(memberId, date, pageable);
-    }
-
-
 }

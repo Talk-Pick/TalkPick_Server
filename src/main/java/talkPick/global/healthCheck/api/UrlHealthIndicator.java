@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import talkPick.global.healthCheck.exception.HealthCheckException;
+import talkPick.global.exception.handler.HealthCheckExceptionHandler;
 import static talkPick.global.exception.ErrorCode.URL_HEALTH_CHECK_FAILED;
 
 @Slf4j
@@ -23,7 +23,7 @@ public class UrlHealthIndicator implements HealthIndicator {
             return Health.up().withDetail("url", url).build();
         } catch (Exception e) {
             log.error("[Health Check Error]", e);
-            throw new HealthCheckException(URL_HEALTH_CHECK_FAILED);
+            throw new HealthCheckExceptionHandler(URL_HEALTH_CHECK_FAILED);
         }
     }
 }

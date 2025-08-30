@@ -7,6 +7,10 @@ import talkPick.domain.search.adapter.out.repository.TopicSearchHistoryJpaReposi
 import talkPick.domain.search.port.out.TopicSearchHistoryQueryRepositoryPort;
 import java.util.List;
 
+/**
+ * 해당 코드 사용 안 함.
+ * **/
+@Deprecated
 @Component
 @RequiredArgsConstructor
 public class TopicSearchHistoryQueryRepositoryAdapter implements TopicSearchHistoryQueryRepositoryPort {

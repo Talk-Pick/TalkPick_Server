@@ -2,11 +2,14 @@ package talkPick.domain.notice.adapter.in;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import talkPick.domain.notice.adapter.out.dto.NoticeResDTO;
 import talkPick.global.response.CursorPageResponse;
 import java.time.LocalDateTime;
 
+@Validated
 @RequestMapping("/api/v1/notices")
 @Tag(name = "공지사항 API", description = "공지사항 관련 API 입니다.")
 public interface NoticeQueryApi {
@@ -20,5 +23,5 @@ public interface NoticeQueryApi {
 
     @GetMapping("/{id}")
     @Operation(summary = "공지사항 상세 조회", description = "공지사항 상세 조회 API 입니다.")
-    NoticeResDTO.NoticeDetail getNoticeDetail(@PathVariable("id") Long noticeId);
+    NoticeResDTO.NoticeDetail getNoticeDetail(@PathVariable("id") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long noticeId);
 }

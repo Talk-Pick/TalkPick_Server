@@ -1,0 +1,51 @@
+package talkPick.domain.member.adapter.out;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
+import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
+import talkPick.domain.member.domain.Member;
+import talkPick.domain.member.port.out.MemberQueryRepositoryPort;
+import talkPick.domain.random.dto.MemberDataDTO;
+import talkPick.global.exception.ErrorCode;
+import talkPick.global.exception.handler.MemberExceptionHandler;
+
+import java.time.Duration;
+
+@Component
+@RequiredArgsConstructor
+public class MemberQueryRepositoryAdapter implements MemberQueryRepositoryPort {
+    private final MemberJpaRepository memberJpaRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private static final String KEY_PREFIX = "member:";
+
+    @Override
+    public MemberDataDTO findMemberDataById(final Long memberId) {
+        var key = KEY_PREFIX + memberId;
+        var cached = redisTemplate.opsForValue().get(key);
+        if (cached instanceof MemberDataDTO dto) {
+            return dto;
+        }
+
+        var member = findMemberById(memberId);
+        var dto = MemberDataDTO.from(member);
+        redisTemplate.opsForValue().set(key, dto, Duration.ofHours(5));
+        return dto;
+    }
+
+    @Override
+    public Member findMemberById(final Long memberId) {
+        return memberJpaRepository.findById(memberId)
+                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
+    @Override
+    public java.util.Optional<Member> findByEmail(String email) {
+        return memberJpaRepository.findByEmail(email);
+    }
+
+    @Override
+    public java.util.Optional<Member> findByProviderId(String providerId) {
+        return memberJpaRepository.findByProviderId(providerId);
+    }
+}

@@ -1,27 +1,34 @@
 package talkPick.domain.today.adapter.out.dto;
 
-import talkPick.domain.topic.domain.type.CategoryGroup;
 import talkPick.domain.topic.domain.type.Keyword;
 
+
 public class TodayTopicResDTO {
+
     public record TopicSummaries(
             Long topicId,
             String title,
-            String icon,
             long averageTalkTime,
             int selectCount,
             String category,
-            Keyword keyword
-    ) {}
-//    public record TopicDetail(
-//            Long topicId,
-//            String title,
-//            String detail,
-//            String thumbnail,
-//            long averageTalkTime,
-//            int selectCount,
-//            String category,
-//            CategoryGroup categoryGroup,
-//            Keyword keyword
-//    ) {}
+            String keywordName,
+            String keywordIconUrl
+    ) {
+        public TopicSummaries(Long topicId,
+                              String title,
+                              long averageTalkTime,
+                              int selectCount,
+                              String category,
+                              Keyword keyword) {
+            this(
+                    topicId,
+                    title,
+                    averageTalkTime,
+                    selectCount,
+                    category,
+                    keyword != null ? keyword.name() : null,
+                    keyword != null ? keyword.getIconUrl() : null
+            );
+        }
+    }
 }

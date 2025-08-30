@@ -67,6 +67,8 @@ public class DummyDataScheduler {
             saveTopicImage(topicStat, i);
 
             saveTopicKeyword(topic, randomKeyword);
+
+//            saveDummyMember();
         }
     }
 
@@ -107,7 +109,7 @@ public class DummyDataScheduler {
     }
 
     private Topic saveTopic(int i, Category randomCategory) {
-        Topic topic = Topic.of("토픽 더미 Title " + (i +1), "토픽 더미 Detail " + (i +1),"Thumbnail ", "icon", randomCategory.getId(), 333L);
+        Topic topic = Topic.of("토픽 더미 Title " + (i +1), "토픽 더미 Detail " + (i +1), randomCategory.getId(), 333L);
         topicJpaRepository.save(topic);
         return topic;
     }
@@ -127,24 +129,23 @@ public class DummyDataScheduler {
         TopicKeyword topicKeyword = TopicKeyword.of(topic.getId(), randomKeyword);
         topicKeywordRepository.save(topicKeyword);
     }
-
-    private Member saveDummyMember() {
-        return memberJpaRepository.findByEmail("user@talkpick.com")
-                .orElseGet(() -> {
-                    Member member = Member.builder()
-                            .kakaoId(null)
-                            .email("user@talkpick.com")
-                            .memberRole(Role.MEMBER)
-                            .password("encrypted-password")
-                            .name("테스트유저")
-                            .birth(LocalDate.of(2000, 1, 1))
-                            .gender(Gender.FEMALE)
-                            .loginType(LoginType.EMAIL)
-                            .status(TalkPickStatus.ACTIVE)
-                            .mbti(MBTI.INFP)
-                            .profileImageUrl("https://dummyimage.com/100x100/ccc/fff&text=User")
-                            .build();
-                    return memberJpaRepository.save(member);
-                });
-    }
+//
+//    private Member saveDummyMember() {
+//        return memberJpaRepository.findByEmail("user@talkpick.com")
+//                .orElseGet(() -> {
+//                    Member member = Member.builder()
+//                            .email("user@talkpick.com")
+//                            .memberRole(Role.MEMBER)
+//                            .password("encrypted-password")
+//                            .nickname("테스트유저")
+//                            .birth(LocalDate.of(2000, 1, 1))
+//                            .gender(Gender.FEMALE)
+//                            .loginType(LoginType.EMAIL)
+//                            .status(TalkPickStatus.ACTIVE)
+//                            .mbti(MBTI.INFP)
+//                            .profileImageUrl("https://dummyimage.com/100x100/ccc/fff&text=User")
+//                            .build();
+//                    return memberJpaRepository.save(member);
+//                });
+//    }
 }

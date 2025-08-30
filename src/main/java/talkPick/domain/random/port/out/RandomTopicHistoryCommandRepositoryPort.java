@@ -1,9 +1,7 @@
 package talkPick.domain.random.port.out;
 
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
-import talkPick.domain.random.domain.RandomTopicHistory;
 
 public interface RandomTopicHistoryCommandRepositoryPort {
-    RandomTopicHistory saveByCategory(Long memberId, RandomReqDTO.SelectByCategory requestDTO);
-    RandomTopicHistory saveByTopic(Long memberId, RandomReqDTO.SelectByTopic selectByTopic);
+    void record(Long memberId, Long randomId, RandomReqDTO.Record requestDTO);
 }

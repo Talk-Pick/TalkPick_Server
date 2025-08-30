@@ -1,15 +1,13 @@
 package talkPick.domain.random.port.in;
 
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
-import talkPick.domain.random.adapter.out.dto.RandomResDTO;
-
-import java.util.List;
 
 public interface RandomCommandUseCase {
     void start(Long memberId);
-    List<RandomResDTO.RandomTopic> selectByCategories(Long memberId, RandomReqDTO.SelectByCategory requestDTO);
-    List<RandomResDTO.RandomTopic> selectByTopics(Long memberId, RandomReqDTO.SelectByTopic requestDTO);
+    void next(Long memberId, Long randomId, RandomReqDTO.Next requestDTO);
     void quit(Long memberId, Long randomId);
-    RandomResDTO.Result end(Long memberId, Long randomId);
-    void saveResult(Long memberId, Long randomId, RandomReqDTO.Result requestDTO);
+    void end(Long memberId, Long randomId);
+    void record(Long memberId, Long randomId, RandomReqDTO.Record requestDTO);
+    void rate(Long memberId, Long randomId, RandomReqDTO.Rate requestDTO);
+    void comment(Long memberId, Long randomId, RandomReqDTO.Comment requestDTO);
 }

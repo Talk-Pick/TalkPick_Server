@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import talkPick.domain.today.adapter.out.dto.TodayTopicResDTO;
 import java.util.List;
 
+@Deprecated
 @RequestMapping("/api/v1/topic")
 @Tag(name = "톡픽 API", description = "톡픽 관련 API 입니다.")
 public interface TodayTopicQueryApi {

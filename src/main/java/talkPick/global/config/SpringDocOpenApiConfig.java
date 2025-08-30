@@ -33,14 +33,14 @@ public class SpringDocOpenApiConfig {
                 .security(Arrays.asList(securityRequirement));
     }
 
-    @Bean
-    public GroupedOpenApi healthCheckOpenApi() {
-        return GroupedOpenApi.builder()
-                .group("HealthCheck API")
-                .displayName("HealthCheck API")
-                .pathsToMatch("/actuator/health/**")
-                .build();
-    }
+//    @Bean
+//    public GroupedOpenApi healthCheckOpenApi() {
+//        return GroupedOpenApi.builder()
+//                .group("HealthCheck API")
+//                .displayName("HealthCheck API")
+//                .pathsToMatch("/actuator/health/**")
+//                .build();
+//    }
 
     @Bean
     public GroupedOpenApi topicOpenApi() {
@@ -51,14 +51,14 @@ public class SpringDocOpenApiConfig {
                 .build();
     }
 
-    @Bean
-    public GroupedOpenApi searchOpenApi() {
-        return GroupedOpenApi.builder()
-                .group("톡픽 검색 API")
-                .displayName("톡픽 검색 API")
-                .pathsToMatch("/api/v1/search/**")
-                .build();
-    }
+//    @Bean
+//    public GroupedOpenApi searchOpenApi() {
+//        return GroupedOpenApi.builder()
+//                .group("톡픽 검색 API")
+//                .displayName("톡픽 검색 API")
+//                .pathsToMatch("/api/v1/search/**")
+//                .build();
+//    }
 
     @Bean
     public GroupedOpenApi randomOpenApi() {
@@ -81,26 +81,18 @@ public class SpringDocOpenApiConfig {
     @Bean
     public GroupedOpenApi signupOpenApi() {
         return GroupedOpenApi.builder()
-                .group("회원가입 API")
-                .displayName("회원가입 API")
-                .pathsToMatch(
-                    "/api/v1/auth/kakao/authorize",
-                    "/api/v1/auth/kakao/callback",
-                    "/api/v1/auth/kakao/additional",
-                    "/api/v1/members/join"
-                )
+                .group("사용자 API")
+                .displayName("사용자 API")
+                .pathsToMatch("/api/v1/members/**")
                 .build();
     }
 
     @Bean
-    public GroupedOpenApi memberCommandOpenApi() {
+    public GroupedOpenApi inquiryOpenApi() {
         return GroupedOpenApi.builder()
-                .group("회원 명령 API")
-                .displayName("회원 명령 API")
-                .pathsToMatch(
-                    "/api/v1/members/mbti",
-                    "/api/v1/topic/additional"
-                )
+                .group("문의 API")
+                .displayName("문의 API")
+                .pathsToMatch("/api/v1/inquiry/**")
                 .build();
     }
 }

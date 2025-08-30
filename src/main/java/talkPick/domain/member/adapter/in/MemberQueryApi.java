@@ -1,21 +1,40 @@
 package talkPick.domain.member.adapter.in;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.RequestParam;
-import talkPick.domain.member.adapter.in.dto.MemberDetailResDto;
-import talkPick.domain.member.adapter.in.dto.MemberLikedTopicsResDto;
-import talkPick.domain.member.adapter.in.dto.MemberTopicResultResDto;
-import talkPick.domain.member.adapter.out.dto.MemberEmailResDTO;
-import talkPick.domain.member.adapter.out.dto.MemberKakaoResDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.*;
+import talkPick.domain.member.adapter.out.dto.MemberResDto;
+import talkPick.global.response.CursorPageResponse;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
 
+@RequestMapping("/api/v1/members")
+@Tag(name = "유저 API", description = "유저 관련 API 입니다.")
 public interface MemberQueryApi {
-    List<MemberEmailResDTO> getEmailMembers();
-    List<MemberKakaoResDTO> getKakaoMembers();
-    MemberDetailResDto getMemberInfo();
-    Page<MemberLikedTopicsResDto> getMemberLikedTopics(Pageable pageable);
-    Page<MemberTopicResultResDto> getMemberTopicResults(@RequestParam("date") LocalDate date, Pageable pageable);
+    @GetMapping("/liked-topics")
+    @Operation(summary = "회원이 좋아요한 토픽 조회 API", description = "회원이 좋아요한 토픽들을 커서 페이징으로 조회하는 API입니다.")
+    CursorPageResponse<MemberResDto.MemberLikedTopicResDto> getMemberLikedTopics(
+            @RequestHeader(value = "Authorization", required = false) String authorization,
+            @RequestParam(value = "cursor", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime cursor,
+            @RequestParam(value = "size", defaultValue = "6") @Parameter(description = "페이지 크기 (1 이상)", schema = @Schema(minimum = "1")) int size
+    );
+
+    @GetMapping("/topic-results")
+    @Operation(summary = "회원 토픽 결과 캘린더 조회 API", description = "특정 날짜의 회원 토픽 결과를 커서 페이징으로 조회하는 API입니다.")
+    CursorPageResponse<MemberResDto.MemberTopicResultResDto> getMemberTopicResults(
+            @RequestHeader(value = "Authorization", required = false) String authorization,
+            @Parameter(description = "조회할 날짜 (yyyy-MM-dd)") @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(value = "cursor", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime cursor,
+            @RequestParam(value = "size", defaultValue = "6") @Parameter(description = "페이지 크기 (1 이상)", schema = @Schema(minimum = "1")) int size
+            );
+
+    @GetMapping("/me")
+    @Operation(summary = "마이페이지 프로필 조회 API", description = "회원의 프로필 정보와 통계를 조회하는 API입니다.")
+    MemberResDto.ProfileResponse getProfile(
+            @RequestHeader(value = "Authorization", required = false) String authorization
+    );
 }
