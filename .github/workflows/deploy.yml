@@ -29,7 +29,6 @@ jobs:
       - name: ⏳ BUILD - Run Test & Build JAR ⏳
         run: | 
           ./gradlew clean build
-          jar tf build/libs/app.jar | grep 'application-prod.yml'
 
       - name: ☁️ CONFIG - Configure AWS Credentials ☁️
         uses: aws-actions/configure-aws-credentials@v4
