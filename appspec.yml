@@ -4,23 +4,23 @@ os: linux
 
 files:
   - source: /
-    destination: /home/ubuntu/TalkPick_Server
+    destination: /home/ec2-user/TalkPick_Server
     overwrite: yes
 
 permissions:
-  - object: /home/ubuntu/TalkPick_Server
+  - object: /home/ec2-user/TalkPick_Server
     pattern: "**"
-    owner: ubuntu
-    group: ubuntu
+    owner: ec2-user
+    group: ec2-user
     mode: "755"
 
 hooks:
   ApplicationStop:
     - location: scripts/stop-server.sh
       timeout: 60
-      runas: ubuntu
+      runas: ec2-user
 
   ApplicationStart:
     - location: scripts/start-server.sh
       timeout: 60
-      runas: ubuntu
+      runas: ec2-user
