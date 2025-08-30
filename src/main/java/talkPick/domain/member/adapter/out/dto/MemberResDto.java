@@ -11,17 +11,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class MemberResDto {
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class LoginTokenResponse {
-        private String accessToken;
-        private String refreshToken;
-        private LocalDateTime accessTokenExpireAt;
-        private TalkPickStatus talkPickStatus;
-    }
-
 
     @Getter
     @Builder
@@ -31,15 +20,6 @@ public class MemberResDto {
         private Long memberId;
         private String message;
         private TalkPickStatus talkPickStatus;
-    }
-
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class RefreshAccessTokenResponse {
-        private String accessToken;
-        private LocalDateTime accessTokenExpireAt;
     }
 
     @Getter
@@ -65,19 +45,21 @@ public class MemberResDto {
     }
 
     @Getter
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public class MemberTopicResultResDto {
+    public static class MemberTopicResultResDto {
+        private Long id; // 히스토리 ID (MemberTopicHistory)
         private String comment; // 한 줄 코멘트
         private List<Keyword> topicKeyword; // 토픽 키워드
         private LocalDateTime createdDate; // 대화 날짜
     }
 
     @Getter
-    @Setter
-    @NoArgsConstructor
+    @Builder
     @AllArgsConstructor
-    public class MemberLikedTopicResDto {
+    @NoArgsConstructor
+    public static class MemberLikedTopicResDto {
         private Long id; // 좋아요 누른 토픽 id (TopicLikeHistory 테이블)
         private String title;  //토픽 주제 (Topic 테이블)
         private long averageTalkTime; //평균 대화 시간 (Topic 테이블)

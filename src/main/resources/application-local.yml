@@ -37,6 +37,11 @@ spring:
       max-request-size: ${MAX_REQUEST_SIZE}
   messages:
     basename: messages,errors
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
 
 logging:
   level:

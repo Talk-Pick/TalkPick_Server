@@ -1,5 +1,6 @@
 package talkPick.global.security.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,10 +29,11 @@ import static talkPick.global.security.model.WhiteList.PATHS;
 @RequiredArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtProvider jwtProvider;
-    private final ExceptionHandlerFilter exceptionHandlerFilter;
     private final CorsFilter corsFilter;
+    private final JwtProvider jwtProvider;
+    private final ObjectMapper objectMapper;
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -58,7 +60,8 @@ public class SecurityConfig {
                                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class) // CORS 필터는 제일 앞에 실행
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class) // JWT 인증 필터 추가
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider, objectMapper),
+                        UsernamePasswordAuthenticationFilter.class) // JWT 인증 필터 추가
                 .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class) // 예외 처리 필터는 JWT 필터보다 먼저 실행
                 .build();
     }

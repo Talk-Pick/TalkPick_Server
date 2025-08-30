@@ -3,7 +3,6 @@ package talkPick.domain.member.adapter.in;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import talkPick.domain.member.adapter.in.dto.MemberReqDto;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
@@ -13,8 +12,6 @@ import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.dto.*;
 import talkPick.domain.member.port.in.MemberCommandUseCase;
 import talkPick.global.security.jwt.port.in.JwtTokenCommandUseCase;
-
-import talkPick.global.response.ResultResponse;
 
 /**
  * 회원 명령 관련 컨트롤러
@@ -29,73 +26,80 @@ public class MemberCommandController implements MemberCommandApi {
     private final JwtTokenCommandUseCase jwtTokenCommandUseCase;
 
     @Override
-    public ResponseEntity<ResultResponse<JwtResDTO.Login>> joinEmailMember(
-            @Valid @RequestBody MemberReqDto.MemberEmailReqest memberReqDto
-           ) {
-        Member findOrCreateEmailMember = memberCommandUseCase.findOrCreateEmailMember(memberReqDto);
-
-        return ResponseEntity.ok(ResultResponse.success(jwtTokenCommandUseCase.generateToken(findOrCreateEmailMember)));
+    public JwtResDTO.Login joinEmailMember(
+            @Valid @RequestBody MemberReqDto.MemberEmailRequest memberReqDto
+    ) {
+        Member member = memberCommandUseCase.findOrCreateEmailMember(memberReqDto);
+        return jwtTokenCommandUseCase.generateToken(member);
     }
 
     @Override
-    public ResponseEntity<ResultResponse<JwtResDTO.Login>> emailLogin(
-            @Valid @RequestBody MemberReqDto.MemberEmailReqest memberReqDto
-           ) {
-        return ResponseEntity.ok(ResultResponse.success(
-                jwtTokenCommandUseCase.generateToken(memberCommandUseCase.loginEmailMember(memberReqDto))));
+    public JwtResDTO.Login emailLogin(
+            @Valid @RequestBody MemberReqDto.MemberEmailRequest memberReqDto
+    ) {
+        Member member = memberCommandUseCase.loginEmailMember(memberReqDto);
+        return jwtTokenCommandUseCase.generateToken(member);
     }
 
     @Override
-    public ResponseEntity<ResultResponse<JwtResDTO.Login>> kakaoOAuth2Login(
-            @Valid @RequestBody MemberReqDto.KakaoOAuth2LoginRequest request) {
-        // id_token 검증 후 멤버 데이터 추출
+    public JwtResDTO.Login kakaoOAuth2Login(
+            @Valid @RequestBody MemberReqDto.KakaoOAuth2LoginRequest request
+    ) {
         MemberDataDto.KakaoMemberData kakaoMemberData = kakaoOidcService.verifyAndParseIdToken(request);
-
-        // id_token 에서 추출한 데이터를 통해 멤버 조회 OR 생성
-        Member findOrCreateMember = memberCommandUseCase.findOrCreateKakaoMember(kakaoMemberData);
-
-        return ResponseEntity.ok(ResultResponse.success(jwtTokenCommandUseCase.generateToken(findOrCreateMember)));
+        Member member = memberCommandUseCase.findOrCreateKakaoMember(kakaoMemberData);
+        return jwtTokenCommandUseCase.generateToken(member);
     }
 
     @Override
-    public ResponseEntity<ResultResponse<JwtResDTO.AccessToken>> refreshAccessToken(
-            @Valid @RequestBody MemberReqDto.RefreshAccessTokenRequest request) {
-        return ResponseEntity.ok(ResultResponse.success(jwtTokenCommandUseCase.refreshAccessToken(request)));
+    public JwtResDTO.AccessToken refreshAccessToken(
+            @Valid @RequestBody MemberReqDto.RefreshAccessTokenRequest request
+    ) {
+        return jwtTokenCommandUseCase.refreshAccessToken(request);
     }
 
     @Override
-    public ResponseEntity<ResultResponse<MemberResDto.MemberSignupResponse>> signup(
+    public MemberResDto.MemberSignupResponse signup(
             @RequestHeader(value = "Authorization", required = false) String authorization,
-            @Valid @RequestBody MemberReqDto.MemberSignupRequest request) {
-        return ResponseEntity.ok(ResultResponse.success(memberCommandUseCase.memberSignup(authorization, request)));
+            @Valid @RequestBody MemberReqDto.MemberSignupRequest request
+    ) {
+        return memberCommandUseCase.memberSignup(authorization, request);
     }
 
     @Override
-    public ResponseEntity<ResultResponse<MemberResDto.TermAgreementResponse>> termAgreement(
+    public MemberResDto.TermAgreementResponse termAgreement(
             @RequestHeader(value = "Authorization", required = false) String authorization,
-            @Valid @RequestBody MemberReqDto.TermAgreementRequest request) {
-        return ResponseEntity.ok(ResultResponse.success(memberCommandUseCase.termAgreement(authorization, request)));
+            @Valid @RequestBody MemberReqDto.TermAgreementRequest request
+    ) {
+        return memberCommandUseCase.termAgreement(authorization, request);
     }
 
     @Override
-    public ResponseEntity<ResultResponse<MemberResDto.ProfileUpdateResponse>> updateProfile(
+    public MemberResDto.ProfileUpdateResponse updateProfile(
             @RequestHeader(value = "Authorization", required = false) String authorization,
-            MemberReqDto.ProfileUpdateRequest request) {
-        return ResponseEntity.ok(ResultResponse.success(memberCommandUseCase.updateProfile(authorization, request)));
+            MemberReqDto.ProfileUpdateRequest request
+    ) {
+        return memberCommandUseCase.updateProfile(authorization, request);
     }
 
     @Override
-    public ResponseEntity<ResultResponse<Void>> logout(
-            @RequestHeader(value = "Authorization", required = false) String authorization){
+    public void logout(
+            @RequestHeader(value = "Authorization", required = false) String authorization
+    ) {
         memberCommandUseCase.logout(authorization);
-        return ResponseEntity.ok(ResultResponse.success(null));
     }
 
     @Override
-    public ResponseEntity<ResultResponse<Void>> deleteMember(
-            @RequestHeader(value = "Authorization", required = false) String authorization) {
+    public void deleteMember(
+            @RequestHeader(value = "Authorization", required = false) String authorization
+    ) {
         memberCommandUseCase.delete(authorization);
-        return ResponseEntity.ok(ResultResponse.success(null));
+    }
+
+    @Override
+    public void changeComment(
+            @RequestHeader(value = "Authorization", required = false) String authorization,
+            @Valid @RequestBody MemberReqDto.TopicResultCommentChangeRequest request) {
+        memberCommandUseCase.TopicResultCommentChange(authorization, request);
     }
 
 

@@ -1,11 +1,12 @@
 package talkPick.domain.member.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.domain.member.converter.MemberConverter;
-import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
+import talkPick.domain.member.port.out.MemberQueryRepositoryPort;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
 import talkPick.domain.member.port.out.MemberLikedTopicsQueryRepositoryPort;
@@ -15,6 +16,7 @@ import talkPick.global.exception.handler.MemberExceptionHandler;
 import talkPick.global.response.CursorPageResponse;
 import talkPick.global.security.jwt.util.JwtProvider;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,7 +24,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberQueryService implements MemberQueryUseCase {
-    private final MemberJpaRepository memberJpaRepository;
+    private final MemberQueryRepositoryPort memberQueryRepositoryPort;
     private final MemberLikedTopicsQueryRepositoryPort memberLikedTopicsQueryRepositoryPort;
     private final MemberTopicResultQueryRepositoryPort memberTopicResultQueryRepositoryPort;
     private final JwtProvider jwtProvider;
@@ -34,8 +36,7 @@ public class MemberQueryService implements MemberQueryUseCase {
         Long memberId = jwtProvider.getMemberId(authorization);
 
         // 회원 존재 여부 검증 및 조회
-        Member findMember = memberJpaRepository.findById(memberId)
-                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+        Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
         // 조회된 회원 정보를 DTO로 변환 후 반환
         return MemberConverter.toProfileResponse(findMember);
@@ -48,8 +49,7 @@ public class MemberQueryService implements MemberQueryUseCase {
     public CursorPageResponse<MemberResDto.MemberLikedTopicResDto> getMemberLikedTopics(String authorization, LocalDateTime cursor, int size) {
         Long memberId = jwtProvider.getMemberId(authorization);
 
-        Member findMember = memberJpaRepository.findById(memberId)
-                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+        Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
         // size + 1개 조회하여 다음 페이지 존재 여부 판단
         List<MemberResDto.MemberLikedTopicResDto> memberLikedTopics = memberLikedTopicsQueryRepositoryPort.findMemberLikedTopics(findMember, cursor, size + 1);
@@ -76,13 +76,31 @@ public class MemberQueryService implements MemberQueryUseCase {
     /**
      * 특정 일자 기준 회원 토픽 캘린더 결과 조회
      */
-//    @Override
-//    public Page<MemberResDto.MemberTopicResultResDto> getMemberTopicResultsByCreatedDate(String authorization, LocalDate date) {
-//        Long memberId = jwtProvider.getMemberId(authorization);
-//
-//        Member findMember = memberJpaRepository.findById(memberId)
-//                .orElseThrow(() -> new MemberHandler(ErrorCode.MEMBER_NOT_FOUND));
-//
-//        return memberTopicResultQueryRepositoryPort.findMemberTopicResults(findMember, date);
-//    }
+    @Override
+    public CursorPageResponse<MemberResDto.MemberTopicResultResDto> getMemberTopicResultsByCreatedDate(String authorization, LocalDate date, LocalDateTime cursor, int size) {
+        Long memberId = jwtProvider.getMemberId(authorization);
+
+        Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
+
+        // size + 1개 조회하여 다음 페이지 존재 여부 판단
+        List<MemberResDto.MemberTopicResultResDto> items = memberTopicResultQueryRepositoryPort.findMemberTopicResults(findMember, date, cursor, size + 1);
+
+        // 다음 페이지 존재 시 마지막 데이터 제거
+        boolean hasNext = items.size() > size;
+        if (hasNext) items.remove(items.size() - 1);
+
+        // 다음 페이지 조회용 커서 생성
+        CursorPageResponse.Cursor nextCursor = null;
+        if (hasNext && !items.isEmpty()) {
+            MemberResDto.MemberTopicResultResDto last = items.get(items.size() - 1);
+            nextCursor = new CursorPageResponse.Cursor(last.getCreatedDate(), last.getId());
+        }
+
+        // 커서 기반 페이징 응답 반환
+        return CursorPageResponse.<MemberResDto.MemberTopicResultResDto>builder()
+                .items(items)
+                .hasNext(hasNext)
+                .nextCursor(nextCursor)
+                .build();
+    }
 }
