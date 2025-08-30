@@ -2,7 +2,7 @@
 set -e
 
 echo "--------------- START : Talkpick Server Deploy -----------------"
-cd /home/ubuntu/TalkPick_Server
+cd /home/ec2-user/TalkPick_Server
 
 echo "📂 현재 디렉토리: $(pwd)"
 echo "📄 파일 목록:"
