@@ -21,7 +21,7 @@ jobs:
       - name: 🔐 CONFIG - Create .env.properties 🔐
         run: |
           mkdir -p ./env
-          echo "${{ secrets.ENV }}" > ./env/.env.properties
+          echo "${{ secrets.ENV }}" > ./env/.env
 
       - name: 🔗 CONFIG - Create application.yml 🔗
         run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application.yml
