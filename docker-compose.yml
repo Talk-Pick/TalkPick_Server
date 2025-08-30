@@ -19,6 +19,15 @@ services:
       - t4y
     ports:
       - "6379:6379"
+
+  ## adminer
+  adminer:
+    image: adminer
+    container_name: talkpick-db-adminer
+    restart: always
+    ports:
+      - "8081:8080"
+
 #  # monitoring
 #  prometheus:
 #    image: prom/prometheus:latest
