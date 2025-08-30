@@ -26,9 +26,6 @@ jobs:
       - name: 🔗 CONFIG - Create application.yml 🔗
         run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application.yml
 
-      - name: 🔗 CONFIG - Create application-prod.yml 🔗
-        run: echo "${{ secrets.APPLICATION_PROD_PROPERTIES }}" > ./src/main/resources/application-prod.yml
-
       - name: ⏳ BUILD - Run Test & Build JAR ⏳
         run: ./gradlew clean build
 
@@ -63,7 +60,7 @@ jobs:
           mkdir -p deploy-files
           cp appspec.yml docker-compose.yml -t deploy-files
           cp -r scripts deploy-files
-          cp src/main/resources/application*.yml deploy-files
+          cp src/main/resources/application.yml deploy-files
           cp -r env deploy-files
           tar -czvf $GITHUB_SHA.tar.gz -C deploy-files .
 
