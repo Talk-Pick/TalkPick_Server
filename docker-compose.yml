@@ -14,7 +14,6 @@ services:
       - ./env/.env.properties
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_CONFIG_LOCATION=file:/app/config/
       - SPRING_CONFIG_LOCATION=optional:classpath:/,optional:classpath:/config/,file:/app/config/
 
   ## redis
