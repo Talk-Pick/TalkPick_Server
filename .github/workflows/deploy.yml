@@ -59,7 +59,6 @@ jobs:
           cp appspec.yml docker-compose.yml -t deploy-files
           cp -r scripts deploy-files
           cp src/main/resources/application.yml deploy-files
-          cp -r env deploy-files
           tar -czvf $GITHUB_SHA.tar.gz -C deploy-files .
 
       - name: ☁️ AWS - Upload Archive to S3 ☁️
