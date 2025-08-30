@@ -7,13 +7,14 @@ services:
       - "8080:8080"
     network_mode: "host"
     volumes:
+      - ./env/.env.properties:/app/config/.env.properties
       - ./application.yml:/app/config/application.yml
       - ./application-prod.yml:/app/config/application-prod.yml
-      - ./env/.env.properties:/app/config/.env.properties
     env_file:
       - ./env/.env.properties
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_CONFIG_LOCATION=file:/app/config/
       - SPRING_CONFIG_LOCATION=optional:classpath:/,optional:classpath:/config/,file:/app/config/
 
   ## redis
