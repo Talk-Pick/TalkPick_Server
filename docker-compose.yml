@@ -10,7 +10,6 @@ services:
       - ./env/.env.properties:/app/config/.env.properties
     environment:
       - SPRING_CONFIG_IMPORT=optional:file:/app/config/.env.properties
-      - SPRING_PROFILES_ACTIVE=prod
 
   ## redis
   redis:
