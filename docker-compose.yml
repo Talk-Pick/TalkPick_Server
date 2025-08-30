@@ -9,9 +9,9 @@ services:
     volumes:
       - ./application.yml:/app/config/application.yml
       - ./application-prod.yml:/app/config/application-prod.yml
-      - ./env/.env.properties:/app/config/.env
+      - ./env/.env.properties:/app/config/.env.properties
     env_file:
-      - ./env/.env
+      - ./env/.env.properties
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CONFIG_LOCATION=optional:classpath:/,optional:classpath:/config/,file:/app/config/
