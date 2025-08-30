@@ -8,13 +8,9 @@ services:
     network_mode: "host"
     volumes:
       - ./env/.env.properties:/app/config/.env.properties
-      - ./application.yml:/app/config/application.yml
-      - ./application-prod.yml:/app/config/application-prod.yml
-    env_file:
-      - ./env/.env.properties
     environment:
+      - SPRING_CONFIG_IMPORT=optional:file:/app/config/.env.properties
       - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_CONFIG_LOCATION=optional:classpath:/,optional:classpath:/config/,file:/app/config/
 
   ## redis
   redis:
