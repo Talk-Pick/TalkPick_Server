@@ -42,7 +42,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: 🐳 DOCKER - Build Docker Image 🐳
-        run: docker build -t talkpick-server .
+        run: docker build --no-cache -t talkpick-server .
 
       - name: 🐳 DOCKER - Tag Docker Image 🐳
         run: docker tag talkpick-server ${{ steps.login-ecr.outputs.registry }}/talkpick-server:latest
