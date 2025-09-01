@@ -3,6 +3,7 @@ package talkPick.global.security.jwt.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -99,10 +100,17 @@ public class JwtProvider {
     /**
      * 토큰 만료까지 남은 시간을 밀리초 단위로 반환합니다.
      */
-    public long getRemainMillis(String token) {
+    public long getRemainMillis(String authorization) {
         try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(secretKey.getBytes())
+            // Bearer 접두사 제거
+            String token = resolveToken(authorization);
+            if (token == null) {
+                return 0;
+            }
+
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(jwtGenerator.getSigningKey())  // JwtGenerator의 키 사용
+                    .build()
                     .parseClaimsJws(token)
                     .getBody();
 
