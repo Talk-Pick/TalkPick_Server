@@ -20,6 +20,8 @@ import talkPick.domain.member.port.out.MemberTermCommandRepositoryPort;
 import talkPick.domain.term.port.out.TermQueryRepositoryPort;
 import talkPick.domain.term.domain.Term;
 import talkPick.domain.topic.domain.member.MemberTopicResult;
+import talkPick.global.security.jwt.RefreshToken;
+import talkPick.global.security.jwt.port.in.RedisCommandUseCase;
 import talkPick.global.security.jwt.repository.RefreshTokenRepository;
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.handler.MemberExceptionHandler;
@@ -44,6 +46,7 @@ public class MemberCommandService implements MemberCommandUseCase {
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
     private final MemberTopicResultJpaRepository memberTopicResultJpaRepository;
+    private final RedisCommandUseCase redisCommandUseCase;
 
     /**
      * 회원 프로필 수정
@@ -215,8 +218,22 @@ public class MemberCommandService implements MemberCommandUseCase {
 
         Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
-        refreshTokenRepository.deleteByMemberId(findMember.getId());
-        memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
+        // 액세스 토큰 남은 만료 시간 조회
+        long accessTokenRemainMillis = jwtProvider.getRemainMillis(authorization);
+        if (accessTokenRemainMillis > 0) {
+            redisCommandUseCase.addTokenToBlacklist(authorization, accessTokenRemainMillis);
+        }
+
+        RefreshToken refreshToken = refreshTokenRepository.findByMemberId(findMember.getId());
+        if (refreshToken != null) {
+            long refreshTokenRemainMillis = jwtProvider.getRemainMillis(refreshToken.getToken());
+            if (refreshTokenRemainMillis > 0) {
+                redisCommandUseCase.addTokenToBlacklist(refreshToken.getToken(), refreshTokenRemainMillis);
+            }
+            // 리프레시 토큰 DB에서 삭제
+            refreshTokenRepository.deleteByMemberId(findMember.getId());
+            memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
+        }
     }
 
     // 회원 탈퇴 처리 (상태 비활성화, 토큰 및 로그인 기록 삭제)
