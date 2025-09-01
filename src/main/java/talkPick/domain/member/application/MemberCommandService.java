@@ -219,40 +219,24 @@ public class MemberCommandService implements MemberCommandUseCase {
         Long memberId = jwtProvider.getMemberId(authorization);
         Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
-        // 액세스 토큰을 블랙리스트에 추가
-        try {
-            long accessTokenRemainMillis = jwtProvider.getRemainMillis(authorization);
-            if (accessTokenRemainMillis > 0) {
-                // Bearer 토큰을 블랙리스트에 추가
-                redisCommandUseCase.addTokenToBlacklist(authorization, accessTokenRemainMillis);
-            }
-        } catch (Exception e) {
-            // 토큰 처리 중 오류가 발생해도 로그아웃은 계속 진행
-            log.warn("액세스 토큰 블랙리스트 추가 실패: {}", e.getMessage());
+        // 액세스 토큰 블랙리스트 등록
+        long accessTokenRemainMillis = jwtProvider.getRemainMillis(authorization);
+        if (accessTokenRemainMillis > 0) {
+            redisCommandUseCase.addTokenToBlacklist(authorization, accessTokenRemainMillis);
         }
 
-        // 리프레시 토큰 처리
-        try {
-            RefreshToken refreshToken = refreshTokenRepository.findByMemberId(findMember.getId());
-            if (refreshToken != null && refreshToken.getToken() != null) {
-                long refreshTokenRemainMillis = jwtProvider.getRemainMillis(refreshToken.getToken());
-                if (refreshTokenRemainMillis > 0) {
-                    redisCommandUseCase.addTokenToBlacklist(refreshToken.getToken(), refreshTokenRemainMillis);
-                }
-                // 리프레시 토큰 DB에서 삭제
-                refreshTokenRepository.deleteByMemberId(findMember.getId());
+        // 리프레시 토큰 블랙리스트 등록 및 삭제
+        RefreshToken refreshToken = refreshTokenRepository.findByMemberId(findMember.getId());
+        if (refreshToken != null && refreshToken.getToken() != null) {
+            long refreshTokenRemainMillis = jwtProvider.getRemainMillis(refreshToken.getToken());
+            if (refreshTokenRemainMillis > 0) {
+                redisCommandUseCase.addTokenToBlacklist(refreshToken.getToken(), refreshTokenRemainMillis);
             }
-        } catch (Exception e) {
-            // 리프레시 토큰 처리 중 오류가 발생해도 로그아웃은 계속 진행
-            log.warn("리프레시 토큰 처리 실패: {}", e.getMessage());
+            refreshTokenRepository.deleteByMemberId(findMember.getId());
         }
 
         // 로그인 기록 삭제
-        try {
-            memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
-        } catch (Exception e) {
-            log.warn("로그인 기록 삭제 실패: {}", e.getMessage());
-        }
+        memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
     }
 
     // 회원 탈퇴 처리 (상태 비활성화, 토큰 및 로그인 기록 삭제)
@@ -264,37 +248,24 @@ public class MemberCommandService implements MemberCommandUseCase {
         findMember.updateStatus(TalkPickStatus.DIS_ACTIVE);
         memberCommandRepositoryPort.save(findMember);
 
-        // 액세스 토큰을 블랙리스트에 추가
-        try {
-            long accessTokenRemainMillis = jwtProvider.getRemainMillis(authorization);
-            if (accessTokenRemainMillis > 0) {
-                redisCommandUseCase.addTokenToBlacklist(authorization, accessTokenRemainMillis);
-            }
-        } catch (Exception e) {
-            log.warn("액세스 토큰 블랙리스트 추가 실패: {}", e.getMessage());
+        // 액세스 토큰 블랙리스트 등록
+        long accessTokenRemainMillis = jwtProvider.getRemainMillis(authorization);
+        if (accessTokenRemainMillis > 0) {
+            redisCommandUseCase.addTokenToBlacklist(authorization, accessTokenRemainMillis);
         }
 
-        // 리프레시 토큰 처리
-        try {
-            RefreshToken refreshToken = refreshTokenRepository.findByMemberId(findMember.getId());
-            if (refreshToken != null && refreshToken.getToken() != null) {
-                long refreshTokenRemainMillis = jwtProvider.getRemainMillis(refreshToken.getToken());
-                if (refreshTokenRemainMillis > 0) {
-                    redisCommandUseCase.addTokenToBlacklist(refreshToken.getToken(), refreshTokenRemainMillis);
-                }
-                // 리프레시 토큰 DB에서 삭제
-                refreshTokenRepository.deleteByMemberId(findMember.getId());
+        // 리프레시 토큰 블랙리스트 등록 및 삭제
+        RefreshToken refreshToken = refreshTokenRepository.findByMemberId(findMember.getId());
+        if (refreshToken != null && refreshToken.getToken() != null) {
+            long refreshTokenRemainMillis = jwtProvider.getRemainMillis(refreshToken.getToken());
+            if (refreshTokenRemainMillis > 0) {
+                redisCommandUseCase.addTokenToBlacklist(refreshToken.getToken(), refreshTokenRemainMillis);
             }
-        } catch (Exception e) {
-            log.warn("리프레시 토큰 처리 실패: {}", e.getMessage());
+            refreshTokenRepository.deleteByMemberId(findMember.getId());
         }
 
         // 로그인 기록 삭제
-        try {
-            memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
-        } catch (Exception e) {
-            log.warn("로그인 기록 삭제 실패: {}", e.getMessage());
-        }
+        memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
     }
 
     // 토픽 캘린더 조회 코멘트 수정
