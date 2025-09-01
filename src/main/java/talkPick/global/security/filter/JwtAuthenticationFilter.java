@@ -18,6 +18,7 @@ import talkPick.global.exception.handler.SecurityExceptionHandler;
 import talkPick.global.response.ApiResponse;
 import talkPick.global.security.constants.AuthConstants;
 import talkPick.global.security.jwt.util.JwtProvider;
+import talkPick.global.security.jwt.port.in.RedisCommandUseCase;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +31,7 @@ import static talkPick.global.security.model.WhiteList.PATHS;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
     private final ObjectMapper objectMapper;
+    private final RedisCommandUseCase redisCommandUseCase;
 
     private static final List<AntPathRequestMatcher> whiteMatchers =
             Arrays.stream(PATHS).map(AntPathRequestMatcher::new).toList();
@@ -43,6 +45,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             final var accessToken = getAccessToken(request);
+            if (redisCommandUseCase.isTokenBlacklisted(accessToken)) {
+                throw new SecurityExceptionHandler(UNAUTHORIZED);
+            }
             final var memberId = jwtProvider.getMemberIdFromToken(accessToken);
             final var role = jwtProvider.getRoleFromToken(accessToken);
             doAuthentication(accessToken, memberId, role);
