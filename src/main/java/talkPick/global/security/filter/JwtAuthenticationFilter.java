@@ -44,10 +44,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         try {
-            final var accessToken = getAccessToken(request);
-            if (redisCommandUseCase.isTokenBlacklisted(accessToken)) {
+            final var authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+            if (!StringUtils.hasText(authorizationHeader) || !authorizationHeader.startsWith(AuthConstants.BEARER)) {
                 throw new SecurityExceptionHandler(UNAUTHORIZED);
             }
+
+            // Bearer 토큰을 블랙리스트에서 체크
+            if (redisCommandUseCase.isTokenBlacklisted(authorizationHeader)) {
+                throw new SecurityExceptionHandler(UNAUTHORIZED);
+            }
+
+            final var accessToken = authorizationHeader.substring(AuthConstants.BEARER.length());
             final var memberId = jwtProvider.getMemberIdFromToken(accessToken);
             final var role = jwtProvider.getRoleFromToken(accessToken);
             doAuthentication(accessToken, memberId, role);
@@ -62,13 +69,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-    private String getAccessToken(final HttpServletRequest request) {
-        final var accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (StringUtils.hasText(accessToken) && accessToken.startsWith(AuthConstants.BEARER)) {
-            return accessToken.substring(AuthConstants.BEARER.length());
-        }
-        throw new SecurityExceptionHandler(UNAUTHORIZED);
-    }
+
 
     private void doAuthentication(final String token, final Long memberId, final String role) {
         var tokenAuthentication = TokenAuthentication.createTokenAuthentication(token, memberId, role);
