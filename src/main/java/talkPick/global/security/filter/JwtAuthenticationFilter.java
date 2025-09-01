@@ -18,6 +18,7 @@ import talkPick.global.exception.handler.SecurityExceptionHandler;
 import talkPick.global.response.ApiResponse;
 import talkPick.global.security.constants.AuthConstants;
 import talkPick.global.security.jwt.util.JwtProvider;
+import talkPick.global.security.jwt.port.in.RedisCommandUseCase;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +31,7 @@ import static talkPick.global.security.model.WhiteList.PATHS;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
     private final ObjectMapper objectMapper;
+    private final RedisCommandUseCase redisCommandUseCase;
 
     private static final List<AntPathRequestMatcher> whiteMatchers =
             Arrays.stream(PATHS).map(AntPathRequestMatcher::new).toList();
@@ -42,7 +44,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         try {
-            final var accessToken = getAccessToken(request);
+            final var authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+            if (!StringUtils.hasText(authorizationHeader) || !authorizationHeader.startsWith(AuthConstants.BEARER)) {
+                throw new SecurityExceptionHandler(UNAUTHORIZED);
+            }
+
+            // Bearer 토큰을 블랙리스트에서 체크
+            if (redisCommandUseCase.isTokenBlacklisted(authorizationHeader)) {
+                throw new SecurityExceptionHandler(UNAUTHORIZED);
+            }
+
+            final var accessToken = authorizationHeader.substring(AuthConstants.BEARER.length());
+            
+            // 토큰 유효성 검증
+            if (!jwtProvider.validateToken(accessToken)) {
+                throw new SecurityExceptionHandler(UNAUTHORIZED);
+            }
+            
             final var memberId = jwtProvider.getMemberIdFromToken(accessToken);
             final var role = jwtProvider.getRoleFromToken(accessToken);
             doAuthentication(accessToken, memberId, role);
@@ -57,13 +75,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-    private String getAccessToken(final HttpServletRequest request) {
-        final var accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (StringUtils.hasText(accessToken) && accessToken.startsWith(AuthConstants.BEARER)) {
-            return accessToken.substring(AuthConstants.BEARER.length());
-        }
-        throw new SecurityExceptionHandler(UNAUTHORIZED);
-    }
+
 
     private void doAuthentication(final String token, final Long memberId, final String role) {
         var tokenAuthentication = TokenAuthentication.createTokenAuthentication(token, memberId, role);

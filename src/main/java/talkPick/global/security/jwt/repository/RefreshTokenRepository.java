@@ -6,4 +6,5 @@ import talkPick.global.security.jwt.RefreshToken;
 public interface RefreshTokenRepository extends CrudRepository<RefreshToken, String> {
     void deleteByMemberId(final Long memberId);
     RefreshToken findByToken(String token);
+    RefreshToken findByMemberId(Long memberId);
 }
