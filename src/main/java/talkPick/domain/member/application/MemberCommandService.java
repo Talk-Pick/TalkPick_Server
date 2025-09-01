@@ -246,8 +246,22 @@ public class MemberCommandService implements MemberCommandUseCase {
         findMember.updateStatus(TalkPickStatus.DIS_ACTIVE);
         memberCommandRepositoryPort.save(findMember);
 
-        refreshTokenRepository.deleteByMemberId(findMember.getId());
-        memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
+        // 액세스 토큰 남은 만료 시간 조회
+        long accessTokenRemainMillis = jwtProvider.getRemainMillis(authorization);
+        if (accessTokenRemainMillis > 0) {
+            redisCommandUseCase.addTokenToBlacklist(authorization, accessTokenRemainMillis);
+        }
+
+        RefreshToken refreshToken = refreshTokenRepository.findByMemberId(findMember.getId());
+        if (refreshToken != null) {
+            long refreshTokenRemainMillis = jwtProvider.getRemainMillis(refreshToken.getToken());
+            if (refreshTokenRemainMillis > 0) {
+                redisCommandUseCase.addTokenToBlacklist(refreshToken.getToken(), refreshTokenRemainMillis);
+            }
+            // 리프레시 토큰 DB에서 삭제
+            refreshTokenRepository.deleteByMemberId(findMember.getId());
+            memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
+        }
     }
 
     // 토픽 캘린더 조회 코멘트 수정
