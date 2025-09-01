@@ -1,6 +1,7 @@
 package talkPick.domain.member.application;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class MemberCommandService implements MemberCommandUseCase {
     private static final String DEFAULT_PROFILE_IMG_URL = "https://example.com/images/default-profile.png";
 
@@ -215,24 +217,41 @@ public class MemberCommandService implements MemberCommandUseCase {
     @Override
     public void logout(String authorization) {
         Long memberId = jwtProvider.getMemberId(authorization);
-
         Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
-        // 액세스 토큰 남은 만료 시간 조회
-        long accessTokenRemainMillis = jwtProvider.getRemainMillis(authorization);
-        if (accessTokenRemainMillis > 0) {
-            redisCommandUseCase.addTokenToBlacklist(authorization, accessTokenRemainMillis);
+        // 액세스 토큰을 블랙리스트에 추가
+        try {
+            long accessTokenRemainMillis = jwtProvider.getRemainMillis(authorization);
+            if (accessTokenRemainMillis > 0) {
+                // Bearer 토큰을 블랙리스트에 추가
+                redisCommandUseCase.addTokenToBlacklist(authorization, accessTokenRemainMillis);
+            }
+        } catch (Exception e) {
+            // 토큰 처리 중 오류가 발생해도 로그아웃은 계속 진행
+            log.warn("액세스 토큰 블랙리스트 추가 실패: {}", e.getMessage());
         }
 
-        RefreshToken refreshToken = refreshTokenRepository.findByMemberId(findMember.getId());
-        if (refreshToken != null) {
-            long refreshTokenRemainMillis = jwtProvider.getRemainMillis(refreshToken.getToken());
-            if (refreshTokenRemainMillis > 0) {
-                redisCommandUseCase.addTokenToBlacklist(refreshToken.getToken(), refreshTokenRemainMillis);
+        // 리프레시 토큰 처리
+        try {
+            RefreshToken refreshToken = refreshTokenRepository.findByMemberId(findMember.getId());
+            if (refreshToken != null && refreshToken.getToken() != null) {
+                long refreshTokenRemainMillis = jwtProvider.getRemainMillis(refreshToken.getToken());
+                if (refreshTokenRemainMillis > 0) {
+                    redisCommandUseCase.addTokenToBlacklist(refreshToken.getToken(), refreshTokenRemainMillis);
+                }
+                // 리프레시 토큰 DB에서 삭제
+                refreshTokenRepository.deleteByMemberId(findMember.getId());
             }
-            // 리프레시 토큰 DB에서 삭제
-            refreshTokenRepository.deleteByMemberId(findMember.getId());
+        } catch (Exception e) {
+            // 리프레시 토큰 처리 중 오류가 발생해도 로그아웃은 계속 진행
+            log.warn("리프레시 토큰 처리 실패: {}", e.getMessage());
+        }
+
+        // 로그인 기록 삭제
+        try {
             memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
+        } catch (Exception e) {
+            log.warn("로그인 기록 삭제 실패: {}", e.getMessage());
         }
     }
 
@@ -240,27 +259,41 @@ public class MemberCommandService implements MemberCommandUseCase {
     @Override
     public void delete(String authorization) {
         Long memberId = jwtProvider.getMemberId(authorization);
-
         Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
         findMember.updateStatus(TalkPickStatus.DIS_ACTIVE);
         memberCommandRepositoryPort.save(findMember);
 
-        // 액세스 토큰 남은 만료 시간 조회
-        long accessTokenRemainMillis = jwtProvider.getRemainMillis(authorization);
-        if (accessTokenRemainMillis > 0) {
-            redisCommandUseCase.addTokenToBlacklist(authorization, accessTokenRemainMillis);
+        // 액세스 토큰을 블랙리스트에 추가
+        try {
+            long accessTokenRemainMillis = jwtProvider.getRemainMillis(authorization);
+            if (accessTokenRemainMillis > 0) {
+                redisCommandUseCase.addTokenToBlacklist(authorization, accessTokenRemainMillis);
+            }
+        } catch (Exception e) {
+            log.warn("액세스 토큰 블랙리스트 추가 실패: {}", e.getMessage());
         }
 
-        RefreshToken refreshToken = refreshTokenRepository.findByMemberId(findMember.getId());
-        if (refreshToken != null) {
-            long refreshTokenRemainMillis = jwtProvider.getRemainMillis(refreshToken.getToken());
-            if (refreshTokenRemainMillis > 0) {
-                redisCommandUseCase.addTokenToBlacklist(refreshToken.getToken(), refreshTokenRemainMillis);
+        // 리프레시 토큰 처리
+        try {
+            RefreshToken refreshToken = refreshTokenRepository.findByMemberId(findMember.getId());
+            if (refreshToken != null && refreshToken.getToken() != null) {
+                long refreshTokenRemainMillis = jwtProvider.getRemainMillis(refreshToken.getToken());
+                if (refreshTokenRemainMillis > 0) {
+                    redisCommandUseCase.addTokenToBlacklist(refreshToken.getToken(), refreshTokenRemainMillis);
+                }
+                // 리프레시 토큰 DB에서 삭제
+                refreshTokenRepository.deleteByMemberId(findMember.getId());
             }
-            // 리프레시 토큰 DB에서 삭제
-            refreshTokenRepository.deleteByMemberId(findMember.getId());
+        } catch (Exception e) {
+            log.warn("리프레시 토큰 처리 실패: {}", e.getMessage());
+        }
+
+        // 로그인 기록 삭제
+        try {
             memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
+        } catch (Exception e) {
+            log.warn("로그인 기록 삭제 실패: {}", e.getMessage());
         }
     }
 
