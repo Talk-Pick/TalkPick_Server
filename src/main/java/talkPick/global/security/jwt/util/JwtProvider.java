@@ -59,10 +59,8 @@ public class JwtProvider {
         try {
             Jwts.parserBuilder().setSigningKey(jwtGenerator.getSigningKey()).build().parseClaimsJws(token);
             return true;
-        } catch (ExpiredJwtException e) {
-            throw new JwtExceptionHandler(ErrorCode.EXPIRED_JWT_TOKEN);
         } catch (Exception e) {
-            throw new JwtExceptionHandler(ErrorCode.INVALID_JWT_TOKEN);
+            return false;
         }
     }
 

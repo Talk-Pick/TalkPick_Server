@@ -17,8 +17,8 @@ import talkPick.global.exception.TalkPickException;
 import talkPick.global.exception.handler.SecurityExceptionHandler;
 import talkPick.global.response.ApiResponse;
 import talkPick.global.security.constants.AuthConstants;
-import talkPick.global.security.jwt.port.in.RedisCommandUseCase;
 import talkPick.global.security.jwt.util.JwtProvider;
+import talkPick.global.security.jwt.port.in.RedisCommandUseCase;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -55,6 +55,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             final var accessToken = authorizationHeader.substring(AuthConstants.BEARER.length());
+            
+            // 토큰 유효성 검증
+            if (!jwtProvider.validateToken(accessToken)) {
+                throw new SecurityExceptionHandler(UNAUTHORIZED);
+            }
+            
             final var memberId = jwtProvider.getMemberIdFromToken(accessToken);
             final var role = jwtProvider.getRoleFromToken(accessToken);
             doAuthentication(accessToken, memberId, role);
