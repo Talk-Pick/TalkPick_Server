@@ -4,11 +4,14 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.handler.JwtExceptionHandler;
 import talkPick.global.exception.handler.SecurityExceptionHandler;
 import talkPick.global.security.jwt.dto.JwtResDTO;
+
+import java.util.Date;
 import java.util.List;
 
 import static talkPick.global.exception.ErrorCode.ROLE_NOT_FOUND;
@@ -18,6 +21,8 @@ import static talkPick.global.exception.ErrorCode.ROLE_NOT_FOUND;
 public class JwtProvider {
     private final JwtGenerator jwtGenerator;
     private final RefreshTokenGenerator refreshTokenGenerator;
+    @Value("${jwt.secret}")
+    private String secretKey;
 
 
     public JwtResDTO.Login createJwt(final Long memberId, final String role) {
@@ -88,6 +93,28 @@ public class JwtProvider {
             return Long.valueOf(claims.getSubject());
         } catch (Exception e) {
             throw new JwtExceptionHandler(ErrorCode.INVALID_JWT_TOKEN);
+        }
+    }
+
+    /**
+     * 토큰 만료까지 남은 시간을 밀리초 단위로 반환합니다.
+     */
+    public long getRemainMillis(String token) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(secretKey.getBytes())
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            Date expiration = claims.getExpiration();
+            long now = System.currentTimeMillis();
+            long expireTime = expiration.getTime();
+
+            long remain = expireTime - now;
+            return remain > 0 ? remain : 0;
+        } catch (Exception e) {
+            // 토큰이 잘못됐거나 만료된 경우 0 반환
+            return 0;
         }
     }
 }
