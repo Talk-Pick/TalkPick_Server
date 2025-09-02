@@ -22,7 +22,6 @@ import talkPick.global.security.handler.ExceptionHandlerFilter;
 import talkPick.global.security.handler.JwtAuthenticationEntryPoint;
 import talkPick.global.security.filter.JwtAuthenticationFilter;
 import talkPick.global.security.jwt.util.JwtProvider;
-import talkPick.global.security.jwt.port.in.RedisCommandUseCase;
 import static talkPick.global.security.model.WhiteList.PATHS;
 
 @Configuration
@@ -35,7 +34,6 @@ public class SecurityConfig {
     private final ObjectMapper objectMapper;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final RedisCommandUseCase redisCommandUseCase;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -62,7 +60,7 @@ public class SecurityConfig {
                                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class) // CORS 필터는 제일 앞에 실행
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider, objectMapper, redisCommandUseCase),
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider, objectMapper),
                         UsernamePasswordAuthenticationFilter.class) // JWT 인증 필터 추가
                 .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class) // 예외 처리 필터는 JWT 필터보다 먼저 실행
                 .build();
