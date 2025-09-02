@@ -22,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtGenerator {
     private final JwtProperties jwtProperties;
+    private Key key;
 
     public JwtResDTO.AccessToken generateAccessToken(final long memberId, final String role) {
         final var now = LocalDateTime.now();
@@ -83,7 +84,7 @@ public class JwtGenerator {
      */
     public LocalDateTime getExpiredAt(String token) {
         try {
-            Claims claims = Jwts.parserBuilder().setSigningKey(getSigningKey()).build()
+            Claims claims = Jwts.parserBuilder().setSigningKey(key).build()
                     .parseClaimsJws(token).getBody();
             Date expiration = claims.getExpiration();
             return LocalDateTime.ofInstant(expiration.toInstant(), ZoneId.systemDefault());

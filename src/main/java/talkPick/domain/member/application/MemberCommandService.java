@@ -1,11 +1,11 @@
 package talkPick.domain.member.application;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.member.port.out.MemberCommandRepositoryPort;
+import talkPick.domain.member.port.out.MemberTermCommandRepositoryPort;
 import talkPick.domain.member.adapter.out.repository.MemberTopicResultJpaRepository;
 import talkPick.domain.member.converter.MemberConverter;
 import talkPick.domain.member.domain.Member;
@@ -17,12 +17,9 @@ import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.domain.member.port.in.MemberCommandUseCase;
 import talkPick.domain.member.port.out.MemberLoginHistoryCommandRepositoryPort;
 import talkPick.domain.member.port.out.MemberQueryRepositoryPort;
-import talkPick.domain.member.port.out.MemberTermCommandRepositoryPort;
 import talkPick.domain.term.port.out.TermQueryRepositoryPort;
 import talkPick.domain.term.domain.Term;
 import talkPick.domain.topic.domain.member.MemberTopicResult;
-import talkPick.global.security.jwt.RefreshToken;
-import talkPick.global.security.jwt.port.in.RedisCommandUseCase;
 import talkPick.global.security.jwt.repository.RefreshTokenRepository;
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.handler.MemberExceptionHandler;
@@ -35,7 +32,6 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-@Slf4j
 public class MemberCommandService implements MemberCommandUseCase {
     private static final String DEFAULT_PROFILE_IMG_URL = "https://example.com/images/default-profile.png";
 
@@ -48,7 +44,6 @@ public class MemberCommandService implements MemberCommandUseCase {
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
     private final MemberTopicResultJpaRepository memberTopicResultJpaRepository;
-    private final RedisCommandUseCase redisCommandUseCase;
 
     /**
      * 회원 프로필 수정
@@ -217,25 +212,10 @@ public class MemberCommandService implements MemberCommandUseCase {
     @Override
     public void logout(String authorization) {
         Long memberId = jwtProvider.getMemberId(authorization);
+
         Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
-        // 액세스 토큰 블랙리스트 등록
-        long accessTokenRemainMillis = jwtProvider.getRemainMillis(authorization);
-        if (accessTokenRemainMillis > 0) {
-            redisCommandUseCase.addTokenToBlacklist(authorization, accessTokenRemainMillis);
-        }
-
-        // 리프레시 토큰 블랙리스트 등록 및 삭제
-        RefreshToken refreshToken = refreshTokenRepository.findByMemberId(findMember.getId());
-        if (refreshToken != null && refreshToken.getToken() != null) {
-            long refreshTokenRemainMillis = jwtProvider.getRemainMillis(refreshToken.getToken());
-            if (refreshTokenRemainMillis > 0) {
-                redisCommandUseCase.addTokenToBlacklist(refreshToken.getToken(), refreshTokenRemainMillis);
-            }
-            refreshTokenRepository.deleteByMemberId(findMember.getId());
-        }
-
-        // 로그인 기록 삭제
+        refreshTokenRepository.deleteByMemberId(findMember.getId());
         memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
     }
 
@@ -243,28 +223,13 @@ public class MemberCommandService implements MemberCommandUseCase {
     @Override
     public void delete(String authorization) {
         Long memberId = jwtProvider.getMemberId(authorization);
+
         Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
         findMember.updateStatus(TalkPickStatus.DIS_ACTIVE);
         memberCommandRepositoryPort.save(findMember);
 
-        // 액세스 토큰 블랙리스트 등록
-        long accessTokenRemainMillis = jwtProvider.getRemainMillis(authorization);
-        if (accessTokenRemainMillis > 0) {
-            redisCommandUseCase.addTokenToBlacklist(authorization, accessTokenRemainMillis);
-        }
-
-        // 리프레시 토큰 블랙리스트 등록 및 삭제
-        RefreshToken refreshToken = refreshTokenRepository.findByMemberId(findMember.getId());
-        if (refreshToken != null && refreshToken.getToken() != null) {
-            long refreshTokenRemainMillis = jwtProvider.getRemainMillis(refreshToken.getToken());
-            if (refreshTokenRemainMillis > 0) {
-                redisCommandUseCase.addTokenToBlacklist(refreshToken.getToken(), refreshTokenRemainMillis);
-            }
-            refreshTokenRepository.deleteByMemberId(findMember.getId());
-        }
-
-        // 로그인 기록 삭제
+        refreshTokenRepository.deleteByMemberId(findMember.getId());
         memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
     }
 

@@ -22,7 +22,7 @@ import java.time.ZoneOffset;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class JwtTokenCommandService implements JwtTokenCommandUseCase {
+public class JwtTokenCommandCommandService implements JwtTokenCommandUseCase {
     private final JwtProvider jwtProvider;
     private final JwtGenerator jwtGenerator;
     private final RefreshTokenRepository refreshTokenRepository;
