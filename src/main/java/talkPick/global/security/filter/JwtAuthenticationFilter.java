@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import talkPick.global.exception.TalkPickException;
+import talkPick.global.security.jwt.port.in.RedisCommandUseCase;
 import talkPick.global.exception.handler.SecurityExceptionHandler;
 import talkPick.global.response.ApiResponse;
 import talkPick.global.security.constants.AuthConstants;
