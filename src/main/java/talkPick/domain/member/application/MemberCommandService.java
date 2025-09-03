@@ -216,6 +216,23 @@ public class MemberCommandService implements MemberCommandUseCase {
         Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
         refreshTokenRepository.deleteByMemberId(findMember.getId());
+        // 액세스 토큰 블랙리스트 등록
+        long accessTokenRemainMillis = jwtProvider.getRemainMillis(authorization);
+        if (accessTokenRemainMillis > 0) {
+            redisCommandUseCase.addTokenToBlacklist(authorization, accessTokenRemainMillis);
+        }
+
+        // 리프레시 토큰 블랙리스트 등록 및 삭제
+        RefreshToken refreshToken = refreshTokenRepository.findByMemberId(findMember.getId());
+        if (refreshToken != null && refreshToken.getToken() != null) {
+            long refreshTokenRemainMillis = jwtProvider.getRemainMillis(refreshToken.getToken());
+            if (refreshTokenRemainMillis > 0) {
+                redisCommandUseCase.addTokenToBlacklist(refreshToken.getToken(), refreshTokenRemainMillis);
+            }
+            refreshTokenRepository.deleteByMemberId(findMember.getId());
+        }
+
+        // 로그인 기록 삭제
         memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
     }
 
@@ -230,6 +247,23 @@ public class MemberCommandService implements MemberCommandUseCase {
         memberCommandRepositoryPort.save(findMember);
 
         refreshTokenRepository.deleteByMemberId(findMember.getId());
+        // 액세스 토큰 블랙리스트 등록
+        long accessTokenRemainMillis = jwtProvider.getRemainMillis(authorization);
+        if (accessTokenRemainMillis > 0) {
+            redisCommandUseCase.addTokenToBlacklist(authorization, accessTokenRemainMillis);
+        }
+
+        // 리프레시 토큰 블랙리스트 등록 및 삭제
+        RefreshToken refreshToken = refreshTokenRepository.findByMemberId(findMember.getId());
+        if (refreshToken != null && refreshToken.getToken() != null) {
+            long refreshTokenRemainMillis = jwtProvider.getRemainMillis(refreshToken.getToken());
+            if (refreshTokenRemainMillis > 0) {
+                redisCommandUseCase.addTokenToBlacklist(refreshToken.getToken(), refreshTokenRemainMillis);
+            }
+            refreshTokenRepository.deleteByMemberId(findMember.getId());
+        }
+
+        // 로그인 기록 삭제
         memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
     }
 

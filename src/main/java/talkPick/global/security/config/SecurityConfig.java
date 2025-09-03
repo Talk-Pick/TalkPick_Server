@@ -15,8 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import talkPick.domain.admin.adapter.out.repository.AdminJpaRepository;
-import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
+import talkPick.global.security.jwt.port.in.RedisCommandUseCase;
 import talkPick.global.config.CorsFilter;
 import talkPick.global.security.handler.ExceptionHandlerFilter;
 import talkPick.global.security.handler.JwtAuthenticationEntryPoint;
@@ -34,6 +33,7 @@ public class SecurityConfig {
     private final ObjectMapper objectMapper;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final RedisCommandUseCase redisCommandUseCase;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -60,7 +60,7 @@ public class SecurityConfig {
                                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class) // CORS 필터는 제일 앞에 실행
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider, objectMapper),
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider, objectMapper, redisCommandUseCase),
                         UsernamePasswordAuthenticationFilter.class) // JWT 인증 필터 추가
                 .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class) // 예외 처리 필터는 JWT 필터보다 먼저 실행
                 .build();
