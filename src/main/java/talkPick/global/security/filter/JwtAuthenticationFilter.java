@@ -55,12 +55,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             final var accessToken = authorizationHeader.substring(AuthConstants.BEARER.length());
-            
+
             // 토큰 유효성 검증
             if (!jwtProvider.validateToken(accessToken)) {
                 throw new SecurityExceptionHandler(UNAUTHORIZED);
             }
-            
+
             final var memberId = jwtProvider.getMemberIdFromToken(accessToken);
             final var role = jwtProvider.getRoleFromToken(accessToken);
             doAuthentication(accessToken, memberId, role);
