@@ -79,3 +79,11 @@ resilience4j:
 
 healthcheck:
   url: ${HEALTH_CHECK_URL}
+
+jasypt:
+  admin:
+    secret-key: ${JASYPT_ADMIN_SECRET_KEY}
+  member:
+    secret-key: ${JASYPT_MEMBER_SECRET_KEY}
+  algorithm: ${JASYPT_ALGORITHM:PBEWITHHMACSHA512ANDAES_256}
+  pool-size: ${JASYPT_POOL_SIZE:1}
