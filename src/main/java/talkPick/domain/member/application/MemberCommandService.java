@@ -20,6 +20,8 @@ import talkPick.domain.member.port.out.MemberQueryRepositoryPort;
 import talkPick.domain.term.port.out.TermQueryRepositoryPort;
 import talkPick.domain.term.domain.Term;
 import talkPick.domain.topic.domain.member.MemberTopicResult;
+import talkPick.global.security.jwt.RefreshToken;
+import talkPick.global.security.jwt.port.in.RedisCommandUseCase;
 import talkPick.global.security.jwt.repository.RefreshTokenRepository;
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.handler.MemberExceptionHandler;
@@ -44,6 +46,7 @@ public class MemberCommandService implements MemberCommandUseCase {
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
     private final MemberTopicResultJpaRepository memberTopicResultJpaRepository;
+    private final RedisCommandUseCase redisCommandUseCase;
 
     /**
      * 회원 프로필 수정
