@@ -3,7 +3,7 @@ name: Deploy TalkPick Server
 on:
   push:
     branches:
-      - deploy/205  # for test
+      - staging
 
 jobs:
   deploy:
