@@ -39,7 +39,7 @@ services:
       - "80:80"
     environment:
         ORIGIN_CERTIFICATE: "${ORIGIN_CERTIFICATE}"
-        PRIVATE_CERTIFICATE_KEY: "${ PRIVATE_CERTIFICATE_KEY}"
+        PRIVATE_CERTIFICATE_KEY: "${PRIVATE_CERTIFICATE_KEY}"
     depends_on:
       - talkpick-server
 
