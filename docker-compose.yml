@@ -32,7 +32,6 @@ services:
   nginx:
     build: ./nginx
     container_name: nginx
-    image: nginx
     restart: always
     ports:
       - "443:443"
@@ -42,6 +41,8 @@ services:
         PRIVATE_CERTIFICATE_KEY: "${PRIVATE_CERTIFICATE_KEY}"
     depends_on:
       - talkpick-server
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
 
 #  # monitoring
 #  prometheus:
