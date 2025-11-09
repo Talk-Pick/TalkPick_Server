@@ -33,3 +33,4 @@
 ## 🟢 ERD
 
 ## 🛠️ 아키텍처 구조
+<img width="1211" height="506" alt="talkpick-architecture" src="https://github.com/user-attachments/assets/eb59b801-c3ce-4965-a8f0-3373f6f116b6" />

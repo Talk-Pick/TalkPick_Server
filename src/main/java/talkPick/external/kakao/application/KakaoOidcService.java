@@ -36,6 +36,8 @@ public class KakaoOidcService implements KakaoOidcUsecase {
      */
     @Override
     public MemberDataDto.KakaoMemberData verifyAndParseIdToken(MemberReqDto.KakaoOAuth2LoginRequest request) {
+        log.info("PROD_SERVER_RECEIVED_TOKEN: {}", request.getIdToken());
+
         try {
             // JWT 디코드 (헤더 추출)
             String[] parts = request.getIdToken().split("\\.");
