@@ -11,6 +11,8 @@ server:
     accept-count: ${ACCEPT_COUNT}
 
 spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration,org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
   config:
     import: optional:file:.env[.properties]
   datasource:
