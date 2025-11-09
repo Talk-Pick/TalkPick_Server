@@ -16,8 +16,8 @@ public class JwtResDTO {
     ){
         public static Login of(final AccessToken accessToken, final RefreshToken refreshToken) {
             return new Login(
-                    refreshToken.getMemberId(),
-                    refreshToken.getRole(),
+                    refreshToken.getMember().getId(),
+                    refreshToken.getMember().getMemberRole().toString(),
                     accessToken.accessToken,
                     refreshToken.getToken(),
                     accessToken.accessExpiredTime,

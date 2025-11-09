@@ -8,11 +8,14 @@ import talkPick.domain.admin.adapter.in.mapper.AdminReqMapper;
 import talkPick.domain.admin.adapter.out.dto.AdminResDTO;
 import talkPick.domain.admin.domain.Admin;
 import talkPick.domain.admin.domain.AdminAuthInfo;
+import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
+import talkPick.domain.member.domain.Member;
 import talkPick.global.exception.ErrorCode;
 import talkPick.domain.admin.exception.AdminException;
 import talkPick.domain.admin.domain.type.Role;
 import talkPick.domain.admin.port.in.AuthCommandUseCase;
 import talkPick.domain.admin.port.out.AdminCommandRepositoryPort;
+import talkPick.global.exception.handler.MemberExceptionHandler;
 import talkPick.global.security.jwt.dto.JwtResDTO;
 import talkPick.global.security.jwt.util.JwtProvider;
 
@@ -23,6 +26,7 @@ public class AuthCommandService implements AuthCommandUseCase {
     private final AdminCommandRepositoryPort adminCommandRepositoryPort;
     private final JwtProvider jwtProvider;
     private final AdminReqMapper adminReqMapper;
+    private final MemberJpaRepository memberJpaRepository;
 
     @Override
     public AdminResDTO.Signup signup(AdminReqDTO.Signup signup) {
@@ -65,6 +69,7 @@ public class AuthCommandService implements AuthCommandUseCase {
     }
 
     private JwtResDTO.Login getToken(final Long memberId) {
-        return jwtProvider.createJwt(memberId, String.valueOf(Role.ADMIN));
+        Member member = memberJpaRepository.findById(memberId).orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+        return jwtProvider.createJwt(member);
     }
 }

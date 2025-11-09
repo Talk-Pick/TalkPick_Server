@@ -20,8 +20,6 @@ import talkPick.domain.member.port.out.MemberQueryRepositoryPort;
 import talkPick.domain.term.port.out.TermQueryRepositoryPort;
 import talkPick.domain.term.domain.Term;
 import talkPick.domain.topic.domain.member.MemberTopicResult;
-import talkPick.global.security.jwt.RefreshToken;
-import talkPick.global.security.jwt.port.in.RedisCommandUseCase;
 import talkPick.global.security.jwt.repository.RefreshTokenRepository;
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.handler.MemberExceptionHandler;
@@ -46,7 +44,6 @@ public class MemberCommandService implements MemberCommandUseCase {
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
     private final MemberTopicResultJpaRepository memberTopicResultJpaRepository;
-    private final RedisCommandUseCase redisCommandUseCase;
 
     /**
      * 회원 프로필 수정
@@ -153,7 +150,7 @@ public class MemberCommandService implements MemberCommandUseCase {
 
         // 이메일 회원은 임시 토큰 삭제 처리
         if (findMember.getLoginType() == LoginType.EMAIL) {
-            refreshTokenRepository.deleteByMemberId(findMember.getId());
+            refreshTokenRepository.findByMember(findMember).ifPresent(refreshTokenRepository::delete);
         }
 
         // 카카오 회원은 가입 완료 시 로그인 기록 저장
@@ -218,22 +215,7 @@ public class MemberCommandService implements MemberCommandUseCase {
 
         Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
-        refreshTokenRepository.deleteByMemberId(findMember.getId());
-        // 액세스 토큰 블랙리스트 등록
-        long accessTokenRemainMillis = jwtProvider.getRemainMillis(authorization);
-        if (accessTokenRemainMillis > 0) {
-            redisCommandUseCase.addTokenToBlacklist(authorization, accessTokenRemainMillis);
-        }
-
-        // 리프레시 토큰 블랙리스트 등록 및 삭제
-        RefreshToken refreshToken = refreshTokenRepository.findByMemberId(findMember.getId());
-        if (refreshToken != null && refreshToken.getToken() != null) {
-            long refreshTokenRemainMillis = jwtProvider.getRemainMillis(refreshToken.getToken());
-            if (refreshTokenRemainMillis > 0) {
-                redisCommandUseCase.addTokenToBlacklist(refreshToken.getToken(), refreshTokenRemainMillis);
-            }
-            refreshTokenRepository.deleteByMemberId(findMember.getId());
-        }
+        refreshTokenRepository.findByMember(findMember).ifPresent(refreshTokenRepository::delete);
 
         // 로그인 기록 삭제
         memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
@@ -249,22 +231,7 @@ public class MemberCommandService implements MemberCommandUseCase {
         findMember.updateStatus(TalkPickStatus.DIS_ACTIVE);
         memberCommandRepositoryPort.save(findMember);
 
-        refreshTokenRepository.deleteByMemberId(findMember.getId());
-        // 액세스 토큰 블랙리스트 등록
-        long accessTokenRemainMillis = jwtProvider.getRemainMillis(authorization);
-        if (accessTokenRemainMillis > 0) {
-            redisCommandUseCase.addTokenToBlacklist(authorization, accessTokenRemainMillis);
-        }
-
-        // 리프레시 토큰 블랙리스트 등록 및 삭제
-        RefreshToken refreshToken = refreshTokenRepository.findByMemberId(findMember.getId());
-        if (refreshToken != null && refreshToken.getToken() != null) {
-            long refreshTokenRemainMillis = jwtProvider.getRemainMillis(refreshToken.getToken());
-            if (refreshTokenRemainMillis > 0) {
-                redisCommandUseCase.addTokenToBlacklist(refreshToken.getToken(), refreshTokenRemainMillis);
-            }
-            refreshTokenRepository.deleteByMemberId(findMember.getId());
-        }
+        refreshTokenRepository.findByMember(findMember).ifPresent(refreshTokenRepository::delete);
 
         // 로그인 기록 삭제
         memberLoginHistoryRepository.deleteByMemberId(findMember.getId());

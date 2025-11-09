@@ -1,32 +1,47 @@
 package talkPick.global.security.jwt;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
+import talkPick.domain.member.domain.Member;
+import talkPick.global.model.BaseTime;
 
 import java.time.LocalDateTime;
 
 @Getter
-@NoArgsConstructor
+@Entity
+@Table(name = "refresh_token")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@RedisHash(value = "refresh_token", timeToLive = 3600 * 24 * 7)
-public class RefreshToken {
+public class RefreshToken extends BaseTime {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
+    @Column(nullable = false, unique = true)
     private String token;
-    private Long memberId;
-    private String role;
+
+    @Column(nullable = false)
     private LocalDateTime expiredAt;
 
-    public static RefreshToken of(final String token, final Long memberId, final String role, LocalDateTime expiredAt) {
+    public static RefreshToken of(final Member member, final String token, final LocalDateTime expiredAt) {
         return RefreshToken.builder()
+                .member(member)
                 .token(token)
-                .memberId(memberId)
-                .role(role)
                 .expiredAt(expiredAt)
                 .build();
+    }
+
+    public void updateToken(String token, LocalDateTime expiredAt) {
+        this.token = token;
+        this.expiredAt = expiredAt;
     }
 }
