@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.handler.JwtExceptionHandler;
 import talkPick.global.exception.handler.SecurityExceptionHandler;
+import talkPick.domain.member.domain.Member;
 import talkPick.global.security.jwt.dto.JwtResDTO;
 
 import java.util.Date;
@@ -23,10 +24,10 @@ public class JwtProvider {
     private final RefreshTokenGenerator refreshTokenGenerator;
 
 
-    public JwtResDTO.Login createJwt(final Long memberId, final String role) {
+    public JwtResDTO.Login createJwt(final Member member) {
         return JwtResDTO.Login.of(
-                jwtGenerator.generateAccessToken(memberId, role),
-                refreshTokenGenerator.generateRefreshToken(memberId, role)
+                jwtGenerator.generateAccessToken(member.getId(), member.getMemberRole().toString()),
+                refreshTokenGenerator.generateRefreshToken(member)
         );
     }
 
