@@ -2,8 +2,8 @@ package talkPick.global.security.jwt.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import talkPick.domain.member.domain.Member;
 import talkPick.global.security.jwt.RefreshToken;
-import talkPick.global.security.jwt.repository.RefreshTokenRepository;
 
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;
@@ -13,10 +13,9 @@ import java.util.Base64;
 @RequiredArgsConstructor
 @Component
 public class RefreshTokenGenerator {
-    private final RefreshTokenRepository refreshTokenRepository;
     private static final int TOKEN_BYTE_SIZE = 60 * 6 / 8; // 45 Bytes
 
-    public RefreshToken generateRefreshToken(final long memberId, final String role) {
+    public RefreshToken generateRefreshToken(final Member member) {
         var random = createSecureRandom();
 
         // SecureRandom을 사용하여 45 바이트의 랜덤 토큰을 생성
@@ -28,10 +27,7 @@ public class RefreshTokenGenerator {
 
         var expireAt = LocalDateTime.now().plusWeeks(4);
 
-        var refreshToken = RefreshToken.of(token, memberId, role, expireAt);
-        refreshTokenRepository.save(refreshToken);
-
-        return refreshToken;
+        return RefreshToken.of(member, token, expireAt);
     }
 
     private SecureRandom createSecureRandom() {

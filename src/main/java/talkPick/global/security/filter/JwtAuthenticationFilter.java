@@ -14,12 +14,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import talkPick.global.exception.TalkPickException;
-import talkPick.global.security.jwt.port.in.RedisCommandUseCase;
 import talkPick.global.exception.handler.SecurityExceptionHandler;
 import talkPick.global.response.ApiResponse;
 import talkPick.global.security.constants.AuthConstants;
 import talkPick.global.security.jwt.util.JwtProvider;
-import talkPick.global.security.jwt.port.in.RedisCommandUseCase;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +30,6 @@ import static talkPick.global.security.model.WhiteList.PATHS;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
     private final ObjectMapper objectMapper;
-    private final RedisCommandUseCase redisCommandUseCase;
 
     private static final List<AntPathRequestMatcher> whiteMatchers =
             Arrays.stream(PATHS).map(AntPathRequestMatcher::new).toList();
@@ -47,11 +44,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             final var authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
             if (!StringUtils.hasText(authorizationHeader) || !authorizationHeader.startsWith(AuthConstants.BEARER)) {
-                throw new SecurityExceptionHandler(UNAUTHORIZED);
-            }
-
-            // Bearer 토큰을 블랙리스트에서 체크
-            if (redisCommandUseCase.isTokenBlacklisted(authorizationHeader)) {
                 throw new SecurityExceptionHandler(UNAUTHORIZED);
             }
 
