@@ -1,6 +1,7 @@
 package talkPick.domain.topic.adapter.in;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
@@ -22,5 +23,5 @@ public interface TopicQueryApi {
 
     @GetMapping("/{topicId}")
     @Operation(summary = "토픽 상세 조회 API", description = "토픽 상세 조회 API 입니다.")
-    TopicResDTO.TopicDetail getTopicDetail(@PathVariable("topicId") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long topicId);
+    TopicResDTO.TopicDetail getTopicDetail(@PathVariable("topicId") @Parameter(description = "토픽 고유 ID(topicId)", example = "42") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long topicId);
 }

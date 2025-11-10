@@ -1,6 +1,7 @@
 package talkPick.domain.random.adapter.in;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +29,9 @@ public interface RandomQueryApi {
                           """
     )
     List<RandomResDTO.RandomTopic> getRandomTopics(
-            @MemberId Long memberId,
+            @MemberId @Parameter(hidden = true) Long memberId,
             @PathVariable("id")
+            @Parameter(description = "랜덤 대화 코스 고유 ID(randomId)", example = "42")
             @NotNull(message = "[ERROR] randomId 값이 존재하지 않습니다.") Long randomId,
             @RequestParam(name = "order", required = true)
             @NotNull(message = "[ERROR] order 값이 존재하지 않습니다.") Integer order,
