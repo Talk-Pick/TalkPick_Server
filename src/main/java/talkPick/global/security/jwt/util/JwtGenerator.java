@@ -43,7 +43,7 @@ public class JwtGenerator {
     }
 
     private LocalDateTime generateExpirationDate(final LocalDateTime now) {
-        return now.plusMinutes(jwtProperties.getAccessTokenExpireTime());
+        return now.plus(jwtProperties.getAccessTokenExpireTime(), java.time.temporal.ChronoUnit.MILLIS);
     }
 
     private Date convertToDate(LocalDateTime localDateTime) {
