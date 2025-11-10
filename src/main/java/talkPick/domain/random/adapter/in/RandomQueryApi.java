@@ -28,8 +28,7 @@ public interface RandomQueryApi {
                           """
     )
     List<RandomResDTO.RandomTopic> getRandomTopics(
-            @MemberId
-            @NotNull(message = "[ERROR] memberId 값이 존재하지 않습니다.") Long memberId,
+            @MemberId Long memberId,
             @PathVariable("id")
             @NotNull(message = "[ERROR] randomId 값이 존재하지 않습니다.") Long randomId,
             @RequestParam(name = "order", required = true)

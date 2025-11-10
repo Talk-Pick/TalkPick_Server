@@ -15,5 +15,5 @@ import talkPick.global.security.annotation.MemberId;
 public interface TopicCommandApi {
     @PostMapping("/{topicId}/like")
     @Operation(summary = "토픽 좋아요 API", description = "토픽 좋아요 API 입니다.")
-    void addLike(@MemberId @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long memberId, @PathVariable("topicId") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long topicId);
+    void addLike(@MemberId final Long memberId, @PathVariable("topicId") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long topicId);
 }
