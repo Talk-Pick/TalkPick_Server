@@ -12,6 +12,8 @@ services:
       - ./env/.env.properties:/app/config/.env.properties
     environment:
       - SPRING_CONFIG_IMPORT=optional:file:/app/config/.env.properties
+    env_file:
+      - ./env/.env
 
   ## adminer
   adminer:
