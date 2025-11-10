@@ -1,6 +1,7 @@
 package talkPick.domain.notice.adapter.in;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
@@ -23,5 +24,5 @@ public interface NoticeQueryApi {
 
     @GetMapping("/{id}")
     @Operation(summary = "공지사항 상세 조회", description = "공지사항 상세 조회 API 입니다.")
-    NoticeResDTO.NoticeDetail getNoticeDetail(@PathVariable("id") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long noticeId);
+    NoticeResDTO.NoticeDetail getNoticeDetail(@PathVariable("id") @Parameter(description = "공지사항 고유 ID(noticeId)", example = "42") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long noticeId);
 }

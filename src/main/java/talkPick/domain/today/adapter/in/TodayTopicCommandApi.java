@@ -1,6 +1,7 @@
 package talkPick.domain.today.adapter.in;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
@@ -16,5 +17,5 @@ import java.util.List;
 public interface TodayTopicCommandApi {
     @GetMapping("/today-topics")
     @Operation(summary = "오늘의 토픽 5개 조회 API", description = "오늘의 토픽 5개 조회 API 입니다.")
-    List<TodayTopicResDTO.TopicSummaries> getTodayTopicSummaries(@MemberId @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long memberId);
+    List<TodayTopicResDTO.TopicSummaries> getTodayTopicSummaries(@MemberId @Parameter(hidden = true) final Long memberId);
 }
