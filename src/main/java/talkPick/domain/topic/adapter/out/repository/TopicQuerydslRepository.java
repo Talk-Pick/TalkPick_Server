@@ -9,8 +9,8 @@ import talkPick.domain.topic.domain.type.CategoryGroup;
 import talkPick.domain.topic.dto.TopicCacheDTO;
 import java.util.List;
 import static talkPick.domain.topic.domain.QCategory.category;
+import static talkPick.domain.topic.domain.QKeyword.keyword;
 import static talkPick.domain.topic.domain.QTopic.topic;
-import static talkPick.domain.topic.domain.QTopicKeyword.topicKeyword;
 import static talkPick.domain.topic.domain.QTopicStat.topicStat;
 
 @Repository
@@ -24,7 +24,6 @@ public class TopicQuerydslRepository {
         return queryFactory.select(Projections.constructor(TopicResDTO.Categories.class,
                         category.id,
                         category.title,
-                        category.description,
                         category.imageUrl,
                         category.categoryGroup
                 ))
@@ -37,15 +36,14 @@ public class TopicQuerydslRepository {
         return queryFactory.select(Projections.constructor(TopicResDTO.TopicDetail.class,
                         topic.id,
                         topic.title,
-                        topicStat.averageTalkTime,
-                        topicStat.selectCount,
                         category.title,
                         category.categoryGroup,
-                        topicKeyword.keyword
+                        keyword.name,
+                        keyword.imageUrl
                 ))
                 .from(topic)
                 .leftJoin(category).on(topic.categoryId.eq(category.id))
-                .leftJoin(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
+                .leftJoin(keyword).on(topic.keywordId.eq(keyword.id))
                 .leftJoin(topicStat).on(topic.id.eq(topicStat.topicId))
                 .where(topic.id.eq(topicId))
                 .fetchOne();
@@ -56,10 +54,11 @@ public class TopicQuerydslRepository {
                         topic.id,
                         topic.title,
                         topic.detail,
-                        topicKeyword.keyword.stringValue(),
+                        keyword.name,
+                        keyword.imageUrl,
+                        keyword.iconUrl,
                         category.categoryGroup.stringValue(),
                         category.title,
-                        category.description,
                         category.imageUrl,
                         topicStat.eCount,
                         topicStat.iCount,
@@ -81,7 +80,7 @@ public class TopicQuerydslRepository {
                 ))
                 .from(topic)
                 .join(topicStat).on(topic.id.eq(topicStat.topicId))
-                .join(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
+                .leftJoin(keyword).on(topic.keywordId.eq(keyword.id))
                 .join(category).on(topic.categoryId.eq(category.id))
                 .fetch();
     }

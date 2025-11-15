@@ -37,8 +37,31 @@ public class JwtGenerator {
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
 
-        log.info("[AccessToken 생성] {}", accessToken);
-        log.info("[MemberId, Role] [{}, {}]", memberId, role);
+        return JwtResDTO.AccessToken.of(memberId, role, accessToken, expireDate);
+    }
+
+    /**
+     * 마스터 토큰 생성 (만료 시간 없음 - 개발/테스트용)
+     * @param memberId 회원 ID
+     * @param role 회원 역할
+     * @return 무한 시간 유효한 JWT 토큰
+     */
+    public JwtResDTO.AccessToken generateMasterAccessToken(final long memberId, final String role) {
+        final var now = LocalDateTime.now();
+        final var expireDate = now.plusYears(100);
+
+        var accessToken = Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setSubject(String.valueOf(memberId))
+                .claim("roles", List.of(role))
+                .setIssuedAt(convertToDate(now))
+                .setExpiration(convertToDate(expireDate))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+
+        log.warn("[마스터 AccessToken 생성] {}", accessToken);
+        log.warn("[MemberId, Role] [{}, {}]", memberId, role);
+        log.warn("[만료일] {}", expireDate);
         return JwtResDTO.AccessToken.of(memberId, role, accessToken, expireDate);
     }
 

@@ -11,8 +11,8 @@ import talkPick.global.model.TalkPickStatus;
 import java.util.List;
 import static talkPick.domain.random.domain.QRandomTopicHistory.randomTopicHistory;
 import static talkPick.domain.topic.domain.QCategory.category;
+import static talkPick.domain.topic.domain.QKeyword.keyword;
 import static talkPick.domain.topic.domain.QTopic.topic;
-import static talkPick.domain.topic.domain.QTopicKeyword.topicKeyword;
 
 @Repository
 public class RandomQuerydslRepository {
@@ -51,11 +51,13 @@ public class RandomQuerydslRepository {
                         topic.detail,
                         category.categoryGroup.stringValue(),
                         category.title,
-                        topicKeyword.keyword
+                        keyword.name,
+                        keyword.imageUrl,
+                        keyword.iconUrl
                 ))
                 .from(topic)
                 .leftJoin(category).on(topic.categoryId.eq(category.id))
-                .leftJoin(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
+                .leftJoin(keyword).on(topic.keywordId.eq(keyword.id))
                 .where(builder)
                 .orderBy(com.querydsl.core.types.dsl.Expressions.numberTemplate(Double.class, "rand()").asc())
                 .limit(4)

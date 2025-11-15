@@ -1,15 +1,15 @@
 services:
   ## talkpick
-  talkpick-server:
-    image: 718513646976.dkr.ecr.ap-northeast-2.amazonaws.com/talkpick-server:latest
-    container_name: talkpick-server
-    ports:
-      - "8080:8080"
-    network_mode: "host"
-    volumes:
-      - ./env/.env.properties:/app/config/.env.properties
-    environment:
-      - SPRING_CONFIG_IMPORT=optional:file:/app/config/.env.properties
+#  talkpick-server:
+#    image: 718513646976.dkr.ecr.ap-northeast-2.amazonaws.com/talkpick-server:latest
+#    container_name: talkpick-server
+#    ports:
+#      - "8080:8080"
+#    network_mode: "host"
+#    volumes:
+#      - ./env/.env.properties:/app/config/.env.properties
+#    environment:
+#      - SPRING_CONFIG_IMPORT=optional:file:/app/config/.env.properties
 
   ## redis
   redis:

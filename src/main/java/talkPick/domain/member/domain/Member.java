@@ -2,10 +2,10 @@ package talkPick.domain.member.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import talkPick.domain.admin.domain.type.Role;
 import talkPick.domain.member.domain.type.Gender;
 import talkPick.domain.member.domain.type.LoginType;
 import talkPick.domain.member.domain.type.MBTI;
+import talkPick.domain.member.domain.type.Role;
 import talkPick.global.model.BaseTime;
 import talkPick.global.model.TalkPickStatus;
 

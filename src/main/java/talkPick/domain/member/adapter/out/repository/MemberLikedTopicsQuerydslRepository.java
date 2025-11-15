@@ -26,7 +26,7 @@ public class MemberLikedTopicsQuerydslRepository implements MemberLikedTopicsQue
         QTopicLikeHistory tlh = QTopicLikeHistory.topicLikeHistory;
         QTopic t = QTopic.topic;
         QCategory c = QCategory.category;
-        QTopicKeyword tk = QTopicKeyword.topicKeyword;
+        QKeyword k = QKeyword.keyword;
         QTopicStat ts = QTopicStat.topicStat;
 
         // 기본 조건: 특정 회원이 좋아요한 토픽만 조회
@@ -40,26 +40,24 @@ public class MemberLikedTopicsQuerydslRepository implements MemberLikedTopicsQue
         }
 
         // size + 1개를 조회하여 다음 페이지 존재 여부 확인
-        List<MemberResDto.MemberLikedTopicResDto> results = queryFactory
+        return queryFactory
                 .select(Projections.constructor(MemberResDto.MemberLikedTopicResDto.class,
                         tlh.id,
                         t.title,           // 토픽 주제 (String)
                         ts.averageTalkTime, // 평균 대화 시간 (long)
                         ts.selectCount,     // 선택된 횟수 (long)
-                        tk.keyword,         // 키워드 (Keyword)
+                        k.name,                  // 키워드 (Keyword)
                         c,                   // 카테고리 (Category)
                         tlh.createdDate
                 ))
                 .from(tlh)
                 .innerJoin(t).on(tlh.topicId.eq(t.id))
                 .innerJoin(c).on(t.categoryId.eq(c.id))
-                .innerJoin(tk).on(tk.topicId.eq(t.id))
+                .innerJoin(k).on(t.keywordId.eq(k.id))
                 .innerJoin(ts).on(ts.topicId.eq(t.id))
                 .where(builder)
                 .orderBy(tlh.createdDate.desc()) // 최신 좋아요부터 내림차순 정렬
                 .limit(size + 1) // 페이징을 위해 요청된 크기보다 1개 더 조회
                 .fetch();
-
-        return results;
     }
 }

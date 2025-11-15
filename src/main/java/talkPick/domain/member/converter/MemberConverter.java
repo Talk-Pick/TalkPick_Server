@@ -1,11 +1,11 @@
 package talkPick.domain.member.converter;
 
-import talkPick.domain.admin.domain.type.Role;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.domain.MemberLoginHistory;
 import talkPick.domain.member.domain.mapping.MemberTerm;
 import talkPick.domain.member.domain.type.Gender;
 import talkPick.domain.member.domain.type.LoginType;
+import talkPick.domain.member.domain.type.Role;
 import talkPick.domain.member.dto.MemberDataDto;
 import talkPick.domain.member.adapter.in.dto.MemberReqDto;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;

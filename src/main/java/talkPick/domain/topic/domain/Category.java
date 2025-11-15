@@ -19,9 +19,6 @@ public class Category {
     @Column(name = "title", nullable = false, length = 255, columnDefinition = "VARCHAR(255) COMMENT '카테고리 제목'")
     private String title;
 
-    @Column(name = "description", nullable = true, length = 500, columnDefinition = "VARCHAR(500) COMMENT '카테고리 설명'")
-    private String description;
-
     @Column(name = "image_url", nullable = true, length = 500, columnDefinition = "VARCHAR(500) COMMENT '카테고리 이미지 URL'")
     private String imageUrl;
 
@@ -29,10 +26,9 @@ public class Category {
     @Column(name = "category_group", nullable = false, columnDefinition = "VARCHAR(20) COMMENT '카테고리 그룹'")
     private CategoryGroup categoryGroup;
 
-    public static Category of(String title, String description, String imageUrl, CategoryGroup categoryGroup) {
+    public static Category of(String title, String imageUrl, CategoryGroup categoryGroup) {
         return Category.builder()
                 .title(title)
-                .description(description)
                 .imageUrl(imageUrl)
                 .categoryGroup(categoryGroup)
                 .build();
