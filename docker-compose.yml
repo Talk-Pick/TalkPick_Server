@@ -5,7 +5,9 @@ services:
     container_name: talkpick-server
     ports:
       - "8080:8080"
-    network_mode: "host"
+    networks:
+      - t4y
+    restart: always
     volumes:
       - ./env/.env.properties:/app/config/.env.properties
     environment:
@@ -17,6 +19,7 @@ services:
     container_name: redis
     networks:
       - t4y
+    restart: always
     ports:
       - "6379:6379"
 
@@ -24,58 +27,30 @@ services:
   adminer:
     image: adminer
     container_name: talkpick-db-adminer
+    networks:
+      - t4y
     restart: always
     ports:
       - "8081:8080"
 
-#  # monitoring
-#  prometheus:
-#    image: prom/prometheus:latest
-#    container_name: prometheus-container
-#    ports:
-#      - "9090:9090"
-#    volumes:
-#      - ./prometheus.yml:/etc/prometheus.yml
-#    command:
-#      - '--storage.tsdb.path=/prometheus'
-#      - '--config.file=/etc/prometheus/prometheus.yml'
-#    restart: always
-#    networks:
-#      - t4y
-#  grafana:
-#    image: grafana/grafana
-#    container_name: grafana-container
-#    user: "$UID:$GID"
-#    ports:
-#      - 3000:3000
-#    volumes:
-#      - grafana-data:/var/lib/grafana
-#      - ./grafana/provisioning/:/etc/grafana/provisioning/
-#    restart: always
-#    depends_on:
-#      - prometheus
-#    networks:
-#      - t4y
-#
-#  node_exporter:
-#    image: prom/node-exporter
-#    volumes:
-#      - /proc:/host/proc:ro
-#      - /sys:/host/sys:ro
-#      - /:/rootfs:ro
-#    command:
-#      - '--path.procfs=/host/proc'
-#      - '--path.rootfs=/rootfs'
-#      - '--path.sysfs=/host/sys'
-#      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
-#    ports:
-#      - "9100:9100"
-#    networks:
-#      - t4y
+  ## nginx
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    networks:
+      - t4y
+    restart: always
+    ports:
+      - "443:443"
+      - "80:80"
+    environment:
+        ORIGIN_CERTIFICATE: "${ORIGIN_CERTIFICATE}"
+        PRIVATE_CERTIFICATE_KEY: "${PRIVATE_CERTIFICATE_KEY}"
+    depends_on:
+      - talkpick-server
+      - adminer
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
 
 networks:
   t4y:
-#
-#volumes:
-#  grafana-data:
-#  prometheus-data:
