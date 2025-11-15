@@ -12,16 +12,8 @@ services:
       - ./env/.env.properties:/app/config/.env.properties
     environment:
       - SPRING_CONFIG_IMPORT=optional:file:/app/config/.env.properties
-
-  ## redis
-  redis:
-    image: redis:latest
-    container_name: redis
-    networks:
-      - t4y
-    restart: always
-    ports:
-      - "6379:6379"
+    env_file:
+      - ./env/.env
 
   ## adminer
   adminer:
