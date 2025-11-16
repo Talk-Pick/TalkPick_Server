@@ -4,5 +4,5 @@ import talkPick.domain.today.adapter.out.dto.TodayTopicResDTO;
 import java.util.List;
 
 public interface TodayTopicCommandUseCase {
-    List<TodayTopicResDTO.TopicSummaries> getTodayTopicSummaries(Long memberId);
+    List<TodayTopicResDTO.TodayTopic> getTodayTopicSummaries(Long memberId);
 }

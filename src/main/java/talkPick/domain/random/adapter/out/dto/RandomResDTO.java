@@ -3,7 +3,8 @@ package talkPick.domain.random.adapter.out.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import talkPick.domain.topic.domain.type.Keyword;
+import talkPick.domain.topic.domain.Keyword;
+
 import java.util.List;
 
 public class RandomResDTO {
@@ -23,18 +24,8 @@ public class RandomResDTO {
         private String detail;
         private String categoryGroup;
         private String category;
-        private Keyword keyword;
-
-        public String getKeywordName() {
-            return keyword != null ? keyword.name() : null;
-        }
-
-        public String getKeywordImageUrl() {
-            return keyword != null ? keyword.getImageUrl() : null;
-        }
-
-        public String getKeywordIconUrl() {
-            return keyword != null ? keyword.getIconUrl() : null;
-        }
+        private String keywordName;
+        private String keywordImageUrl;
+        private String keywordIconUrl;
     }
 }

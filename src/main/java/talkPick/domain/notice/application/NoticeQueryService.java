@@ -1,9 +1,11 @@
 package talkPick.domain.notice.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import talkPick.domain.notice.adapter.in.dto.NoticeReqDTO;
 import talkPick.domain.notice.adapter.out.dto.NoticeResDTO;
+import talkPick.domain.notice.domain.event.NoticeReadEvent;
 import talkPick.domain.notice.port.in.NoticeQueryUseCase;
 import talkPick.domain.notice.port.out.NoticeQueryRepositoryPort;
 import talkPick.global.response.CursorPageResponse;
@@ -12,6 +14,7 @@ import talkPick.global.response.CursorPageResponse;
 @RequiredArgsConstructor
 public class NoticeQueryService implements NoticeQueryUseCase {
     private final NoticeQueryRepositoryPort noticeQueryRepositoryPort;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public CursorPageResponse<NoticeResDTO.NoticeSummary> getNotices(NoticeReqDTO.Cursor cursor) {
@@ -20,6 +23,8 @@ public class NoticeQueryService implements NoticeQueryUseCase {
 
     @Override
     public NoticeResDTO.NoticeDetail getNoticeDetail(Long noticeId) {
-        return noticeQueryRepositoryPort.findNoticeDetailById(noticeId);
+        NoticeResDTO.NoticeDetail noticeDetail = noticeQueryRepositoryPort.findNoticeDetailById(noticeId);
+        eventPublisher.publishEvent(NoticeReadEvent.of(this, noticeId));
+        return noticeDetail;
     }
 }
