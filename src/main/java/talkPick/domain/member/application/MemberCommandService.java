@@ -70,50 +70,49 @@ public class MemberCommandService implements MemberCommandUseCase {
     /**
      * 이메일 회원 신규 생성
      */
-    @Override
-    public Member findOrCreateEmailMember(MemberReqDto.MemberEmailRequest emailReqDto) {
-        validatePassword(emailReqDto.getPassword());
-
-        if (memberCommandRepositoryPort.findByEmail(emailReqDto.getEmail()).isPresent()) {
-            throw new MemberExceptionHandler(ErrorCode.MEMBER_EMAIL_ALREADY_EXISTS);
-        }
-
-        Member newMember = MemberConverter.toEmailMember(emailReqDto);
-
-        // 비밀번호 암호화
-        newMember.updatePassword(passwordEncoder.encode(emailReqDto.getPassword()));
-        return memberCommandRepositoryPort.save(newMember);
-    }
+//    @Override
+//    public Member findOrCreateEmailMember(MemberReqDto.MemberEmailRequest emailReqDto) {
+//        validatePassword(emailReqDto.getPassword());
+//
+//        if (memberCommandRepositoryPort.findByEmail(emailReqDto.getEmail()).isPresent()) {
+//            throw new MemberExceptionHandler(ErrorCode.MEMBER_EMAIL_ALREADY_EXISTS);
+//        }
+//
+//        Member newMember = MemberConverter.toEmailMember(emailReqDto);
+//
+//        // 비밀번호 암호화
+//        newMember.updatePassword(passwordEncoder.encode(emailReqDto.getPassword()));
+//        return memberCommandRepositoryPort.save(newMember);
+//    }
 
     /**
      * 이메일 로그인 처리 (비밀번호 검증 및 로그인 이력 기록)
      */
-    @Override
-    public Member loginEmailMember(MemberReqDto.MemberEmailRequest emailReqDto) {
-        validatePassword(emailReqDto.getPassword());
-
-        Member member = memberCommandRepositoryPort.findByEmail(emailReqDto.getEmail())
-                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
-
-        // 비밀번호 복호화 및 검증
-        if (!passwordEncoder.matches(emailReqDto.getPassword(), member.getPassword())) {
-            throw new MemberExceptionHandler(ErrorCode.INVALID_PASSWORD);
-        }
-
-        MemberLoginHistory loginHistory = MemberConverter.toLoginHistory(member);
-        memberLoginHistoryRepository.save(loginHistory);
-
-        return member;
-    }
+//    @Override
+//    public Member loginEmailMember(MemberReqDto.MemberEmailRequest emailReqDto) {
+//        validatePassword(emailReqDto.getPassword());
+//
+//        Member member = memberCommandRepositoryPort.findByEmail(emailReqDto.getEmail())
+//                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+//
+//        // 비밀번호 복호화 및 검증
+//        if (!passwordEncoder.matches(emailReqDto.getPassword(), member.getPassword())) {
+//            throw new MemberExceptionHandler(ErrorCode.INVALID_PASSWORD);
+//        }
+//
+//        MemberLoginHistory loginHistory = MemberConverter.toLoginHistory(member);
+//        memberLoginHistoryRepository.save(loginHistory);
+//
+//        return member;
+//    }
 
     /**
-     * 카카오 멤버 데이터로 기존 회원 조회 또는 신규 생성
+     * 멤버 데이터로 기존 회원 조회 또는 신규 생성
      */
     @Override
-    public Member findOrCreateKakaoMember(MemberDataDto.KakaoMemberData kakaoMemberData) {
-        Member findOrNewMember = memberCommandRepositoryPort.findByProviderId(kakaoMemberData.getSub())
-                .orElseGet(() -> MemberConverter.toKakaoMember(kakaoMemberData));
-
+    public Member findOrCreateMember(MemberDataDto.MemberData MemberData, LoginType loginType) {
+        Member findOrNewMember = memberCommandRepositoryPort.findByProviderId(MemberData.getSub())
+                .orElseGet(() -> MemberConverter.toMember(MemberData, loginType));
         return memberCommandRepositoryPort.save(findOrNewMember);
     }
 
@@ -149,12 +148,12 @@ public class MemberCommandService implements MemberCommandUseCase {
         memberCommandRepositoryPort.save(findMember);
 
         // 이메일 회원은 임시 토큰 삭제 처리
-        if (findMember.getLoginType() == LoginType.EMAIL) {
-            refreshTokenRepository.findByMember(findMember).ifPresent(refreshTokenRepository::delete);
-        }
+//        if (findMember.getLoginType() == LoginType.EMAIL) {
+//            refreshTokenRepository.findByMember(findMember).ifPresent(refreshTokenRepository::delete);
+//        }
 
-        // 카카오 회원은 가입 완료 시 로그인 기록 저장
-        if (findMember.getLoginType() == LoginType.KAKAO) {
+        // 소셜 로그인 회원 가입 완료 시 로그인 기록 저장
+        if (findMember.getLoginType() == LoginType.KAKAO || findMember.getLoginType() == LoginType.APPLE) {
             MemberLoginHistory loginHistory = MemberConverter.toLoginHistory(findMember);
             memberLoginHistoryRepository.save(loginHistory);
         }
