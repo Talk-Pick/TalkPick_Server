@@ -4,7 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.handler.JwtExceptionHandler;
@@ -17,7 +17,6 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtGenerator {
@@ -37,8 +36,23 @@ public class JwtGenerator {
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
 
-        log.info("[AccessToken 생성] {}", accessToken);
-        log.info("[MemberId, Role] [{}, {}]", memberId, role);
+        return JwtResDTO.AccessToken.of(memberId, role, accessToken, expireDate);
+    }
+
+    @Profile("!prod")
+    public JwtResDTO.AccessToken generateMasterAccessToken(final long memberId, final String role) {
+        final var now = LocalDateTime.now();
+        final var expireDate = now.plusYears(100);
+
+        var accessToken = Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setSubject(String.valueOf(memberId))
+                .claim("roles", List.of(role))
+                .setIssuedAt(convertToDate(now))
+                .setExpiration(convertToDate(expireDate))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+
         return JwtResDTO.AccessToken.of(memberId, role, accessToken, expireDate);
     }
 

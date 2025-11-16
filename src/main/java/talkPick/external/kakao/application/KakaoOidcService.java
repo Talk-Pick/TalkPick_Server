@@ -35,7 +35,7 @@ public class KakaoOidcService implements KakaoOidcUsecase {
      * id_token을 검증하고 담겨있는 멤버 데이터 추출하는 메서드
      */
     @Override
-    public MemberDataDto.KakaoMemberData verifyAndParseIdToken(MemberReqDto.KakaoOAuth2LoginRequest request) {
+    public MemberDataDto.MemberData verifyAndParseIdToken(MemberReqDto.OAuth2LoginRequest request) {
         log.info("PROD_SERVER_RECEIVED_TOKEN: {}", request.getIdToken());
 
         try {

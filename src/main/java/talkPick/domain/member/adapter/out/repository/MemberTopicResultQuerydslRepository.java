@@ -3,36 +3,34 @@ package talkPick.domain.member.adapter.out.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.port.out.MemberTopicResultQueryRepositoryPort;
 import talkPick.domain.topic.domain.*;
 import talkPick.domain.topic.domain.member.*;
+import talkPick.domain.topic.domain.QKeyword;
+import talkPick.domain.topic.domain.QTopic;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static com.querydsl.core.group.GroupBy.*;
 
 @Repository
+@RequiredArgsConstructor
 public class MemberTopicResultQuerydslRepository implements MemberTopicResultQueryRepositoryPort {
     private final JPAQueryFactory queryFactory;
-
-    public MemberTopicResultQuerydslRepository(EntityManager em) {
-        this.queryFactory = new JPAQueryFactory(em);
-    }
 
     @Override
     public List<MemberResDto.MemberTopicResultResDto> findMemberTopicResults(Member member, LocalDate date,
                                                                              LocalDateTime cursor, int size) {
         QMemberTopicHistory mth = QMemberTopicHistory.memberTopicHistory;
         QMemberTopicResult mtr = QMemberTopicResult.memberTopicResult;
-        QTopicKeyword tk = QTopicKeyword.topicKeyword;
+        QTopic topic = QTopic.topic;
+        QKeyword keyword = QKeyword.keyword;
 
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime nextDayStart = date.plusDays(1).atStartOfDay();
@@ -54,7 +52,8 @@ public class MemberTopicResultQuerydslRepository implements MemberTopicResultQue
         return queryFactory
                 .from(mth)
                 .leftJoin(mtr).on(mtr.id.eq(mth.member_topic_result_id))
-                .leftJoin(tk).on(tk.topicId.eq(mth.topicId))
+                .leftJoin(topic).on(topic.id.eq(mth.topicId))
+                .leftJoin(keyword).on(keyword.id.eq(topic.keywordId))
                 .where(builder)
                 .orderBy(mth.createdDate.desc(), mth.id.desc())
                 .limit(size + 1)
@@ -63,7 +62,7 @@ public class MemberTopicResultQuerydslRepository implements MemberTopicResultQue
                                 MemberResDto.MemberTopicResultResDto.class,
                                 mth.id,
                                 mtr.comment,
-                                list(tk.keyword),
+                                list(keyword.name),
                                 mth.createdDate
                         )
                 ));

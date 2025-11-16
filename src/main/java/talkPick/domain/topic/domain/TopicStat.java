@@ -5,7 +5,6 @@ import lombok.*;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.domain.type.Gender;
 import talkPick.domain.member.domain.type.MBTI;
-
 import java.time.LocalDate;
 
 //TODO 동시성 고려해야 함.

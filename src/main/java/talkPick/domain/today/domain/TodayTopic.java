@@ -2,6 +2,7 @@ package talkPick.domain.today.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import talkPick.global.model.BaseTime;
 
 @Getter
 @Entity
@@ -9,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "today_topic")
-public class TodayTopic {
+public class TodayTopic extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, columnDefinition = "BIGINT COMMENT '기본 키'")

@@ -3,7 +3,7 @@ package talkPick.domain.notice.adapter.out.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.notice.adapter.in.dto.NoticeReqDTO;
 import talkPick.domain.notice.adapter.out.dto.NoticeResDTO;
@@ -13,13 +13,9 @@ import static talkPick.domain.notice.domain.QNotice.notice;
 import static talkPick.domain.notice.domain.QNoticeImage.noticeImage;
 
 @Repository
+@RequiredArgsConstructor
 public class NoticeQuerydslRepository {
-
     private final JPAQueryFactory queryFactory;
-
-    public NoticeQuerydslRepository(EntityManager em) {
-        this.queryFactory = new JPAQueryFactory(em);
-    }
 
     public NoticeResDTO.NoticeDetail findNoticeDetailById(Long noticeId) {
         return queryFactory.select(Projections.constructor(

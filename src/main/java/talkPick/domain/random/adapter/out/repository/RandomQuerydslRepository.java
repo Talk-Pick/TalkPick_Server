@@ -3,7 +3,7 @@ package talkPick.domain.random.adapter.out.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.topic.domain.type.CategoryGroup;
@@ -11,15 +11,13 @@ import talkPick.global.model.TalkPickStatus;
 import java.util.List;
 import static talkPick.domain.random.domain.QRandomTopicHistory.randomTopicHistory;
 import static talkPick.domain.topic.domain.QCategory.category;
+import static talkPick.domain.topic.domain.QKeyword.keyword;
 import static talkPick.domain.topic.domain.QTopic.topic;
-import static talkPick.domain.topic.domain.QTopicKeyword.topicKeyword;
 
 @Repository
+@RequiredArgsConstructor
 public class RandomQuerydslRepository {
     private final JPAQueryFactory queryFactory;
-    public RandomQuerydslRepository(EntityManager em) {
-        this.queryFactory = new JPAQueryFactory(em);
-    }
 
     public List<RandomResDTO.RandomTopicDetail> findRandomTopics(Long memberId, Long randomId, CategoryGroup categoryGroup, String categoryType){
         List<Long> alreadyUsedTopicIds = queryFactory
@@ -51,11 +49,13 @@ public class RandomQuerydslRepository {
                         topic.detail,
                         category.categoryGroup.stringValue(),
                         category.title,
-                        topicKeyword.keyword
+                        keyword.name,
+                        keyword.imageUrl,
+                        keyword.iconUrl
                 ))
                 .from(topic)
                 .leftJoin(category).on(topic.categoryId.eq(category.id))
-                .leftJoin(topicKeyword).on(topic.id.eq(topicKeyword.topicId))
+                .leftJoin(keyword).on(topic.keywordId.eq(keyword.id))
                 .where(builder)
                 .orderBy(com.querydsl.core.types.dsl.Expressions.numberTemplate(Double.class, "rand()").asc())
                 .limit(4)

@@ -12,8 +12,8 @@ public class TopicCacheDTO {
     private String title;
     private String detail;
     private String keyword;
-    private String thumbnail;
-    private String icon;
+    private String keywordImgUrl;
+    private String keywordIconUrl;
     private String categoryGroup;
     private String categoryTitle;
     private String categoryDescription;
