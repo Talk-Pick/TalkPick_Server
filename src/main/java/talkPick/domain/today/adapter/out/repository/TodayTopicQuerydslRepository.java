@@ -21,9 +21,9 @@ public class TodayTopicQuerydslRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<TodayTopicResDTO.TopicSummaries> findTodayTopicSummaries(Long memberId) {
+    public List<TodayTopicResDTO.TodayTopic> findTodayTopicSummaries(Long memberId) {
         return queryFactory.select(Projections.constructor(
-                        TodayTopicResDTO.TopicSummaries.class,
+                        TodayTopicResDTO.TodayTopic.class,
                         topic.id,
                         topic.title,
                         topicStat.averageTalkTime,

@@ -2,7 +2,7 @@ package talkPick.domain.today.adapter.out.dto;
 
 public class TodayTopicResDTO {
 
-    public record TopicSummaries(
+    public record TodayTopic(
             Long topicId,
             String title,
             long averageTalkTime,

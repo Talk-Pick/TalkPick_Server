@@ -19,7 +19,7 @@ public class TodayTopicCommandRepositoryAdapter implements TodayTopicCommandRepo
     private final TodayTopicQuerydslRepository todayTopicQuerydslRepository;
 
     @Override
-    public List<TodayTopicResDTO.TopicSummaries> findTodayTopicSummaries(Long memberId) {
+    public List<TodayTopicResDTO.TodayTopic> findTodayTopicSummaries(Long memberId) {
         return Optional.ofNullable(todayTopicQuerydslRepository.findTodayTopicSummaries(memberId))
                 .orElse(Collections.emptyList());
     }
