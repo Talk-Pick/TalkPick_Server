@@ -1,7 +1,7 @@
 package talkPick.domain.member.converter;
 
 import io.jsonwebtoken.Claims;
-import talkPick.domain.admin.domain.type.Role;
+import talkPick.domain.member.domain.type.Role;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.domain.MemberLoginHistory;
 import talkPick.domain.member.domain.mapping.MemberTerm;
