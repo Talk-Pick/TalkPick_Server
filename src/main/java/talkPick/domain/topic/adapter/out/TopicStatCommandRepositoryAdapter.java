@@ -15,4 +15,9 @@ public class TopicStatCommandRepositoryAdapter implements TopicStatCommandReposi
     public void save(Long topicId) {
         topicStatJpaRepository.save(TopicStat.of(topicId));
     }
+
+    @Override
+    public void incrementLikeCount(Long topicId) {
+        topicStatJpaRepository.incrementLikeCount(topicId);
+    }
 }

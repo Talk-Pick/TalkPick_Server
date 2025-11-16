@@ -23,7 +23,7 @@ public class NoticeQueryService implements NoticeQueryUseCase {
 
     @Override
     public NoticeResDTO.NoticeDetail getNoticeDetail(Long noticeId) {
-        NoticeResDTO.NoticeDetail noticeDetail = noticeQueryRepositoryPort.findNoticeDetailById(noticeId);
+        var noticeDetail = noticeQueryRepositoryPort.findNoticeDetailById(noticeId);
         eventPublisher.publishEvent(NoticeReadEvent.of(this, noticeId));
         return noticeDetail;
     }

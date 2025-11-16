@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.notice.adapter.out.repository.NoticeJpaRepository;
+import talkPick.domain.notice.domain.Notice;
 import talkPick.domain.notice.domain.event.NoticeReadEvent;
 
 @Slf4j
@@ -21,10 +22,7 @@ public class NoticeReadEventHandler {
     public void handle(NoticeReadEvent event) {
         try {
             noticeJpaRepository.findById(event.getNoticeId())
-                    .ifPresent(notice -> {
-                        notice.plusReadCount();
-                        noticeJpaRepository.save(notice);
-                    });
+                    .ifPresent(Notice::plusReadCount);
         } catch (Exception e) {
             log.error("공지사항 조회수 증가 실패 - noticeId: {}", event.getNoticeId(), e);
         }

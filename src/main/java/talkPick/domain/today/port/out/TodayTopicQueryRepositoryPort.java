@@ -5,4 +5,5 @@ import java.util.List;
 
 public interface TodayTopicQueryRepositoryPort {
     List<TodayTopicResDTO.TodayTopic> findTodayTopics(Long memberId);
+    List<TodayTopicResDTO.TodayTopic> findTodayTopicsByDateOnly(Long memberId);
 }

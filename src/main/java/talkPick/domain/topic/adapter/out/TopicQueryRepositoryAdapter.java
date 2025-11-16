@@ -3,7 +3,6 @@ package talkPick.domain.topic.adapter.out;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import talkPick.domain.topic.domain.type.CategoryGroup;
-import talkPick.domain.topic.dto.TopicCacheDTO;
 import talkPick.domain.topic.domain.Topic;
 import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
@@ -35,11 +34,5 @@ public class TopicQueryRepositoryAdapter implements TopicQueryRepositoryPort {
     public TopicResDTO.TopicDetail findTopicDetail(Long topicId) {
         return Optional.ofNullable(topicQuerydslRepository.findTopicDetailById(topicId))
                 .orElseThrow(() -> new TopicExceptionHandler(TOPIC_NOT_FOUND));
-    }
-
-    @Override
-    public List<TopicCacheDTO> findAllTopicCache() {
-        return Optional.ofNullable(topicQuerydslRepository.findAllTopicData())
-                .orElse(Collections.emptyList());
     }
 }

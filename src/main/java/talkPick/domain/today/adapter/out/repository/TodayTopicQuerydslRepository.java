@@ -29,7 +29,7 @@ public class TodayTopicQuerydslRepository {
         return findRandomTopics();
     }
 
-    private List<TodayTopicResDTO.TodayTopic> findTodayTopicsByDate(Long memberId) {
+    public List<TodayTopicResDTO.TodayTopic> findTodayTopicsByDate(Long memberId) {
         var today = LocalDate.now();
         var startOfDay = today.atStartOfDay();
         var endOfDay = today.plusDays(1).atStartOfDay();
@@ -60,7 +60,7 @@ public class TodayTopicQuerydslRepository {
             return findTopicsWithOffset(0);
         }
 
-        long offset = new Random().nextLong(totalCount - LIMIT);
+        var offset = new Random().nextLong(totalCount - LIMIT);
         return findTopicsWithOffset(offset);
     }
 
