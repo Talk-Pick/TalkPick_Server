@@ -13,8 +13,8 @@ import java.util.List;
 @Validated
 @RequestMapping("/api/v1/topic")
 @Tag(name = "톡픽 API", description = "톡픽 관련 API 입니다.")
-public interface TodayTopicCommandApi {
+public interface TodayTopicQueryApi {
     @GetMapping("/today-topics")
     @Operation(summary = "오늘의 토픽 5개 조회 API", description = "오늘의 토픽 5개 조회 API 입니다.")
-    List<TodayTopicResDTO.TodayTopic> getTodayTopicSummaries(@MemberId @Parameter(hidden = true) final Long memberId);
+    List<TodayTopicResDTO.TodayTopic> getTodayTopics(@MemberId @Parameter(hidden = true) final Long memberId);
 }

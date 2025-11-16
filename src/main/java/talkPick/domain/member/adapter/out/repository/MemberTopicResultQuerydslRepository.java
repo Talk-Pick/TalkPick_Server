@@ -3,7 +3,7 @@ package talkPick.domain.member.adapter.out.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.domain.member.domain.Member;
@@ -20,12 +20,9 @@ import java.util.List;
 import static com.querydsl.core.group.GroupBy.*;
 
 @Repository
+@RequiredArgsConstructor
 public class MemberTopicResultQuerydslRepository implements MemberTopicResultQueryRepositoryPort {
     private final JPAQueryFactory queryFactory;
-
-    public MemberTopicResultQuerydslRepository(EntityManager em) {
-        this.queryFactory = new JPAQueryFactory(em);
-    }
 
     @Override
     public List<MemberResDto.MemberTopicResultResDto> findMemberTopicResults(Member member, LocalDate date,

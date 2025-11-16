@@ -2,7 +2,7 @@ package talkPick.domain.topic.adapter.out.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import talkPick.domain.topic.domain.type.CategoryGroup;
@@ -14,11 +14,9 @@ import static talkPick.domain.topic.domain.QTopic.topic;
 import static talkPick.domain.topic.domain.QTopicStat.topicStat;
 
 @Repository
+@RequiredArgsConstructor
 public class TopicQuerydslRepository {
     private final JPAQueryFactory queryFactory;
-    public TopicQuerydslRepository(EntityManager em) {
-        this.queryFactory = new JPAQueryFactory(em);
-    }
 
     public List<TopicResDTO.Categories> findCategoriesByCategoryGroup(CategoryGroup categoryGroup) {
         return queryFactory.select(Projections.constructor(TopicResDTO.Categories.class,
