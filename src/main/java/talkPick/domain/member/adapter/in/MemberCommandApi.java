@@ -13,22 +13,26 @@ import talkPick.global.security.jwt.dto.JwtResDTO;
 @Tag(name = "유저 API", description = "유저 관련 API 입니다.")
 public interface MemberCommandApi {
 
-    @PostMapping("/email/signup")
-    @Operation(summary = "이메일 회원가입", description = "이메일, 비밀번호 등으로 회원가입을 처리합니다. 회원가입 후 약관 동의와 추가 정보 입력이 필요합니다.")
-    JwtResDTO.Login joinEmailMember(
-            @Parameter(description = "회원가입 요청 DTO", required = true)
-            @Valid @RequestBody MemberReqDto.MemberEmailRequest memberReqDto);
-
-    @PostMapping("/email/login")
-    @Operation(summary = "이메일 로그인", description = "이메일, 비밀번호로 로그인을 처리합니다.")
-    JwtResDTO.Login emailLogin(
-            @Parameter(description = "로그인 요청 DTO", required = true)
-            @Valid @RequestBody MemberReqDto.MemberEmailRequest memberReqDto);
+//    @PostMapping("/email/signup")
+//    @Operation(summary = "이메일 회원가입", description = "이메일, 비밀번호 등으로 회원가입을 처리합니다. 회원가입 후 약관 동의와 추가 정보 입력이 필요합니다.")
+//    JwtResDTO.Login joinEmailMember(
+//            @Parameter(description = "회원가입 요청 DTO", required = true)
+//            @Valid @RequestBody MemberReqDto.MemberEmailRequest memberReqDto);
+//
+//    @PostMapping("/email/login")
+//    @Operation(summary = "이메일 로그인", description = "이메일, 비밀번호로 로그인을 처리합니다.")
+//    JwtResDTO.Login emailLogin(
+//            @Parameter(description = "로그인 요청 DTO", required = true)
+//            @Valid @RequestBody MemberReqDto.MemberEmailRequest memberReqDto);
 
     @PostMapping("/kakao/login")
     @Operation(summary = "KAKAO OAuth2 로그인 API", description = "KAKAO OAuth2 로그인 API 입니다.")
     JwtResDTO.Login kakaoOAuth2Login(
-            @Valid @RequestBody MemberReqDto.KakaoOAuth2LoginRequest request);
+            @Valid @RequestBody MemberReqDto.OAuth2LoginRequest request);
+
+    @PatchMapping("/auth/apple")
+    @Operation(summary = "APPLE Oauth2 로그인 API", description = "APPLE OAuth2 로그인 API 입니다.")
+    JwtResDTO.Login appleOauth2Login (@Valid @RequestBody MemberReqDto.OAuth2LoginRequest request);
 
     @PostMapping("/token/refresh")
     @Operation(summary = "액세스 토큰 재발급", description = "리프레시 토큰으로 액세스 토큰을 재발급합니다.")
