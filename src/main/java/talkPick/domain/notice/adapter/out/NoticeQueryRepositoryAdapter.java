@@ -20,8 +20,6 @@ public class NoticeQueryRepositoryAdapter implements NoticeQueryRepositoryPort {
 
     @Override
     public NoticeResDTO.NoticeDetail findNoticeDetailById(Long noticeId) {
-        //TODO 조회수 업데이트 로직 필요
-
         var result = Optional.ofNullable(noticeQuerydslRepository.findNoticeDetailById(noticeId))
                 .orElseThrow(() -> new NoticeExceptionHandler(NOTICE_NOT_FOUND));
 
