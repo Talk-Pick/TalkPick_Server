@@ -4,5 +4,5 @@ import talkPick.domain.member.dto.MemberDataDto;
 import talkPick.domain.member.adapter.in.dto.MemberReqDto;
 
 public interface KakaoOidcUsecase {
-    MemberDataDto.KakaoMemberData verifyAndParseIdToken(MemberReqDto.KakaoOAuth2LoginRequest request);
+    MemberDataDto.MemberData verifyAndParseIdToken(MemberReqDto.OAuth2LoginRequest request);
 }
