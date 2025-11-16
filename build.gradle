@@ -101,6 +101,9 @@ dependencies {
     // Bucket4j
     implementation group: 'com.github.vladimir-bukhtoyarov', name: 'bucket4j-core', version: '7.6.0'
 
+    // Cache
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+
     // Caffeine
     implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.2.1'
 

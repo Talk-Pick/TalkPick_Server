@@ -16,17 +16,13 @@ public class MasterTokenGenerator {
 
     @EventListener(ApplicationReadyEvent.class)
     public void generateMasterToken() {
-        log.warn("\n");
-        log.warn("========================================");
-        log.warn("마스터 토큰 생성");
-        log.warn("========================================");
+        log.debug("\n");
+        log.debug("마스터 토큰 생성");
+        log.debug("========================================");
 
         JwtResDTO.AccessToken masterToken = jwtGenerator.generateMasterAccessToken(1L, "MEMBER");
 
-        log.warn("========================================");
-        log.warn("마스터 토큰 정보");
-        log.warn("========================================");
-        log.warn("{}", masterToken.accessToken());
-        log.warn("========================================\n");
+        log.debug("{}", masterToken.accessToken());
+        log.debug("========================================\n");
     }
 }
