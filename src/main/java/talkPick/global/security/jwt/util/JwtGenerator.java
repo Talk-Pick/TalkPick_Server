@@ -4,7 +4,6 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import talkPick.global.exception.ErrorCode;
@@ -18,7 +17,6 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtGenerator {
@@ -54,8 +52,6 @@ public class JwtGenerator {
                 .setExpiration(convertToDate(expireDate))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
-
-        log.debug("[마스터 AccessToken 생성] {}", accessToken);
 
         return JwtResDTO.AccessToken.of(memberId, role, accessToken, expireDate);
     }
