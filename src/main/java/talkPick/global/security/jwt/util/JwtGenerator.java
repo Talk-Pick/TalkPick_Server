@@ -5,6 +5,7 @@ import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.handler.JwtExceptionHandler;
@@ -40,12 +41,7 @@ public class JwtGenerator {
         return JwtResDTO.AccessToken.of(memberId, role, accessToken, expireDate);
     }
 
-    /**
-     * 마스터 토큰 생성 (만료 시간 없음 - 개발/테스트용)
-     * @param memberId 회원 ID
-     * @param role 회원 역할
-     * @return 무한 시간 유효한 JWT 토큰
-     */
+    @Profile("local")
     public JwtResDTO.AccessToken generateMasterAccessToken(final long memberId, final String role) {
         final var now = LocalDateTime.now();
         final var expireDate = now.plusYears(100);
@@ -59,9 +55,8 @@ public class JwtGenerator {
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
 
-        log.warn("[마스터 AccessToken 생성] {}", accessToken);
-        log.warn("[MemberId, Role] [{}, {}]", memberId, role);
-        log.warn("[만료일] {}", expireDate);
+        log.debug("[마스터 AccessToken 생성] {}", accessToken);
+
         return JwtResDTO.AccessToken.of(memberId, role, accessToken, expireDate);
     }
 
