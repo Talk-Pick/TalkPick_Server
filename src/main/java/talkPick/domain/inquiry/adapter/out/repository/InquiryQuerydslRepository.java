@@ -3,7 +3,7 @@ package talkPick.domain.inquiry.adapter.out.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.inquiry.adapter.out.dto.InquiryResDto;
 import talkPick.domain.inquiry.domain.Inquiry;
@@ -15,12 +15,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class InquiryQuerydslRepository {
     private final JPAQueryFactory queryFactory;
-
-    public InquiryQuerydslRepository(EntityManager em) {
-        this.queryFactory = new JPAQueryFactory(em);
-    }
 
     public List<InquiryResDto.InquiryListItemResDto> findMyInquiries(Member member, LocalDateTime cursor, int size) {
         QInquiry iq = QInquiry.inquiry;

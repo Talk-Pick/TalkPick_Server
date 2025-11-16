@@ -3,7 +3,7 @@ package talkPick.domain.random.adapter.out.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.topic.domain.type.CategoryGroup;
@@ -15,11 +15,9 @@ import static talkPick.domain.topic.domain.QKeyword.keyword;
 import static talkPick.domain.topic.domain.QTopic.topic;
 
 @Repository
+@RequiredArgsConstructor
 public class RandomQuerydslRepository {
     private final JPAQueryFactory queryFactory;
-    public RandomQuerydslRepository(EntityManager em) {
-        this.queryFactory = new JPAQueryFactory(em);
-    }
 
     public List<RandomResDTO.RandomTopicDetail> findRandomTopics(Long memberId, Long randomId, CategoryGroup categoryGroup, String categoryType){
         List<Long> alreadyUsedTopicIds = queryFactory

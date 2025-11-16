@@ -41,7 +41,7 @@ public class JwtGenerator {
         return JwtResDTO.AccessToken.of(memberId, role, accessToken, expireDate);
     }
 
-    @Profile("local")
+    @Profile("!prod")
     public JwtResDTO.AccessToken generateMasterAccessToken(final long memberId, final String role) {
         final var now = LocalDateTime.now();
         final var expireDate = now.plusYears(100);
