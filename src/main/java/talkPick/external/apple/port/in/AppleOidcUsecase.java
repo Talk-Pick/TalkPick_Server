@@ -1,8 +1,8 @@
-package talkPick.external.kakao.port.in;
+package talkPick.external.apple.port.in;
 
-import talkPick.domain.member.dto.MemberDataDto;
 import talkPick.domain.member.adapter.in.dto.MemberReqDto;
+import talkPick.domain.member.dto.MemberDataDto;
 
-public interface KakaoOidcUsecase {
+public interface AppleOidcUsecase {
     MemberDataDto.MemberData verifyAndParseIdToken(MemberReqDto.OAuth2LoginRequest request);
 }

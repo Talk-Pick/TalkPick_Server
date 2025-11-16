@@ -15,7 +15,7 @@ public class MemberReqDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class KakaoOAuth2LoginRequest{
+    public static class OAuth2LoginRequest{
         @NotNull(message = "idToken 은 필수입니다.")
         private String idToken;
     }

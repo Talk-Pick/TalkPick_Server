@@ -1,11 +1,12 @@
 package talkPick.domain.member.converter;
 
+import io.jsonwebtoken.Claims;
+import talkPick.domain.member.domain.type.Role;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.domain.MemberLoginHistory;
 import talkPick.domain.member.domain.mapping.MemberTerm;
 import talkPick.domain.member.domain.type.Gender;
 import talkPick.domain.member.domain.type.LoginType;
-import talkPick.domain.member.domain.type.Role;
 import talkPick.domain.member.dto.MemberDataDto;
 import talkPick.domain.member.adapter.in.dto.MemberReqDto;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
@@ -17,23 +18,23 @@ public class MemberConverter {
     private static final String DEFAULT_PROFILE_IMG_URL = "https://example.com/images/default-profile.png";
     private static final String DEFAULT_NICKNAME = "토픽";
 
-    public static MemberDataDto.KakaoMemberData toKakaoMemberData(io.jsonwebtoken.Claims claims) {
-        return MemberDataDto.KakaoMemberData.builder()
+    public static MemberDataDto.MemberData toKakaoMemberData(io.jsonwebtoken.Claims claims) {
+        return MemberDataDto.MemberData.builder()
                 .sub(claims.getSubject())
                 .email(claims.get("email", String.class))
                 .build();
     }
 
-    public static Member toKakaoMember(MemberDataDto.KakaoMemberData kakaoMemberData) {
+    public static Member toMember(MemberDataDto.MemberData MemberData, LoginType loginType) {
         return Member.builder()
-                .email(kakaoMemberData.getEmail())
+                .email(MemberData.getEmail())
                 .memberRole(Role.MEMBER)
                 .nickname(DEFAULT_NICKNAME)
                 .gender(Gender.NONE)
-                .loginType(LoginType.KAKAO)
+                .loginType(loginType)
                 .status(TalkPickStatus.PENDING)
                 .profileImageUrl(DEFAULT_PROFILE_IMG_URL)
-                .providerId(kakaoMemberData.getSub())
+                .providerId(MemberData.getSub())
                 .build();
 
     }
@@ -102,4 +103,10 @@ public class MemberConverter {
                 .build();
     }
 
+    public static MemberDataDto.MemberData toAppleMemberData(Claims claims) {
+        return MemberDataDto.MemberData.builder()
+                .sub(claims.getSubject())
+                .email(claims.get("email", String.class) != null ? claims.get("email", String.class) : "NONE")
+                .build();
+    }
 }
