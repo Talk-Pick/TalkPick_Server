@@ -19,24 +19,10 @@ public class TopicResDTO {
     public record TopicDetail(
             Long topicId,
             String title,
+            String detail,
             String category,
             CategoryGroup categoryGroup,
             String keywordName,
             String keywordImageUrl
-    ) {
-        public TopicDetail(Long topicId,
-                           String title,
-                           String category,
-                           CategoryGroup categoryGroup,
-                           Keyword keyword) {
-            this(
-                    topicId,
-                    title,
-                    category,
-                    categoryGroup,
-                    keyword != null ? keyword.getName() : null,
-                    keyword != null ? keyword.getImageUrl() : null
-            );
-        }
-    }
+    ) {}
 }
