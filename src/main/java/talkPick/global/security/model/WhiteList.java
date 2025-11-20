@@ -6,9 +6,8 @@ public final class WhiteList {
     public static final String[] PATHS = {
             "/api/v1/admin/signup",
             "/api/v1/admin/login",
-            "/api/v1/members/email/signup",
-            "/api/v1/members/email/login",
             "/api/v1/members/kakao/login",
+            "/api/v1/members/apple/login",
             "/api/v1/inquiry",
             "/swagger-ui/**",
             "/swagger-ui.html/**",

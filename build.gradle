@@ -43,6 +43,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    // Bouncy Castle 의존성
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.78.1'
+
     // JPA (MySQL) 관련 의존성
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
