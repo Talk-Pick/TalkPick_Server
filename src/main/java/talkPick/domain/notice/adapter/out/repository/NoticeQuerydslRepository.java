@@ -73,7 +73,7 @@ public class NoticeQuerydslRepository {
     }
 
     private BooleanBuilder buildCursorPredicate(NoticeReqDTO.Cursor cursor) {
-        BooleanBuilder builder = new BooleanBuilder();
+        var builder = new BooleanBuilder();
 
         if (cursor.cursorCreatedAt() != null && cursor.cursorId() != null) {
             builder.and(notice.createdDate

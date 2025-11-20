@@ -16,4 +16,9 @@ public class TodayTopicQueryRepositoryAdapter implements TodayTopicQueryReposito
     public List<TodayTopicResDTO.TodayTopic> findTodayTopics(Long memberId) {
         return todayTopicQuerydslRepository.findTodayTopics(memberId);
     }
+
+    @Override
+    public List<TodayTopicResDTO.TodayTopic> findTodayTopicsByDateOnly(Long memberId) {
+        return todayTopicQuerydslRepository.findTodayTopicsByDate(memberId);
+    }
 }
