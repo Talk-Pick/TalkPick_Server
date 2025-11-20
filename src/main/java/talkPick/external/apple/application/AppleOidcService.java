@@ -91,6 +91,7 @@ public class AppleOidcService implements AppleOidcUsecase {
         } catch (ExpiredJwtException e) {
             throw new AppleHandler(ErrorCode.EXPIRED_JWT_TOKEN);
         } catch (Exception e) {
+            log.error("Apple OAuth Error", e);
             throw new AppleHandler(ErrorCode.ERROR_ON_VERIFYING);
         }
     }
