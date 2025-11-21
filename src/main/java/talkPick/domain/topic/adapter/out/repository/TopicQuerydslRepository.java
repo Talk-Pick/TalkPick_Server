@@ -33,10 +33,12 @@ public class TopicQuerydslRepository {
         return queryFactory.select(Projections.constructor(TopicResDTO.TopicDetail.class,
                         topic.id,
                         topic.title,
+                        topic.detail,
                         category.title,
                         category.categoryGroup,
                         keyword.name,
-                        keyword.imageUrl
+                        keyword.imageUrl,
+                        topic.imageUrl
                 ))
                 .from(topic)
                 .leftJoin(category).on(topic.categoryId.eq(category.id))

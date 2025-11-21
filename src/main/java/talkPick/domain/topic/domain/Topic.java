@@ -23,6 +23,9 @@ public class Topic extends BaseTime {
     @Column(name = "detail", nullable = false, length = 1000, columnDefinition = "VARCHAR(1000) COMMENT 'Topic 상세 내용'")
     private String detail;
 
+    @Column(name = "image_url", nullable = true, length = 500, columnDefinition = "VARCHAR(500) COMMENT 'Topic 이미지 URL'")
+    private String imageUrl;
+
     @Column(name = "category_id", nullable = false, columnDefinition = "BIGINT COMMENT '카테고리 ID'")
     private Long categoryId;
 
@@ -32,14 +35,4 @@ public class Topic extends BaseTime {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(20) COMMENT 'Topic 상태'")
     private TalkPickStatus status;
-
-    public static Topic of(String title, String detail, Long categoryId, Long keywordId) {
-        return Topic.builder()
-                .title(title)
-                .detail(detail)
-                .categoryId(categoryId)
-                .keywordId(keywordId)
-                .status(TalkPickStatus.ACTIVE)
-                .build();
-    }
 }
