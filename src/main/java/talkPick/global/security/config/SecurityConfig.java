@@ -1,8 +1,10 @@
 package talkPick.global.security.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,8 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import talkPick.domain.admin.adapter.out.repository.AdminJpaRepository;
-import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
 import talkPick.global.config.CorsFilter;
 import talkPick.global.security.handler.ExceptionHandlerFilter;
 import talkPick.global.security.handler.JwtAuthenticationEntryPoint;
@@ -27,21 +27,15 @@ import static talkPick.global.security.model.WhiteList.PATHS;
 @RequiredArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtProvider jwtProvider;
-    private final ExceptionHandlerFilter exceptionHandlerFilter;
     private final CorsFilter corsFilter;
-    private final AdminJpaRepository adminJpaRepository;
-    private final MemberJpaRepository memberJpaRepository;
+    private final JwtProvider jwtProvider;
+    private final ObjectMapper objectMapper;
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtProvider, adminJpaRepository, memberJpaRepository);
     }
 
     @Bean
@@ -54,16 +48,19 @@ public class SecurityConfig {
                         sessionManagementConfigurer
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(
-                        exceptionHandlingConfigurer -> exceptionHandlingConfigurer.authenticationEntryPoint(jwtAuthenticationEntryPoint))
-                .authorizeHttpRequests(registry ->
-                        registry
-                                .requestMatchers(PATHS).permitAll()
-                                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                                .anyRequest().authenticated()
+                        exceptionHandlingConfigurer ->
+                                exceptionHandlingConfigurer.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                .authorizeHttpRequests(
+                        authorizationManagerRequestMatcherRegistry ->
+                                authorizationManagerRequestMatcherRegistry
+                                        .requestMatchers(PATHS).permitAll() // whiteList는 인증 없이 접근 가능
+                                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                        .anyRequest().authenticated()
                 )
-                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class)
+                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class) // CORS 필터는 제일 앞에 실행
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider, objectMapper),
+                        UsernamePasswordAuthenticationFilter.class) // JWT 인증 필터 추가
+                .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class) // 예외 처리 필터는 JWT 필터보다 먼저 실행
                 .build();
     }
 

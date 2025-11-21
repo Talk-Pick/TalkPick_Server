@@ -43,14 +43,13 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    // Bouncy Castle 의존성
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.78.1'
+
     // JPA (MySQL) 관련 의존성
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'mysql:mysql-connector-java:8.0.33'
-
-    // Redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     // Jackson
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
@@ -88,8 +87,10 @@ dependencies {
     implementation 'org.springframework.security:spring-security-crypto'
 
     // Monitoring
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    // Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     // WebFlux
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
@@ -103,11 +104,17 @@ dependencies {
     // Bucket4j
     implementation group: 'com.github.vladimir-bukhtoyarov', name: 'bucket4j-core', version: '7.6.0'
 
+    // Cache
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+
     // Caffeine
     implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '3.2.1'
 
     // Resilience4j
     implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.1.0'
+
+    // Jackson
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }
 
 test {

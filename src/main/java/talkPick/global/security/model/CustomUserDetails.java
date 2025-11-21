@@ -3,9 +3,8 @@ package talkPick.global.security.model;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import talkPick.domain.admin.domain.Admin;
-import talkPick.domain.admin.domain.type.Role;
 import talkPick.domain.member.domain.Member;
+import talkPick.domain.member.domain.type.Role;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,16 +19,16 @@ public class CustomUserDetails implements UserDetails {
     @Getter
     private final Role role;
 
-    public CustomUserDetails(Admin admin) {
-        this.id = admin.getId();
-        this.password = admin.getAuthInfo().getPassword();
-        this.name = admin.getName();
-        this.role = admin.getRole();
-    }
+//    public CustomUserDetails(Admin admin) {
+//        this.id = admin.getId();
+//        this.password = admin.getAuthInfo().getPassword();
+//        this.name = admin.getName();
+//        this.role = admin.getRole();
+//    }
 
     public CustomUserDetails(Member member) {
         this.id = member.getId();
-        this.name = member.getName();
+        this.name = member.getNickname();
         this.password = member.getPassword();
         this.role = member.getMemberRole();
     }

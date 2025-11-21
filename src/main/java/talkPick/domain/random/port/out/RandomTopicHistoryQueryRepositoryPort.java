@@ -1,11 +1,8 @@
 package talkPick.domain.random.port.out;
 
-import talkPick.domain.random.adapter.out.dto.RandomResDTO;
-import talkPick.domain.random.dto.RandomTopicHistoryDataDTO;
-
-import java.util.List;
+import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
+import talkPick.domain.random.domain.RandomTopicHistory;
 
 public interface RandomTopicHistoryQueryRepositoryPort {
-    RandomResDTO.Result getResult(Long randomId);
-    List<RandomTopicHistoryDataDTO > getRandomTopicHistoriesByRandomId(Long randomId);
+    RandomTopicHistory getRandomTopicHistoryByMemberIdAndRandomIdAndOrder(Long memberId, Long randomId, RandomReqDTO.Next requestDTO);
 }

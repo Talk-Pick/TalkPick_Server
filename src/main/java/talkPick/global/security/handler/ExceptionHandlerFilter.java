@@ -11,11 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import talkPick.global.response.ApiResponse;
 import talkPick.global.security.constants.AuthConstants;
 import talkPick.global.exception.ErrorCode;
-import talkPick.global.response.ErrorResponse;
 import talkPick.global.security.exception.UnauthorizedException;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -44,6 +43,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
     private void handleException(HttpServletResponse response, Exception e) throws IOException {
         setResponse(response, HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.INTERNAL_SERVER_ERROR);
+        log.error("[handleException] {}", e.getMessage(), e);
     }
 
     private void setResponse(HttpServletResponse response, HttpStatus httpStatus, ErrorCode errorCode) throws IOException {
@@ -51,6 +51,6 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         response.setCharacterEncoding(AuthConstants.CHARACTER_TYPE);
         response.setStatus(httpStatus.value());
         PrintWriter writer = response.getWriter();
-        writer.write(objectMapper.writeValueAsString(ErrorResponse.of(errorCode)));
+        writer.write(objectMapper.writeValueAsString(ApiResponse.ofErrorCode(errorCode)));
     }
 }

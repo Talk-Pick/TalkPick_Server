@@ -1,39 +1,46 @@
 package talkPick.domain.random.adapter.in;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
-import talkPick.domain.random.adapter.out.dto.RandomResDTO;
-import talkPick.global.security.annotation.UserId;
-import java.util.List;
+import talkPick.global.security.annotation.MemberId;
 
+@Validated
 @RequestMapping("/api/v1/random")
-@Tag(name = "랜덤 대화 코스 API", description = "랜덤 대화 코스 관련 API 입니다.")
+@Tag(name = "랜덤 대화 주제 코스 API", description = "랜덤 대화 주제 코스 관련 API 입니다.")
 public interface RandomCommandApi {
     @PostMapping("/start")
-    @Operation(summary = "랜덤 토픽 1 : 랜덤 토픽 시작 API", description = "랜덤 토픽 1 : 랜덤 토픽 시작 API 입니다.")
-    void start(@UserId final Long memberId);
+    @Operation(summary = "랜덤 대화 주제 코스 시작 API", description = "랜덤 대화 주제 코스 시작 API 입니다. 랜덤 대화 주제 코스를 시작하게 될 때, 해당 API를 한 번 요청해 주세요.")
+    void start(@MemberId @Parameter(hidden = true) final Long memberId);
 
-    @PostMapping("/select-category")
-    @Operation(summary = "랜덤 토픽 3 : 카테고리 선택 API", description = "랜덤 토픽 3 : 카테고리 선택 API 입니다.")
-    List<RandomResDTO.RandomTopic> selectCategory(@UserId final Long memberId, RandomReqDTO.SelectCategory requestDTO);
+    @PostMapping("/{id}/next")
+    @Operation(summary = "랜덤 대화 주제 코스 다음 API", description = "랜덤 대화 주제 코스 다음 API 입니다. 랜덤 대화 주제 코스에서 다음으로 넘어갈 때마다, 해당 API를 한 번 요청해 주세요.")
+    void next(@MemberId @Parameter(hidden = true) final Long memberId, @PathVariable("id") @Parameter(description = "랜덤 대화 코스 고유 ID(randomId)", example = "42") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long randomId, @RequestBody RandomReqDTO.Next requestDTO);
 
-    @PostMapping("/select-topic")
-    @Operation(summary = "랜덤 토픽 5 : 토픽 선택 API", description = "랜덤 토픽 5 : 토픽 선택 API 입니다.")
-    List<RandomResDTO.RandomTopic> selectTopic(@UserId final Long memberId, RandomReqDTO.SelectTopic requestDTO);
+    @PostMapping("/{id}/quit")
+    @Operation(summary = "랜덤 대화 주제 코스 그만하기 API", description = "랜덤 대화 주제 코스 그만하기 API 입니다. 랜덤 대화 주제 코스를 중간에 그만둘 때, 해당 API를 한 번 요청해 주세요.")
+    void quit(@MemberId @Parameter(hidden = true) final Long memberId, @PathVariable("id") @Parameter(description = "랜덤 대화 코스 고유 ID(randomId)", example = "42") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long randomId);
 
-    @PostMapping("/quit/{randomId}")
-    @Operation(summary = "랜덤 토픽 6 : 랜덤 토픽 그만하기 API", description = "랜덤 토픽 6 : 랜덤 토픽 그만하기 API 입니다.")
-    void quit(@UserId Long memberId, @PathVariable("randomId") Long randomId);
+    @PostMapping("/{id}/end")
+    @Operation(summary = "랜덤 대화 주제 코스 종료 API", description = "랜덤 대화 주제 코스 종료 API 입니다. 랜덤 대화 주제 코스를 종료할 때, 해당 API를 한 번 요청해 주세요.")
+    void end(@MemberId @Parameter(hidden = true) final Long memberId, @PathVariable("id") @Parameter(description = "랜덤 대화 코스 고유 ID(randomId)", example = "42") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long randomId);
 
-    @PostMapping("/end/{randomId}")
-    @Operation(summary = "랜덤 토픽7 : 랜덤 토픽 종료 및 결과 보기 API", description = "랜덤 토픽 7 : 랜덤 토픽 종료 및 결과 보기 API 입니다.")
-    RandomResDTO.Result end(@UserId Long memberId, @PathVariable("randomId") Long randomId);
+    @PostMapping("/{id}/record")
+    @Operation(summary = "랜덤 대화 주제 코스 기록 API", description = "랜덤 대화 주제 코스 기록 API 입니다. 톡픽 선택할 때마다 기록을 위해, 해당 API를 한 번 요청해 주세요.")
+    void record(@MemberId @Parameter(hidden = true) final Long memberId, @PathVariable("id") @Parameter(description = "랜덤 대화 코스 고유 ID(randomId)", example = "42") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long randomId, @RequestBody RandomReqDTO.Record requestDTO);
 
-    @PostMapping("/save-result/{randomId}")
-    @Operation(summary = "랜덤 토픽 8 : 랜덤 토픽 결과 저장 API", description = "랜덤 토픽 8 : 랜덤 토픽 결과 저장 API 입니다.")
-    void saveResult(@UserId Long memberId, @PathVariable("randomId") Long randomId, RandomReqDTO.Result requestDTO);
+    @PostMapping("/{id}/rate")
+    @Operation(summary = "랜덤 대화 주제 코스 평점 저장 API", description = "랜덤 대화 주제 코스 평점 저장 API 입니다.")
+    void rate(@MemberId @Parameter(hidden = true) final Long memberId, @PathVariable("id") @Parameter(description = "랜덤 대화 코스 고유 ID(randomId)", example = "42") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long randomId, @RequestBody RandomReqDTO.Rate requestDTO);
+
+    @PostMapping("/{id}/comment")
+    @Operation(summary = "랜덤 대화 주제 코스 한 줄 평 저장 API", description = "랜덤 대화 주제 코스 한 줄 평 저장 API 입니다.")
+    void comment(@MemberId @Parameter(hidden = true) final Long memberId, @PathVariable("id") @Parameter(description = "랜덤 대화 코스 고유 ID(randomId)", example = "42") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long randomId, @RequestBody RandomReqDTO.Comment requestDTO);
 }

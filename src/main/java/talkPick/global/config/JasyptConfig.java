@@ -13,16 +13,16 @@ import talkPick.global.exception.TalkPickException;
 @EnableEncryptableProperties
 public class JasyptConfig {
 
-    @Value("${JASYPT_ADMIN_SECRET_KEY}")
+    @Value("${jasypt.admin.secret-key}")
     private String adminKey;
 
-    @Value("${JASYPT_MEMBER_SECRET_KEY}")
+    @Value("${jasypt.member.secret-key}")
     private String memberKey;
 
-    @Value("${JASYPT_ALGORITHM}")
+    @Value("${jasypt.algorithm}")
     private String algorithm;
 
-    @Value("${JASYPT_POOL_SIZE}")
+    @Value("${jasypt.pool-size}")
     private Integer poolSize;
 
     @Bean("adminEncryptor")

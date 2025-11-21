@@ -1,12 +1,15 @@
 # 💬 TalkPick Server
 
 ## 🖥️ 프로젝트 소개
+
 대화 주제 추천 서비스입니다.
 
 ## 🕰️ 개발 기간
-* 25.01.13 - 진행 중
+
+- 25.01.13 - 진행 중
 
 ## 🧑‍🤝‍🧑 멤버 구성
+
 <p>
     <a href="https://github.com/M-ung">
       <img src="https://avatars.githubusercontent.com/u/126846468?v=4" width="100">
@@ -20,6 +23,7 @@
 </p>
 
 ## ⚙️ 개발 환경
+
 - `Java 21`
 - **IDE** : IntelliJ IDEA
 - **Framework** : Springboot(3.3.7)
@@ -29,3 +33,4 @@
 ## 🟢 ERD
 
 ## 🛠️ 아키텍처 구조
+<img width="1211" height="506" alt="talkpick-architecture" src="https://github.com/user-attachments/assets/eb59b801-c3ce-4965-a8f0-3373f6f116b6" />

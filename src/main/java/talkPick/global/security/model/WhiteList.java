@@ -6,17 +6,15 @@ public final class WhiteList {
     public static final String[] PATHS = {
             "/api/v1/admin/signup",
             "/api/v1/admin/login",
-            "/api/v1/member/login",
-            "/oauth/kakao/authorize",
-            "/api/v1/topic/kakao",
-            "/api/v1/topic/additional",
-            "/api/v1/topic",
-            "/mbti-form.html",
+            "/api/v1/members/kakao/login",
+            "/api/v1/members/apple/login",
+            "/api/v1/inquiry",
             "/swagger-ui/**",
             "/swagger-ui.html/**",
             "/swagger-resources/**",
             "/v3/api-docs/**",
             "/favicon.ico",
-            "/test"
+            "/test",
+            "/actuator/health/**"
     };
 }

@@ -34,11 +34,11 @@ public class SpringDocOpenApiConfig {
     }
 
 //    @Bean
-//    public GroupedOpenApi memberOpenApi() {
+//    public GroupedOpenApi healthCheckOpenApi() {
 //        return GroupedOpenApi.builder()
-//                .group("Member")
-//                .displayName("Member")
-//                .pathsToMatch("/api/v1/member/my-page/**")
+//                .group("HealthCheck API")
+//                .displayName("HealthCheck API")
+//                .pathsToMatch("/actuator/health/**")
 //                .build();
 //    }
 
@@ -51,14 +51,14 @@ public class SpringDocOpenApiConfig {
                 .build();
     }
 
-    @Bean
-    public GroupedOpenApi searchOpenApi() {
-        return GroupedOpenApi.builder()
-                .group("톡픽 검색 API")
-                .displayName("톡픽 검색 API")
-                .pathsToMatch("/api/v1/search/**")
-                .build();
-    }
+//    @Bean
+//    public GroupedOpenApi searchOpenApi() {
+//        return GroupedOpenApi.builder()
+//                .group("톡픽 검색 API")
+//                .displayName("톡픽 검색 API")
+//                .pathsToMatch("/api/v1/search/**")
+//                .build();
+//    }
 
     @Bean
     public GroupedOpenApi randomOpenApi() {
@@ -66,6 +66,33 @@ public class SpringDocOpenApiConfig {
                 .group("랜덤 대화 코스 API")
                 .displayName("랜덤 대화 코스 API")
                 .pathsToMatch("/api/v1/random/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi noticeOpenApi() {
+        return GroupedOpenApi.builder()
+                .group("공지사항 API")
+                .displayName("공지사항 API")
+                .pathsToMatch("/api/v1/notices/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi signupOpenApi() {
+        return GroupedOpenApi.builder()
+                .group("사용자 API")
+                .displayName("사용자 API")
+                .pathsToMatch("/api/v1/members/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi inquiryOpenApi() {
+        return GroupedOpenApi.builder()
+                .group("문의 API")
+                .displayName("문의 API")
+                .pathsToMatch("/api/v1/inquiry/**")
                 .build();
     }
 }

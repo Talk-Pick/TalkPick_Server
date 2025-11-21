@@ -2,7 +2,7 @@ package talkPick.domain.topic.adapter.out;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import talkPick.domain.random.adapter.out.repository.TopicStatJpaRepository;
+import talkPick.domain.topic.adapter.out.repository.TopicStatJpaRepository;
 import talkPick.domain.topic.domain.TopicStat;
 import talkPick.domain.topic.port.out.TopicStatCommandRepositoryPort;
 
@@ -14,5 +14,10 @@ public class TopicStatCommandRepositoryAdapter implements TopicStatCommandReposi
     @Override
     public void save(Long topicId) {
         topicStatJpaRepository.save(TopicStat.of(topicId));
+    }
+
+    @Override
+    public void incrementLikeCount(Long topicId) {
+        topicStatJpaRepository.incrementLikeCount(topicId);
     }
 }
