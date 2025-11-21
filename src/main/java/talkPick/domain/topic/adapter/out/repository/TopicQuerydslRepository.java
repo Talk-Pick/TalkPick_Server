@@ -37,7 +37,8 @@ public class TopicQuerydslRepository {
                         category.title,
                         category.categoryGroup,
                         keyword.name,
-                        keyword.imageUrl
+                        keyword.imageUrl,
+                        topic.imageUrl
                 ))
                 .from(topic)
                 .leftJoin(category).on(topic.categoryId.eq(category.id))

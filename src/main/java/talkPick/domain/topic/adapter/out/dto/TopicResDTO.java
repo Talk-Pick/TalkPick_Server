@@ -23,6 +23,7 @@ public class TopicResDTO {
             String category,
             CategoryGroup categoryGroup,
             String keywordName,
-            String keywordImageUrl
+            String keywordImageUrl,
+            String topicImageUrl
     ) {}
 }
