@@ -5,8 +5,6 @@ public class TodayTopicResDTO {
     public record TodayTopic(
             Long topicId,
             String title,
-            long averageTalkTime,
-            int selectCount,
             String category,
             String keywordName,
             String keywordIconUrl

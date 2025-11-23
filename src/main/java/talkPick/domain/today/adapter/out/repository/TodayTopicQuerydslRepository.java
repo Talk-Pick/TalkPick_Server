@@ -37,8 +37,6 @@ public class TodayTopicQuerydslRepository {
         return queryFactory.select(Projections.constructor(TodayTopicResDTO.TodayTopic.class,
                         topic.id,
                         topic.title,
-                        topicStat.averageTalkTime,
-                        topicStat.selectCount,
                         category.title,
                         keyword.name,
                         keyword.iconUrl
@@ -75,8 +73,6 @@ public class TodayTopicQuerydslRepository {
         return queryFactory.select(Projections.constructor(TodayTopicResDTO.TodayTopic.class,
                         topic.id,
                         topic.title,
-                        topicStat.averageTalkTime,
-                        topicStat.selectCount,
                         category.title,
                         keyword.name,
                         keyword.iconUrl
