@@ -42,7 +42,6 @@ public class MemberCommandService implements MemberCommandUseCase {
     private final MemberLoginHistoryCommandRepositoryPort memberLoginHistoryRepository;
     private final MemberQueryRepositoryPort memberQueryRepositoryPort;
     private final JwtProvider jwtProvider;
-    private final PasswordEncoder passwordEncoder;
     private final MemberTopicResultJpaRepository memberTopicResultJpaRepository;
 
     /**
@@ -66,45 +65,6 @@ public class MemberCommandService implements MemberCommandUseCase {
 
         return MemberConverter.toProfileUpdateResponse(findMember);
     }
-
-    /**
-     * 이메일 회원 신규 생성
-     */
-//    @Override
-//    public Member findOrCreateEmailMember(MemberReqDto.MemberEmailRequest emailReqDto) {
-//        validatePassword(emailReqDto.getPassword());
-//
-//        if (memberCommandRepositoryPort.findByEmail(emailReqDto.getEmail()).isPresent()) {
-//            throw new MemberExceptionHandler(ErrorCode.MEMBER_EMAIL_ALREADY_EXISTS);
-//        }
-//
-//        Member newMember = MemberConverter.toEmailMember(emailReqDto);
-//
-//        // 비밀번호 암호화
-//        newMember.updatePassword(passwordEncoder.encode(emailReqDto.getPassword()));
-//        return memberCommandRepositoryPort.save(newMember);
-//    }
-
-    /**
-     * 이메일 로그인 처리 (비밀번호 검증 및 로그인 이력 기록)
-     */
-//    @Override
-//    public Member loginEmailMember(MemberReqDto.MemberEmailRequest emailReqDto) {
-//        validatePassword(emailReqDto.getPassword());
-//
-//        Member member = memberCommandRepositoryPort.findByEmail(emailReqDto.getEmail())
-//                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
-//
-//        // 비밀번호 복호화 및 검증
-//        if (!passwordEncoder.matches(emailReqDto.getPassword(), member.getPassword())) {
-//            throw new MemberExceptionHandler(ErrorCode.INVALID_PASSWORD);
-//        }
-//
-//        MemberLoginHistory loginHistory = MemberConverter.toLoginHistory(member);
-//        memberLoginHistoryRepository.save(loginHistory);
-//
-//        return member;
-//    }
 
     /**
      * 멤버 데이터로 기존 회원 조회 또는 신규 생성

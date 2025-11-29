@@ -1,19 +1,15 @@
 package talkPick.domain.member.adapter.in;
 
-import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import talkPick.domain.member.adapter.in.dto.MemberReqDto;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.domain.member.domain.type.LoginType;
-import talkPick.external.apple.application.AppleOidcService;
 import talkPick.external.apple.port.in.AppleOidcUsecase;
 import talkPick.external.kakao.port.in.KakaoOidcUsecase;
 import talkPick.global.security.jwt.dto.JwtResDTO;
-import talkPick.external.kakao.application.KakaoOidcService;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.dto.*;
 import talkPick.domain.member.port.in.MemberCommandUseCase;
@@ -32,21 +28,6 @@ public class MemberCommandController implements MemberCommandApi {
     private final MemberCommandUseCase memberCommandUseCase;
     private final JwtTokenCommandUseCase jwtTokenCommandUseCase;
 
-//    @Override
-//    public JwtResDTO.Login joinEmailMember(
-//            @Valid @RequestBody MemberReqDto.MemberEmailRequest memberReqDto
-//    ) {
-//        Member member = memberCommandUseCase.findOrCreateEmailMember(memberReqDto);
-//        return jwtTokenCommandUseCase.generateToken(member);
-//    }
-//
-//    @Override
-//    public JwtResDTO.Login emailLogin(
-//            @Valid @RequestBody MemberReqDto.MemberEmailRequest memberReqDto
-//    ) {
-//        Member member = memberCommandUseCase.loginEmailMember(memberReqDto);
-//        return jwtTokenCommandUseCase.generateToken(member);
-//    }
 
     @Override
     public JwtResDTO.Login kakaoOAuth2Login(
