@@ -68,7 +68,7 @@ public class MemberCommandController implements MemberCommandApi {
     }
 
     @Override
-    public MemberResDto.ProfileUpdateResponse updateProfile(
+    public MemberResDto.MemberProfileResponse updateProfile(
             @RequestHeader(value = "Authorization", required = false) String authorization,
             MemberReqDto.ProfileUpdateRequest request
     ) {

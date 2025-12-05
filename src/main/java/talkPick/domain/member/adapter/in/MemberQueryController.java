@@ -18,7 +18,7 @@ public class MemberQueryController implements MemberQueryApi {
     private final MemberQueryUseCase memberQueryUseCase;
 
     @Override
-    public MemberResDto.ProfileResponse getProfile(
+    public MemberResDto.MemberProfileResponse getProfile(
             @RequestHeader(value = "Authorization", required = false) String authorization) {
         return memberQueryUseCase.getProfile(authorization);
     }

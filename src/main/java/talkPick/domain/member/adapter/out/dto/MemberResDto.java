@@ -37,10 +37,8 @@ public class MemberResDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class ProfileResponse {
+    public static class MemberProfileResponse {
         private String nickname;
-        private String profileImgUrl;
-        private Gender gender;
         private MBTI mbti;
     }
 
@@ -65,17 +63,5 @@ public class MemberResDto {
         private String keyword; //키워드 (Topickeyword 테이블)
         private Category category; //카테고리 (TopicCategory 테이블)
         private LocalDateTime createdDate; // 좋아요 누른 시간
-    }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class ProfileUpdateResponse {
-        private String nickname;
-        private String gender;
-        private String birth;
-        private String message;
-        private String mbti;
     }
 }
