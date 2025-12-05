@@ -48,22 +48,19 @@ public class MemberCommandService implements MemberCommandUseCase {
      * 회원 프로필 수정
      */
     @Override
-    public MemberResDto.ProfileUpdateResponse updateProfile(String authorization, MemberReqDto.ProfileUpdateRequest request) {
+    public MemberResDto.MemberProfileResponse updateProfile(String authorization, MemberReqDto.ProfileUpdateRequest request) {
         Long memberId = jwtProvider.getMemberId(authorization);
 
         // 회원 조회
         Member findMember = memberCommandRepositoryPort.findById(memberId)
                 .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
-        System.out.println("회원 이름 :" + request.getNickname());
+
         // 요청된 필드별 수정 처리
-        if (request.getNickname() != null) findMember.updateNickname(request.getNickname());
-        if (request.getGender() != null) findMember.updateGender(request.getGender());
-        if (request.getBirth() != null) findMember.updateBirth(request.getBirth());
         if (request.getMbti() != null) findMember.updateMbti(request.getMbti());
 
         memberCommandRepositoryPort.save(findMember);
 
-        return MemberConverter.toProfileUpdateResponse(findMember);
+        return MemberConverter.toMemberProfileResponse(findMember);
     }
 
     /**
