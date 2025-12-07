@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import talkPick.domain.member.adapter.in.dto.MemberReqDto;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.global.security.jwt.dto.JwtResDTO;
-
 @RequestMapping("/api/v1/members")
 @Tag(name = "유저 API", description = "유저 관련 API 입니다.")
 public interface MemberCommandApi {
