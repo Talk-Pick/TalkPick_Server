@@ -31,7 +31,7 @@ public class MemberQueryService implements MemberQueryUseCase {
 
     // 회원 프로필 조회 로직
     @Override
-    public MemberResDto.ProfileResponse getProfile(String authorization) {
+    public MemberResDto.MemberProfileResponse getProfile(String authorization) {
         // JWT 토큰에서 회원 ID 추출
         Long memberId = jwtProvider.getMemberId(authorization);
 
@@ -39,7 +39,7 @@ public class MemberQueryService implements MemberQueryUseCase {
         Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
         // 조회된 회원 정보를 DTO로 변환 후 반환
-        return MemberConverter.toProfileResponse(findMember);
+        return MemberConverter.toMemberProfileResponse(findMember);
     }
 
     /**

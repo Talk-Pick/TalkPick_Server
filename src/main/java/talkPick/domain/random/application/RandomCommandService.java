@@ -14,7 +14,7 @@ import talkPick.domain.random.port.out.*;
 public class RandomCommandService implements RandomCommandUseCase {
     private final RandomQueryRepositoryPort randomQueryRepositoryPort;
     private final RandomCommandRepositoryPort randomCommandRepositoryPort;
-    private final RandomTopicHistoryCommandRepositoryPort randomTopicCommandRepositoryPort;
+    private final RandomTopicHistoryCommandRepositoryPort randomTopicHistoryCommandRepositoryPort;
     private final RandomTopicHistoryQueryRepositoryPort randomTopicHistoryQueryRepositoryPort;
 
     @Override
@@ -39,7 +39,7 @@ public class RandomCommandService implements RandomCommandUseCase {
 
     @Override
     public void record(Long memberId, Long randomId, RandomReqDTO.Record requestDTO) {
-        randomTopicCommandRepositoryPort.record(memberId, randomId, requestDTO);
+        randomTopicHistoryCommandRepositoryPort.record(memberId, randomId, requestDTO);
     }
 
     @Override

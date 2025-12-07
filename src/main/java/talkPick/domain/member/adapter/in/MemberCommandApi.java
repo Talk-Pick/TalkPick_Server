@@ -11,19 +11,6 @@ import talkPick.global.security.jwt.dto.JwtResDTO;
 @RequestMapping("/api/v1/members")
 @Tag(name = "유저 API", description = "유저 관련 API 입니다.")
 public interface MemberCommandApi {
-
-//    @PostMapping("/email/signup")
-//    @Operation(summary = "이메일 회원가입", description = "이메일, 비밀번호 등으로 회원가입을 처리합니다. 회원가입 후 약관 동의와 추가 정보 입력이 필요합니다.")
-//    JwtResDTO.Login joinEmailMember(
-//            @Parameter(description = "회원가입 요청 DTO", required = true)
-//            @Valid @RequestBody MemberReqDto.MemberEmailRequest memberReqDto);
-//
-//    @PostMapping("/email/login")
-//    @Operation(summary = "이메일 로그인", description = "이메일, 비밀번호로 로그인을 처리합니다.")
-//    JwtResDTO.Login emailLogin(
-//            @Parameter(description = "로그인 요청 DTO", required = true)
-//            @Valid @RequestBody MemberReqDto.MemberEmailRequest memberReqDto);
-
     @PostMapping("/kakao/login")
     @Operation(summary = "KAKAO OAuth2 로그인 API", description = "KAKAO OAuth2 로그인 API 입니다.")
     JwtResDTO.Login kakaoOAuth2Login(
@@ -39,7 +26,7 @@ public interface MemberCommandApi {
             @Valid @RequestBody MemberReqDto.RefreshAccessTokenRequest request);
 
     @PatchMapping("/signup")
-    @Operation(summary = "회원가입 완료 API (이메일, OAuth 공통 - 회원가입 시 마지막 단계)", description = "회원의 추가 정보(닉네임, MBTI, 성별, 생년월일, 프로필 이미지)를 입력하여 회원가입을 완료하는 API입니다.")
+    @Operation(summary = "회원가입 완료 API (OAuth 공통 - 회원가입 시 마지막 단계)", description = "회원의 추가 정보(닉네임, MBTI, 성별, 생년월일, 프로필 이미지)를 입력하여 회원가입을 완료하는 API입니다.")
     MemberResDto.MemberSignupResponse signup(
             @RequestHeader(value = "Authorization", required = false) String authorization,
             @Valid @RequestBody MemberReqDto.MemberSignupRequest request);
@@ -51,8 +38,8 @@ public interface MemberCommandApi {
             @Valid @RequestBody MemberReqDto.TermAgreementRequest request);
 
     @PatchMapping("/me")
-    @Operation(summary = "프로필 수정 API", description = "회원의 프로필 정보(닉네임, 성별, 생년월일, MBTI)를 수정하는 API입니다.")
-    MemberResDto.ProfileUpdateResponse updateProfile(
+    @Operation(summary = "프로필 정보 수정 API", description = "회원의 프로필 정보를 수정하는 API입니다.")
+    MemberResDto.MemberProfileResponse updateProfile(
             @RequestHeader(value = "Authorization", required = false) String authorization,
             @RequestBody @Valid MemberReqDto.ProfileUpdateRequest request);
 

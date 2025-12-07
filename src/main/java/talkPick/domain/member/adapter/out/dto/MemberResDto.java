@@ -37,10 +37,8 @@ public class MemberResDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class ProfileResponse {
+    public static class MemberProfileResponse {
         private String nickname;
-        private String profileImgUrl;
-        private Gender gender;
         private MBTI mbti;
     }
 
@@ -62,22 +60,8 @@ public class MemberResDto {
     public static class MemberLikedTopicResDto {
         private Long id; // 좋아요 누른 토픽 id (TopicLikeHistory 테이블)
         private String title;  //토픽 주제 (Topic 테이블)
-        private long averageTalkTime; //평균 대화 시간 (Topic 테이블)
-        private Integer selectCount; //선택된 횟수 (Topic 테이블)
         private String keyword; //키워드 (Topickeyword 테이블)
         private Category category; //카테고리 (TopicCategory 테이블)
         private LocalDateTime createdDate; // 좋아요 누른 시간
-    }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class ProfileUpdateResponse {
-        private String nickname;
-        private String gender;
-        private String birth;
-        private String message;
-        private String mbti;
     }
 }
