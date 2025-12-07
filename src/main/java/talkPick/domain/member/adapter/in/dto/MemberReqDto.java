@@ -50,11 +50,15 @@ public class MemberReqDto {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class MbtiUpdateRequest {
+        private MBTI mbti;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class ProfileUpdateRequest {
-        @Size(max = 25, message = "닉네임은 최대 25자입니다.")
-        private String nickname;
-        private Gender gender;
-        private LocalDate birth;
         private MBTI mbti;
     }
 

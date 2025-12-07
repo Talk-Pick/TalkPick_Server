@@ -3,7 +3,6 @@ package talkPick.domain.member.adapter.in;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
@@ -19,7 +18,7 @@ public class MemberQueryController implements MemberQueryApi {
     private final MemberQueryUseCase memberQueryUseCase;
 
     @Override
-    public MemberResDto.ProfileResponse getProfile(
+    public MemberResDto.MemberProfileResponse getProfile(
             @RequestHeader(value = "Authorization", required = false) String authorization) {
         return memberQueryUseCase.getProfile(authorization);
     }
