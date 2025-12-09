@@ -12,7 +12,7 @@ public class RandomCommandRepositoryAdapter implements RandomCommandRepositoryPo
     private final RandomJpaRepository randomJpaRepository;
 
     @Override
-    public void save(Random random) {
-        randomJpaRepository.save(random);
+    public Random save(Random random) {
+        return randomJpaRepository.save(random);
     }
 }
