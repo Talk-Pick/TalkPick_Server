@@ -1,5 +1,7 @@
 package talkPick.domain.member.adapter.in;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,24 +33,52 @@ public class MemberCommandController implements MemberCommandApi {
 
     @Override
     public JwtResDTO.Login kakaoOAuth2Login(
-            @Valid @RequestBody MemberReqDto.OAuth2LoginRequest request
+            @Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response
     ) {
         MemberDataDto.MemberData kakaoMemberData = kakaoOidcService.verifyAndParseIdToken(request);
         Member member = memberCommandUseCase.findOrCreateMember(kakaoMemberData, LoginType.KAKAO);
-        return jwtTokenCommandUseCase.generateToken(member);
+        JwtResDTO.GeneratedTokens generatedTokens = jwtTokenCommandUseCase.generateToken(member);
+
+        setRefreshTokenCookie(response, generatedTokens.refreshToken(), generatedTokens.refreshExpiredTime());
+
+        return JwtResDTO.Login.of(
+                member.getId(),
+                member.getMemberRole().toString(),
+                generatedTokens.accessToken(),
+                generatedTokens.accessExpiredTime()
+        );
     }
 
-    public JwtResDTO.Login appleOauth2Login (@Valid @RequestBody MemberReqDto.OAuth2LoginRequest request) {
+    public JwtResDTO.Login appleOauth2Login (@Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response) {
         MemberDataDto.MemberData appleMemberData = appleOidcService.verifyAndParseIdToken(request);
         Member member = memberCommandUseCase.findOrCreateMember(appleMemberData, LoginType.APPLE);
-        return jwtTokenCommandUseCase.generateToken(member);
+        JwtResDTO.GeneratedTokens generatedTokens = jwtTokenCommandUseCase.generateToken(member);
+
+        setRefreshTokenCookie(response, generatedTokens.refreshToken(), generatedTokens.refreshExpiredTime());
+
+        return JwtResDTO.Login.of(
+                member.getId(),
+                member.getMemberRole().toString(),
+                generatedTokens.accessToken(),
+                generatedTokens.accessExpiredTime()
+        );
+    }
+
+    // refresh token을 HttpOnly 쿠키로 설정하는 헬퍼 메서드
+    private void setRefreshTokenCookie(HttpServletResponse response, String refreshToken, Long refreshExpiredTime) {
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setSecure(true); // HTTPS를 사용하는 프로덕션 환경에서는 true로 설정
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(refreshExpiredTime.intValue());
+        response.addCookie(refreshTokenCookie);
     }
 
     @Override
     public JwtResDTO.AccessToken refreshAccessToken(
-            @Valid @RequestBody MemberReqDto.RefreshAccessTokenRequest request
+            @CookieValue("refreshToken") String refreshToken
     ) {
-        return jwtTokenCommandUseCase.refreshAccessToken(request);
+        return jwtTokenCommandUseCase.refreshAccessToken(refreshToken);
     }
 
     @Override
