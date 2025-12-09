@@ -5,8 +5,8 @@ import talkPick.domain.member.adapter.in.dto.MemberReqDto;
 import talkPick.global.security.jwt.dto.JwtResDTO;
 
 public interface JwtTokenCommandUseCase {
-    JwtResDTO.Login generateToken(Member member);
-    JwtResDTO.AccessToken refreshAccessToken(MemberReqDto.RefreshAccessTokenRequest request);
+    JwtResDTO.GeneratedTokens generateToken(Member member);
+    JwtResDTO.AccessToken refreshAccessToken(String refreshToken);
 }
 
 
