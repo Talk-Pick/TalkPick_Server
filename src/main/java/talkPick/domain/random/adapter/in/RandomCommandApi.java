@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
+import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.global.security.annotation.MemberId;
 
 @Validated
@@ -18,7 +19,7 @@ import talkPick.global.security.annotation.MemberId;
 public interface RandomCommandApi {
     @PostMapping("/start")
     @Operation(summary = "랜덤 대화 주제 코스 시작 API", description = "랜덤 대화 주제 코스 시작 API 입니다. 랜덤 대화 주제 코스를 시작하게 될 때, 해당 API를 한 번 요청해 주세요.")
-    void start(@MemberId @Parameter(hidden = true) final Long memberId);
+    RandomResDTO.RandomStart start(@MemberId @Parameter(hidden = true) final Long memberId);
 
     @PostMapping("/{id}/next")
     @Operation(summary = "랜덤 대화 주제 코스 다음 API", description = "랜덤 대화 주제 코스 다음 API 입니다. 랜덤 대화 주제 코스에서 다음으로 넘어갈 때마다, 해당 API를 한 번 요청해 주세요.")

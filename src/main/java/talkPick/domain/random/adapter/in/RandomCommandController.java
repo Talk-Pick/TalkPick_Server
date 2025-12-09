@@ -3,6 +3,7 @@ package talkPick.domain.random.adapter.in;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
+import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.port.in.RandomCommandUseCase;
 
 @RestController
@@ -11,8 +12,8 @@ public class RandomCommandController implements RandomCommandApi {
     private final RandomCommandUseCase randomCommandUseCase;
 
     @Override
-    public void start(Long memberId) {
-        randomCommandUseCase.start(memberId);
+    public RandomResDTO.RandomStart start(Long memberId) {
+        return randomCommandUseCase.start(memberId);
     }
 
     @Override
