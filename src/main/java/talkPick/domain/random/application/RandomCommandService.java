@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
+import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.domain.Random;
 import talkPick.domain.random.port.in.RandomCommandUseCase;
 import talkPick.domain.random.port.out.*;
@@ -18,8 +19,10 @@ public class RandomCommandService implements RandomCommandUseCase {
     private final RandomTopicHistoryQueryRepositoryPort randomTopicHistoryQueryRepositoryPort;
 
     @Override
-    public void start(Long memberId) {
-        randomCommandRepositoryPort.save(Random.from(memberId));
+    public RandomResDTO.RandomStart start(Long memberId) {
+        return RandomResDTO.RandomStart.from(
+                randomCommandRepositoryPort.save(Random.from(memberId)).getId()
+        );
     }
 
     @Override
