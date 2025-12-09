@@ -24,13 +24,6 @@ public class JwtProvider {
     private final RefreshTokenGenerator refreshTokenGenerator;
 
 
-    public JwtResDTO.Login createJwt(final Member member) {
-        return JwtResDTO.Login.of(
-                jwtGenerator.generateAccessToken(member.getId(), member.getMemberRole().toString()),
-                refreshTokenGenerator.generateRefreshToken(member)
-        );
-    }
-
     public Long getMemberIdFromToken(String token) {
         try {
             var subject = jwtGenerator.parseToken(token).getBody().getSubject();
