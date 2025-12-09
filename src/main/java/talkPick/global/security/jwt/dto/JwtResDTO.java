@@ -1,7 +1,5 @@
 package talkPick.global.security.jwt.dto;
 
-import talkPick.global.security.jwt.RefreshToken;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -10,18 +8,14 @@ public class JwtResDTO {
             Long memberId,
             String role,
             String accessToken,
-            String refreshToken,
-            Long accessExpiredTime,
-            Long refreshExpiredTime
+            Long accessExpiredTime
     ){
-        public static Login of(final AccessToken accessToken, final RefreshToken refreshToken) {
+        public static Login of(final Long memberId, final String role, final String accessToken, final Long accessExpiredTime) {
             return new Login(
-                    refreshToken.getMember().getId(),
-                    refreshToken.getMember().getMemberRole().toString(),
-                    accessToken.accessToken,
-                    refreshToken.getToken(),
-                    accessToken.accessExpiredTime,
-                    refreshToken.getExpiredAt().atZone(ZoneId.systemDefault()).toEpochSecond()
+                    memberId,
+                    role,
+                    accessToken,
+                    accessExpiredTime
             );
         }
     }
@@ -41,4 +35,11 @@ public class JwtResDTO {
             );
         }
     }
+
+    public record GeneratedTokens(
+        String accessToken,
+        String refreshToken,
+        Long accessExpiredTime,
+        Long refreshExpiredTime
+    ) {}
 }
