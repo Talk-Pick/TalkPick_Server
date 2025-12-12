@@ -3,6 +3,7 @@ package talkPick.domain.member.adapter.in;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import talkPick.domain.member.adapter.in.dto.MemberReqDto;
@@ -14,16 +15,16 @@ public interface MemberCommandApi {
     @PostMapping("/kakao/login")
     @Operation(summary = "KAKAO OAuth2 로그인 API", description = "KAKAO OAuth2 로그인 API 입니다.")
     JwtResDTO.Login kakaoOAuth2Login(
-            @Valid @RequestBody MemberReqDto.OAuth2LoginRequest request);
+            @Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response);
 
     @PatchMapping("/apple/login")
     @Operation(summary = "APPLE Oauth2 로그인 API", description = "APPLE OAuth2 로그인 API 입니다.")
-    JwtResDTO.Login appleOauth2Login (@Valid @RequestBody MemberReqDto.OAuth2LoginRequest request);
+    JwtResDTO.Login appleOauth2Login (@Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response);
 
     @PostMapping("/token/refresh")
-    @Operation(summary = "액세스 토큰 재발급", description = "리프레시 토큰으로 액세스 토큰을 재발급합니다.")
+    @Operation(summary = "액세스 토큰 재발급", description = "쿠키에 담긴 리프레시 토큰으로 액세스 토큰을 재발급합니다.")
     JwtResDTO.AccessToken refreshAccessToken(
-            @Valid @RequestBody MemberReqDto.RefreshAccessTokenRequest request);
+            @CookieValue("refreshToken") String refreshToken);
 
     @PatchMapping("/signup")
     @Operation(summary = "회원가입 완료 API (OAuth 공통 - 회원가입 시 마지막 단계)", description = "회원의 추가 정보(닉네임, MBTI, 성별, 생년월일, 프로필 이미지)를 입력하여 회원가입을 완료하는 API입니다.")

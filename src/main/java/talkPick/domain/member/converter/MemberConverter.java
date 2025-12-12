@@ -48,10 +48,8 @@ public class MemberConverter {
 
     public static MemberResDto.MemberSignupResponse toMemberSignupResponse(Member member) {
         return MemberResDto.MemberSignupResponse.builder()
-                .memberId(member.getId())
                 .nickname(member.getNickname())
                 .mbti(member.getMbti())
-                .profileImgUrl(member.getProfileImageUrl() != null ? member.getProfileImageUrl() : DEFAULT_PROFILE_IMG_URL)
                 .build();
     }
 

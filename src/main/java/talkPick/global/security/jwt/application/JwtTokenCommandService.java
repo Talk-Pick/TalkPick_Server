@@ -29,7 +29,7 @@ public class JwtTokenCommandService implements JwtTokenCommandUseCase {
 
     @Override
     @Transactional
-    public JwtResDTO.Login generateToken(Member member) {
+    public JwtResDTO.GeneratedTokens generateToken(Member member) {
         // 1. 새로운 (저장되지 않은) RefreshToken 객체를 생성합니다.
         RefreshToken newRefreshToken = refreshTokenGenerator.generateRefreshToken(member);
 
@@ -53,14 +53,19 @@ public class JwtTokenCommandService implements JwtTokenCommandUseCase {
         JwtResDTO.AccessToken accessToken = jwtGenerator.generateAccessToken(member.getId(), member.getMemberRole().toString());
 
         // 6. 응답 DTO를 생성하여 반환합니다.
-        return JwtResDTO.Login.of(accessToken, refreshTokenToSave);
+        return new JwtResDTO.GeneratedTokens(
+                accessToken.accessToken(),
+                refreshTokenToSave.getToken(),
+                accessToken.accessExpiredTime(),
+                refreshTokenToSave.getExpiredAt().atZone(java.time.ZoneId.systemDefault()).toEpochSecond()
+        );
     }
 
     @Override
     @Transactional
-    public JwtResDTO.AccessToken refreshAccessToken(MemberReqDto.RefreshAccessTokenRequest request) {
+    public JwtResDTO.AccessToken refreshAccessToken(String refreshToken) {
         // DB에서 리프레시 토큰 조회
-        RefreshToken refresh = refreshTokenRepository.findByToken(request.getRefreshToken())
+        RefreshToken refresh = refreshTokenRepository.findByToken(refreshToken)
                 .orElseThrow(() -> new JwtExceptionHandler(ErrorCode.INVALID_REFRESH_TOKEN));
 
         // 리프레시 토큰이 만료됐으면 DB에서 삭제하고 예외 발생
