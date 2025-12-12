@@ -41,6 +41,11 @@ public class RandomCommandService implements RandomCommandUseCase {
     }
 
     @Override
+    public void totalRecord(Long memberId, Long randomId, RandomReqDTO.TotalRecords requestDTO) {
+        randomTopicHistoryCommandRepositoryPort.totalRecord(memberId, randomId, requestDTO);
+    }
+
+    @Override
     public void record(Long memberId, Long randomId, RandomReqDTO.Record requestDTO) {
         randomTopicHistoryCommandRepositoryPort.record(memberId, randomId, requestDTO);
     }
