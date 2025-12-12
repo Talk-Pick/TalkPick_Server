@@ -21,15 +21,7 @@ import static talkPick.global.exception.ErrorCode.ROLE_NOT_FOUND;
 @Component
 public class JwtProvider {
     private final JwtGenerator jwtGenerator;
-    private final RefreshTokenGenerator refreshTokenGenerator;
 
-
-    public JwtResDTO.Login createJwt(final Member member) {
-        return JwtResDTO.Login.of(
-                jwtGenerator.generateAccessToken(member.getId(), member.getMemberRole().toString()),
-                refreshTokenGenerator.generateRefreshToken(member)
-        );
-    }
 
     public Long getMemberIdFromToken(String token) {
         try {
@@ -92,35 +84,6 @@ public class JwtProvider {
             return Long.valueOf(claims.getSubject());
         } catch (Exception e) {
             throw new JwtExceptionHandler(ErrorCode.INVALID_JWT_TOKEN);
-        }
-    }
-
-    /**
-     * 토큰 만료까지 남은 시간을 밀리초 단위로 반환합니다.
-     */
-    public long getRemainMillis(String authorization) {
-        try {
-            // Bearer 접두사 제거
-            String token = resolveToken(authorization);
-            if (token == null) {
-                return 0;
-            }
-
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(jwtGenerator.getSigningKey())  // JwtGenerator의 키 사용
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-
-            Date expiration = claims.getExpiration();
-            long now = System.currentTimeMillis();
-            long expireTime = expiration.getTime();
-
-            long remain = expireTime - now;
-            return remain > 0 ? remain : 0;
-        } catch (Exception e) {
-            // 토큰이 잘못됐거나 만료된 경우 0 반환
-            return 0;
         }
     }
 }
