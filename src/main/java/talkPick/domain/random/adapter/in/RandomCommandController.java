@@ -32,6 +32,11 @@ public class RandomCommandController implements RandomCommandApi {
     }
 
     @Override
+    public void totalRecord(Long memberId, Long randomId, RandomReqDTO.TotalRecords requestDTO) {
+        randomCommandUseCase.totalRecord(memberId, randomId, requestDTO);
+    }
+
+    @Override
     public void record(Long memberId, Long randomId, RandomReqDTO.Record requestDTO) {
         randomCommandUseCase.record(memberId, randomId, requestDTO);
     }

@@ -27,9 +27,7 @@ public class MemberResDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class MemberSignupResponse {
-        private Long memberId;
         private String nickname;
-        private String profileImgUrl;
         private MBTI mbti;
     }
 
