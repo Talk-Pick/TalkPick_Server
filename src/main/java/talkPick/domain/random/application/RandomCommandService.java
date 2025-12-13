@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
+import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.domain.Random;
 import talkPick.domain.random.port.in.RandomCommandUseCase;
 import talkPick.domain.random.port.out.*;
@@ -14,12 +15,14 @@ import talkPick.domain.random.port.out.*;
 public class RandomCommandService implements RandomCommandUseCase {
     private final RandomQueryRepositoryPort randomQueryRepositoryPort;
     private final RandomCommandRepositoryPort randomCommandRepositoryPort;
-    private final RandomTopicHistoryCommandRepositoryPort randomTopicCommandRepositoryPort;
+    private final RandomTopicHistoryCommandRepositoryPort randomTopicHistoryCommandRepositoryPort;
     private final RandomTopicHistoryQueryRepositoryPort randomTopicHistoryQueryRepositoryPort;
 
     @Override
-    public void start(Long memberId) {
-        randomCommandRepositoryPort.save(Random.from(memberId));
+    public RandomResDTO.RandomStart start(Long memberId) {
+        return RandomResDTO.RandomStart.from(
+                randomCommandRepositoryPort.save(Random.from(memberId)).getId()
+        );
     }
 
     @Override
@@ -38,8 +41,13 @@ public class RandomCommandService implements RandomCommandUseCase {
     }
 
     @Override
+    public void totalRecord(Long memberId, Long randomId, RandomReqDTO.TotalRecords requestDTO) {
+        randomTopicHistoryCommandRepositoryPort.totalRecord(memberId, randomId, requestDTO);
+    }
+
+    @Override
     public void record(Long memberId, Long randomId, RandomReqDTO.Record requestDTO) {
-        randomTopicCommandRepositoryPort.record(memberId, randomId, requestDTO);
+        randomTopicHistoryCommandRepositoryPort.record(memberId, randomId, requestDTO);
     }
 
     @Override

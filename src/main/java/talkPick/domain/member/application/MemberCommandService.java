@@ -42,69 +42,26 @@ public class MemberCommandService implements MemberCommandUseCase {
     private final MemberLoginHistoryCommandRepositoryPort memberLoginHistoryRepository;
     private final MemberQueryRepositoryPort memberQueryRepositoryPort;
     private final JwtProvider jwtProvider;
-    private final PasswordEncoder passwordEncoder;
     private final MemberTopicResultJpaRepository memberTopicResultJpaRepository;
 
     /**
      * 회원 프로필 수정
      */
     @Override
-    public MemberResDto.ProfileUpdateResponse updateProfile(String authorization, MemberReqDto.ProfileUpdateRequest request) {
+    public MemberResDto.MemberProfileResponse updateProfile(String authorization, MemberReqDto.ProfileUpdateRequest request) {
         Long memberId = jwtProvider.getMemberId(authorization);
 
         // 회원 조회
         Member findMember = memberCommandRepositoryPort.findById(memberId)
                 .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
-        System.out.println("회원 이름 :" + request.getNickname());
+
         // 요청된 필드별 수정 처리
-        if (request.getNickname() != null) findMember.updateNickname(request.getNickname());
-        if (request.getGender() != null) findMember.updateGender(request.getGender());
-        if (request.getBirth() != null) findMember.updateBirth(request.getBirth());
         if (request.getMbti() != null) findMember.updateMbti(request.getMbti());
 
         memberCommandRepositoryPort.save(findMember);
 
-        return MemberConverter.toProfileUpdateResponse(findMember);
+        return MemberConverter.toMemberProfileResponse(findMember);
     }
-
-    /**
-     * 이메일 회원 신규 생성
-     */
-//    @Override
-//    public Member findOrCreateEmailMember(MemberReqDto.MemberEmailRequest emailReqDto) {
-//        validatePassword(emailReqDto.getPassword());
-//
-//        if (memberCommandRepositoryPort.findByEmail(emailReqDto.getEmail()).isPresent()) {
-//            throw new MemberExceptionHandler(ErrorCode.MEMBER_EMAIL_ALREADY_EXISTS);
-//        }
-//
-//        Member newMember = MemberConverter.toEmailMember(emailReqDto);
-//
-//        // 비밀번호 암호화
-//        newMember.updatePassword(passwordEncoder.encode(emailReqDto.getPassword()));
-//        return memberCommandRepositoryPort.save(newMember);
-//    }
-
-    /**
-     * 이메일 로그인 처리 (비밀번호 검증 및 로그인 이력 기록)
-     */
-//    @Override
-//    public Member loginEmailMember(MemberReqDto.MemberEmailRequest emailReqDto) {
-//        validatePassword(emailReqDto.getPassword());
-//
-//        Member member = memberCommandRepositoryPort.findByEmail(emailReqDto.getEmail())
-//                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
-//
-//        // 비밀번호 복호화 및 검증
-//        if (!passwordEncoder.matches(emailReqDto.getPassword(), member.getPassword())) {
-//            throw new MemberExceptionHandler(ErrorCode.INVALID_PASSWORD);
-//        }
-//
-//        MemberLoginHistory loginHistory = MemberConverter.toLoginHistory(member);
-//        memberLoginHistoryRepository.save(loginHistory);
-//
-//        return member;
-//    }
 
     /**
      * 멤버 데이터로 기존 회원 조회 또는 신규 생성

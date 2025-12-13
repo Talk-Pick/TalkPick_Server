@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
+import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.global.security.annotation.MemberId;
 
 @Validated
@@ -18,9 +19,9 @@ import talkPick.global.security.annotation.MemberId;
 public interface RandomCommandApi {
     @PostMapping("/start")
     @Operation(summary = "랜덤 대화 주제 코스 시작 API", description = "랜덤 대화 주제 코스 시작 API 입니다. 랜덤 대화 주제 코스를 시작하게 될 때, 해당 API를 한 번 요청해 주세요.")
-    void start(@MemberId @Parameter(hidden = true) final Long memberId);
+    RandomResDTO.RandomStart start(@MemberId @Parameter(hidden = true) final Long memberId);
 
-    @PostMapping("/{id}/next")
+//    @PostMapping("/{id}/next")
     @Operation(summary = "랜덤 대화 주제 코스 다음 API", description = "랜덤 대화 주제 코스 다음 API 입니다. 랜덤 대화 주제 코스에서 다음으로 넘어갈 때마다, 해당 API를 한 번 요청해 주세요.")
     void next(@MemberId @Parameter(hidden = true) final Long memberId, @PathVariable("id") @Parameter(description = "랜덤 대화 코스 고유 ID(randomId)", example = "42") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long randomId, @RequestBody RandomReqDTO.Next requestDTO);
 
@@ -32,7 +33,12 @@ public interface RandomCommandApi {
     @Operation(summary = "랜덤 대화 주제 코스 종료 API", description = "랜덤 대화 주제 코스 종료 API 입니다. 랜덤 대화 주제 코스를 종료할 때, 해당 API를 한 번 요청해 주세요.")
     void end(@MemberId @Parameter(hidden = true) final Long memberId, @PathVariable("id") @Parameter(description = "랜덤 대화 코스 고유 ID(randomId)", example = "42") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long randomId);
 
-    @PostMapping("/{id}/record")
+    @PostMapping("{id}/total-record")
+    @Operation(summary = "랜덤 대화 주제 코스 기록 API", description = "랜덤 대화 주제 코스 동안 프론트에서 기록 저장 후, 마지막에 보내주세요. 만약에 중간에 그만둘 경우에도 요청 주세요.")
+    void totalRecord(@MemberId @Parameter(hidden = true) final Long memberId, @PathVariable("id") @Parameter(description = "랜덤 대화 코스 고유 ID(randomId)", example = "42") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long randomId, @RequestBody RandomReqDTO.TotalRecords requestDTO);
+
+
+    //    @PostMapping("/{id}/record")
     @Operation(summary = "랜덤 대화 주제 코스 기록 API", description = "랜덤 대화 주제 코스 기록 API 입니다. 톡픽 선택할 때마다 기록을 위해, 해당 API를 한 번 요청해 주세요.")
     void record(@MemberId @Parameter(hidden = true) final Long memberId, @PathVariable("id") @Parameter(description = "랜덤 대화 코스 고유 ID(randomId)", example = "42") @NotNull(message = "[ERROR] id 값이 존재하지 않습니다.") final Long randomId, @RequestBody RandomReqDTO.Record requestDTO);
 

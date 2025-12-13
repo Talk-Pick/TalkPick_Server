@@ -33,8 +33,8 @@ public interface MemberQueryApi {
             );
 
     @GetMapping("/me")
-    @Operation(summary = "마이페이지 프로필 조회 API", description = "회원의 프로필 정보와 통계를 조회하는 API입니다.")
-    MemberResDto.ProfileResponse getProfile(
+    @Operation(summary = "마이페이지 프로필 조회 API", description = "회원의 닉네임과 MBTI를 조회하는 API입니다.")
+    MemberResDto.MemberProfileResponse getProfile(
             @RequestHeader(value = "Authorization", required = false) String authorization
     );
 }

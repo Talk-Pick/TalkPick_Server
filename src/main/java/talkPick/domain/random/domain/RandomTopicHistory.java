@@ -23,7 +23,7 @@ public class RandomTopicHistory {
     @Column(name = "random_id", nullable = false, columnDefinition = "BIGINT COMMENT '랜덤 ID'")
     private Long randomId;
 
-    @Column(name = "topic_id", nullable = true, columnDefinition = "BIGINT COMMENT 'Topic ID'")
+    @Column(name = "topic_id", nullable = false, columnDefinition = "BIGINT COMMENT 'Topic ID'")
     private Long topicId;
 
     @Column(name = "`order`", nullable = false, columnDefinition = "INT COMMENT '랜덤 코스 순서'")
@@ -43,6 +43,17 @@ public class RandomTopicHistory {
                 .order(requestDTO.order())
                 .startAt(LocalDateTime.now())
                 .endAt(null)
+                .build();
+    }
+
+    public static RandomTopicHistory ofRecord(final Long memberId, final Long randomId, RandomReqDTO.TotalRecord requestDTO) {
+        return RandomTopicHistory.builder()
+                .memberId(memberId)
+                .randomId(randomId)
+                .topicId(requestDTO.topicId())
+                .order(requestDTO.order())
+                .startAt(requestDTO.startAt())
+                .endAt(requestDTO.endAt())
                 .build();
     }
 

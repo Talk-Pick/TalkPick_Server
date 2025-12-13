@@ -10,6 +10,16 @@ import java.util.List;
 public class RandomResDTO {
     @Getter
     @AllArgsConstructor
+    public static class RandomStart {
+        private Long randomId;
+
+        public static RandomStart from(Long randomId) {
+            return new RandomStart(randomId);
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
     public static class RandomTopic {
         private Integer order;
         private List<RandomTopicDetail> randomTopicDetails;
