@@ -95,13 +95,6 @@ public class TopicStat {
                 .averageTalkTime(0)
                 .selectCount(0)
                 .likeCount(0)
-                .teenCount(0)
-                .twentiesCount(0)
-                .thirtiesCount(0)
-                .fortiesCount(0)
-                .fiftiesCount(0)
-                .maleCount(0)
-                .femaleCount(0)
                 .build();
     }
 
@@ -113,8 +106,6 @@ public class TopicStat {
     public void update(Member member, long talkTime) {
         MBTI mbti = MBTI.INFP;
         updateMBTI(mbti);
-        updateAge(member.getBirth());
-        updateGender(member.getGender());
         updateAverageTalkTime(talkTime);
         this.selectCount++;
     }
@@ -141,34 +132,6 @@ public class TopicStat {
                 this.jCount++;
             } else if (mbtiString.charAt(3) == 'P') {
                 this.pCount++;
-            }
-        }
-    }
-
-    private void updateAge(LocalDate birth) {
-        if (birth != null) {
-            int age = LocalDate.now().getYear() - birth.getYear();
-
-            if (age < 20) {
-                this.teenCount++;
-            } else if (age < 30) {
-                this.twentiesCount++;
-            } else if (age < 40) {
-                this.thirtiesCount++;
-            } else if (age < 50) {
-                this.fortiesCount++;
-            } else {
-                this.fiftiesCount++;
-            }
-        }
-    }
-
-    private void updateGender(Gender gender) {
-        if (gender != null) {
-            if (gender == Gender.MALE) {
-                this.maleCount++;
-            } else if (gender == Gender.FEMALE) {
-                this.femaleCount++;
             }
         }
     }

@@ -36,12 +36,6 @@ public class MemberReqDto {
         @NotEmpty(message = "닉네임은 필수입니다.")
         @Size(max = 25, message = "닉네임은 최대 25자입니다.")
         private String nickname;
-        @NotNull(message = "성별은 필수입니다.")
-        private Gender gender;
-        @NotNull(message = "생년월일은 필수입니다.")
-        private LocalDate birth;
-        @NotNull(message = "프로필 이미지는 필수입니다.")
-        private String profileImgUrl;
         @NotNull(message = "mbti는 필수입니다.")
         private MBTI mbti;
     }

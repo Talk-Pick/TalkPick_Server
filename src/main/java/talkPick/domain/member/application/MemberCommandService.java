@@ -33,7 +33,6 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class MemberCommandService implements MemberCommandUseCase {
-    private static final String DEFAULT_PROFILE_IMG_URL = "https://example.com/images/default-profile.png";
 
     private final MemberCommandRepositoryPort memberCommandRepositoryPort;
     private final TermQueryRepositoryPort termQueryRepositoryPort;
@@ -88,17 +87,8 @@ public class MemberCommandService implements MemberCommandUseCase {
         }
 
         // 추가 정보 입력
-        findMember.updateBirth(request.getBirth());
-        findMember.updateGender(request.getGender());
         findMember.updateMbti(request.getMbti());
         findMember.updateNickname(request.getNickname());
-
-        String profileImgUrl = request.getProfileImgUrl();
-        if (profileImgUrl == null || profileImgUrl.trim().isEmpty()) {
-            findMember.updateProfileImgUrl(DEFAULT_PROFILE_IMG_URL);
-        } else {
-            findMember.updateProfileImgUrl(profileImgUrl);
-        }
 
         // 회원 ACTIVE 상태 변경
         findMember.updateStatus(TalkPickStatus.ACTIVE);
@@ -218,9 +208,7 @@ public class MemberCommandService implements MemberCommandUseCase {
     // 회원 가입 시 필수 정보 검증
     private boolean validateAdditionalInfo(MemberReqDto.MemberSignupRequest request) {
         return request.getNickname() != null &&
-                request.getMbti() != null &&
-                request.getGender() != null &&
-                request.getBirth() != null;
+                request.getMbti() != null;
     }
 
     // 필수 약관 동의 여부 검증
