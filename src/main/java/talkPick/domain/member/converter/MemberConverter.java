@@ -15,7 +15,6 @@ import talkPick.global.model.TalkPickStatus;
 import java.time.LocalDateTime;
 
 public class MemberConverter {
-    private static final String DEFAULT_PROFILE_IMG_URL = "https://example.com/images/default-profile.png";
     private static final String DEFAULT_NICKNAME = "토픽";
 
     public static MemberDataDto.MemberData toKakaoMemberData(io.jsonwebtoken.Claims claims) {
@@ -30,10 +29,8 @@ public class MemberConverter {
                 .email(MemberData.getEmail())
                 .memberRole(Role.MEMBER)
                 .nickname(DEFAULT_NICKNAME)
-                .gender(Gender.NONE)
                 .loginType(loginType)
                 .status(TalkPickStatus.PENDING)
-                .profileImageUrl(DEFAULT_PROFILE_IMG_URL)
                 .providerId(MemberData.getSub())
                 .build();
 
