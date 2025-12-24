@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface RandomJpaRepository extends JpaRepository<Random, Long> {
     Optional<Random> findRandomByMemberIdAndId(Long memberId, Long randomId);
+
+    void deleteByMemberId(Long memberId);
 }
