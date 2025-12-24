@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface MemberTopicResultJpaRepository extends JpaRepository<MemberTopicResult, Long> {
     Optional<MemberTopicResult> findByMemberTopicHistoryId(Long memberTopicHistoryId);
+
+    void deleteByMemberId(Long memberId);
 }

@@ -4,4 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import talkPick.domain.topic.domain.TopicLikeHistory;
 
 public interface TopicLikeHistoryJpaRepository extends JpaRepository<TopicLikeHistory, Long> {
+    void deleteByMemberId(Long memberId);
 }
