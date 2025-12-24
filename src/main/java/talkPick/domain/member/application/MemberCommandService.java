@@ -1,9 +1,9 @@
 package talkPick.domain.member.application;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
 import talkPick.domain.member.port.out.MemberCommandRepositoryPort;
 import talkPick.domain.member.port.out.MemberTermCommandRepositoryPort;
 import talkPick.domain.member.adapter.out.repository.MemberTopicResultJpaRepository;
@@ -26,6 +26,12 @@ import talkPick.global.exception.handler.MemberExceptionHandler;
 import talkPick.global.exception.handler.TermExceptionHandler;
 import talkPick.global.model.TalkPickStatus;
 import talkPick.global.security.jwt.util.JwtProvider;
+import talkPick.domain.inquiry.adapter.out.repository.InquiryJpaRepository;
+import talkPick.domain.random.adapter.out.repository.RandomJpaRepository;
+import talkPick.domain.random.adapter.out.repository.RandomTopicHistoryJpaRepository;
+import talkPick.domain.today.adapter.out.repository.TodayTopicJpaRepository;
+import talkPick.domain.topic.adapter.out.repository.TopicLikeHistoryJpaRepository;
+import talkPick.domain.member.adapter.out.repository.MemberTopicHistoryJpaRepository;
 
 import java.util.List;
 
@@ -42,6 +48,14 @@ public class MemberCommandService implements MemberCommandUseCase {
     private final MemberQueryRepositoryPort memberQueryRepositoryPort;
     private final JwtProvider jwtProvider;
     private final MemberTopicResultJpaRepository memberTopicResultJpaRepository;
+    private final MemberJpaRepository memberJpaRepository;
+    private final InquiryJpaRepository inquiryJpaRepository;
+    private final RandomJpaRepository randomJpaRepository;
+    private final RandomTopicHistoryJpaRepository randomTopicHistoryJpaRepository;
+    private final TodayTopicJpaRepository todayTopicJpaRepository;
+    private final TopicLikeHistoryJpaRepository topicLikeHistoryJpaRepository;
+    private final MemberTopicHistoryJpaRepository memberTopicHistoryJpaRepository;
+
 
     /**
      * 회원 프로필 수정
@@ -93,11 +107,6 @@ public class MemberCommandService implements MemberCommandUseCase {
         // 회원 ACTIVE 상태 변경
         findMember.updateStatus(TalkPickStatus.ACTIVE);
         memberCommandRepositoryPort.save(findMember);
-
-        // 이메일 회원은 임시 토큰 삭제 처리
-//        if (findMember.getLoginType() == LoginType.EMAIL) {
-//            refreshTokenRepository.findByMember(findMember).ifPresent(refreshTokenRepository::delete);
-//        }
 
         // 소셜 로그인 회원 가입 완료 시 로그인 기록 저장
         if (findMember.getLoginType() == LoginType.KAKAO || findMember.getLoginType() == LoginType.APPLE) {
@@ -179,8 +188,23 @@ public class MemberCommandService implements MemberCommandUseCase {
 
         refreshTokenRepository.findByMember(findMember).ifPresent(refreshTokenRepository::delete);
 
+        // 연관 데이터 삭제
+        deleteAllRelatedData(findMember.getId());
+
         // 로그인 기록 삭제
         memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
+        memberJpaRepository.deleteById(findMember.getId());
+    }
+
+    private void deleteAllRelatedData(Long memberId) {
+        inquiryJpaRepository.deleteByMemberId(memberId);
+        memberTermJpaRepository.deleteByMemberId(memberId);
+        memberTopicResultJpaRepository.deleteByMemberId(memberId);
+        randomTopicHistoryJpaRepository.deleteByMemberId(memberId);
+        randomJpaRepository.deleteByMemberId(memberId);
+        todayTopicJpaRepository.deleteByMemberId(memberId);
+        topicLikeHistoryJpaRepository.deleteByMemberId(memberId);
+        memberTopicHistoryJpaRepository.deleteByMemberId(memberId);
     }
 
     // 토픽 캘린더 조회 코멘트 수정

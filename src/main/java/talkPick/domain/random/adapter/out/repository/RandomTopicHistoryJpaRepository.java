@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface RandomTopicHistoryJpaRepository extends JpaRepository<RandomTopicHistory, Long> {
     Optional<RandomTopicHistory> findByMemberIdAndRandomIdAndOrder(Long memberId, Long randomId, Integer order);
+
+    void deleteByMemberId(Long memberId);
 }
