@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.topic.domain.type.CategoryGroup;
 import talkPick.global.model.TalkPickStatus;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import static talkPick.domain.random.domain.QRandomTopicHistory.randomTopicHistory;
 import static talkPick.domain.topic.domain.QCategory.category;
@@ -42,7 +44,7 @@ public class RandomQuerydslRepository {
             builder.and(category.title.eq(categoryType));
         }
 
-        return queryFactory
+        List<RandomResDTO.RandomTopicDetail> topics = queryFactory
                 .select(Projections.constructor(RandomResDTO.RandomTopicDetail.class,
                         topic.id,
                         topic.title,
@@ -57,8 +59,13 @@ public class RandomQuerydslRepository {
                 .leftJoin(category).on(topic.categoryId.eq(category.id))
                 .leftJoin(keyword).on(topic.keywordId.eq(keyword.id))
                 .where(builder)
-                .orderBy(com.querydsl.core.types.dsl.Expressions.numberTemplate(Double.class, "rand()").asc())
-                .limit(4)
+                .limit(20)
                 .fetch();
+
+        List<RandomResDTO.RandomTopicDetail> shuffledTopics = new ArrayList<>(topics);
+        Collections.shuffle(shuffledTopics);
+        return shuffledTopics.stream()
+                .limit(4)
+                .toList();
     }
 }

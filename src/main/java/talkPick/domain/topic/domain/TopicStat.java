@@ -83,9 +83,16 @@ public class TopicStat {
                 .tCount(0)
                 .jCount(0)
                 .pCount(0)
-                .averageTalkTime(0)
-                .selectCount(0)
                 .likeCount(0)
+                .teenCount(0)
+                .twentiesCount(0)
+                .thirtiesCount(0)
+                .fortiesCount(0)
+                .fiftiesCount(0)
+                .maleCount(0)
+                .femaleCount(0)
+                .selectCount(0)
+                .averageTalkTime(0)
                 .build();
     }
 }
