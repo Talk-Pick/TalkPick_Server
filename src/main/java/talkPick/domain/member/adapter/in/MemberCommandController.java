@@ -15,6 +15,7 @@ import talkPick.global.security.jwt.dto.JwtResDTO;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.dto.*;
 import talkPick.domain.member.port.in.MemberCommandUseCase;
+import talkPick.domain.member.port.in.MemberWithdrawalUseCase;
 import talkPick.global.security.jwt.port.in.JwtTokenCommandUseCase;
 
 /**
@@ -28,6 +29,7 @@ public class MemberCommandController implements MemberCommandApi {
     private final KakaoOidcUsecase kakaoOidcService;
     private final AppleOidcUsecase appleOidcService;
     private final MemberCommandUseCase memberCommandUseCase;
+    private final MemberWithdrawalUseCase memberWithdrawalUseCase; // 의존성 추가
     private final JwtTokenCommandUseCase jwtTokenCommandUseCase;
 
 
@@ -116,7 +118,8 @@ public class MemberCommandController implements MemberCommandApi {
     public void deleteMember(
             @RequestHeader(value = "Authorization", required = false) String authorization
     ) {
-        memberCommandUseCase.delete(authorization);
+        // Facade 서비스 호출로 변경
+        memberWithdrawalUseCase.withdraw(authorization);
     }
 
     @Override
@@ -125,7 +128,5 @@ public class MemberCommandController implements MemberCommandApi {
             @Valid @RequestBody MemberReqDto.TopicResultCommentChangeRequest request) {
         memberCommandUseCase.TopicResultCommentChange(authorization, request);
     }
-
-
 
 }
