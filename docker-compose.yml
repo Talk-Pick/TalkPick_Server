@@ -15,16 +15,6 @@ services:
     env_file:
       - ./env/.env
 
-  ## adminer
-  adminer:
-    image: adminer
-    container_name: talkpick-db-adminer
-    networks:
-      - t4y
-    restart: always
-    ports:
-      - "8081:8080"
-
   ## nginx
   nginx:
     build: ./nginx
@@ -43,6 +33,6 @@ services:
       - adminer
     volumes:
       - ./nginx/conf:/etc/nginx/conf.d
-
+      - ./nginx/html:/usr/share/nginx/html
 networks:
   t4y:
