@@ -66,6 +66,37 @@ public class MemberCommandController implements MemberCommandApi {
         );
     }
 
+    @Override
+    public JwtResDTO.Login reactivateMember(
+            @PathVariable("provider") String provider,
+            @Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response
+    ) {
+        MemberDataDto.MemberData memberData;
+        LoginType loginType;
+
+        if ("kakao".equalsIgnoreCase(provider)) {
+            memberData = kakaoOidcService.verifyAndParseIdToken(request);
+            loginType = LoginType.KAKAO;
+        } else if ("apple".equalsIgnoreCase(provider)) {
+            memberData = appleOidcService.verifyAndParseIdToken(request);
+            loginType = LoginType.APPLE;
+        } else {
+            throw new IllegalArgumentException("지원하지 않는 Provider입니다: " + provider);
+        }
+
+        Member member = memberCommandUseCase.reactivateMember(memberData, loginType);
+        JwtResDTO.GeneratedTokens generatedTokens = jwtTokenCommandUseCase.generateToken(member);
+
+        setRefreshTokenCookie(response, generatedTokens.refreshToken(), generatedTokens.refreshExpiredTime());
+
+        return JwtResDTO.Login.of(
+                member.getId(),
+                member.getMemberRole().toString(),
+                generatedTokens.accessToken(),
+                generatedTokens.accessExpiredTime()
+        );
+    }
+
     // refresh token을 HttpOnly 쿠키로 설정하는 헬퍼 메서드
     private void setRefreshTokenCookie(HttpServletResponse response, String refreshToken, Long refreshExpiredTime) {
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
