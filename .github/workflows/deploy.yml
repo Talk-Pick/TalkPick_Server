@@ -18,6 +18,11 @@ jobs:
           distribution: temurin
           java-version: 21
 
+      - name: CLEAN - Ensure no prod properties exist
+        run: |
+          sudo rm -f src/main/resources/application-prod.properties
+          find src/main/resources -name "application-prod.properties" || true
+
       - name: BUILD - Run Test & Build JAR
         run: | 
           ./gradlew clean build
