@@ -30,7 +30,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: DOCKER - Build Docker Image
-        run: docker build -t talkpick-server .
+        run: docker build --no-cache -t talkpick-server:latest .
     
       - name: DOCKER_HUB - Login to Docker Hub
         run: |
