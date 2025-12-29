@@ -70,6 +70,7 @@ public enum ErrorCode {
 
     // Member
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
+    MEMBER_IS_WITHDRAWN(HttpStatus.FORBIDDEN, "탈퇴한 회원입니다."),
     MEMBER_EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 가입된 이메일입니다."),
     INVALID_MEMBER_INFO(HttpStatus.BAD_REQUEST, "회원 필수 정보가 누락되었습니다."),
     PASSWORD_REQUIRED(HttpStatus.BAD_REQUEST, "비밀번호는 필수입니다."),
