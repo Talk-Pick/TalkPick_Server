@@ -10,7 +10,12 @@ services:
     restart: always
     env_file:
       - /home/ec2-user/env/.env
-
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_CONFIG_ADDITIONAL_LOCATION: file:/config/
+    volumes:
+      - /home/ec2-user/config:/config
+      
   ## nginx
   nginx:
     build: ./nginx
