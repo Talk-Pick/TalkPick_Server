@@ -72,7 +72,28 @@ public class MemberCommandService implements MemberCommandUseCase {
     public Member findOrCreateMember(MemberDataDto.MemberData MemberData, LoginType loginType) {
         Member findOrNewMember = memberCommandRepositoryPort.findByProviderId(MemberData.getSub())
                 .orElseGet(() -> MemberConverter.toMember(MemberData, loginType));
+
+        if (findOrNewMember.getStatus() == TalkPickStatus.DIS_ACTIVE) {
+            throw new MemberExceptionHandler(ErrorCode.MEMBER_IS_WITHDRAWN);
+        }
+
         return memberCommandRepositoryPort.save(findOrNewMember);
+    }
+
+    /**
+     * 탈퇴한 회원 복구
+     */
+    @Override
+    public Member reactivateMember(MemberDataDto.MemberData memberData, LoginType loginType) {
+        Member member = memberCommandRepositoryPort.findByProviderId(memberData.getSub())
+                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+
+        if (member.getStatus() == TalkPickStatus.DIS_ACTIVE) {
+            member.reactivate();
+            return memberCommandRepositoryPort.save(member);
+        }
+
+        return member;
     }
 
     /**

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.inquiry.adapter.out.repository.InquiryJpaRepository;
 import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
+import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.adapter.out.repository.MemberLoginHistoryJpaRepository;
 import talkPick.domain.member.adapter.out.repository.MemberTermJpaRepository;
 import talkPick.domain.member.adapter.out.repository.MemberTopicHistoryJpaRepository;
@@ -41,10 +42,21 @@ public class MemberWithdrawalService implements MemberWithdrawalUseCase {
     public void withdraw(String authorization) {
         Long memberId = jwtProvider.getMemberId(authorization);
 
-        // 1. Refresh Token 삭제
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+
+        // 1. Refresh Token 삭제 (즉시 로그아웃 효과)
         refreshTokenRepository.deleteAllByMemberIdInBulk(memberId);
 
-        // 2. 연관 데이터 일괄 삭제
+        // 2. 소프트 삭제 처리
+        member.withdraw();
+        memberRepository.save(member);
+    }
+
+    @Override
+    @Transactional
+    public void hardDelete(Long memberId) {
+        // 1. 연관 데이터 일괄 삭제
         inquiryRepository.deleteAllByMemberIdInBulk(memberId);
         memberTermRepository.deleteAllByMemberIdInBulk(memberId);
         memberLoginHistoryRepository.deleteAllByMemberIdInBulk(memberId);
@@ -55,7 +67,7 @@ public class MemberWithdrawalService implements MemberWithdrawalUseCase {
         todayTopicRepository.deleteAllByMemberIdInBulk(memberId);
         topicLikeHistoryRepository.deleteAllByMemberIdInBulk(memberId);
 
-        // 3. 회원 삭제
+        // 2. 회원 영구 삭제
         memberRepository.deleteById(memberId);
     }
 }
