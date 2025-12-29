@@ -18,11 +18,6 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: CONFIG - Create application-prod.properties
-        run: |
-          mkdir -p ./src/main/resources
-          echo "${{ secrets.ENV }}" > ./src/main/resources/application-prod.properties
-
       - name: BUILD - Run Test & Build JAR
         run: | 
           ./gradlew clean build
