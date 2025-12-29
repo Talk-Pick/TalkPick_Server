@@ -10,6 +10,7 @@ import talkPick.global.model.BaseTime;
 import talkPick.global.model.TalkPickStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -82,6 +83,11 @@ public class Member extends BaseTime {
     )
     private String providerId;
 
+    @Column(
+            columnDefinition = "DATETIME COMMENT '회원 탈퇴 일시'"
+    )
+    private LocalDateTime deletedAt;
+
     public void updateNickname(String nickname) {
         this.nickname = nickname;
     }
@@ -92,6 +98,16 @@ public class Member extends BaseTime {
 
     public void updatePassword(String password) {
         this.password = password;
+    }
+
+    public void withdraw() {
+        this.status = TalkPickStatus.DIS_ACTIVE;
+        this.deletedAt = LocalDateTime.now();
+    }
+
+    public void reactivate() {
+        this.status = TalkPickStatus.ACTIVE;
+        this.deletedAt = null;
     }
 
 }
