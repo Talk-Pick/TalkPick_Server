@@ -1,20 +1,21 @@
 services:
   ## talkpick
   talkpick-server:
-    image: 718513646976.dkr.ecr.ap-northeast-2.amazonaws.com/talkpick-server:latest
+    image: hszoo/talkpick-server:latest
     container_name: talkpick-server
     ports:
       - "8080:8080"
     networks:
       - t4y
     restart: always
-    volumes:
-      - ./env/.env.properties:/app/config/.env.properties
-    environment:
-      - SPRING_CONFIG_IMPORT=optional:file:/app/config/.env.properties
     env_file:
-      - ./env/.env
-
+      - /home/ec2-user/env/.env
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_CONFIG_ADDITIONAL_LOCATION: file:/config/
+    volumes:
+      - /home/ec2-user/config:/config
+      
   ## nginx
   nginx:
     build: ./nginx
@@ -30,7 +31,6 @@ services:
         PRIVATE_CERTIFICATE_KEY: "${PRIVATE_CERTIFICATE_KEY}"
     depends_on:
       - talkpick-server
-      - adminer
     volumes:
       - ./nginx/conf:/etc/nginx/conf.d
       - ./nginx/html:/usr/share/nginx/html
