@@ -1,4 +1,4 @@
-package talkPick.domain.today.adapter.out.event;
+package talkPick.domain.topic.adapter.out.event;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,25 +7,23 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-import talkPick.domain.today.adapter.out.repository.TodayTopicJpaRepository;
-import talkPick.domain.today.domain.event.TodayTopicSavedEvent;
+import talkPick.domain.topic.domain.event.TopicLikedEvent;
+import talkPick.domain.topic.port.out.TopicStatCommandRepositoryPort;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class TodayTopicSavedEventHandler {
-    private final TodayTopicJpaRepository todayTopicJpaRepository;
+public class TopicLikedEventHandler {
+    private final TopicStatCommandRepositoryPort topicStatCommandRepositoryPort;
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional
-    public void handle(TodayTopicSavedEvent event) {
+    public void handle(TopicLikedEvent event) {
         try {
-            if (event.getTodayTopics() != null && !event.getTodayTopics().isEmpty()) {
-                todayTopicJpaRepository.saveAll(event.getTodayTopics());
-            }
+            topicStatCommandRepositoryPort.incrementLikeCount(event.getTopicId());
         } catch (Exception e) {
-            log.error("오늘의 주제 저장 실패", e);
+            log.error("토픽 좋아요 수 증가 실패 - topicId: {}", event.getTopicId(), e);
         }
     }
 }
