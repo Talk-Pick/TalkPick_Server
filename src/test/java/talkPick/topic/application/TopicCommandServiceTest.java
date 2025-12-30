@@ -1,4 +1,4 @@
-package talkPick.domain.topic.application;
+package talkPick.topic.application;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,13 +7,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import talkPick.domain.topic.application.TopicCommandService;
 import talkPick.domain.topic.domain.event.TopicLikedEvent;
 import talkPick.domain.topic.port.out.TopicLikeHistoryCommandRepositoryPort;
-
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Mockito.*;
+import org.mockito.ArgumentCaptor;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("TopicCommandService 테스트")
@@ -63,5 +66,48 @@ class TopicCommandServiceTest {
         var inOrder = org.mockito.Mockito.inOrder(topicLikeHistoryCommandRepositoryPort, eventPublisher);
         inOrder.verify(topicLikeHistoryCommandRepositoryPort).save(memberId, topicId);
         inOrder.verify(eventPublisher).publishEvent(any(TopicLikedEvent.class));
+    }
+
+    @Test
+    @DisplayName("토픽 좋아요 추가 시 ArgumentCaptor로 이벤트 내용 검증 테스트")
+    void 토픽_좋아요_추가시_ArgumentCaptor로_이벤트_내용_검증_테스트() {
+        // given
+        Long memberId = 1L;
+        Long topicId = 100L;
+        ArgumentCaptor<TopicLikedEvent> eventCaptor = ArgumentCaptor.forClass(TopicLikedEvent.class);
+
+        willDoNothing().given(topicLikeHistoryCommandRepositoryPort).save(memberId, topicId);
+        willDoNothing().given(eventPublisher).publishEvent(any(TopicLikedEvent.class));
+
+        // when
+        topicCommandService.addLike(memberId, topicId);
+
+        // then
+        verify(topicLikeHistoryCommandRepositoryPort).save(memberId, topicId);
+        verify(eventPublisher).publishEvent(eventCaptor.capture());
+
+        TopicLikedEvent capturedEvent = eventCaptor.getValue();
+        assertAll(
+                () -> assertThat(capturedEvent).isNotNull(),
+                () -> assertThat(capturedEvent.getMemberId()).isEqualTo(memberId),
+                () -> assertThat(capturedEvent.getTopicId()).isEqualTo(topicId)
+        );
+    }
+
+    @Test
+    @DisplayName("토픽 좋아요 추가 시 Repository 예외 발생 테스트")
+    void 토픽_좋아요_추가시_Repository_예외_발생_테스트() {
+        // given
+        Long memberId = 1L;
+        Long topicId = 100L;
+
+        willThrow(new IllegalStateException("Already liked"))
+                .given(topicLikeHistoryCommandRepositoryPort).save(memberId, topicId);
+
+        // when & then
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalStateException.class,
+                () -> topicCommandService.addLike(memberId, topicId));
+
+        verify(eventPublisher, never()).publishEvent(any(TopicLikedEvent.class));
     }
 }

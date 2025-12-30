@@ -1,7 +1,8 @@
-package talkPick.domain.notice.domain;
+package talkPick.notice.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import talkPick.domain.notice.domain.Notice;
 import talkPick.global.model.TalkPickStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -75,5 +76,31 @@ class NoticeTest {
 
         // then
         assertThat(notice.getStatus()).isEqualTo(TalkPickStatus.DIS_ACTIVE);
+    }
+
+    @Test
+    @DisplayName("조회수가 큰 값일 때 plusReadCount 호출 테스트")
+    void 조회수가_큰_값일때_plusReadCount_호출_테스트() {
+        // given
+        Notice notice = Notice.of(1L, "제목", "내용", Integer.MAX_VALUE - 10, TalkPickStatus.ACTIVE);
+
+        // when
+        notice.plusReadCount();
+
+        // then
+        assertThat(notice.getReadCount()).isEqualTo(Integer.MAX_VALUE - 9);
+    }
+
+    @Test
+    @DisplayName("다양한 초기 조회수로 Notice 생성 테스트")
+    void 다양한_초기_조회수로_Notice_생성_테스트() {
+        // given
+        Integer[] readCounts = {0, 10, 100, 1000, 10000};
+
+        // when & then
+        for (Integer readCount : readCounts) {
+            Notice notice = Notice.of(1L, "제목", "내용", readCount, TalkPickStatus.ACTIVE);
+            assertThat(notice.getReadCount()).isEqualTo(readCount);
+        }
     }
 }

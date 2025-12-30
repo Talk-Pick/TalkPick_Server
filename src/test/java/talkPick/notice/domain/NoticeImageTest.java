@@ -1,7 +1,8 @@
-package talkPick.domain.notice.domain;
+package talkPick.notice.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import talkPick.domain.notice.domain.NoticeImage;
 import talkPick.global.model.TalkPickStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;

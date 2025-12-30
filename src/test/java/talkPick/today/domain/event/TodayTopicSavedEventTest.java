@@ -1,8 +1,9 @@
-package talkPick.domain.today.domain.event;
+package talkPick.today.domain.event;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import talkPick.domain.today.domain.TodayTopic;
+import talkPick.domain.today.domain.event.TodayTopicSavedEvent;
 
 import java.util.Collections;
 import java.util.List;

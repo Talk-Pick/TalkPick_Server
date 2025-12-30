@@ -1,4 +1,4 @@
-package talkPick.domain.random.application;
+package talkPick.random.application;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
+import talkPick.domain.random.application.RandomQueryService;
 import talkPick.domain.random.port.out.RandomQueryRepositoryPort;
 import talkPick.domain.topic.domain.type.CategoryGroup;
 
