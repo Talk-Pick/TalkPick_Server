@@ -1,8 +1,9 @@
-package talkPick.domain.random.domain;
+package talkPick.random.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
+import talkPick.domain.random.domain.Random;
 import talkPick.domain.random.domain.type.RandomType;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -102,5 +103,61 @@ class RandomTest {
                 () -> assertThat(random.getRating()).isEqualTo(4),
                 () -> assertThat(random.getOneLine()).isEqualTo("좋아요")
         );
+    }
+
+    @Test
+    @DisplayName("START 상태에서 QUIT으로 상태 전이 테스트")
+    void START_상태에서_QUIT으로_상태_전이_테스트() {
+        // given
+        Random random = Random.from(1L);
+        assertThat(random.getType()).isEqualTo(RandomType.START);
+
+        // when
+        random.quit();
+
+        // then
+        assertThat(random.getType()).isEqualTo(RandomType.QUIT);
+    }
+
+    @Test
+    @DisplayName("START 상태에서 COMPLETED로 상태 전이 테스트")
+    void START_상태에서_COMPLETED로_상태_전이_테스트() {
+        // given
+        Random random = Random.from(1L);
+        assertThat(random.getType()).isEqualTo(RandomType.START);
+
+        // when
+        random.end();
+
+        // then
+        assertThat(random.getType()).isEqualTo(RandomType.COMPLETED);
+    }
+
+    @Test
+    @DisplayName("다양한 평점 값으로 rate 호출 테스트")
+    void 다양한_평점_값으로_rate_호출_테스트() {
+        // given
+        Integer[] ratings = {1, 2, 3, 4, 5};
+
+        // when & then
+        for (Integer rating : ratings) {
+            Random random = Random.from(1L);
+            RandomReqDTO.Rate rateDTO = new RandomReqDTO.Rate(rating);
+            random.rate(rateDTO);
+            assertThat(random.getRating()).isEqualTo(rating);
+        }
+    }
+
+    @Test
+    @DisplayName("다양한 memberId로 Random 생성 테스트")
+    void 다양한_memberId로_Random_생성_테스트() {
+        // given
+        Long[] memberIds = {1L, 100L, 999L, 12345L};
+
+        // when & then
+        for (Long memberId : memberIds) {
+            Random random = Random.from(memberId);
+            assertThat(random.getMemberId()).isEqualTo(memberId);
+        }
     }
 }

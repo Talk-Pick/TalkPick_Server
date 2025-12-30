@@ -1,8 +1,9 @@
-package talkPick.domain.random.domain;
+package talkPick.random.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
+import talkPick.domain.random.domain.RandomTopicHistory;
 
 import java.time.LocalDateTime;
 
@@ -91,5 +92,40 @@ class RandomTopicHistoryTest {
             RandomTopicHistory history = RandomTopicHistory.of(memberId, randomId, recordDTO);
             assertThat(history.getOrder()).isEqualTo(order);
         }
+    }
+
+    @Test
+    @DisplayName("next 호출 전후로 endAt 값 변경 확인 테스트")
+    void next_호출_전후로_endAt_값_변경_확인_테스트() {
+        // given
+        RandomReqDTO.Record recordDTO = new RandomReqDTO.Record(200L, 1);
+        RandomTopicHistory history = RandomTopicHistory.of(1L, 100L, recordDTO);
+
+        // when
+        LocalDateTime beforeNext = history.getEndAt();
+        history.next();
+        LocalDateTime afterNext = history.getEndAt();
+
+        // then
+        assertAll(
+                () -> assertThat(beforeNext).isNull(),
+                () -> assertThat(afterNext).isNotNull()
+        );
+    }
+
+    @Test
+    @DisplayName("큰 값의 order로 RandomTopicHistory 생성 테스트")
+    void 큰_값의_order로_RandomTopicHistory_생성_테스트() {
+        // given
+        Long memberId = 1L;
+        Long randomId = 100L;
+        Integer largeOrder = Integer.MAX_VALUE;
+        RandomReqDTO.Record recordDTO = new RandomReqDTO.Record(200L, largeOrder);
+
+        // when
+        RandomTopicHistory history = RandomTopicHistory.of(memberId, randomId, recordDTO);
+
+        // then
+        assertThat(history.getOrder()).isEqualTo(largeOrder);
     }
 }

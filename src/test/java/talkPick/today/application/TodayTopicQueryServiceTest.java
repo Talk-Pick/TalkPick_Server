@@ -1,4 +1,4 @@
-package talkPick.domain.today.application;
+package talkPick.today.application;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,6 +10,7 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.ApplicationEventPublisher;
 import talkPick.domain.today.adapter.out.dto.TodayTopicResDTO;
+import talkPick.domain.today.application.TodayTopicQueryService;
 import talkPick.domain.today.domain.event.TodayTopicSavedEvent;
 import talkPick.domain.today.port.out.TodayTopicQueryRepositoryPort;
 
@@ -120,5 +121,21 @@ class TodayTopicQueryServiceTest {
                 () -> verify(todayTopicQueryRepositoryPort, times(1)).findTodayTopics(memberId),
                 () -> verify(eventPublisher, times(1)).publishEvent(any(TodayTopicSavedEvent.class))
         );
+    }
+
+    @Test
+    @DisplayName("오늘의 토픽 조회 시 Repository 예외 발생 테스트")
+    void 오늘의_토픽_조회시_Repository_예외_발생_테스트() {
+        // given
+        Long memberId = 1L;
+
+        given(cacheManager.getCache("todayTopics")).willReturn(cache);
+        given(cache.get(memberId)).willReturn(null);
+        given(todayTopicQueryRepositoryPort.findTodayTopics(memberId))
+                .willThrow(new RuntimeException("DB error"));
+
+        // when & then
+        org.junit.jupiter.api.Assertions.assertThrows(RuntimeException.class,
+                () -> todayTopicQueryService.getTodayTopics(memberId));
     }
 }

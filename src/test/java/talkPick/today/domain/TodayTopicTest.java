@@ -1,7 +1,8 @@
-package talkPick.domain.today.domain;
+package talkPick.today.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import talkPick.domain.today.domain.TodayTopic;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -44,5 +45,22 @@ class TodayTopicTest {
                     () -> assertThat(todayTopic.getTopicId()).isEqualTo(topicId)
             );
         }
+    }
+
+    @Test
+    @DisplayName("큰 값의 memberId와 topicId로 TodayTopic 생성 테스트")
+    void 큰_값의_memberId와_topicId로_TodayTopic_생성_테스트() {
+        // given
+        Long memberId = Long.MAX_VALUE;
+        Long topicId = Long.MAX_VALUE - 1;
+
+        // when
+        TodayTopic todayTopic = TodayTopic.of(memberId, topicId);
+
+        // then
+        assertAll(
+                () -> assertThat(todayTopic.getMemberId()).isEqualTo(memberId),
+                () -> assertThat(todayTopic.getTopicId()).isEqualTo(topicId)
+        );
     }
 }

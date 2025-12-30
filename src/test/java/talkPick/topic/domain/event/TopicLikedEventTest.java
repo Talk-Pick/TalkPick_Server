@@ -1,7 +1,8 @@
-package talkPick.domain.topic.domain.event;
+package talkPick.topic.domain.event;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import talkPick.domain.topic.domain.event.TopicLikedEvent;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;

@@ -1,4 +1,4 @@
-package talkPick.domain.notice.application;
+package talkPick.notice.application;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 import talkPick.domain.notice.adapter.in.dto.NoticeReqDTO;
 import talkPick.domain.notice.adapter.out.dto.NoticeResDTO;
+import talkPick.domain.notice.application.NoticeQueryService;
 import talkPick.domain.notice.domain.event.NoticeReadEvent;
 import talkPick.domain.notice.port.out.NoticeQueryRepositoryPort;
 import talkPick.global.response.CursorPageResponse;
@@ -190,9 +191,40 @@ class NoticeQueryServiceTest {
         noticeQueryService.getNoticeDetail(noticeId);
 
         // then
-        // Repository 조회가 먼저 실행되고, 그 다음 이벤트가 발행되어야 함
         var inOrder = org.mockito.Mockito.inOrder(noticeQueryRepositoryPort, eventPublisher);
         inOrder.verify(noticeQueryRepositoryPort).findNoticeDetailById(noticeId);
         inOrder.verify(eventPublisher).publishEvent(any(NoticeReadEvent.class));
+    }
+
+    @Test
+    @DisplayName("공지사항 목록 조회 시 Repository 예외 발생 테스트")
+    void 공지사항_목록_조회시_Repository_예외_발생_테스트() {
+        // given
+        NoticeReqDTO.Cursor cursor = new NoticeReqDTO.Cursor(
+                LocalDateTime.now(),
+                1L,
+                20
+        );
+
+        given(noticeQueryRepositoryPort.findNoticesWithCursor(cursor))
+                .willThrow(new RuntimeException("DB Connection failed"));
+
+        // when & then
+        org.junit.jupiter.api.Assertions.assertThrows(RuntimeException.class,
+                () -> noticeQueryService.getNotices(cursor));
+    }
+
+    @Test
+    @DisplayName("공지사항 상세 조회 시 Repository 예외 발생 테스트")
+    void 공지사항_상세_조회시_Repository_예외_발생_테스트() {
+        // given
+        Long noticeId = -1L;
+
+        given(noticeQueryRepositoryPort.findNoticeDetailById(noticeId))
+                .willThrow(new IllegalArgumentException("Notice not found"));
+
+        // when & then
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class,
+                () -> noticeQueryService.getNoticeDetail(noticeId));
     }
 }
