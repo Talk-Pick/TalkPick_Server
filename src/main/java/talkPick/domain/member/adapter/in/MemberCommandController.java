@@ -10,6 +10,7 @@ import talkPick.domain.member.adapter.in.dto.MemberReqDto;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.domain.member.domain.type.LoginType;
 import talkPick.external.apple.port.in.AppleOidcUsecase;
+import talkPick.external.google.port.in.GoogleOidcUsecase;
 import talkPick.external.kakao.port.in.KakaoOidcUsecase;
 import talkPick.global.security.jwt.dto.JwtResDTO;
 import talkPick.domain.member.domain.Member;
@@ -28,6 +29,7 @@ import talkPick.global.security.jwt.port.in.JwtTokenCommandUseCase;
 public class MemberCommandController implements MemberCommandApi {
     private final KakaoOidcUsecase kakaoOidcService;
     private final AppleOidcUsecase appleOidcService;
+    private final GoogleOidcUsecase googleOidcService;
     private final MemberCommandUseCase memberCommandUseCase;
     private final MemberWithdrawalUseCase memberWithdrawalUseCase; // 의존성 추가
     private final JwtTokenCommandUseCase jwtTokenCommandUseCase;
@@ -51,9 +53,28 @@ public class MemberCommandController implements MemberCommandApi {
         );
     }
 
+    @Override
     public JwtResDTO.Login appleOauth2Login (@Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response) {
         MemberDataDto.MemberData appleMemberData = appleOidcService.verifyAndParseIdToken(request);
         Member member = memberCommandUseCase.findOrCreateMember(appleMemberData, LoginType.APPLE);
+        JwtResDTO.GeneratedTokens generatedTokens = jwtTokenCommandUseCase.generateToken(member);
+
+        setRefreshTokenCookie(response, generatedTokens.refreshToken(), generatedTokens.refreshExpiredTime());
+
+        return JwtResDTO.Login.of(
+                member.getId(),
+                member.getMemberRole().toString(),
+                generatedTokens.accessToken(),
+                generatedTokens.accessExpiredTime()
+        );
+    }
+
+    @Override
+    public JwtResDTO.Login googleOauth2Login(
+            @Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response
+    ) {
+        MemberDataDto.MemberData googleMemberData = googleOidcService.verifyAndParseIdToken(request);
+        Member member = memberCommandUseCase.findOrCreateMember(googleMemberData, LoginType.GOOGLE);
         JwtResDTO.GeneratedTokens generatedTokens = jwtTokenCommandUseCase.generateToken(member);
 
         setRefreshTokenCookie(response, generatedTokens.refreshToken(), generatedTokens.refreshExpiredTime());
@@ -80,6 +101,9 @@ public class MemberCommandController implements MemberCommandApi {
         } else if ("apple".equalsIgnoreCase(provider)) {
             memberData = appleOidcService.verifyAndParseIdToken(request);
             loginType = LoginType.APPLE;
+        } else if ("google".equalsIgnoreCase(provider)) {
+            memberData = googleOidcService.verifyAndParseIdToken(request);
+            loginType = LoginType.GOOGLE;
         } else {
             throw new IllegalArgumentException("지원하지 않는 Provider입니다: " + provider);
         }
