@@ -119,7 +119,7 @@ public class MemberCommandService implements MemberCommandUseCase {
         memberCommandRepositoryPort.save(findMember);
 
         // 소셜 로그인 회원 가입 완료 시 로그인 기록 저장
-        if (findMember.getLoginType() == LoginType.KAKAO || findMember.getLoginType() == LoginType.APPLE) {
+        if (findMember.getLoginType() == LoginType.KAKAO || findMember.getLoginType() == LoginType.APPLE || findMember.getLoginType() == LoginType.GOOGLE) {
             MemberLoginHistory loginHistory = MemberConverter.toLoginHistory(findMember);
             memberLoginHistoryRepository.save(loginHistory);
         }
