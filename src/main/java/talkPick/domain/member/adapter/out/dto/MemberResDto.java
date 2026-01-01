@@ -56,7 +56,7 @@ public class MemberResDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class MemberLikedTopicResDto {
-        private Long id; // 좋아요 누른 토픽 id (TopicLikeHistory 테이블)
+        private Long topicId; // 좋아요 누른 토픽 id (Topic 테이블)
         private String title;  //토픽 주제 (Topic 테이블)
         private String keyword; //키워드 (Topickeyword 테이블)
         private Category category; //카테고리 (TopicCategory 테이블)
