@@ -41,7 +41,7 @@ public class MemberLikedTopicsQuerydslRepository implements MemberLikedTopicsQue
         // size + 1개를 조회하여 다음 페이지 존재 여부 확인
         return queryFactory
                 .select(Projections.constructor(MemberResDto.MemberLikedTopicResDto.class,
-                        tlh.id,
+                        t.id, // 토픽 ID
                         t.title,           // 토픽 주제 (String)
                         k.name,                  // 키워드 (Keyword)
                         c,                   // 카테고리 (Category)
