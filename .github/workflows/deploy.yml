@@ -82,7 +82,12 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             TARGET_DIR="/home/${{ secrets.EC2_user }}/TalkPick_Server"
+            
+            # Ensure env directory exists and clear old .env
             mkdir -p $TARGET_DIR/env
+            rm -f $TARGET_DIR/env/.env
+            
+            # Write new .env file
             cat << 'EOF' > $TARGET_DIR/env/.env
             ${{ secrets.ENV }}
             EOF
