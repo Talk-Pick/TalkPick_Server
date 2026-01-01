@@ -17,7 +17,7 @@ public interface MemberCommandApi {
     JwtResDTO.Login kakaoOAuth2Login(
             @Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response);
 
-    @PatchMapping("/apple/login")
+    @PostMapping("/apple/login")
     @Operation(summary = "APPLE Oauth2 로그인 API", description = "APPLE OAuth2 로그인 API 입니다.")
     JwtResDTO.Login appleOauth2Login (@Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response);
 
