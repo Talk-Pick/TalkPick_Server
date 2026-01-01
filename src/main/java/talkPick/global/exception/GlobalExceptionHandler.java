@@ -27,10 +27,14 @@ public class GlobalExceptionHandler {
     // 커스텀 예외 처리
     @ExceptionHandler(TalkPickException.class)
     public ResponseEntity<ApiResponse<Void>> talkPickExceptionHandler(final TalkPickException e) {
+        String message = e.getMessage();
+        if (message == null || message.isBlank()) {
+            message = e.getErrorCode().getMessage();
+        }
         return ResponseEntity
                 .status(e.getErrorCode().getStatus())
                 .headers(jsonHeaders)
-                .body(ApiResponse.ofErrorCode(e.getErrorCode()));
+                .body(ApiResponse.ofErrorCode(e.getErrorCode(), message));
     }
 
     // 유효성 검사 실패 예외 처리
