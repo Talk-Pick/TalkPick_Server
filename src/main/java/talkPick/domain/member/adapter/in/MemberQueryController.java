@@ -14,6 +14,7 @@ import talkPick.global.response.CursorPageResponse;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/api/v1/members")
 public class MemberQueryController implements MemberQueryApi {
     private final MemberQueryUseCase memberQueryUseCase;
 
