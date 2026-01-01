@@ -67,6 +67,7 @@ jobs:
             EOF
             
             cd /home/${{ secrets.EC2_user }}/TalkPick_Server
+            docker compose down
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/talkpick-server:latest || true
             docker compose pull 
-            docker compose down 
             docker compose up -d
