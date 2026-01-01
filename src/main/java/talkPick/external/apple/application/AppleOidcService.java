@@ -8,7 +8,6 @@ import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import talkPick.domain.member.adapter.in.dto.MemberReqDto;
 import talkPick.domain.member.converter.MemberConverter;
@@ -34,8 +33,7 @@ public class AppleOidcService implements AppleOidcUsecase {
     private static final String JWK_URL = "https://appleid.apple.com/auth/keys";
     // iss 검증 값
     private static final String ISSUER = "https://appleid.apple.com";
-    @Value("${apple.bundle-id}")
-    private String BUNDLE_ID;
+    private static final String BUNDLE_ID = "io.tuist.TalkPick";
 
     @Override
     public MemberDataDto.MemberData verifyAndParseIdToken(MemberReqDto.OAuth2LoginRequest request) {
