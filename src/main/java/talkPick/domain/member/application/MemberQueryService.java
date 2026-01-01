@@ -62,7 +62,7 @@ public class MemberQueryService implements MemberQueryUseCase {
         CursorPageResponse.Cursor nextCursor = null;
         if (hasNext && !memberLikedTopics.isEmpty()) {
             MemberResDto.MemberLikedTopicResDto last = memberLikedTopics.get(memberLikedTopics.size() - 1);
-            nextCursor = new CursorPageResponse.Cursor(last.getCreatedDate(), last.getId());
+            nextCursor = new CursorPageResponse.Cursor(last.getCreatedDate(), last.getTopicId());
         }
 
         // 커서 기반 페이징 응답 반환
