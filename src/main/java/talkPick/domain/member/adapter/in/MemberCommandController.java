@@ -26,6 +26,7 @@ import talkPick.global.security.jwt.port.in.JwtTokenCommandUseCase;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/api/v1/members")
 public class MemberCommandController implements MemberCommandApi {
     private final KakaoOidcUsecase kakaoOidcService;
     private final AppleOidcUsecase appleOidcService;
