@@ -3,7 +3,7 @@ name: Deploy TalkPick Server
 on:
   push:
     branches:
-      - staging
+      - deploy/265
 
 jobs:
   deploy:
@@ -68,12 +68,11 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             mkdir -p /home/${{ secrets.EC2_USER }}/TalkPick_Server/env
-            cd /home/${{ secrets.EC2_USER }}/TalkPick_Server
-            
-            cat << 'EOF' > ./env/.env
+            cat << 'EOF' > /home/${{ secrets.EC2_USER }}/TalkPick_Server/env/.env
             ${{ secrets.ENV }}
             EOF
             
+            cd /home/${{ secrets.EC2_USER }}/TalkPick_Server
             docker compose pull talkpick-server
             docker compose build nginx
             docker compose up -d
