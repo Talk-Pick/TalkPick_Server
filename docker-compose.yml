@@ -9,9 +9,7 @@ services:
       - "8080:8080"
     restart: always
     env_file:
-      - /home/ec2-user/TalkPick_Server/env/.env
-    volumes:
-      - /home/ec2-user/config:/config
+      - ./.env
       
   ## nginx
   nginx:
