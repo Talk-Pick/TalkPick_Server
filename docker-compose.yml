@@ -21,11 +21,6 @@ services:
     ports:
       - "443:443"
       - "80:80"
-    env_file:
-      - ./env/.env
-    environment:
-        ORIGIN_CERTIFICATE: "${ORIGIN_CERTIFICATE}"
-        PRIVATE_CERTIFICATE_KEY: "${PRIVATE_CERTIFICATE_KEY}"
     depends_on:
       - talkpick-server
     volumes:
