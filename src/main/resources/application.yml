@@ -4,6 +4,7 @@ jwt:
   refreshTokenExpireTime: ${JWT_REFRESH_EXPIRE_TIME}
 
 server:
+  forward-headers-strategy: framework
   port: ${SERVER_PORT}
   tomcat:
     threads:

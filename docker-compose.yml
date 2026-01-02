@@ -9,7 +9,7 @@ services:
       - "8080:8080"
     restart: always
     env_file:
-      - ./.env
+      - /home/ec2-user/TalkPick_Server/env/.env
       
   ## nginx
   nginx:
@@ -21,13 +21,11 @@ services:
     ports:
       - "443:443"
       - "80:80"
-    environment:
-        ORIGIN_CERTIFICATE: "${ORIGIN_CERTIFICATE}"
-        PRIVATE_CERTIFICATE_KEY: "${PRIVATE_CERTIFICATE_KEY}"
     depends_on:
       - talkpick-server
     volumes:
       - ./nginx/conf:/etc/nginx/conf.d
-      - ./nginx/html:/usr/share/nginx/html
+      - ./nginx/html/terms/privacy-policy:/usr/share/nginx/html/docs:ro
+      - /etc/ssl/cloudflare:/etc/ssl/cloudflare:ro
 networks:
   t4y:
