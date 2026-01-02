@@ -30,7 +30,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: DOCKER - Build Docker Image
-        run: docker build --no-cache -t talkpick-server:latest .
+        run: docker build -t talkpick-server:latest .
     
       - name: DOCKER_HUB - Login to Docker Hub
         run: |
@@ -67,11 +67,13 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            mkdir -p /home/${{ secrets.EC2_user }}/TalkPick_Server/env
-            cat << 'EOF' > /home/${{ secrets.EC2_user }}/TalkPick_Server/env/.env
+            mkdir -p /home/${{ secrets.EC2_USER }}/TalkPick_Server/env
+            cd /home/${{ secrets.EC2_USER }}/TalkPick_Server
+            
+            cat << 'EOF' > .env
             ${{ secrets.ENV }}
             EOF
             
-            cd /home/${{ secrets.EC2_user }}/TalkPick_Server
-            docker compose pull 
+            docker compose pull talkpick-server
+            docker compose build nginx
             docker compose up -d
