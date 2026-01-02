@@ -78,7 +78,7 @@ jobs:
           script: |
             mkdir -p /home/${{ secrets.EC2_USER }}/TalkPick_Server/env
             cat << 'EOF' > /home/${{ secrets.EC2_USER }}/TalkPick_Server/env/.env
-            ${{ secrets.ENV }}
+            ${{ secrets.ENV }}ㄴ
             EOF
             
             cd /home/${{ secrets.EC2_USER }}/TalkPick_Server
