@@ -70,7 +70,7 @@ jobs:
             mkdir -p /home/${{ secrets.EC2_USER }}/TalkPick_Server/env
             cd /home/${{ secrets.EC2_USER }}/TalkPick_Server
             
-            cat << 'EOF' > .env
+            cat << 'EOF' > /env/.env
             ${{ secrets.ENV }}
             EOF
             
