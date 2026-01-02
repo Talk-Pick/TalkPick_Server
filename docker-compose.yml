@@ -25,6 +25,7 @@ services:
       - talkpick-server
     volumes:
       - ./nginx/conf:/etc/nginx/conf.d
+      - ./nginx/docs:/usr/share/nginx/html/docs:ro
       - /etc/ssl/cloudflare:/etc/ssl/cloudflare:ro
 networks:
   t4y:
