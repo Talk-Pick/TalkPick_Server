@@ -18,11 +18,6 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: CLEAN - Ensure no prod properties exist
-        run: |
-          sudo rm -f src/main/resources/application-prod.properties
-          find src/main/resources -name "application-prod.properties" || true
-
       - name: BUILD - Run Test & Build JAR
         run: | 
           ./gradlew clean build
@@ -61,18 +56,9 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            target_dir="/home/${{ secrets.EC2_user }}/TalkPick_Server"
+            target_dir="/home/${{ secrets.EC2_USER }}/TalkPick_Server"
             sudo mkdir -p $target_dir
             sudo chown -R $(whoami):$(whoami) $target_dir
-
-      - name: SCP - Copy files to EC2
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          source: "docker-compose.yml,nginx/"
-          target: "/home/${{ secrets.EC2_user }}/TalkPick_Server"
 
       - name: AWS - Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
@@ -81,26 +67,11 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            TARGET_DIR="/home/${{ secrets.EC2_user }}/TalkPick_Server"
-            
-            # Ensure env directory exists and clear old .env
-            mkdir -p $TARGET_DIR/env
-            rm -f $TARGET_DIR/env/.env
-            
-            # Write new .env file
-            cat << 'EOF' > $TARGET_DIR/env/.env
+            mkdir -p /home/${{ secrets.EC2_user }}/TalkPick_Server/env
+            cat << 'EOF' > /home/${{ secrets.EC2_user }}/TalkPick_Server/env/.env
             ${{ secrets.ENV }}
             EOF
             
-            cd $TARGET_DIR
-            
-            # Stop current services
-            docker compose down
-            
-            # Remove the specific app image and any unused data to ensure a clean state
-            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/talkpick-server:latest || true
-            docker system prune -f
-            
-            # Pull latest images and rebuild local ones (like nginx)
-            docker compose pull
-            docker compose up -d --build
+            cd /home/${{ secrets.EC2_user }}/TalkPick_Server
+            docker compose pull 
+            docker compose up -d
