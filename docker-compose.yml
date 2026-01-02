@@ -26,6 +26,5 @@ services:
     volumes:
       - ./nginx/conf:/etc/nginx/conf.d
       - /etc/ssl/cloudflare:/etc/ssl/cloudflare:ro
-      - ./docs:/usr/share/nginx/html/docs
 networks:
   t4y:
