@@ -2,7 +2,7 @@ FROM nginx:stable-alpine
 
 # Nginx 설정 복사
 COPY conf /etc/nginx/conf.d
-COPY docs /usr/share/nginx/html/docs
+COPY docs /usr/share/nginx/html/docs/index.html
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
