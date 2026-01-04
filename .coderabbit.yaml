@@ -1,0 +1,11 @@
+# CodeRabbit 설정 파일
+language: "ko-KR"                # 리뷰 언어 한국어로 설정
+early_access: false
+reviews:
+  profile: "chill"
+  request_changes_workflow: false # AI가 승인 거부를 못 하게
+  high_level_summary: true       # 전체적인 3줄 요약 제공
+  auto_review:
+    enabled: true
+chat:
+  auto_reply: true               # 대댓글로 질문하면 답변
