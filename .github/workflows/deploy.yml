@@ -79,6 +79,8 @@ jobs:
             mkdir -p /home/${{ secrets.EC2_USER }}/TalkPick_Server/env
             cat << 'EOF' > /home/${{ secrets.EC2_USER }}/TalkPick_Server/env/.env
             ${{ secrets.ENV }}
+            GRAFANA_CLOUD_USER=${{ secrets.GRAFANA_CLOUD_USER }}
+            GRAFANA_CLOUD_TOKEN=${{ secrets.GRAFANA_CLOUD_TOKEN }}
             EOF
             
             cd /home/${{ secrets.EC2_USER }}/TalkPick_Server
