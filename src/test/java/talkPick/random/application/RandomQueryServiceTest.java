@@ -9,7 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
 import talkPick.domain.random.application.RandomQueryService;
 import talkPick.domain.random.port.out.RandomQueryRepositoryPort;
-import talkPick.domain.topic.domain.type.CategoryGroup;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,7 +36,6 @@ class RandomQueryServiceTest {
         Long memberId = 1L;
         Long randomId = 100L;
         Integer order = 1;
-        CategoryGroup categoryGroup = CategoryGroup.STRANGER;
         String category = "일상";
 
         List<RandomResDTO.RandomTopic> mockTopics = List.of(
@@ -49,12 +47,12 @@ class RandomQueryServiceTest {
                 ))
         );
 
-        given(randomQueryRepositoryPort.findRandomTopics(memberId, randomId, order, categoryGroup, category))
+        given(randomQueryRepositoryPort.findRandomTopics(memberId, randomId, order, category))
                 .willReturn(mockTopics);
 
         // when
         List<RandomResDTO.RandomTopic> result = randomQueryService.getRandomTopics(
-                memberId, randomId, order, categoryGroup, category
+                memberId, randomId, order, category
         );
 
         // then
@@ -64,7 +62,7 @@ class RandomQueryServiceTest {
                 () -> assertThat(result.get(0).getOrder()).isEqualTo(1),
                 () -> assertThat(result.get(1).getOrder()).isEqualTo(2),
                 () -> verify(randomQueryRepositoryPort, times(1))
-                        .findRandomTopics(memberId, randomId, order, categoryGroup, category)
+                        .findRandomTopics(memberId, randomId, order, category)
         );
     }
 
@@ -75,15 +73,14 @@ class RandomQueryServiceTest {
         Long memberId = 1L;
         Long randomId = 100L;
         Integer order = 1;
-        CategoryGroup categoryGroup = CategoryGroup.STRANGER;
         String category = "일상";
 
-        given(randomQueryRepositoryPort.findRandomTopics(memberId, randomId, order, categoryGroup, category))
+        given(randomQueryRepositoryPort.findRandomTopics(memberId, randomId, order, category))
                 .willReturn(Collections.emptyList());
 
         // when
         List<RandomResDTO.RandomTopic> result = randomQueryService.getRandomTopics(
-                memberId, randomId, order, categoryGroup, category
+                memberId, randomId, order, category
         );
 
         // then
@@ -91,7 +88,7 @@ class RandomQueryServiceTest {
                 () -> assertThat(result).isNotNull(),
                 () -> assertThat(result).isEmpty(),
                 () -> verify(randomQueryRepositoryPort, times(1))
-                        .findRandomTopics(memberId, randomId, order, categoryGroup, category)
+                        .findRandomTopics(memberId, randomId, order, category)
         );
     }
 }

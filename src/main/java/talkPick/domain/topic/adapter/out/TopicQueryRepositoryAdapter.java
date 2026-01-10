@@ -2,7 +2,6 @@ package talkPick.domain.topic.adapter.out;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import talkPick.domain.topic.domain.type.CategoryGroup;
 import talkPick.domain.topic.domain.Topic;
 import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
@@ -25,8 +24,8 @@ public class TopicQueryRepositoryAdapter implements TopicQueryRepositoryPort {
     }
 
     @Override
-    public List<TopicResDTO.Categories> findCategoriesByCategoryGroup(CategoryGroup categoryGroup) {
-        return Optional.ofNullable(topicQuerydslRepository.findCategoriesByCategoryGroup(categoryGroup))
+    public List<TopicResDTO.Categories> findCategories() {
+        return Optional.ofNullable(topicQuerydslRepository.findCategories())
                 .orElse(Collections.emptyList());
     }
 
