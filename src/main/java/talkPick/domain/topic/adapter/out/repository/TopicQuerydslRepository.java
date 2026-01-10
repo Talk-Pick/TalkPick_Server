@@ -5,7 +5,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
-import talkPick.domain.topic.domain.type.CategoryGroup;
 import java.util.List;
 import static talkPick.domain.topic.domain.QCategory.category;
 import static talkPick.domain.topic.domain.QKeyword.keyword;
@@ -17,15 +16,13 @@ import static talkPick.domain.topic.domain.QTopicStat.topicStat;
 public class TopicQuerydslRepository {
     private final JPAQueryFactory queryFactory;
 
-    public List<TopicResDTO.Categories> findCategoriesByCategoryGroup(CategoryGroup categoryGroup) {
+    public List<TopicResDTO.Categories> findCategories() {
         return queryFactory.select(Projections.constructor(TopicResDTO.Categories.class,
                         category.id,
                         category.title,
-                        category.imageUrl,
-                        category.categoryGroup
+                        category.imageUrl
                 ))
                 .from(category)
-                .where(category.categoryGroup.eq(categoryGroup))
                 .fetch();
     }
 
@@ -35,7 +32,6 @@ public class TopicQuerydslRepository {
                         topic.title,
                         topic.detail,
                         category.title,
-                        category.categoryGroup,
                         keyword.name,
                         keyword.imageUrl,
                         topic.imageUrl

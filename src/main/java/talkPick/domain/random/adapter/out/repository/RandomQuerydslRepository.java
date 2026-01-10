@@ -6,7 +6,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
-import talkPick.domain.topic.domain.type.CategoryGroup;
 import talkPick.global.model.TalkPickStatus;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +20,7 @@ import static talkPick.domain.topic.domain.QTopic.topic;
 public class RandomQuerydslRepository {
     private final JPAQueryFactory queryFactory;
 
-    public List<RandomResDTO.RandomTopicDetail> findRandomTopics(Long memberId, Long randomId, CategoryGroup categoryGroup, String categoryType){
+    public List<RandomResDTO.RandomTopicDetail> findRandomTopics(Long memberId, Long randomId, String categoryType){
         List<Long> alreadyUsedTopicIds = queryFactory
                 .select(randomTopicHistory.topicId)
                 .from(randomTopicHistory)
@@ -36,10 +35,6 @@ public class RandomQuerydslRepository {
             builder.and(topic.id.notIn(alreadyUsedTopicIds));
         }
 
-        if (categoryGroup != null) {
-            builder.and(category.categoryGroup.eq(categoryGroup));
-        }
-
         if (categoryType != null) {
             builder.and(category.title.eq(categoryType));
         }
@@ -49,7 +44,6 @@ public class RandomQuerydslRepository {
                         topic.id,
                         topic.title,
                         topic.detail,
-                        category.categoryGroup.stringValue(),
                         category.title,
                         keyword.name,
                         keyword.imageUrl,

@@ -2,7 +2,6 @@ package talkPick.domain.topic.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import talkPick.domain.topic.domain.type.CategoryGroup;
 
 @Getter
 @Entity
@@ -22,15 +21,10 @@ public class Category {
     @Column(name = "image_url", nullable = true, length = 500, columnDefinition = "VARCHAR(500) COMMENT '카테고리 이미지 URL'")
     private String imageUrl;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "category_group", nullable = false, columnDefinition = "VARCHAR(20) COMMENT '카테고리 그룹'")
-    private CategoryGroup categoryGroup;
-
-    public static Category of(String title, String imageUrl, CategoryGroup categoryGroup) {
+    public static Category of(String title, String imageUrl) {
         return Category.builder()
                 .title(title)
                 .imageUrl(imageUrl)
-                .categoryGroup(categoryGroup)
                 .build();
     }
 }

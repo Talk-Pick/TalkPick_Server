@@ -14,15 +14,15 @@ VALUES (
            NOW()
        );
 
-INSERT INTO category (title, image_url, category_group) VALUES
-                                                            ('소개팅/과팅', 'https://dummyimage.com/600x400/000/fff&text=소개팅', 'STRANGER'),
-                                                            ('그룹 첫 모임', 'https://dummyimage.com/600x400/111/fff&text=그룹모임', 'STRANGER'),
-                                                            ('룸메 첫 만남', 'https://dummyimage.com/600x400/222/fff&text=룸메', 'STRANGER'),
-                                                            ('기타/아이스브레이킹', 'https://dummyimage.com/600x400/333/fff&text=기타', 'STRANGER'),
-                                                            ('가족', 'https://dummyimage.com/600x400/444/fff&text=가족', 'CLOSE'),
-                                                            ('친구', 'https://dummyimage.com/600x400/555/fff&text=친구', 'CLOSE'),
-                                                            ('연인', 'https://dummyimage.com/600x400/666/fff&text=연인', 'CLOSE'),
-                                                            ('동료', 'https://dummyimage.com/600x400/777/fff&text=동료', 'CLOSE');
+INSERT INTO category (title, image_url) VALUES
+                                            ('소개팅/과팅', 'https://dummyimage.com/600x400/000/fff&text=소개팅'),
+                                            ('그룹 첫 모임', 'https://dummyimage.com/600x400/111/fff&text=그룹모임'),
+                                            ('룸메 첫 만남', 'https://dummyimage.com/600x400/222/fff&text=룸메'),
+                                            ('기타/아이스브레이킹', 'https://dummyimage.com/600x400/333/fff&text=기타'),
+                                            ('가족', 'https://dummyimage.com/600x400/444/fff&text=가족'),
+                                            ('친구', 'https://dummyimage.com/600x400/555/fff&text=친구'),
+                                            ('연인', 'https://dummyimage.com/600x400/666/fff&text=연인'),
+                                            ('동료', 'https://dummyimage.com/600x400/777/fff&text=동료');
 
 INSERT INTO keyword (name, image_url, icon_url) VALUES
                                                     ('만약에', 'https://dummyimage.com/600x400/f44/fff&text=만약에', 'https://dummyimage.com/100x100/f44/fff&text=만약에'),
