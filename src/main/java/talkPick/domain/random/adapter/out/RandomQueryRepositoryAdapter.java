@@ -7,7 +7,6 @@ import talkPick.domain.random.adapter.out.repository.RandomJpaRepository;
 import talkPick.domain.random.adapter.out.repository.RandomQuerydslRepository;
 import talkPick.domain.random.domain.Random;
 import talkPick.domain.random.port.out.RandomQueryRepositoryPort;
-import talkPick.domain.topic.domain.type.CategoryGroup;
 import talkPick.global.exception.handler.RandomExceptionHandler;
 import java.util.List;
 import static talkPick.global.exception.ErrorCode.RANDOM_NOT_FOUND;
@@ -19,8 +18,8 @@ public class RandomQueryRepositoryAdapter implements RandomQueryRepositoryPort {
     private final RandomQuerydslRepository randomQuerydslRepository;
 
     @Override
-    public List<RandomResDTO.RandomTopic> findRandomTopics(Long memberId, Long randomId, Integer order, CategoryGroup categoryGroup, String category) {
-        var topics = randomQuerydslRepository.findRandomTopics(memberId, randomId, categoryGroup, category);
+    public List<RandomResDTO.RandomTopic> findRandomTopics(Long memberId, Long randomId, Integer order, String category) {
+        var topics = randomQuerydslRepository.findRandomTopics(memberId, randomId, category);
         return List.of(new RandomResDTO.RandomTopic(order, topics));
     }
 

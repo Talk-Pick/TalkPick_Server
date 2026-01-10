@@ -8,9 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
-import talkPick.domain.topic.domain.type.CategoryGroup;
 import java.util.List;
 
 @Validated
@@ -18,8 +16,8 @@ import java.util.List;
 @Tag(name = "톡픽 API", description = "톡픽 관련 API 입니다.")
 public interface TopicQueryApi {
     @GetMapping("/categories")
-    @Operation(summary = "카테고리 전체 조회 API", description = "카테고리 전체 조회 API 입니다. 조회를 원하는 Category의 CategoryGroup(STRANGER : 첫 만남, CLOSE : 가까운 사이)를 파라미터에 넣어서 보내주세요.")
-    List<TopicResDTO.Categories> getCategories(@RequestParam(name = "categoryGroup") CategoryGroup categoryGroup);
+    @Operation(summary = "카테고리 전체 조회 API", description = "카테고리 전체 조회 API 입니다. 기존에 CategoryGroup을 파라미터로 넣어서 보냈는데, 이제 안 넣으시고 요청하셔도 됩니다.")
+    List<TopicResDTO.Categories> getCategories();
 
     @GetMapping("/{topicId}")
     @Operation(summary = "토픽 상세 조회 API", description = "토픽 상세 조회 API 입니다.")
