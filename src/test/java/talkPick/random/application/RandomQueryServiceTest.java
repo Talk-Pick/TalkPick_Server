@@ -40,10 +40,10 @@ class RandomQueryServiceTest {
 
         List<RandomResDTO.RandomTopic> mockTopics = List.of(
                 new RandomResDTO.RandomTopic(1, List.of(
-                        new RandomResDTO.RandomTopicDetail(1L, "토픽1", "설명1", "STRANGER", "일상", "키워드1", "img1.png", "icon1.png")
+                        new RandomResDTO.RandomTopicDetail(1L, "토픽1", "설명1", "일상", "키워드1", "img1.png", "icon1.png")
                 )),
                 new RandomResDTO.RandomTopic(2, List.of(
-                        new RandomResDTO.RandomTopicDetail(2L, "토픽2", "설명2", "CLOSE", "대화", "키워드2", "img2.png", "icon2.png")
+                        new RandomResDTO.RandomTopicDetail(2L, "토픽2", "설명2", "대화", "키워드2", "img2.png", "icon2.png")
                 ))
         );
 
