@@ -32,7 +32,6 @@ public class RandomResDTO {
         private Long topicId;
         private String title;
         private String detail;
-        private String categoryGroup;
         private String category;
         private String keywordName;
         private String keywordImageUrl;
