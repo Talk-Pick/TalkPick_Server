@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface TopicStatJpaRepository extends JpaRepository<TopicStat, Long> {
     Optional<TopicStat> findByTopicId(Long topicId);
 
-    @Modifying
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("UPDATE TopicStat SET likeCount = likeCount + 1 WHERE topicId = :topicId")
     void incrementLikeCount(@Param("topicId") Long topicId);
 }

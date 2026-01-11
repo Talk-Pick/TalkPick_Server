@@ -22,6 +22,11 @@ public class MemberTermCommandRepositoryAdapter implements MemberTermCommandRepo
     public MemberTerm save(MemberTerm memberTerm) {
         return repository.save(memberTerm);
     }
+
+    @Override
+    public void deleteByMemberId(Long memberId) {
+        repository.deleteByMemberId(memberId);
+    }
 }
 
 

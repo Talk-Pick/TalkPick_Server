@@ -1,7 +1,6 @@
 package talkPick.domain.member.application;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.member.port.out.MemberCommandRepositoryPort;
@@ -15,6 +14,7 @@ import talkPick.domain.member.dto.MemberDataDto;
 import talkPick.domain.member.adapter.in.dto.MemberReqDto;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.domain.member.port.in.MemberCommandUseCase;
+import talkPick.domain.member.port.in.MemberWithdrawalUseCase;
 import talkPick.domain.member.port.out.MemberLoginHistoryCommandRepositoryPort;
 import talkPick.domain.member.port.out.MemberQueryRepositoryPort;
 import talkPick.domain.term.port.out.TermQueryRepositoryPort;
@@ -27,13 +27,13 @@ import talkPick.global.exception.handler.TermExceptionHandler;
 import talkPick.global.model.TalkPickStatus;
 import talkPick.global.security.jwt.util.JwtProvider;
 
+
 import java.util.List;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class MemberCommandService implements MemberCommandUseCase {
-    private static final String DEFAULT_PROFILE_IMG_URL = "https://example.com/images/default-profile.png";
 
     private final MemberCommandRepositoryPort memberCommandRepositoryPort;
     private final TermQueryRepositoryPort termQueryRepositoryPort;
@@ -41,8 +41,10 @@ public class MemberCommandService implements MemberCommandUseCase {
     private final RefreshTokenRepository refreshTokenRepository;
     private final MemberLoginHistoryCommandRepositoryPort memberLoginHistoryRepository;
     private final MemberQueryRepositoryPort memberQueryRepositoryPort;
+    private final MemberWithdrawalUseCase memberWithdrawalUseCase;
     private final JwtProvider jwtProvider;
     private final MemberTopicResultJpaRepository memberTopicResultJpaRepository;
+
 
     /**
      * 회원 프로필 수정
@@ -70,7 +72,28 @@ public class MemberCommandService implements MemberCommandUseCase {
     public Member findOrCreateMember(MemberDataDto.MemberData MemberData, LoginType loginType) {
         Member findOrNewMember = memberCommandRepositoryPort.findByProviderId(MemberData.getSub())
                 .orElseGet(() -> MemberConverter.toMember(MemberData, loginType));
+
+        if (findOrNewMember.getStatus() == TalkPickStatus.DIS_ACTIVE) {
+            throw new MemberExceptionHandler(ErrorCode.MEMBER_IS_WITHDRAWN);
+        }
+
         return memberCommandRepositoryPort.save(findOrNewMember);
+    }
+
+    /**
+     * 탈퇴한 회원 복구
+     */
+    @Override
+    public Member reactivateMember(MemberDataDto.MemberData memberData, LoginType loginType) {
+        Member member = memberCommandRepositoryPort.findByProviderId(memberData.getSub())
+                .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
+
+        if (member.getStatus() == TalkPickStatus.DIS_ACTIVE) {
+            member.reactivate();
+            return memberCommandRepositoryPort.save(member);
+        }
+
+        return member;
     }
 
     /**
@@ -88,29 +111,15 @@ public class MemberCommandService implements MemberCommandUseCase {
         }
 
         // 추가 정보 입력
-        findMember.updateBirth(request.getBirth());
-        findMember.updateGender(request.getGender());
         findMember.updateMbti(request.getMbti());
         findMember.updateNickname(request.getNickname());
-
-        String profileImgUrl = request.getProfileImgUrl();
-        if (profileImgUrl == null || profileImgUrl.trim().isEmpty()) {
-            findMember.updateProfileImgUrl(DEFAULT_PROFILE_IMG_URL);
-        } else {
-            findMember.updateProfileImgUrl(profileImgUrl);
-        }
 
         // 회원 ACTIVE 상태 변경
         findMember.updateStatus(TalkPickStatus.ACTIVE);
         memberCommandRepositoryPort.save(findMember);
 
-        // 이메일 회원은 임시 토큰 삭제 처리
-//        if (findMember.getLoginType() == LoginType.EMAIL) {
-//            refreshTokenRepository.findByMember(findMember).ifPresent(refreshTokenRepository::delete);
-//        }
-
         // 소셜 로그인 회원 가입 완료 시 로그인 기록 저장
-        if (findMember.getLoginType() == LoginType.KAKAO || findMember.getLoginType() == LoginType.APPLE) {
+        if (findMember.getLoginType() == LoginType.KAKAO || findMember.getLoginType() == LoginType.APPLE || findMember.getLoginType() == LoginType.GOOGLE) {
             MemberLoginHistory loginHistory = MemberConverter.toLoginHistory(findMember);
             memberLoginHistoryRepository.save(loginHistory);
         }
@@ -177,20 +186,10 @@ public class MemberCommandService implements MemberCommandUseCase {
         memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
     }
 
-    // 회원 탈퇴 처리 (상태 비활성화, 토큰 및 로그인 기록 삭제)
+    // 회원 탈퇴 처리
     @Override
     public void delete(String authorization) {
-        Long memberId = jwtProvider.getMemberId(authorization);
-
-        Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
-
-        findMember.updateStatus(TalkPickStatus.DIS_ACTIVE);
-        memberCommandRepositoryPort.save(findMember);
-
-        refreshTokenRepository.findByMember(findMember).ifPresent(refreshTokenRepository::delete);
-
-        // 로그인 기록 삭제
-        memberLoginHistoryRepository.deleteByMemberId(findMember.getId());
+        memberWithdrawalUseCase.withdraw(authorization);
     }
 
     // 토픽 캘린더 조회 코멘트 수정
@@ -218,9 +217,7 @@ public class MemberCommandService implements MemberCommandUseCase {
     // 회원 가입 시 필수 정보 검증
     private boolean validateAdditionalInfo(MemberReqDto.MemberSignupRequest request) {
         return request.getNickname() != null &&
-                request.getMbti() != null &&
-                request.getGender() != null &&
-                request.getBirth() != null;
+                request.getMbti() != null;
     }
 
     // 필수 약관 동의 여부 검증

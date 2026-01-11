@@ -1,30 +1,16 @@
 services:
-  ## talkpick
+  ## talkpick server
   talkpick-server:
-    image: 718513646976.dkr.ecr.ap-northeast-2.amazonaws.com/talkpick-server:latest
+    image: hszoo/talkpick-server:latest
     container_name: talkpick-server
+    networks:
+      - t4y
     ports:
       - "8080:8080"
-    networks:
-      - t4y
     restart: always
-    volumes:
-      - ./env/.env.properties:/app/config/.env.properties
-    environment:
-      - SPRING_CONFIG_IMPORT=optional:file:/app/config/.env.properties
     env_file:
-      - ./env/.env
-
-  ## adminer
-  adminer:
-    image: adminer
-    container_name: talkpick-db-adminer
-    networks:
-      - t4y
-    restart: always
-    ports:
-      - "8081:8080"
-
+      - /home/ec2-user/TalkPick_Server/env/.env
+      
   ## nginx
   nginx:
     build: ./nginx
@@ -35,14 +21,24 @@ services:
     ports:
       - "443:443"
       - "80:80"
-    environment:
-        ORIGIN_CERTIFICATE: "${ORIGIN_CERTIFICATE}"
-        PRIVATE_CERTIFICATE_KEY: "${PRIVATE_CERTIFICATE_KEY}"
     depends_on:
       - talkpick-server
-      - adminer
     volumes:
       - ./nginx/conf:/etc/nginx/conf.d
+      - ./nginx/html/terms/privacy-policy:/usr/share/nginx/html/docs:ro
+      - /etc/ssl/cloudflare:/etc/ssl/cloudflare:ro
+
+  ## promtail
+  promtail:
+    image: grafana/promtail:2.9.4
+    container_name: promtail
+    networks:
+      - t4y
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - ./promtail.yaml:/etc/promtail/config.yml:ro
+    command: -config.file=/etc/promtail/config.yml
+    restart: unless-stopped
 
 networks:
   t4y:

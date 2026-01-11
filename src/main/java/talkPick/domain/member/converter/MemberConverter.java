@@ -5,20 +5,31 @@ import talkPick.domain.member.domain.type.Role;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.domain.MemberLoginHistory;
 import talkPick.domain.member.domain.mapping.MemberTerm;
-import talkPick.domain.member.domain.type.Gender;
 import talkPick.domain.member.domain.type.LoginType;
 import talkPick.domain.member.dto.MemberDataDto;
-import talkPick.domain.member.adapter.in.dto.MemberReqDto;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.domain.term.domain.Term;
 import talkPick.global.model.TalkPickStatus;
 import java.time.LocalDateTime;
 
 public class MemberConverter {
-    private static final String DEFAULT_PROFILE_IMG_URL = "https://example.com/images/default-profile.png";
     private static final String DEFAULT_NICKNAME = "토픽";
 
     public static MemberDataDto.MemberData toKakaoMemberData(io.jsonwebtoken.Claims claims) {
+        return MemberDataDto.MemberData.builder()
+                .sub(claims.getSubject())
+                .email(claims.get("email", String.class))
+                .build();
+    }
+
+    public static MemberDataDto.MemberData toAppleMemberData(Claims claims) {
+        return MemberDataDto.MemberData.builder()
+                .sub(claims.getSubject())
+                .email(claims.get("email", String.class) != null ? claims.get("email", String.class) : "NONE")
+                .build();
+    }
+
+    public static MemberDataDto.MemberData toGoogleMemberData(io.jsonwebtoken.Claims claims) {
         return MemberDataDto.MemberData.builder()
                 .sub(claims.getSubject())
                 .email(claims.get("email", String.class))
@@ -30,10 +41,8 @@ public class MemberConverter {
                 .email(MemberData.getEmail())
                 .memberRole(Role.MEMBER)
                 .nickname(DEFAULT_NICKNAME)
-                .gender(Gender.NONE)
                 .loginType(loginType)
                 .status(TalkPickStatus.PENDING)
-                .profileImageUrl(DEFAULT_PROFILE_IMG_URL)
                 .providerId(MemberData.getSub())
                 .build();
 
@@ -73,13 +82,6 @@ public class MemberConverter {
         return MemberLoginHistory.builder()
                 .memberId(member.getId())
                 .loginTime(LocalDateTime.now())
-                .build();
-    }
-
-    public static MemberDataDto.MemberData toAppleMemberData(Claims claims) {
-        return MemberDataDto.MemberData.builder()
-                .sub(claims.getSubject())
-                .email(claims.get("email", String.class) != null ? claims.get("email", String.class) : "NONE")
                 .build();
     }
 }

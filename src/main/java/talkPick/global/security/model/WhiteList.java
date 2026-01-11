@@ -8,6 +8,10 @@ public final class WhiteList {
             "/api/v1/admin/login",
             "/api/v1/members/kakao/login",
             "/api/v1/members/apple/login",
+            "/api/v1/members/google/login",
+            "/api/v1/members/kakao/reactivate",
+            "/api/v1/members/google/reactivate",
+            "/api/v1/members/apple/reactivate",
             "/api/v1/members/token/refresh",
             "/api/v1/inquiry",
             "/swagger-ui/**",
@@ -19,3 +23,4 @@ public final class WhiteList {
             "/actuator/health/**"
     };
 }
+

@@ -53,6 +53,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         authorizationManagerRequestMatcherRegistry ->
                                 authorizationManagerRequestMatcherRegistry
+                                        .requestMatchers("/api/v1/members/google/login").permitAll()
                                         .requestMatchers(PATHS).permitAll() // whiteList는 인증 없이 접근 가능
                                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                         .anyRequest().authenticated()

@@ -10,6 +10,7 @@ import talkPick.global.model.BaseTime;
 import talkPick.global.model.TalkPickStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -54,17 +55,6 @@ public class Member extends BaseTime {
     )
     private String nickname;
 
-    @Column(
-            columnDefinition = "DATE COMMENT '생년월일'"
-    )
-    private LocalDate birth;
-
-    @Enumerated(EnumType.STRING)
-    @Column(
-            columnDefinition = "VARCHAR(10) COMMENT '성별(남/여 등)'"
-    )
-    private Gender gender;
-
     @Enumerated(EnumType.STRING)
     @Column(
             length = 6,
@@ -89,31 +79,17 @@ public class Member extends BaseTime {
 
     @Column(
             length = 255,
-            nullable = false,
-            columnDefinition = "VARCHAR(255) COMMENT '프로필 이미지 URL'"
-    )
-    private String profileImageUrl;
-
-    @Column(
-            length = 255,
             columnDefinition = "VARCHAR(255) COMMENT 'OAuth Provider 식별값(구글, 카카오 등 연결용)'"
     )
     private String providerId;
 
+    @Column(
+            columnDefinition = "DATETIME COMMENT '회원 탈퇴 일시'"
+    )
+    private LocalDateTime deletedAt;
+
     public void updateNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public void updateBirth(LocalDate birth) {
-        this.birth = birth;
-    }
-
-    public void updateGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public void updateProfileImgUrl(String profileImgUrl) {
-        this.profileImageUrl = profileImageUrl;
     }
 
     public void updateMbti(MBTI mbti) {this.mbti = mbti;}
@@ -122,6 +98,16 @@ public class Member extends BaseTime {
 
     public void updatePassword(String password) {
         this.password = password;
+    }
+
+    public void withdraw() {
+        this.status = TalkPickStatus.DIS_ACTIVE;
+        this.deletedAt = LocalDateTime.now();
+    }
+
+    public void reactivate() {
+        this.status = TalkPickStatus.ACTIVE;
+        this.deletedAt = null;
     }
 
 }

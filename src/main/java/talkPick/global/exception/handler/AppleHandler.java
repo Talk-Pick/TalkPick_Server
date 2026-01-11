@@ -7,4 +7,8 @@ public class AppleHandler extends TalkPickException {
     public AppleHandler(ErrorCode errorCode) {
         super(errorCode);
     }
+
+    public AppleHandler(ErrorCode errorCode, String message) {
+        super(errorCode, message);
+    }
 }

@@ -2,7 +2,6 @@ package talkPick.domain.topic.adapter.in;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
-import talkPick.domain.topic.domain.type.CategoryGroup;
 import talkPick.domain.topic.port.in.TopicQueryUseCase;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import java.util.List;
@@ -13,8 +12,8 @@ public class TopicQueryController implements TopicQueryApi {
     private final TopicQueryUseCase topicQueryUseCase;
 
     @Override
-    public List<TopicResDTO.Categories> getCategories(CategoryGroup categoryGroup) {
-        return topicQueryUseCase.getCategories(categoryGroup);
+    public List<TopicResDTO.Categories> getCategories() {
+        return topicQueryUseCase.getCategories();
     }
 
     @Override

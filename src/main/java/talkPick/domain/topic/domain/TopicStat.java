@@ -2,12 +2,7 @@ package talkPick.domain.topic.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import talkPick.domain.member.domain.Member;
-import talkPick.domain.member.domain.type.Gender;
-import talkPick.domain.member.domain.type.MBTI;
-import java.time.LocalDate;
 
-//TODO 동시성 고려해야 함.
 @Getter
 @Entity
 @Builder
@@ -77,10 +72,6 @@ public class TopicStat {
     @Column(name = "average_talk_time", nullable = false, columnDefinition = "BIGINT COMMENT '평균 토크 시간(ms)'")
     private long averageTalkTime;
 
-    @Version
-    @Column(name = "version", nullable = false, columnDefinition = "BIGINT COMMENT '버전'")
-    private Long version;
-
     public static TopicStat of(Long topicId) {
         return TopicStat.builder()
                 .topicId(topicId)
@@ -92,8 +83,6 @@ public class TopicStat {
                 .tCount(0)
                 .jCount(0)
                 .pCount(0)
-                .averageTalkTime(0)
-                .selectCount(0)
                 .likeCount(0)
                 .teenCount(0)
                 .twentiesCount(0)
@@ -102,82 +91,8 @@ public class TopicStat {
                 .fiftiesCount(0)
                 .maleCount(0)
                 .femaleCount(0)
+                .selectCount(0)
+                .averageTalkTime(0)
                 .build();
-    }
-
-    public void addLike() {
-        this.likeCount++;
-    }
-
-    //TODO 이 메서드 호출할 때 락 체크 + 리트라이 필요
-    public void update(Member member, long talkTime) {
-        MBTI mbti = MBTI.INFP;
-        updateMBTI(mbti);
-        updateAge(member.getBirth());
-        updateGender(member.getGender());
-        updateAverageTalkTime(talkTime);
-        this.selectCount++;
-    }
-
-    private void updateMBTI(MBTI mbti) {
-        if (mbti != null) {
-            String mbtiString = mbti.name();
-            if (mbtiString.startsWith("E")) {
-                this.eCount++;
-            } else if (mbtiString.startsWith("I")) {
-                this.iCount++;
-            }
-            if (mbtiString.charAt(1) == 'S') {
-                this.sCount++;
-            } else if (mbtiString.charAt(1) == 'N') {
-                this.nCount++;
-            }
-            if (mbtiString.charAt(2) == 'F') {
-                this.fCount++;
-            } else if (mbtiString.charAt(2) == 'T') {
-                this.tCount++;
-            }
-            if (mbtiString.charAt(3) == 'J') {
-                this.jCount++;
-            } else if (mbtiString.charAt(3) == 'P') {
-                this.pCount++;
-            }
-        }
-    }
-
-    private void updateAge(LocalDate birth) {
-        if (birth != null) {
-            int age = LocalDate.now().getYear() - birth.getYear();
-
-            if (age < 20) {
-                this.teenCount++;
-            } else if (age < 30) {
-                this.twentiesCount++;
-            } else if (age < 40) {
-                this.thirtiesCount++;
-            } else if (age < 50) {
-                this.fortiesCount++;
-            } else {
-                this.fiftiesCount++;
-            }
-        }
-    }
-
-    private void updateGender(Gender gender) {
-        if (gender != null) {
-            if (gender == Gender.MALE) {
-                this.maleCount++;
-            } else if (gender == Gender.FEMALE) {
-                this.femaleCount++;
-            }
-        }
-    }
-
-    private void updateAverageTalkTime(long talkTime) {
-        if (this.selectCount == 1) {
-            this.averageTalkTime = talkTime;
-        } else {
-            this.averageTalkTime = ((this.averageTalkTime * (this.selectCount - 1)) + talkTime) / this.selectCount;
-        }
     }
 }

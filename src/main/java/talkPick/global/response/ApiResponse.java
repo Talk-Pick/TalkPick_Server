@@ -71,6 +71,15 @@ public class ApiResponse<T> {
                 .build();
     }
 
+    public static ApiResponse<Void> ofErrorCode(ErrorCode errorCode, String message) {
+        return ApiResponse.<Void>builder()
+                .status("FAIL")
+                .message(message)
+                .timestamp(LocalDateTime.now())
+                .httpStatus(errorCode.getStatus().value())
+                .build();
+    }
+
     public static <T> ApiResponse<T> ofErrorCode(ErrorCode errorCode, T data) {
         return ApiResponse.<T>builder()
                 .status("FAIL")
