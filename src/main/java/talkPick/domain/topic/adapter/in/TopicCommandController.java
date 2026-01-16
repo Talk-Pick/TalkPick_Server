@@ -11,6 +11,6 @@ public class TopicCommandController implements TopicCommandApi {
 
     @Override
     public void addLike(final Long memberId, final Long topicId) {
-        topicCommandUseCase.addLike(memberId, topicId);
+        topicCommandUseCase.toggleLike(memberId, topicId);
     }
 }

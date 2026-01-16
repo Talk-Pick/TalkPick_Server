@@ -22,5 +22,10 @@ public class TopicLikeHistoryCommandRepositoryAdapter implements TopicLikeHistor
             throw new TopicExceptionHandler(ErrorCode.DUPLICATE_LIKE);
         }
     }
+
+    @Override
+    public void delete(TopicLikeHistory topicLikeHistory) {
+        topicLikeHistory.delete();
+    }
 }
 
