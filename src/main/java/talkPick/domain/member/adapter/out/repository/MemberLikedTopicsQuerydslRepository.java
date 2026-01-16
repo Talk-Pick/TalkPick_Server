@@ -12,6 +12,7 @@ import talkPick.domain.topic.domain.QKeyword;
 import talkPick.domain.topic.domain.QTopic;
 import talkPick.domain.topic.domain.QCategory;
 import talkPick.domain.topic.domain.QTopicLikeHistory;
+import talkPick.global.model.TalkPickStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,7 +31,9 @@ public class MemberLikedTopicsQuerydslRepository implements MemberLikedTopicsQue
 
         // 기본 조건: 특정 회원이 좋아요한 토픽만 조회
         BooleanBuilder builder = new BooleanBuilder()
-                .and(tlh.memberId.eq(member.getId()));
+                .and(tlh.memberId.eq(member.getId()))
+                .and(tlh.status.eq(TalkPickStatus.ACTIVE)
+                );
 
         // 커서 기반 페이징 조건 추가
         // cursor가 null이 아닌 경우, 해당 시간보다 이전(더 오래된) 데이터만 조회
