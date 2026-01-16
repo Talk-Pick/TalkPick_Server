@@ -42,7 +42,7 @@ class TopicCommandServiceTest {
         willDoNothing().given(eventPublisher).publishEvent(any(TopicLikedEvent.class));
 
         // when
-        topicCommandService.addLike(memberId, topicId);
+        topicCommandService.toggleLike(memberId, topicId);
 
         // then
         verify(topicLikeHistoryCommandRepositoryPort, times(1)).save(memberId, topicId);
@@ -60,7 +60,7 @@ class TopicCommandServiceTest {
         willDoNothing().given(eventPublisher).publishEvent(any(TopicLikedEvent.class));
 
         // when
-        topicCommandService.addLike(memberId, topicId);
+        topicCommandService.toggleLike(memberId, topicId);
 
         // then
         var inOrder = org.mockito.Mockito.inOrder(topicLikeHistoryCommandRepositoryPort, eventPublisher);
@@ -80,7 +80,7 @@ class TopicCommandServiceTest {
         willDoNothing().given(eventPublisher).publishEvent(any(TopicLikedEvent.class));
 
         // when
-        topicCommandService.addLike(memberId, topicId);
+        topicCommandService.toggleLike(memberId, topicId);
 
         // then
         verify(topicLikeHistoryCommandRepositoryPort).save(memberId, topicId);
@@ -106,7 +106,7 @@ class TopicCommandServiceTest {
 
         // when & then
         org.junit.jupiter.api.Assertions.assertThrows(IllegalStateException.class,
-                () -> topicCommandService.addLike(memberId, topicId));
+                () -> topicCommandService.toggleLike(memberId, topicId));
 
         verify(eventPublisher, never()).publishEvent(any(TopicLikedEvent.class));
     }

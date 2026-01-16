@@ -11,10 +11,7 @@ import talkPick.global.model.TalkPickStatus;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
-        name = "topic_like_history",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"memberId", "topicId"})
-        }
+        name = "topic_like_history"
 )
 public class TopicLikeHistory extends BaseTime {
     @Id
@@ -38,5 +35,9 @@ public class TopicLikeHistory extends BaseTime {
                 .memberId(memberId)
                 .topicId(topicId)
                 .build();
+    }
+
+    public void delete() {
+        this.status = TalkPickStatus.DIS_ACTIVE;
     }
 }
