@@ -12,7 +12,7 @@ import talkPick.domain.topic.domain.QKeyword;
 import talkPick.domain.topic.domain.QTopic;
 import talkPick.domain.topic.domain.QCategory;
 import talkPick.domain.topic.domain.QTopicLikeHistory;
-import talkPick.global.model.TalkPickStatus;
+import talkPick.core.common.model.TalkPickStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;

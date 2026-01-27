@@ -2,8 +2,8 @@ package talkPick.domain.notice.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import talkPick.global.model.BaseTime;
-import talkPick.global.model.TalkPickStatus;
+import talkPick.core.common.model.BaseTime;
+import talkPick.core.common.model.TalkPickStatus;
 
 
 @Getter

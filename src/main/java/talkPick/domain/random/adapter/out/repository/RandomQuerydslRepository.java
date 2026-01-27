@@ -6,7 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
-import talkPick.global.model.TalkPickStatus;
+import talkPick.core.common.model.TalkPickStatus;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

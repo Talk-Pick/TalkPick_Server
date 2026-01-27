@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import talkPick.domain.notice.adapter.in.dto.NoticeReqDTO;
 import talkPick.domain.notice.adapter.out.dto.NoticeResDTO;
 import talkPick.domain.notice.port.in.NoticeQueryUseCase;
-import talkPick.global.response.CursorPageResponse;
+import talkPick.core.common.response.CursorPageResponse;
 import java.time.LocalDateTime;
 
 @RestController

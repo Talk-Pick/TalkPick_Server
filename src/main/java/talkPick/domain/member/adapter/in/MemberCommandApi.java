@@ -8,33 +8,33 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import talkPick.domain.member.adapter.in.dto.MemberReqDto;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
-import talkPick.global.security.jwt.dto.JwtResDTO;
+import talkPick.domain.auth.adapter.out.dto.TokenResponse;
 @RequestMapping("/api/v1/members")
 @Tag(name = "유저 API", description = "유저 관련 API 입니다.")
 public interface MemberCommandApi {
     @PostMapping("/kakao/login")
     @Operation(summary = "KAKAO OAuth2 로그인 API", description = "KAKAO OAuth2 로그인 API 입니다.")
-    JwtResDTO.Login kakaoOAuth2Login(
+    TokenResponse.Login kakaoOAuth2Login(
             @Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response);
 
     @PatchMapping("/apple/login")
     @Operation(summary = "APPLE Oauth2 로그인 API", description = "APPLE OAuth2 로그인 API 입니다.")
-    JwtResDTO.Login appleOauth2Login (@Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response);
+    TokenResponse.Login appleOauth2Login (@Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response);
 
     @PostMapping("/google/login")
     @Operation(summary = "GOOGLE OAuth2 로그인 API", description = "GOOGLE OAuth2 로그인 API 입니다.")
-    JwtResDTO.Login googleOauth2Login(
+    TokenResponse.Login googleOauth2Login(
             @Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response);
 
     @PostMapping("/{provider}/reactivate")
     @Operation(summary = "계정 복구 API", description = "탈퇴한 계정(kakao/apple/google)을 복구하고 로그인합니다. provider: 'kakao', 'apple' 또는 'google'")
-    JwtResDTO.Login reactivateMember(
+    TokenResponse.Login reactivateMember(
             @Parameter(description = "kakao, apple 또는 google", example = "kakao") @PathVariable("provider") String provider,
             @Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response);
 
     @PostMapping("/token/refresh")
     @Operation(summary = "액세스 토큰 재발급", description = "쿠키에 담긴 리프레시 토큰으로 액세스 토큰을 재발급합니다.")
-    JwtResDTO.AccessToken refreshAccessToken(
+    TokenResponse.AccessToken refreshAccessToken(
             @CookieValue("refreshToken") String refreshToken);
 
     @PatchMapping("/signup")

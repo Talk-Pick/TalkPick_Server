@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import talkPick.domain.notice.adapter.out.dto.NoticeResDTO;
-import talkPick.global.response.CursorPageResponse;
+import talkPick.core.common.response.CursorPageResponse;
 import java.time.LocalDateTime;
 
 @Validated

@@ -3,7 +3,7 @@ package talkPick.domain.topic.domain.member;
 import jakarta.persistence.*;
 import lombok.*;
 import talkPick.domain.topic.domain.type.TopicType;
-import talkPick.global.model.BaseTime;
+import talkPick.core.common.model.BaseTime;
 
 @Getter
 @Entity

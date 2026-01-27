@@ -7,8 +7,8 @@ import talkPick.domain.random.adapter.out.repository.RandomTopicHistoryJpaReposi
 import talkPick.domain.random.adapter.out.repository.RandomTopicHistoryQuerydslRepository;
 import talkPick.domain.random.domain.RandomTopicHistory;
 import talkPick.domain.random.port.out.RandomTopicHistoryQueryRepositoryPort;
-import talkPick.global.exception.handler.RandomExceptionHandler;
-import static talkPick.global.exception.ErrorCode.RANDOM_TOPIC_HISTORY_NOT_FOUND;
+import talkPick.core.common.exception.handler.RandomExceptionHandler;
+import static talkPick.core.common.exception.ErrorCode.RANDOM_TOPIC_HISTORY_NOT_FOUND;
 
 @Component
 @RequiredArgsConstructor

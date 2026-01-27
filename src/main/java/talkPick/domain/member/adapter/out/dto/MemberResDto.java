@@ -1,11 +1,9 @@
 package talkPick.domain.member.adapter.out.dto;
 
 import lombok.*;
-import talkPick.domain.member.domain.type.Gender;
 import talkPick.domain.member.domain.type.MBTI;
 import talkPick.domain.topic.domain.Category;
-import talkPick.domain.topic.domain.Keyword;
-import talkPick.global.model.TalkPickStatus;
+import talkPick.core.common.model.TalkPickStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;

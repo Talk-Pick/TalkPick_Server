@@ -6,18 +6,17 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import talkPick.global.security.jwt.dto.JwtResDTO;
-import talkPick.global.security.jwt.util.JwtGenerator;
+import talkPick.domain.auth.port.out.TokenGeneratorPort;
 
 @Slf4j
 @Component
 @Profile("local")
 @RequiredArgsConstructor
 public class MasterTokenGenerator {
-    private final JwtGenerator jwtGenerator;
+    private final TokenGeneratorPort tokenGeneratorPort;
 
     @EventListener(ApplicationReadyEvent.class)
     public void generateMasterToken() {
-        log.info("[MasterToken Generated] AccessToken: {}", jwtGenerator.generateMasterAccessToken(1L, "MEMBER"));
+        log.info("[MasterToken Generated] AccessToken: {}", tokenGeneratorPort.generateMasterAccessToken(1L, "MEMBER"));
     }
 }
