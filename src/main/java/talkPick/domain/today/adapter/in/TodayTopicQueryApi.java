@@ -7,7 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import talkPick.domain.today.adapter.out.dto.TodayTopicResDTO;
-import talkPick.global.security.annotation.MemberId;
+import talkPick.global.security.resolver.MemberId;
 import java.util.List;
 
 @Validated

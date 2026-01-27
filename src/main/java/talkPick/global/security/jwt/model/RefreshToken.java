@@ -1,4 +1,4 @@
-package talkPick.global.security.jwt;
+package talkPick.global.security.jwt.model;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

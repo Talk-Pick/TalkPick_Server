@@ -1,4 +1,4 @@
-package talkPick.global.security.filter;
+package talkPick.global.security.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

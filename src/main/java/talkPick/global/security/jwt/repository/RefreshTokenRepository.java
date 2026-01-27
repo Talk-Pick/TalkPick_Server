@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.member.domain.Member;
-import talkPick.global.security.jwt.RefreshToken;
+import talkPick.global.security.jwt.model.RefreshToken;
 
 import java.util.Optional;
 

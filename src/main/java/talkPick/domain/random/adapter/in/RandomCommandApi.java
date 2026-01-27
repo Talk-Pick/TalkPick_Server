@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
-import talkPick.global.security.annotation.MemberId;
+import talkPick.global.security.resolver.MemberId;
 
 @Validated
 @RequestMapping("/api/v1/random")

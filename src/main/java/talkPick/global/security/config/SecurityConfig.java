@@ -1,6 +1,5 @@
 package talkPick.global.security.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,11 +15,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import talkPick.global.config.CorsFilter;
-import talkPick.global.security.handler.ExceptionHandlerFilter;
-import talkPick.global.security.handler.JwtAuthenticationEntryPoint;
+import talkPick.global.security.filter.ExceptionHandlerFilter;
+import talkPick.global.security.filter.GlobalSecurityFilter;
 import talkPick.global.security.filter.JwtAuthenticationFilter;
-import talkPick.global.security.jwt.util.JwtProvider;
-import static talkPick.global.security.model.WhiteList.PATHS;
+import talkPick.global.security.filter.SpringDocFilter;
+import talkPick.global.security.jwt.handler.JwtAuthenticationEntryPoint;
+import static talkPick.global.security.config.WhiteList.PATHS;
 
 @Configuration
 @EnableWebSecurity
@@ -28,10 +28,11 @@ import static talkPick.global.security.model.WhiteList.PATHS;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
     private final CorsFilter corsFilter;
-    private final JwtProvider jwtProvider;
-    private final ObjectMapper objectMapper;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final ExceptionHandlerFilter exceptionHandlerFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final GlobalSecurityFilter globalSecurityFilter;
+    private final SpringDocFilter springDocFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -57,10 +58,11 @@ public class SecurityConfig {
                                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class) // CORS 필터는 제일 앞에 실행
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider, objectMapper),
-                        UsernamePasswordAuthenticationFilter.class) // JWT 인증 필터 추가
-                .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class) // 예외 처리 필터는 JWT 필터보다 먼저 실행
+                .addFilterBefore(globalSecurityFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(springDocFilter, GlobalSecurityFilter.class)
+                .addFilterAfter(corsFilter, SpringDocFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionHandlerFilter, JwtAuthenticationFilter.class)
                 .build();
     }
 

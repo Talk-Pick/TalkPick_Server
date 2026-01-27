@@ -8,10 +8,8 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import java.util.Arrays;
 
-// http://localhost:8080/swagger-ui/index.html
 @OpenAPIDefinition(
         info = @io.swagger.v3.oas.annotations.info.Info(
                 title = "TalkPick",
@@ -19,7 +17,7 @@ import java.util.Arrays;
                 version = "1.0.0")
 )
 @Configuration
-public class SpringDocOpenApiConfig {
+public class SpringDocConfig {
 
     @Bean
     public OpenAPI openAPI() {
@@ -33,15 +31,6 @@ public class SpringDocOpenApiConfig {
                 .security(Arrays.asList(securityRequirement));
     }
 
-//    @Bean
-//    public GroupedOpenApi healthCheckOpenApi() {
-//        return GroupedOpenApi.builder()
-//                .group("HealthCheck API")
-//                .displayName("HealthCheck API")
-//                .pathsToMatch("/actuator/health/**")
-//                .build();
-//    }
-
     @Bean
     public GroupedOpenApi topicOpenApi() {
         return GroupedOpenApi.builder()
@@ -50,15 +39,6 @@ public class SpringDocOpenApiConfig {
                 .pathsToMatch("/api/v1/topic/**")
                 .build();
     }
-
-//    @Bean
-//    public GroupedOpenApi searchOpenApi() {
-//        return GroupedOpenApi.builder()
-//                .group("톡픽 검색 API")
-//                .displayName("톡픽 검색 API")
-//                .pathsToMatch("/api/v1/search/**")
-//                .build();
-//    }
 
     @Bean
     public GroupedOpenApi randomOpenApi() {

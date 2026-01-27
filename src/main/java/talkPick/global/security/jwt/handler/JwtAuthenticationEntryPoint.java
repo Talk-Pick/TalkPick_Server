@@ -1,4 +1,4 @@
-package talkPick.global.security.handler;
+package talkPick.global.security.jwt.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

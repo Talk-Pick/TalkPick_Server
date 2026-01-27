@@ -1,4 +1,4 @@
-package talkPick.global.security.annotation;
+package talkPick.global.security.resolver;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

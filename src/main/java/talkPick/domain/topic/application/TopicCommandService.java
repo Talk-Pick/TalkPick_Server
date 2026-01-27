@@ -10,7 +10,7 @@ import talkPick.domain.topic.port.in.TopicCommandUseCase;
 import talkPick.domain.topic.port.out.TopicLikeHistoryCommandRepositoryPort;
 import talkPick.domain.topic.port.out.TopicLikeHistoryQueryRepositoryPort;
 import talkPick.global.model.TalkPickStatus;
-import talkPick.global.security.annotation.MemberId;
+import talkPick.global.security.resolver.MemberId;
 
 import java.util.Optional;
 

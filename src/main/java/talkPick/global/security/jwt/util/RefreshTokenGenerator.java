@@ -3,7 +3,7 @@ package talkPick.global.security.jwt.util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import talkPick.domain.member.domain.Member;
-import talkPick.global.security.jwt.RefreshToken;
+import talkPick.global.security.jwt.model.RefreshToken;
 
 import java.nio.ByteBuffer;
 import java.security.SecureRandom;

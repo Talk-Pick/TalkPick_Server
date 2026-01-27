@@ -1,4 +1,4 @@
-package talkPick.global.security.jwt;
+package talkPick.global.security.jwt.config;
 
 import lombok.Getter;
 import lombok.Setter;

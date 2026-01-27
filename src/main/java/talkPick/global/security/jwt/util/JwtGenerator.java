@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import talkPick.global.exception.ErrorCode;
 import talkPick.global.exception.handler.JwtExceptionHandler;
-import talkPick.global.security.jwt.JwtProperties;
+import talkPick.global.security.jwt.config.JwtProperties;
 import talkPick.global.security.jwt.dto.JwtResDTO;
 import java.security.Key;
 import java.time.LocalDateTime;

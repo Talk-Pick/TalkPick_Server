@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import talkPick.domain.random.adapter.out.dto.RandomResDTO;
-import talkPick.global.security.annotation.MemberId;
+import talkPick.global.security.resolver.MemberId;
 import java.util.List;
 
 @RequestMapping("/api/v1/random")
