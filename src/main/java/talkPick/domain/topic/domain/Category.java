@@ -18,13 +18,9 @@ public class Category {
     @Column(name = "title", nullable = false, length = 255, columnDefinition = "VARCHAR(255) COMMENT '카테고리 제목'")
     private String title;
 
-    @Column(name = "image_url", nullable = true, length = 500, columnDefinition = "VARCHAR(500) COMMENT '카테고리 이미지 URL'")
+    @Column(name = "image_url", nullable = false, length = 500, columnDefinition = "VARCHAR(500) COMMENT '카테고리 이미지 URL'")
     private String imageUrl;
 
-    public static Category of(String title, String imageUrl) {
-        return Category.builder()
-                .title(title)
-                .imageUrl(imageUrl)
-                .build();
-    }
+    @Column(name = "color", nullable = false, length = 255, columnDefinition = "VARCHAR(500) COMMENT '카테고리 색상'")
+    private String color;
 }
