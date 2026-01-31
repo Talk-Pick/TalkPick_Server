@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import talkPick.domain.inquiry.adapter.out.dto.InquiryResDto;
-import talkPick.global.response.CursorPageResponse;
+import talkPick.core.common.response.CursorPageResponse;
 
 import java.time.LocalDateTime;
 

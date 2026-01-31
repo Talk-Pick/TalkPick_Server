@@ -14,8 +14,8 @@ import talkPick.domain.member.adapter.in.dto.MemberReqDto;
 import talkPick.domain.member.converter.MemberConverter;
 import talkPick.domain.member.dto.MemberDataDto;
 import talkPick.external.google.port.in.GoogleOidcUsecase;
-import talkPick.global.exception.ErrorCode;
-import talkPick.global.exception.handler.GoogleHandler;
+import talkPick.core.common.exception.ErrorCode;
+import talkPick.core.common.exception.handler.GoogleHandler;
 
 import java.math.BigInteger;
 import java.net.URL;

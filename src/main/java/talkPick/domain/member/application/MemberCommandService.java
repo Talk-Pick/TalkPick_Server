@@ -20,12 +20,12 @@ import talkPick.domain.member.port.out.MemberQueryRepositoryPort;
 import talkPick.domain.term.port.out.TermQueryRepositoryPort;
 import talkPick.domain.term.domain.Term;
 import talkPick.domain.topic.domain.member.MemberTopicResult;
-import talkPick.global.security.jwt.repository.RefreshTokenRepository;
-import talkPick.global.exception.ErrorCode;
-import talkPick.global.exception.handler.MemberExceptionHandler;
-import talkPick.global.exception.handler.TermExceptionHandler;
-import talkPick.global.model.TalkPickStatus;
-import talkPick.global.security.jwt.util.JwtProvider;
+import talkPick.domain.auth.adapter.out.RefreshTokenJpaRepository;
+import talkPick.core.common.exception.ErrorCode;
+import talkPick.core.common.exception.handler.MemberExceptionHandler;
+import talkPick.core.common.exception.handler.TermExceptionHandler;
+import talkPick.core.common.model.TalkPickStatus;
+import talkPick.domain.auth.port.out.TokenParserPort;
 
 
 import java.util.List;
@@ -38,11 +38,11 @@ public class MemberCommandService implements MemberCommandUseCase {
     private final MemberCommandRepositoryPort memberCommandRepositoryPort;
     private final TermQueryRepositoryPort termQueryRepositoryPort;
     private final MemberTermCommandRepositoryPort memberTermJpaRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenJpaRepository refreshTokenRepository;
     private final MemberLoginHistoryCommandRepositoryPort memberLoginHistoryRepository;
     private final MemberQueryRepositoryPort memberQueryRepositoryPort;
     private final MemberWithdrawalUseCase memberWithdrawalUseCase;
-    private final JwtProvider jwtProvider;
+    private final TokenParserPort tokenParserPort;
     private final MemberTopicResultJpaRepository memberTopicResultJpaRepository;
 
 
@@ -51,7 +51,7 @@ public class MemberCommandService implements MemberCommandUseCase {
      */
     @Override
     public MemberResDto.MemberProfileResponse updateProfile(String authorization, MemberReqDto.ProfileUpdateRequest request) {
-        Long memberId = jwtProvider.getMemberId(authorization);
+        Long memberId = tokenParserPort.getMemberIdFromToken(tokenParserPort.resolveToken(authorization));
 
         // 회원 조회
         Member findMember = memberCommandRepositoryPort.findById(memberId)
@@ -101,7 +101,7 @@ public class MemberCommandService implements MemberCommandUseCase {
      */
     @Override
     public MemberResDto.MemberSignupResponse memberSignup(String authorization, MemberReqDto.MemberSignupRequest request) {
-        Long memberId = jwtProvider.getMemberId(authorization);
+        Long memberId = tokenParserPort.getMemberIdFromToken(tokenParserPort.resolveToken(authorization));
 
         Member findMember = memberCommandRepositoryPort.findById(memberId)
                 .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
@@ -132,7 +132,7 @@ public class MemberCommandService implements MemberCommandUseCase {
      */
     @Override
     public MemberResDto.TermAgreementResponse termAgreement(String authorization, MemberReqDto.TermAgreementRequest request) {
-        Long memberId = jwtProvider.getMemberId(authorization);
+        Long memberId = tokenParserPort.getMemberIdFromToken(tokenParserPort.resolveToken(authorization));
 
         Member findMember = memberCommandRepositoryPort.findById(memberId)
                 .orElseThrow(() -> new MemberExceptionHandler(ErrorCode.MEMBER_NOT_FOUND));
@@ -176,7 +176,7 @@ public class MemberCommandService implements MemberCommandUseCase {
     // 로그아웃 처리 (토큰 및 로그인 기록 삭제)
     @Override
     public void logout(String authorization) {
-        Long memberId = jwtProvider.getMemberId(authorization);
+        Long memberId = tokenParserPort.getMemberIdFromToken(tokenParserPort.resolveToken(authorization));
 
         Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
@@ -195,7 +195,7 @@ public class MemberCommandService implements MemberCommandUseCase {
     // 토픽 캘린더 조회 코멘트 수정
     @Override
     public void TopicResultCommentChange(String authorization, MemberReqDto.TopicResultCommentChangeRequest request) {
-        Long memberId = jwtProvider.getMemberId(authorization);
+        Long memberId = tokenParserPort.getMemberIdFromToken(tokenParserPort.resolveToken(authorization));
 
         // 회원 조회
         Member findMember = memberQueryRepositoryPort.findMemberById(memberId);

@@ -3,7 +3,7 @@ package talkPick.domain.inquiry.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import talkPick.domain.inquiry.domain.type.InquiryType;
-import talkPick.global.model.BaseTime;
+import talkPick.core.common.model.BaseTime;
 
 @Entity
 @Table(name = "inquiry")

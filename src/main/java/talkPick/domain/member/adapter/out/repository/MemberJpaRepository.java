@@ -2,7 +2,7 @@ package talkPick.domain.member.adapter.out.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import talkPick.domain.member.domain.Member;
-import talkPick.global.model.TalkPickStatus;
+import talkPick.core.common.model.TalkPickStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;

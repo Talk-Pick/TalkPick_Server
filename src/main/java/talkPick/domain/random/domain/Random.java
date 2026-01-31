@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import talkPick.domain.random.adapter.in.dto.RandomReqDTO;
 import talkPick.domain.random.domain.type.RandomType;
-import talkPick.global.model.BaseTime;
+import talkPick.core.common.model.BaseTime;
 
 @Getter
 @Entity

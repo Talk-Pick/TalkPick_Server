@@ -3,7 +3,7 @@ package talkPick.rateLimiter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import talkPick.global.rateLimiter.adapter.RateLimiterManagerAdapter;
+import talkPick.core.rateLimiter.adapter.RateLimiterManagerAdapter;
 
 import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;

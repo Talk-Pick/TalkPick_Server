@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import talkPick.domain.notice.adapter.in.dto.NoticeReqDTO;
 import talkPick.domain.notice.adapter.out.dto.NoticeResDTO;
-import talkPick.global.response.CursorPageResponse;
+import talkPick.core.common.response.CursorPageResponse;
 import java.util.List;
 import static talkPick.domain.notice.domain.QNotice.notice;
 import static talkPick.domain.notice.domain.QNoticeImage.noticeImage;

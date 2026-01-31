@@ -8,10 +8,8 @@ import talkPick.domain.inquiry.port.in.InquiryQueryUseCase;
 import talkPick.domain.inquiry.port.out.InquiryQueryRepositoryPort;
 import talkPick.domain.member.port.out.MemberQueryRepositoryPort;
 import talkPick.domain.member.domain.Member;
-import talkPick.global.exception.ErrorCode;
-import talkPick.global.exception.handler.MemberExceptionHandler;
-import talkPick.global.response.CursorPageResponse;
-import talkPick.global.security.jwt.util.JwtProvider;
+import talkPick.core.common.response.CursorPageResponse;
+import talkPick.domain.auth.port.out.TokenParserPort;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,11 +20,11 @@ import java.util.List;
 public class InquiryQueryService implements InquiryQueryUseCase {
     private final MemberQueryRepositoryPort memberQueryRepositoryPort;
     private final InquiryQueryRepositoryPort inquiryQueryRepositoryPort;
-    private final JwtProvider jwtProvider;
+    private final TokenParserPort tokenParserPort;
 
     @Override
     public CursorPageResponse<InquiryResDto.InquiryListItemResDto> getMyInquiries(String authorization, LocalDateTime cursor, int size) {
-        Long memberId = jwtProvider.getMemberId(authorization);
+        Long memberId = tokenParserPort.getMemberIdFromToken(tokenParserPort.resolveToken(authorization));
 
         Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
         // size + 1개 조회하여 다음 페이지 존재 여부 판단

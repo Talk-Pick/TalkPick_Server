@@ -12,8 +12,8 @@ import talkPick.domain.member.converter.MemberConverter;
 import talkPick.domain.member.dto.MemberDataDto;
 import talkPick.domain.member.adapter.in.dto.MemberReqDto;
 import talkPick.external.kakao.port.in.KakaoOidcUsecase;
-import talkPick.global.exception.ErrorCode;
-import talkPick.global.exception.handler.KakaoExceptionHandler;
+import talkPick.core.common.exception.ErrorCode;
+import talkPick.core.common.exception.handler.KakaoExceptionHandler;
 
 import java.math.BigInteger;
 import java.net.URL;

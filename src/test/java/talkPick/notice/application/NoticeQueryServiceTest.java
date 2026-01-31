@@ -12,7 +12,7 @@ import talkPick.domain.notice.adapter.out.dto.NoticeResDTO;
 import talkPick.domain.notice.application.NoticeQueryService;
 import talkPick.domain.notice.domain.event.NoticeReadEvent;
 import talkPick.domain.notice.port.out.NoticeQueryRepositoryPort;
-import talkPick.global.response.CursorPageResponse;
+import talkPick.core.common.response.CursorPageResponse;
 
 import java.time.LocalDateTime;
 import java.util.Collections;

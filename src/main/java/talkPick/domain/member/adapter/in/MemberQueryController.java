@@ -9,7 +9,7 @@ import talkPick.domain.member.port.in.MemberQueryUseCase;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import talkPick.global.response.CursorPageResponse;
+import talkPick.core.common.response.CursorPageResponse;
 
 @RestController
 @RequiredArgsConstructor

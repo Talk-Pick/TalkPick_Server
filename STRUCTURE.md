@@ -6,7 +6,7 @@ TalkPick 서버는 스몰토크 주제 추천 및 사용자 성향(MBTI 등) 기
 
 ## 1. Global (공통 인프라 및 설정)
 
-### `talkPick.global.config`
+### `talkPick.core.config`
 *   **`AsyncConfig`**: 비동기 작업 처리 설정 (`@EnableAsync`)
 *   **`CacheConfig`**: 로컬 캐싱 설정 (Caffeine 등)
 *   **`CorsFilter`**: CORS 정책 설정 (허용 출처, 헤더 등)
@@ -18,7 +18,7 @@ TalkPick 서버는 스몰토크 주제 추천 및 사용자 성향(MBTI 등) 기
 *   **`SpringDocOpenApiConfig`**: Swagger/OpenAPI 문서 설정
 *   **`WebConfig`**: 웹 MVC 설정 (ArgumentResolver 등 등록)
 
-### `talkPick.global.security`
+### `talkPick.core.auth`
 *   **Config**
     *   `SecurityConfig`: Spring Security 체인 설정. CSRF/FormLogin 비활성화, JWT 필터 추가, WhiteList 기반 경로 허용
 *   **Filter**
@@ -31,19 +31,19 @@ TalkPick 서버는 스몰토크 주제 추천 및 사용자 성향(MBTI 등) 기
 *   **Resolver**
     *   `MemberIdArgumentResolver`: 컨트롤러 파라미터 `@MemberId`를 통해 인증된 사용자 ID 주입
 
-### `talkPick.global.exception`
+### `talkPick.core.exception`
 *   **Handler**: `GlobalExceptionHandler` 및 도메인별 핸들러 (`MemberExceptionHandler`, `TopicExceptionHandler` 등)
 *   **Exception**: `TalkPickException` (루트 예외), `ErrorCode` (에러 코드 정의)
 
-### `talkPick.global.rateLimiter`
+### `talkPick.core.rateLimiter`
 *   **Adapter**: `RateLimiterManagerAdapter` (Caffeine + Bucket4j 기반 토큰 버킷 알고리즘 구현)
 *   **Aspect**: `RateLimiterAspect` (`@RateLimited` 어노테이션이 붙은 메서드 트래픽 제어)
 *   **Annotation**: `@RateLimited`
 
-### `talkPick.global.log`
+### `talkPick.core.log`
 *   **Aspect**: `LoggerAspect` (현재 주석 처리됨, AOP 기반 로깅)
 
-### `talkPick.global.healthCheck`
+### `talkPick.core.healthCheck`
 *   **API**: `DBHealthIndicator`, `UrlHealthIndicator` (시스템 상태 점검)
 
 ---

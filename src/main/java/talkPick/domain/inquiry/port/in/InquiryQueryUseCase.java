@@ -1,7 +1,7 @@
 package talkPick.domain.inquiry.port.in;
 
 import talkPick.domain.inquiry.adapter.out.dto.InquiryResDto;
-import talkPick.global.response.CursorPageResponse;
+import talkPick.core.common.response.CursorPageResponse;
 
 import java.time.LocalDateTime;
 

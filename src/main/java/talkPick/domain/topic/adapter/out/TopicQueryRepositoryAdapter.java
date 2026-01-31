@@ -7,9 +7,10 @@ import talkPick.domain.topic.port.out.TopicQueryRepositoryPort;
 import talkPick.domain.topic.adapter.out.dto.TopicResDTO;
 import talkPick.domain.topic.adapter.out.repository.TopicJpaRepository;
 import talkPick.domain.topic.adapter.out.repository.TopicQuerydslRepository;
-import talkPick.global.exception.handler.TopicExceptionHandler;
+import talkPick.core.common.exception.handler.TopicExceptionHandler;
 import java.util.*;
-import static talkPick.global.exception.ErrorCode.*;
+
+import static talkPick.core.common.exception.ErrorCode.TOPIC_NOT_FOUND;
 
 @Component
 @RequiredArgsConstructor

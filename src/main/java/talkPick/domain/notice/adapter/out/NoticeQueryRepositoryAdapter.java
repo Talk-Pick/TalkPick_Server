@@ -6,11 +6,11 @@ import talkPick.domain.notice.adapter.in.dto.NoticeReqDTO;
 import talkPick.domain.notice.adapter.out.dto.NoticeResDTO;
 import talkPick.domain.notice.adapter.out.repository.NoticeQuerydslRepository;
 import talkPick.domain.notice.port.out.NoticeQueryRepositoryPort;
-import talkPick.global.exception.handler.NoticeExceptionHandler;
-import talkPick.global.response.CursorPageResponse;
+import talkPick.core.common.exception.handler.NoticeExceptionHandler;
+import talkPick.core.common.response.CursorPageResponse;
 import java.util.Collections;
 import java.util.Optional;
-import static talkPick.global.exception.ErrorCode.NOTICE_NOT_FOUND;
+import static talkPick.core.common.exception.ErrorCode.NOTICE_NOT_FOUND;
 
 @Component
 @RequiredArgsConstructor
