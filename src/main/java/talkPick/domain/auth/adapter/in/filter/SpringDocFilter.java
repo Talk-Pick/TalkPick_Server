@@ -26,29 +26,33 @@ public class SpringDocFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String uri = request.getRequestURI();
+        // Swagger 보안 비활성화 - 모든 요청 통과
+        filterChain.doFilter(request, response);
 
-        if (!isSwaggerPath(uri)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        if (swaggerPassword == null || swaggerPassword.isBlank()) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        String headerKey = request.getHeader(AUTH_HEADER);
-        String paramKey = request.getParameter(AUTH_PARAM);
-
-        if (swaggerPassword.equals(headerKey) || swaggerPassword.equals(paramKey)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        log.warn("[Swagger] 비정상 접근 시도 - IP: {}, URI: {}", request.getRemoteAddr(), uri);
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.getWriter().write("Swagger access requires authentication. Add ?key=<password> or X-Swagger-Key header.");
+        // 기존 Swagger 인증 로직 (주석 처리)
+        // String uri = request.getRequestURI();
+        //
+        // if (!isSwaggerPath(uri)) {
+        //     filterChain.doFilter(request, response);
+        //     return;
+        // }
+        //
+        // if (swaggerPassword == null || swaggerPassword.isBlank()) {
+        //     filterChain.doFilter(request, response);
+        //     return;
+        // }
+        //
+        // String headerKey = request.getHeader(AUTH_HEADER);
+        // String paramKey = request.getParameter(AUTH_PARAM);
+        //
+        // if (swaggerPassword.equals(headerKey) || swaggerPassword.equals(paramKey)) {
+        //     filterChain.doFilter(request, response);
+        //     return;
+        // }
+        //
+        // log.warn("[Swagger] 비정상 접근 시도 - IP: {}, URI: {}", request.getRemoteAddr(), uri);
+        // response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        // response.getWriter().write("Swagger access requires authentication. Add ?key=<password> or X-Swagger-Key header.");
     }
 
     private boolean isSwaggerPath(String uri) {

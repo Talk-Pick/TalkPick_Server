@@ -90,11 +90,19 @@ jasypt:
   algorithm: ${JASYPT_ALGORITHM:PBEWITHHMACSHA512ANDAES_256}
   pool-size: ${JASYPT_POOL_SIZE:1}
 
+# 기존 커스텀 경로 (주석 처리)
+# springdoc:
+#   swagger-ui:
+#     path: ${SWAGGER_UI_PATH}
+#   api-docs:
+#     path: ${DOCS_PATH}
+
 springdoc:
   swagger-ui:
-    path: ${SWAGGER_UI_PATH}
+    path: /swagger-ui.html
+    url: /v3/api-docs
   api-docs:
-    path: ${DOCS_PATH}
+    path: /v3/api-docs
 
 app:
   security:
