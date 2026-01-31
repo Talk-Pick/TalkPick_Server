@@ -9,7 +9,8 @@ public class TopicResDTO {
     public record Categories(
             Long categoryId,
             String title,
-            String imageUrl
+            String imageUrl,
+            String color
     ) {}
 
     public record TopicDetail(

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import talkPick.domain.topic.adapter.out.repository.TopicLikeHistoryJpaRepository;
 import talkPick.domain.topic.domain.TopicLikeHistory;
 import talkPick.domain.topic.port.out.TopicLikeHistoryQueryRepositoryPort;
-import talkPick.global.model.TalkPickStatus;
+import talkPick.core.common.model.TalkPickStatus;
 import java.util.Optional;
 
 @Component

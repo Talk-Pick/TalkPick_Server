@@ -8,7 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import talkPick.global.security.annotation.MemberId;
+import talkPick.domain.auth.adapter.in.resolver.MemberId;
 
 @Validated
 @RequestMapping("/api/v1/topic")

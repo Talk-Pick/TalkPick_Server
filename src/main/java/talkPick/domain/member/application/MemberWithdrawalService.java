@@ -15,16 +15,16 @@ import talkPick.domain.random.adapter.out.repository.RandomJpaRepository;
 import talkPick.domain.random.adapter.out.repository.RandomTopicHistoryJpaRepository;
 import talkPick.domain.today.adapter.out.repository.TodayTopicJpaRepository;
 import talkPick.domain.topic.adapter.out.repository.TopicLikeHistoryJpaRepository;
-import talkPick.global.security.jwt.repository.RefreshTokenRepository;
-import talkPick.global.security.jwt.util.JwtProvider;
+import talkPick.domain.auth.adapter.out.RefreshTokenJpaRepository;
+import talkPick.domain.auth.port.out.TokenParserPort;
 
 @Service
 @RequiredArgsConstructor
 public class MemberWithdrawalService implements MemberWithdrawalUseCase {
 
-    private final JwtProvider jwtProvider;
+    private final TokenParserPort tokenParserPort;
     private final MemberJpaRepository memberRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenJpaRepository refreshTokenRepository;
     
     // 연관 데이터 리포지토리들
     private final InquiryJpaRepository inquiryRepository;
@@ -40,7 +40,7 @@ public class MemberWithdrawalService implements MemberWithdrawalUseCase {
     @Override
     @Transactional
     public void withdraw(String authorization) {
-        Long memberId = jwtProvider.getMemberId(authorization);
+        Long memberId = tokenParserPort.getMemberIdFromToken(tokenParserPort.resolveToken(authorization));
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));

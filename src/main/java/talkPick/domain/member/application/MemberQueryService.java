@@ -1,7 +1,6 @@
 package talkPick.domain.member.application;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
@@ -11,10 +10,8 @@ import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.port.in.MemberQueryUseCase;
 import talkPick.domain.member.port.out.MemberLikedTopicsQueryRepositoryPort;
 import talkPick.domain.member.port.out.MemberTopicResultQueryRepositoryPort;
-import talkPick.global.exception.ErrorCode;
-import talkPick.global.exception.handler.MemberExceptionHandler;
-import talkPick.global.response.CursorPageResponse;
-import talkPick.global.security.jwt.util.JwtProvider;
+import talkPick.core.common.response.CursorPageResponse;
+import talkPick.domain.auth.port.out.TokenParserPort;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,13 +24,13 @@ public class MemberQueryService implements MemberQueryUseCase {
     private final MemberQueryRepositoryPort memberQueryRepositoryPort;
     private final MemberLikedTopicsQueryRepositoryPort memberLikedTopicsQueryRepositoryPort;
     private final MemberTopicResultQueryRepositoryPort memberTopicResultQueryRepositoryPort;
-    private final JwtProvider jwtProvider;
+    private final TokenParserPort tokenParserPort;
 
     // 회원 프로필 조회 로직
     @Override
     public MemberResDto.MemberProfileResponse getProfile(String authorization) {
         // JWT 토큰에서 회원 ID 추출
-        Long memberId = jwtProvider.getMemberId(authorization);
+        Long memberId = tokenParserPort.getMemberIdFromToken(tokenParserPort.resolveToken(authorization));
 
         // 회원 존재 여부 검증 및 조회
         Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
@@ -47,7 +44,7 @@ public class MemberQueryService implements MemberQueryUseCase {
      */
     @Override
     public CursorPageResponse<MemberResDto.MemberLikedTopicResDto> getMemberLikedTopics(String authorization, LocalDateTime cursor, int size) {
-        Long memberId = jwtProvider.getMemberId(authorization);
+        Long memberId = tokenParserPort.getMemberIdFromToken(tokenParserPort.resolveToken(authorization));
 
         Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 
@@ -78,7 +75,7 @@ public class MemberQueryService implements MemberQueryUseCase {
      */
     @Override
     public CursorPageResponse<MemberResDto.MemberTopicResultResDto> getMemberTopicResultsByCreatedDate(String authorization, LocalDate date, LocalDateTime cursor, int size) {
-        Long memberId = jwtProvider.getMemberId(authorization);
+        Long memberId = tokenParserPort.getMemberIdFromToken(tokenParserPort.resolveToken(authorization));
 
         Member findMember = memberQueryRepositoryPort.findMemberById(memberId);
 

@@ -9,7 +9,7 @@ import talkPick.domain.member.domain.type.LoginType;
 import talkPick.domain.member.dto.MemberDataDto;
 import talkPick.domain.member.adapter.out.dto.MemberResDto;
 import talkPick.domain.term.domain.Term;
-import talkPick.global.model.TalkPickStatus;
+import talkPick.core.common.model.TalkPickStatus;
 import java.time.LocalDateTime;
 
 public class MemberConverter {

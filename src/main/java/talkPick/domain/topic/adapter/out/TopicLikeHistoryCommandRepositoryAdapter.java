@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 import talkPick.domain.topic.adapter.out.repository.TopicLikeHistoryJpaRepository;
 import talkPick.domain.topic.domain.TopicLikeHistory;
 import talkPick.domain.topic.port.out.TopicLikeHistoryCommandRepositoryPort;
-import talkPick.global.exception.ErrorCode;
-import talkPick.global.exception.handler.TopicExceptionHandler;
+import talkPick.core.common.exception.ErrorCode;
+import talkPick.core.common.exception.handler.TopicExceptionHandler;
 
 @Component
 @RequiredArgsConstructor

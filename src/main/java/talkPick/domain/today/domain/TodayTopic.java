@@ -2,7 +2,7 @@ package talkPick.domain.today.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import talkPick.global.model.BaseTime;
+import talkPick.core.common.model.BaseTime;
 
 @Getter
 @Entity

@@ -6,8 +6,8 @@ import talkPick.domain.member.adapter.out.repository.MemberJpaRepository;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.port.out.MemberQueryRepositoryPort;
 import talkPick.domain.random.dto.MemberDataDTO;
-import talkPick.global.exception.ErrorCode;
-import talkPick.global.exception.handler.MemberExceptionHandler;
+import talkPick.core.common.exception.ErrorCode;
+import talkPick.core.common.exception.handler.MemberExceptionHandler;
 
 @Component
 @RequiredArgsConstructor

@@ -8,19 +8,19 @@ import talkPick.domain.inquiry.port.out.InquiryCommandRepositoryPort;
 import talkPick.domain.inquiry.domain.Inquiry;
 import talkPick.domain.inquiry.port.in.InquiryCommandUseCase;
 import talkPick.domain.inquiry.converter.InquiryConverter;
-import talkPick.global.security.jwt.util.JwtProvider;
+import talkPick.domain.auth.port.out.TokenParserPort;
 
 @Service
 @RequiredArgsConstructor
 public class InquiryCommandService implements InquiryCommandUseCase {
 
     private final InquiryCommandRepositoryPort inquiryCommandRepositoryPort;
-    private final JwtProvider jwtProvider;
+    private final TokenParserPort tokenParserPort;
 
     @Override
     @Transactional
     public void inquirySend(String authorization, InquiryReqDto.inquiryDataRequest request) {
-        Long memberId = jwtProvider.getMemberId(authorization);
+        Long memberId = tokenParserPort.getMemberIdFromToken(tokenParserPort.resolveToken(authorization));
 
         Inquiry inquiry = InquiryConverter.toInquiry(memberId, request);
 

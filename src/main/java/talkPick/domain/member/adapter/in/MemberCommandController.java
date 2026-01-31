@@ -12,12 +12,13 @@ import talkPick.domain.member.domain.type.LoginType;
 import talkPick.external.apple.port.in.AppleOidcUsecase;
 import talkPick.external.google.port.in.GoogleOidcUsecase;
 import talkPick.external.kakao.port.in.KakaoOidcUsecase;
-import talkPick.global.security.jwt.dto.JwtResDTO;
+import talkPick.domain.auth.adapter.out.dto.TokenResponse;
 import talkPick.domain.member.domain.Member;
 import talkPick.domain.member.dto.*;
 import talkPick.domain.member.port.in.MemberCommandUseCase;
 import talkPick.domain.member.port.in.MemberWithdrawalUseCase;
-import talkPick.global.security.jwt.port.in.JwtTokenCommandUseCase;
+import talkPick.domain.auth.port.in.GenerateTokenUseCase;
+import talkPick.domain.auth.port.in.RefreshTokenUseCase;
 
 /**
  * 회원 명령 관련 컨트롤러
@@ -32,21 +33,22 @@ public class MemberCommandController implements MemberCommandApi {
     private final AppleOidcUsecase appleOidcService;
     private final GoogleOidcUsecase googleOidcService;
     private final MemberCommandUseCase memberCommandUseCase;
-    private final MemberWithdrawalUseCase memberWithdrawalUseCase; // 의존성 추가
-    private final JwtTokenCommandUseCase jwtTokenCommandUseCase;
+    private final MemberWithdrawalUseCase memberWithdrawalUseCase;
+    private final GenerateTokenUseCase generateTokenUseCase;
+    private final RefreshTokenUseCase refreshTokenUseCase;
 
 
     @Override
-    public JwtResDTO.Login kakaoOAuth2Login(
+    public TokenResponse.Login kakaoOAuth2Login(
             @Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response
     ) {
         MemberDataDto.MemberData kakaoMemberData = kakaoOidcService.verifyAndParseIdToken(request);
         Member member = memberCommandUseCase.findOrCreateMember(kakaoMemberData, LoginType.KAKAO);
-        JwtResDTO.GeneratedTokens generatedTokens = jwtTokenCommandUseCase.generateToken(member);
+        TokenResponse.GeneratedTokens generatedTokens = generateTokenUseCase.generateToken(member);
 
         setRefreshTokenCookie(response, generatedTokens.refreshToken(), generatedTokens.refreshExpiredTime());
 
-        return JwtResDTO.Login.of(
+        return TokenResponse.Login.of(
                 member.getId(),
                 member.getMemberRole().toString(),
                 generatedTokens.accessToken(),
@@ -55,14 +57,14 @@ public class MemberCommandController implements MemberCommandApi {
     }
 
     @Override
-    public JwtResDTO.Login appleOauth2Login (@Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response) {
+    public TokenResponse.Login appleOauth2Login (@Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response) {
         MemberDataDto.MemberData appleMemberData = appleOidcService.verifyAndParseIdToken(request);
         Member member = memberCommandUseCase.findOrCreateMember(appleMemberData, LoginType.APPLE);
-        JwtResDTO.GeneratedTokens generatedTokens = jwtTokenCommandUseCase.generateToken(member);
+        TokenResponse.GeneratedTokens generatedTokens = generateTokenUseCase.generateToken(member);
 
         setRefreshTokenCookie(response, generatedTokens.refreshToken(), generatedTokens.refreshExpiredTime());
 
-        return JwtResDTO.Login.of(
+        return TokenResponse.Login.of(
                 member.getId(),
                 member.getMemberRole().toString(),
                 generatedTokens.accessToken(),
@@ -71,16 +73,16 @@ public class MemberCommandController implements MemberCommandApi {
     }
 
     @Override
-    public JwtResDTO.Login googleOauth2Login(
+    public TokenResponse.Login googleOauth2Login(
             @Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response
     ) {
         MemberDataDto.MemberData googleMemberData = googleOidcService.verifyAndParseIdToken(request);
         Member member = memberCommandUseCase.findOrCreateMember(googleMemberData, LoginType.GOOGLE);
-        JwtResDTO.GeneratedTokens generatedTokens = jwtTokenCommandUseCase.generateToken(member);
+        TokenResponse.GeneratedTokens generatedTokens = generateTokenUseCase.generateToken(member);
 
         setRefreshTokenCookie(response, generatedTokens.refreshToken(), generatedTokens.refreshExpiredTime());
 
-        return JwtResDTO.Login.of(
+        return TokenResponse.Login.of(
                 member.getId(),
                 member.getMemberRole().toString(),
                 generatedTokens.accessToken(),
@@ -89,7 +91,7 @@ public class MemberCommandController implements MemberCommandApi {
     }
 
     @Override
-    public JwtResDTO.Login reactivateMember(
+    public TokenResponse.Login reactivateMember(
             @PathVariable("provider") String provider,
             @Valid @RequestBody MemberReqDto.OAuth2LoginRequest request, HttpServletResponse response
     ) {
@@ -110,11 +112,11 @@ public class MemberCommandController implements MemberCommandApi {
         }
 
         Member member = memberCommandUseCase.reactivateMember(memberData, loginType);
-        JwtResDTO.GeneratedTokens generatedTokens = jwtTokenCommandUseCase.generateToken(member);
+        TokenResponse.GeneratedTokens generatedTokens = generateTokenUseCase.generateToken(member);
 
         setRefreshTokenCookie(response, generatedTokens.refreshToken(), generatedTokens.refreshExpiredTime());
 
-        return JwtResDTO.Login.of(
+        return TokenResponse.Login.of(
                 member.getId(),
                 member.getMemberRole().toString(),
                 generatedTokens.accessToken(),
@@ -133,10 +135,10 @@ public class MemberCommandController implements MemberCommandApi {
     }
 
     @Override
-    public JwtResDTO.AccessToken refreshAccessToken(
+    public TokenResponse.AccessToken refreshAccessToken(
             @CookieValue("refreshToken") String refreshToken
     ) {
-        return jwtTokenCommandUseCase.refreshAccessToken(refreshToken);
+        return refreshTokenUseCase.refreshAccessToken(refreshToken);
     }
 
     @Override
