@@ -8,6 +8,7 @@ import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import talkPick.domain.member.adapter.in.dto.MemberReqDto;
 import talkPick.domain.member.converter.MemberConverter;
@@ -33,7 +34,8 @@ public class AppleOidcService implements AppleOidcUsecase {
     private static final String JWK_URL = "https://appleid.apple.com/auth/keys";
     // iss 검증 값
     private static final String ISSUER = "https://appleid.apple.com";
-    private static final String BUNDLE_ID = "io.tuist.TalkPick";
+    @Value("${apple.bundle-id}")
+    private String BUNDLE_ID;
 
     @Override
     public MemberDataDto.MemberData verifyAndParseIdToken(MemberReqDto.OAuth2LoginRequest request) {
@@ -56,10 +58,8 @@ public class AppleOidcService implements AppleOidcUsecase {
                     break;
                 }
             }
-            if (matchedKey == null) {
-                log.error("Apple Matching Key not found for kid: {}", kid);
-                throw new AppleHandler(ErrorCode.ERROR_ON_VERIFYING, "애플 공개키 목록에서 kid가 일치하는 키를 찾을 수 없습니다. kid: " + kid);
-            }
+            if (matchedKey == null) throw new AppleHandler(ErrorCode.ERROR_ON_VERIFYING);
+
 
             String n = matchedKey.get("n").asText();
             String e = matchedKey.get("e").asText();
@@ -79,27 +79,20 @@ public class AppleOidcService implements AppleOidcUsecase {
 
             Object audObj = claims.get("aud");
             boolean audOk = false;
-            log.info("Apple BUNDLE_ID: {}, Token aud: {}", BUNDLE_ID, audObj);
-            
             if (audObj instanceof String audStr) {
                 audOk = BUNDLE_ID.equals(audStr);
             } else if (audObj instanceof List<?> audList) {
                 audOk = audList.stream().anyMatch(a -> BUNDLE_ID.equals(String.valueOf(a)));
             }
-            
-            if (!audOk) {
-                log.error("Apple Audience mismatch. Expected: {}, Received: {}", BUNDLE_ID, audObj);
-                throw new AppleHandler(ErrorCode.INVALID_JWT_TOKEN, "애플 토큰의 aud(Audience)가 일치하지 않습니다. 기대값: " + BUNDLE_ID + ", 실제값: " + audObj);
-            }
+            if (!audOk) throw new AppleHandler(ErrorCode.INVALID_JWT_TOKEN);
 
             return MemberConverter.toAppleMemberData(claims);
 
         } catch (ExpiredJwtException e) {
-            log.error("Apple Token Expired", e);
-            throw new AppleHandler(ErrorCode.EXPIRED_JWT_TOKEN, "애플 토큰이 만료되었습니다: " + e.getMessage());
+            throw new AppleHandler(ErrorCode.EXPIRED_JWT_TOKEN);
         } catch (Exception e) {
-            log.error("Apple OAuth Error: {}", e.getMessage(), e);
-            throw new AppleHandler(ErrorCode.ERROR_ON_VERIFYING, "애플 토큰 검증 중 오류가 발생했습니다: " + e.getMessage());
+            log.error("Apple OAuth Error", e);
+            throw new AppleHandler(ErrorCode.ERROR_ON_VERIFYING);
         }
     }
 }

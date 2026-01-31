@@ -4,7 +4,6 @@ jwt:
   refreshTokenExpireTime: ${JWT_REFRESH_EXPIRE_TIME}
 
 server:
-  forward-headers-strategy: framework
   port: ${SERVER_PORT}
   tomcat:
     threads:
@@ -14,6 +13,8 @@ server:
 spring:
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration,org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+  config:
+    import: optional:file:.env[.properties]
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
@@ -31,15 +32,13 @@ spring:
         format_sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${DDL_AUTO}
   servlet:
     multipart:
       max-file-size: ${MAX_FILE_SIZE}
       max-request-size: ${MAX_REQUEST_SIZE}
   messages:
     basename: messages,errors
-  mvc:
-    throw-exception-if-no-handler-found: true
   web:
     resources:
       add-mappings: false
@@ -50,7 +49,6 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
     org.springframework.web.cors: debug
-#    org.apache.coyote.http11: trace
 
 management:
   endpoint:
@@ -91,3 +89,15 @@ jasypt:
     secret-key: ${JASYPT_MEMBER_SECRET_KEY}
   algorithm: ${JASYPT_ALGORITHM:PBEWITHHMACSHA512ANDAES_256}
   pool-size: ${JASYPT_POOL_SIZE:1}
+
+springdoc:
+  swagger-ui:
+    path: ${SWAGGER_UI_PATH}
+  api-docs:
+    path: ${DOCS_PATH}
+
+app:
+  security:
+    swagger-password: ${SPRING_DOC_PASSWORD}
+    blocked-user-agents: ${BLOCKED_AGENTS}
+    blocked-paths: ${BLOCKED_PATHS}
