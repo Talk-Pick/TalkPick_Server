@@ -20,7 +20,8 @@ public class TopicQuerydslRepository {
         return queryFactory.select(Projections.constructor(TopicResDTO.Categories.class,
                         category.id,
                         category.title,
-                        category.imageUrl
+                        category.imageUrl,
+                        category.color
                 ))
                 .from(category)
                 .fetch();
