@@ -26,6 +26,7 @@ services:
     volumes:
       - ./nginx/conf:/etc/nginx/conf.d
       - ./nginx/html/terms/privacy-policy:/usr/share/nginx/html/docs:ro
+      - ./nginx/html/landing:/usr/share/nginx/html/landing:ro  
       - /etc/ssl/cloudflare:/etc/ssl/cloudflare:ro
 
   ## promtail
