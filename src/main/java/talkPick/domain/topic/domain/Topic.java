@@ -5,6 +5,8 @@ import lombok.*;
 import talkPick.core.common.model.BaseTime;
 import talkPick.core.common.model.TalkPickStatus;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Entity
 @Builder
@@ -35,4 +37,11 @@ public class Topic extends BaseTime {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, columnDefinition = "VARCHAR(20) COMMENT 'Topic 상태'")
     private TalkPickStatus status;
+
+    @Column(name = "expired_at", nullable = true, columnDefinition = "DATETIME COMMENT 'Topic 만료 일시'")
+    private LocalDateTime expiredAt;
+
+    public void expire() {
+        this.status = TalkPickStatus.DIS_ACTIVE;
+    }
 }
