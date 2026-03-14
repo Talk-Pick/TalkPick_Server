@@ -10,7 +10,7 @@ services:
     restart: always
     env_file:
       - /home/ec2-user/TalkPick_Server/env/.env
-      
+
   ## nginx
   nginx:
     build: ./nginx
